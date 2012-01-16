@@ -5,7 +5,11 @@ body{
 }
 #goban{
     margin:auto;
-    border-spacing:0px;
+    border-collapse:collapse;
+}
+#goban td
+{
+	padding:0px;
 }
 .jeunoir{
     display:block;

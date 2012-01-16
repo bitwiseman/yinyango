@@ -27,15 +27,15 @@ if(!isset($_SESSION['goban'])){
             $_SESSION['goban'][$x][$y]['groupe'] = '';
         }
     }
-    $goinitw = explode(';',$_SESSION['fichier_goban'][1]);
-    $goinitb = explode(';',$_SESSION['fichier_goban'][2]);
-    for($i=0;$i<sizeof($goinitw)-1;$i++){        
-        $goinitw[$i] = explode(',',$goinitw[$i]);
-        $_SESSION['goban'][$goinitw[$i][0]][$goinitw[$i][1]]['pierre'] = 'b';
+    $initb = explode(';',$_SESSION['fichier_goban'][1]);
+    $initn = explode(';',$_SESSION['fichier_goban'][2]);
+    for($i=0;$i<sizeof($initb)-1;$i++){        
+        $initb[$i] = explode(',',$initb[$i]);
+        $_SESSION['goban'][$initb[$i][0]][$initb[$i][1]]['pierre'] = 'b';
     }
-    for($i=0;$i<sizeof($goinitb)-1;$i++){
-        $goinitb[$i] = explode(',',$goinitb[$i]);
-        $_SESSION['goban'][$goinitb[$i][0]][$goinitb[$i][1]]['pierre'] = 'n';
+    for($i=0;$i<sizeof($initn)-1;$i++){
+        $initn[$i] = explode(',',$initn[$i]);
+        $_SESSION['goban'][$initn[$i][0]][$initn[$i][1]]['pierre'] = 'n';
     }
     Initialisation_groupes();
     //echo($_SESSION['taille_goban']);
@@ -179,22 +179,19 @@ function Reset_session(){
     header('refresh:1;index.php');
 }
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"; ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html version="-//W3C//DTD XHTML 1.1//EN"
-      xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.w3.org/1999/xhtml
-                          http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd" >
-<head>
-    <link rel="stylesheet" href="tsumego.css" type="text/css"/>
-    <title>tsumego</title>
-</head>
-<body>
-    <div><p><?php echo session_id() ?></p></div>
-    <table border="0" cellpadding="0" style="background-image:url('images/goban<?php echo($_SESSION['taille_goban']); ?>.png')" id="goban">
+?>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>tsumego</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="tsumego.css" />
+    </head>
+    <body>
+        <h1><?php echo session_id() ?></h1>
+        <table style="background-image:url('images/goban<?php echo($_SESSION['taille_goban']); ?>.png')" id="goban">
 <?php for($y=0;$y<$_SESSION['taille_goban'];$y++){ ?>
-        <tr>
+            <tr>
 <?php for($x=0;$x<$_SESSION['taille_goban'];$x++){
             $pierre = '';
             if($_SESSION['jeucouleur'] == 'n') $jeupierre = 'jeunoir';
@@ -202,14 +199,14 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"; ?>
             if($_SESSION['goban'][$x][$y]['pierre'] == 'n') $pierre = 'noir';
             if($_SESSION['goban'][$x][$y]['pierre'] == 'b') $pierre = 'blanc';
 ?>
-            <td <?php if($pierre != ''){?>class="<?php echo($pierre); ?>"<?php } ?>><?php if($pierre == '') echo('<a class="'.$jeupierre.'" href="index.php?'.session_id().'&amp;last='.$_SESSION['jeucouleur'].';'.$x.';'.$y.'"></a>'); ?></td>
+                <td <?php if($pierre != ''){?>class="<?php echo($pierre); ?>"<?php } ?>><?php if($pierre == '') echo('<a class="'.$jeupierre.'" href="index.php?'.session_id().'&amp;last='.$_SESSION['jeucouleur'].';'.$x.';'.$y.'"></a>'); ?></td>
 <?php } ?>
-        </tr>
+            </tr>
 <?php } ?>
-    </table>
-    <form method="get" action="">
-        <p><input type="hidden" name="reset"/></p>
-        <p><input type="submit" value="Remise à zéro"/></p>
-    </form>
-</body>
+        </table>
+        <form method="get">
+            <p><input type="hidden" name="reset"/></p>
+            <p><input type="submit" value="Remise à zéro"/></p>
+        </form>
+    </body>
 </html>
