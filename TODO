@@ -1,0 +1,9 @@
+Tsumego (jQuery)
+
+Objectifs:
+- Séparer l'affichage du traitement des données
+- Avoir un affichage plus réactif grâce à javascript
+- Ajouter des effets visuels
+- Réécrire le code
+- Adapter le code pour avoir un support des bases de données
+- ...

@@ -205,8 +205,7 @@ function Reset_session(){
 <?php } ?>
         </table>
         <form method="get">
-            <p><input type="hidden" name="reset"/></p>
-            <p><input type="submit" value="Remise à zéro"/></p>
+            <p><input type="submit" name="reset" value="Remise à zéro"/></p>
         </form>
     </body>
 </html>
