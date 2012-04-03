@@ -185,7 +185,7 @@ function Reset_session(){
     <head>
         <title>tsumego</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="tsumego.css" />
+        <link type="text/css" rel="stylesheet" href="tsumego_old.css" />
     </head>
     <body>
         <h1><?php echo session_id() ?></h1>

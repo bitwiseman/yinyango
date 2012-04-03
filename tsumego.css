@@ -1,43 +1,29 @@
-body{
-    background-color:black;
-    color:white;
-    text-align:center;
+body {
+    background-color: #262626;
+    color: #c2c2b0;
+    text-align: center;
 }
-#goban{
-    margin:auto;
-    border-collapse:collapse;
+#goban {
+    background-image: url(images/goban19.svg);
+    background-size: 100% 100%;
+    margin: auto;
+    border-collapse: collapse;
+    /*cursor:none;*/
 }
-#goban td
-{
-	padding:0px;
+.jeunoir:hover {
+    background-image: url(images/noirs.svg);
+    background-size: 100% 100%;
 }
-.jeunoir{
-    display:block;
-    width:21px;
-    height:21px;
+.jeublanc:hover {
+    background-image: url(images/blancs.svg);
+    background-size: 100% 100%;
 }
-.jeunoir:hover{
-    width:21px;
-    height:21px;
-    background-image:url(images/blacks.png);
+.noir {
+    background-image: url(images/noir.svg);
+    background-size: 100% 100%;
 }
-.jeublanc{
-    display:block;
-    width:21px;
-    height:21px;
+.blanc {
+    background-image: url(images/blanc.svg);
+    background-size: 100% 100%;
 }
-.jeublanc:hover{
-    width:21px;
-    height:21px;
-    background-image:url(images/whites.png);
-}
-.noir{
-    width:21px;
-    height:21px;
-    background-image:url(images/black.png);
-}
-.blanc{
-    width:21px;
-    height:21px;
-    background-image:url(images/white.png);
-}
+
