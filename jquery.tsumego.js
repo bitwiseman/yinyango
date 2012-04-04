@@ -26,10 +26,12 @@ jQuery(document).ready(function($) {
     }); //}}}
 
     // Formation des lignes et colonnes du goban en enregistrant la coordonnée dans un data {{{
+    var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
+
     for (var i = 0; i < 19; i++) {
         $('#goban').append('<tr class="ligne' + i + '"></tr>');
         for (var j = 0; j < 19; j++) {
-            $('.ligne' + i).append('<td class="jeunoir" data-coord="' + i + ',' + j + '"></td>');
+            $('.ligne' + i).append('<td class="jeunoir" data-coord="' + coord[j] + coord[i] + '"></td>');
         }
     } //}}}
 
@@ -37,7 +39,7 @@ jQuery(document).ready(function($) {
 
     // Retourne la coordonée sur le goban {{{
     $('#goban td').mouseover(function() {
-        $('#dev').html(this.parentNode.rowIndex + ',' + this.cellIndex);
+        $('#dev').html($(this).data('coord'));
     }); //}}}
 
 });
