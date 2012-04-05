@@ -41,5 +41,17 @@ jQuery(document).ready(function($) {
     $('#goban td').mouseover(function() {
         $('#dev').html($(this).data('coord'));
     }); //}}}
+    
+    // TODO: Récupérer la traduction du fichier SGF sous forme de tableau et l'afficher
+    
+    // Ebauche de fonctionnement AJAX
+    $('#goban td').click(function() {
+        $.getJSON('data.php', { test: "ajax ça roule !" + $(this).data('coord') }, function(data) {
+            $('#dev').hide();
+            $('#dev').html(data.Retour);
+            $('#dev').fadeIn();
+        }
+        );
+    });
 
 });
