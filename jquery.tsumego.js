@@ -50,8 +50,7 @@ jQuery(document).ready(function($) {
             $('#dev').hide();
             $('#dev').html(data.Retour);
             $('#dev').fadeIn();
-        }
-        );
+        });
     });
 
 });
