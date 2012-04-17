@@ -13,11 +13,11 @@ function ListeSgf() {/*{{{*/
     }
 
     if (!empty($sgf_table)) {
-        echo "<select>\n";
+        echo '<select>';
         for ($i = 0; $i < count($sgf_table); $i++) {
-            echo "\t    <option value=\"$sgf_table[$i]\">$sgf_table[$i]</option>\n";
+            echo '<option>' . $sgf_table[$i] . '</option>';
         }
-        echo "\t</select>\n";
+        echo '</select>';
     }
 }/*}}}*/
 
