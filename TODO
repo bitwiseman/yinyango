@@ -16,3 +16,13 @@ Idées en vrac:
     Afficher le nombre de variations sur le noeud
     Afficher/masquer l'arbre
 - Afficher/masquer les commentaires
+- Traiter tout les calculs en php et envoyer toutes les grilles
+  (ou) envoyer la grille de la position actuelle seulement
+  (ou) envoyer les changements  
+
+Table SQL par SGF:
+
+ ID   | branche1 | branche2 | branche3 ...
+coup1 | info+état|          |
+coup2 | ...      |          |
+coup3 | ...      |          |

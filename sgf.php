@@ -48,7 +48,118 @@ function SgfToJson($data) {/*{{{*/
     return $sgf_json;
 }/*}}}*/
 
-$sgf_file = 'sgf/simple.sgf';
-echo SgfToJson($sgf_file);
+//Lit un SGF et le stocke dans une base de données
+function SgfToSql($data) {/*{{{*/
+
+    $table_name = 'fichier_sgf'; //TODO: Créer une table à partir du nom SGF
+    
+    CreateSqlTable($table_name);
+
+    $branche = 0; //branche actuelle
+    $noeud[0] = 0; //tableau des noeuds de la forme noeud[branche]
+    $noeud_data = ''; //données du noeud
+    $data_sent = true;
+
+    $sgf = fopen($data, "r"); //Ouverture du fichier en lecture seule
+
+    while (!feof($sgf)) { //Lecture du fichier caractère par caractère
+        $char = fgetc($sgf); //Caractère courant
+        switch ($char) {
+            case "(": //Début de branche
+                //Envoyer les données du précédent noeud à la BDD
+                //si elles n'ont pas déjà été envoyées
+                if (!$data_sent) {
+                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
+                    $data_sent = true;
+                }
+                
+                $branche++;
+                $noeud[$branche] = $noeud[$branche - 1];
+                break;
+            case ")": //Fin de branche
+                //Envoyer les données du précédent noeud à la BDD
+                //si elles n'ont pas déjà été envoyées
+                if (!$data_sent) {
+                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
+                    $data_sent = true;
+                }
+                
+                $branche--;
+                break;
+            case ";": //Nouveau noeud
+                //Envoyer les données du précédent noeud à la BDD
+                //si elles n'ont pas déjà été envoyées
+                if (!$data_sent) {
+                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
+                }
+                
+                $noeud_data = ''; //Effacer les données
+
+                $data_sent = false;
+                $noeud[$branche]++; 
+                break;
+            default: //Données
+                $noeud_data .= $char;
+        }
+    }
+}/*}}}*/
+
+//Envoyer des données dans une table SQL
+function SendToSql($table,$colonne,$ligne,$data) {/*{{{*/
+    
+    try
+    {
+        $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        $bdd = new PDO('mysql:host=localhost;dbname=sgf', 'root', '!', $pdo_options);
+    }
+    catch (Exception $e)
+    {
+        die('Erreur : ' . $e->getMessage());
+    }
+
+    //Test si la colonne existe, sinon on l'ajoute
+    try {
+        $bdd->query("SELECT `$colonne` FROM $table");
+    }
+    catch (Exception $e) {
+        $bdd->exec("ALTER TABLE $table ADD `$colonne` TEXT"); 
+    }
+
+    //Test si la ligne existe, sinon on l'ajoute
+    try {
+        $bdd->query("SELECT * FROM $table WHERE node=$ligne");
+    }
+    catch (Exception $e) {
+        echo("ligne $ligne");
+        $bdd->exec("INSERT INTO $table VALUES(NULL)");
+    }
+
+    $bdd->exec("UPDATE $table SET `$colonne` = '$data' WHERE node = $ligne");
+    //$req->execute(array($col,$data));
+
+
+}/*}}}*/
+
+//Créer une table SQL pour acceuillir les données SGF
+function CreateSqlTable($table) {/*{{{*/
+
+    try
+    {
+        $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        $bdd = new PDO('mysql:host=localhost;dbname=sgf', 'root', '!', $pdo_options);
+    }
+    catch (Exception $e)
+    {
+        die('Erreur : ' . $e->getMessage());
+    }
+
+    $bdd->exec("CREATE TABLE $table (`node` INT NOT NULL AUTO_INCREMENT PRIMARY KEY)");
+
+}/*}}}*/
+
+$sgf_file = 'sgf/branches.sgf';
+//echo SgfToJson($sgf_file);
+
+SgfToSql($sgf_file);
 
 ?>
