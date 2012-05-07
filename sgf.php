@@ -4,8 +4,8 @@
 function SgfToJson($data) {/*{{{*/
 
     $sgf_json = '{';
-    $branche = 0;
-    $noeud = 0;
+    $b = 0;
+    $n = 0;
 
     $sgf = fopen($data, "r"); //Ouverture du fichier en lecture seule
 
@@ -16,19 +16,19 @@ function SgfToJson($data) {/*{{{*/
             //TODO: Plusieurs branches
 
             case "(": //Début de branche
-                $sgf_json .= 'branche' . $branche++ . ':{';
+                $sgf_json .= 'branche' . $b++ . ':{';
                 break;
             case ")": //Fin de branche
                 $sgf_json = substr($sgf_json,0,-1);
                 $sgf_json .= '}}';
                 break;
             case ";": //Nouveau noeud
-                if ($noeud != 0) {
+                if ($n != 0) {
                     $sgf_json = substr($sgf_json,0,-1);
-                    $sgf_json .= '},noeud' . $noeud++ . ':{';
+                    $sgf_json .= '},noeud' . $n++ . ':{';
                 }
                 else {
-                    $sgf_json .= 'noeud' . $noeud++ . ':{';
+                    $sgf_json .= 'noeud' . $n++ . ':{';
                 }
                 break;
             case "[": //Nouvelle valeur
@@ -55,10 +55,10 @@ function SgfToSql($data) {/*{{{*/
     
     CreateSqlTable($table_name);
 
-    $branche = 0; //branche actuelle
-    $noeud[0] = 0; //tableau des noeuds de la forme noeud[branche]
-    $noeud_data = ''; //données du noeud
-    $data_sent = true;
+    $b = 0; //branche actuelle
+    $n = array(); //tableau des noeuds de la forme noeud[branche]
+    $nd = ''; //données du noeud
+    $dw = true; //données écrites dans la table
 
     $sgf = fopen($data, "r"); //Ouverture du fichier en lecture seule
 
@@ -68,38 +68,38 @@ function SgfToSql($data) {/*{{{*/
             case "(": //Début de branche
                 //Envoyer les données du précédent noeud à la BDD
                 //si elles n'ont pas déjà été envoyées
-                if (!$data_sent) {
-                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
-                    $data_sent = true;
+                if (!$dw) {
+                    SendToSql($table_name,$b,$n[$b],$nd);
+                    $dw = true;
                 }
                 
-                $branche++;
-                $noeud[$branche] = $noeud[$branche - 1];
+                $b++;
+                $n[$b] = $n[$b - 1];
                 break;
             case ")": //Fin de branche
                 //Envoyer les données du précédent noeud à la BDD
                 //si elles n'ont pas déjà été envoyées
-                if (!$data_sent) {
-                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
-                    $data_sent = true;
+                if (!$dw) {
+                    SendToSql($table_name,$b,$n[$b],$nd);
+                    $dw = true;
                 }
                 
-                $branche--;
+                $b--;
                 break;
             case ";": //Nouveau noeud
                 //Envoyer les données du précédent noeud à la BDD
                 //si elles n'ont pas déjà été envoyées
-                if (!$data_sent) {
-                    SendToSql($table_name,$branche,$noeud[$branche],$noeud_data);
+                if (!$dw) {
+                    SendToSql($table_name,$b,$n[$b],$nd);
                 }
                 
-                $noeud_data = ''; //Effacer les données
+                $nd = ''; //Effacer les données
 
-                $data_sent = false;
-                $noeud[$branche]++; 
+                $dw = false;
+                $n[$b]++; 
                 break;
             default: //Données
-                $noeud_data .= $char;
+                $nd .= $char;
         }
     }
 }/*}}}*/
@@ -157,9 +157,79 @@ function CreateSqlTable($table) {/*{{{*/
 
 }/*}}}*/
 
+//Lit un SGF et le stocke dans une table de la forme sgftab[noeud][branche]
+function SgfToTab($data) {/*{{{*/
+
+    $sgftab = array();
+
+    $b = 0; //branche actuelle
+    $n = 0; //noeud actuel
+    $bm = 0; //marqueur de branche
+    $nmt = array(); //tableau des noeuds de la forme nmt[marqueur]
+    $nd = ''; //données du noeud
+    $eob = false; //fin de branche
+    $sof = true; //début de fichier
+    $rn = false; //retour au noeud de la branche suivante
+    $dw = false; //données du noeud précédent écrites
+
+    $sgf = fopen($data, "r"); //Ouverture du fichier en lecture seule
+
+    while (!feof($sgf)) { //Lecture du fichier caractère par caractère
+        $char = fgetc($sgf); //Caractère courant
+        switch ($char) {
+            case "(": //Début de branche
+                //si précédée de ) nouvelle branche
+                if ($eob) {
+                    $b++;
+                    $n = $nmt[$bm] + 1;
+                    $bm--;
+                    $eob = false;
+                    $rn = true;
+                }
+                //sinon on est encore dans la même et c'est un repère
+                else {
+                    if (!$sof) {
+                        $bm++;
+                        $nmt[$bm] = $n;
+                    }
+                }
+                break;
+            case ")": //Fin de branche
+                if (!$dw) {
+                    $sgftab[$n][$b] = $nd;
+                    $nd = ''; //Effacer les données
+                    $dw = true;
+                }
+                $eob = true;
+                break;
+            case ";": //Nouveau noeud
+                if (!$sof) {
+                    if (!$dw) {
+                        $sgftab[$n][$b] = $nd;
+                        $nd = ''; //Effacer les données
+                    }
+                    if (!$rn) {
+                        $n++; 
+                    }
+                    $rn = false;
+                    $dw = false;
+                }
+                $sof = false;
+                break;
+            default: //Données
+                $nd .= $char;
+        }
+    }
+    return $sgftab;
+}/*}}}*/
+
 $sgf_file = 'sgf/branches.sgf';
 //echo SgfToJson($sgf_file);
 
-SgfToSql($sgf_file);
+//SgfToSql($sgf_file);
 
+$tab = SgfToTab($sgf_file);
+
+header('Content-type: application/json');
+echo json_encode($tab);
 ?>

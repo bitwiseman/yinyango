@@ -44,16 +44,13 @@ jQuery(document).ready(function($) {
     
     // TODO: Récupérer la traduction du fichier SGF sous forme de tableau et l'afficher
 
-    var json_simple = {branche0:{noeud0:{GM:"1",FF:"4",CA:"UTF-8",AP:"CGoban:3",ST:"2",RU:"Japanese",SZ:"19",KM:"0.00",PW:"Blanc",PB:"Noir"},noeud1:{B:"pp"},noeud2:{W:"dd"},noeud3:{B:"pc"},noeud4:{W:"cq"},noeud5:{B:"fc"}}};
-
-    console.log(json_simple);
-
     // Ebauche de fonctionnement AJAX
     $('#goban td').click(function() {
-        $.getJSON('data.php', { test: "ajax ça roule !" + $(this).data('coord') }, function(data) {
+        $.getJSON('sgf.php', function(data) {
             $('#dev').hide();
-            $('#dev').html(data.Retour);
+            $('#dev').html(data[4][3]);
             $('#dev').fadeIn();
+        debugger;
         });
     });
 
