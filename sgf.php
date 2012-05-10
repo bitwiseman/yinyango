@@ -220,16 +220,53 @@ function SgfToTab($data) {/*{{{*/
                 $nd .= $char;
         }
     }
-    return $sgftab;
+    return KeysTable($sgftab);
+}/*}}}*/
+
+//organise les données SGF dans un tableau[noeud][branche][clé] = valeur
+function KeysTable($table) {/*{{{*/
+
+    $keys_table = array();
+
+    for ($i = 0; $i < sizeof($table); $i++) {
+        foreach ($table[$i] as $j => $value) {
+            //lecture caractère par caratère
+            $valchars = str_split($value);
+            $key = '';
+            $isval = false;
+            $val = '';
+            foreach ($valchars as $char) {
+                switch ($char) {
+                case "[": //début de valeur
+                    $isval = true;
+                    break;
+                case "]": //fin de valeur
+                    $keys_table[$i][$j][$key] = $val;
+                    $key = '';
+                    $isval = false;
+                    $val = '';
+                    break;
+                default:
+                    if ($isval) {
+                        $val .= $char;
+                    }
+                    else {
+                        if ($char != "\n") {
+                            $key .= $char;
+                        }
+                    }
+                }
+            }
+        }
+    }  
+    return $keys_table;
 }/*}}}*/
 
 $sgf_file = 'sgf/branches.sgf';
-//echo SgfToJson($sgf_file);
-
-//SgfToSql($sgf_file);
 
 $tab = SgfToTab($sgf_file);
 
+//renvoi le tableau[noeuds][branches][clés] encodé en json
 header('Content-type: application/json');
 echo json_encode($tab);
 ?>

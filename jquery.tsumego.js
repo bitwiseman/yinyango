@@ -48,7 +48,7 @@ jQuery(document).ready(function($) {
     $('#goban td').click(function() {
         $.getJSON('sgf.php', function(data) {
             $('#dev').hide();
-            $('#dev').html(data[4][3]);
+            $('#dev').html(data[0][0]['SZ']);
             $('#dev').fadeIn();
         debugger;
         });
