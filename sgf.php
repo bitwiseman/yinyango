@@ -262,11 +262,18 @@ function KeysTable($table) {/*{{{*/
     return $keys_table;
 }/*}}}*/
 
-$sgf_file = 'sgf/branches.sgf';
+//récupère le nom de fichier SGF
+$sgf = '';
+if (isset($_GET['file'])) {
+    $sgf = $_GET['file'];
+    //tester que le fichier existe
+    if (file_exists('sgf/' . $sgf)) {
+        $sgf = 'sgf/' . $sgf;
+        $tab = SgfToTab($sgf);
 
-$tab = SgfToTab($sgf_file);
-
-//renvoi le tableau[noeuds][branches][clés] encodé en json
-header('Content-type: application/json');
-echo json_encode($tab);
+        //renvoi le tableau[noeuds][branches][clés] encodé en json
+        header('Content-type: application/json');
+        echo json_encode($tab);
+    }
+}
 ?>

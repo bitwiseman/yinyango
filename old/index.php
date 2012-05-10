@@ -176,7 +176,7 @@ function Conversion($h,$l){
 
 function Reset_session(){
     session_unset();
-    header('refresh:1;index_old.php');
+    header('refresh:1;index.php');
 }
 
 ?>
@@ -185,7 +185,7 @@ function Reset_session(){
     <head>
         <title>tsumego</title>
         <meta charset="utf-8" />
-        <link type="text/css" rel="stylesheet" href="tsumego_old.css" />
+        <link type="text/css" rel="stylesheet" href="tsumego.css" />
     </head>
     <body>
         <h1><?php echo session_id() ?></h1>
@@ -199,7 +199,7 @@ function Reset_session(){
             if($_SESSION['goban'][$x][$y]['pierre'] == 'n') $pierre = 'noir';
             if($_SESSION['goban'][$x][$y]['pierre'] == 'b') $pierre = 'blanc';
 ?>
-                <td <?php if($pierre != ''){?>class="<?php echo($pierre); ?>"<?php } ?>><?php if($pierre == '') echo('<a class="'.$jeupierre.'" href="index_old.php?'.session_id().'&amp;last='.$_SESSION['jeucouleur'].';'.$x.';'.$y.'"></a>'); ?></td>
+                <td <?php if($pierre != ''){?>class="<?php echo($pierre); ?>"<?php } ?>><?php if($pierre == '') echo('<a class="'.$jeupierre.'" href="index.php?'.session_id().'&amp;last='.$_SESSION['jeucouleur'].';'.$x.';'.$y.'"></a>'); ?></td>
 <?php } ?>
             </tr>
 <?php } ?>

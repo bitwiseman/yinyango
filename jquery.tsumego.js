@@ -46,7 +46,8 @@ jQuery(document).ready(function($) {
 
     // Ebauche de fonctionnement AJAX
     $('#goban td').click(function() {
-        $.getJSON('sgf.php', function(data) {
+        var sgf_file = $("#sgflist").val();
+        $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             $('#dev').hide();
             $('#dev').html(data[0][0]['SZ']);
             $('#dev').fadeIn();

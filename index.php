@@ -13,7 +13,7 @@ function ListeSgf() {/*{{{*/
     }
 
     if (!empty($sgf_table)) {
-        echo '<select>';
+        echo '<select id="sgflist">';
         for ($i = 0; $i < count($sgf_table); $i++) {
             echo '<option>' . $sgf_table[$i] . '</option>';
         }
