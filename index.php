@@ -18,6 +18,7 @@ function ListeSgf() {/*{{{*/
             echo '<option>' . $sgf_table[$i] . '</option>';
         }
         echo '</select>';
+        echo '<input type="button" id="load_sgf" value="Charger" />';
     }
 }/*}}}*/
 
@@ -33,10 +34,10 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <h1>Tsumego</h1>
-        <div id="dev"></div>
-        <table id="goban"></table>
 
         <?php ListeSgf(); ?>
+
+        <table id="goban"></table>
 
         <script src="jquery.tsumego.js"></script>
     </body>
