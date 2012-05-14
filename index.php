@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 //fait une liste <select> des fichiers SGF
 function ListeSgf() {/*{{{*/
@@ -34,6 +35,7 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <h1>Tsumego</h1>
+        <p id="dev"><?php if (isset($_SESSION['sgf'])) { echo $_SESSION['sgf'][0][0]['SZ']; } ?></p>
 
         <?php ListeSgf(); ?>
 

@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 //Convertit un fichier SGF au format JSON
 function SgfToJson($data) {/*{{{*/
@@ -270,6 +271,8 @@ if (isset($_GET['file'])) {
     if (file_exists('sgf/' . $sgf)) {
         $sgf = 'sgf/' . $sgf;
         $tab = SgfToTab($sgf);
+
+        $_SESSION['sgf'] = $tab;
 
         //renvoi le tableau[noeuds][branches][clés] encodé en json
         header('Content-type: application/json');

@@ -46,6 +46,7 @@ jQuery(document).ready(function($) {
         var sgf_file = $("#sgflist").val();
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             donnees = data; 
+            $('#dev').html(donnees[0][0]['SZ']);
             if (donnees[0][0]['SZ'] == 19) {
                 $('#goban').fadeIn(); // Affiche le goban progressivement
             }
