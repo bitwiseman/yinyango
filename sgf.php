@@ -221,6 +221,7 @@ function SgfToTab($data) {/*{{{*/
                 $nd .= $char;
         }
     }
+    $_SESSION['branchs'] = $b;
     return KeysTable($sgftab);
 }/*}}}*/
 
@@ -263,6 +264,33 @@ function KeysTable($table) {/*{{{*/
     return $keys_table;
 }/*}}}*/
 
+//traite le déroulement du jeu et enregistre chaque état dans un tableau
+function GobanTable($table) {/*{{{*/
+
+    $branchs = $_SESSION['branchs'];
+
+    for ($i = 0; $i <= $branchs; $i++) {
+        for ($j = 0; $j < sizeof($table); $j++) {
+            if (isset($table[$j][$i])) {
+                foreach ($table[$j][$i] as $key => $value) {
+                    switch ($key) {
+                    case 'B': //noir joue
+                        //TODO en fonction du coup précédent
+                        break;
+                    case 'W': //blanc joue
+                        break;
+                    case 'AB': //ajout de pierre(s) noire(s)
+                        break;
+                    case 'AW': //ajout de pierre(s) blanche(s)
+                        break;
+                    default:
+                    }
+                }
+            }
+        }
+    }
+}/*}}}*/
+
 //récupère le nom de fichier SGF
 $sgf = '';
 if (isset($_GET['file'])) {
@@ -272,7 +300,11 @@ if (isset($_GET['file'])) {
         $sgf = 'sgf/' . $sgf;
         $tab = SgfToTab($sgf);
 
-        $_SESSION['sgf'] = $tab;
+        $_SESSION['size'] = $tab[0][0]['SZ'];
+
+        $gob = GobanTable($tab);
+
+        $_SESSION['goban'] = $gob;
 
         //renvoi le tableau[noeuds][branches][clés] encodé en json
         header('Content-type: application/json');

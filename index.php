@@ -35,7 +35,7 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <h1>Tsumego</h1>
-        <p id="dev"><?php if (isset($_SESSION['sgf'])) { echo $_SESSION['sgf'][0][0]['SZ']; } ?></p>
+        <p id="dev"><?php if (isset($_SESSION['size'])) { echo $_SESSION['size']; } ?></p>
 
         <?php ListeSgf(); ?>
 
