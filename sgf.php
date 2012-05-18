@@ -275,13 +275,16 @@ function GobanTable($table) {/*{{{*/
                 foreach ($table[$j][$i] as $key => $value) {
                     switch ($key) {
                     case 'B': //noir joue
-                        //TODO en fonction du coup précédent
+                        PlayMove($j,$i,'b',$value);
                         break;
                     case 'W': //blanc joue
+                        PlayMove($j,$i,'w',$value);
                         break;
                     case 'AB': //ajout de pierre(s) noire(s)
+                        AddMove($j,$i,'b',$value);
                         break;
                     case 'AW': //ajout de pierre(s) blanche(s)
+                        AddMove($j,$i,'w',$value);
                         break;
                     default:
                     }
@@ -290,6 +293,35 @@ function GobanTable($table) {/*{{{*/
         }
     }
 }/*}}}*/
+
+function PlayMove($node,$branch,$color,$coord) {
+
+    $goban = $_SESSION['goban'];
+    $size = $_SESSION['size'];
+
+    if (isset($goban[$node-1][$branch])) {
+        //récupère l'état précedent dans la même branche
+        echo 'sb'.$color.',';
+        $goban[$node][$branch] = $color.$coord;
+    }
+    elseif (isset($goban[$node-1][$branch-1])) {
+        //récupère l'état précédent dans la branche inférieure
+        echo 'ib'.$color.',';
+        $goban[$node][$branch] = $color.$coord;
+    }
+    else {
+        //TODO 'while' pour vérifier toute les branches inférieures possibles
+        //premier état
+        $goban[$node][$branch] = $color.$coord;
+        echo 'fm'.$color.',';
+    }
+
+    $_SESSION['goban'] = $goban;
+}
+
+function AddMove($node,$branch,$color,$coord) {
+
+}
 
 //récupère le nom de fichier SGF
 $sgf = '';
@@ -302,13 +334,13 @@ if (isset($_GET['file'])) {
 
         $_SESSION['size'] = $tab[0][0]['SZ'];
 
-        $gob = GobanTable($tab);
-
-        $_SESSION['goban'] = $gob;
+        $_SESSION['goban'] = array();
+        GobanTable($tab); //stocke les états du jeu dans $_SESSION['goban']
 
         //renvoi le tableau[noeuds][branches][clés] encodé en json
         header('Content-type: application/json');
-        echo json_encode($tab);
+        echo json_encode($_SESSION['goban']);
+        //echo json_encode($tab);
     }
 }
 ?>
