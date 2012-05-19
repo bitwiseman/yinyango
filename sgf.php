@@ -299,21 +299,18 @@ function PlayMove($node,$branch,$color,$coord) {
     $goban = $_SESSION['goban'];
     $size = $_SESSION['size'];
 
-    if (isset($goban[$node-1][$branch])) {
-        //récupère l'état précedent dans la même branche
-        echo 'sb'.$color.',';
-        $goban[$node][$branch] = $color.$coord;
+    $b = $branch;
+    while ($b >= 0) { //cherche un état précédent
+        if (isset($goban[$node-1][$b])) {
+            echo $branch.':'.$node.':'.$b.',';
+            $goban[$node][$branch] = $color.$coord;
+            break;
+        }
+        $b--;
     }
-    elseif (isset($goban[$node-1][$branch-1])) {
-        //récupère l'état précédent dans la branche inférieure
-        echo 'ib'.$color.',';
+    if ($b == -1) { //on n'a pas trouvé d'état précédent donc c'est un départ
+        echo 'd'.$node.':'.$branch.',';
         $goban[$node][$branch] = $color.$coord;
-    }
-    else {
-        //TODO 'while' pour vérifier toute les branches inférieures possibles
-        //premier état
-        $goban[$node][$branch] = $color.$coord;
-        echo 'fm'.$color.',';
     }
 
     $_SESSION['goban'] = $goban;
