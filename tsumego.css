@@ -4,25 +4,25 @@ body {
     text-align: center;
 }
 #goban {
-    background-image: url(images/goban19.svg);
+    /*background-image: url(images/goban19.svg);*/
     background-size: 100% 100%;
     margin: auto;
     border-collapse: collapse;
     /*cursor:none;*/
 }
-.jeunoir:hover {
+.blackp:hover {
     background-image: url(images/noirs.svg);
     background-size: 100% 100%;
 }
-.jeublanc:hover {
+.whitep:hover {
     background-image: url(images/blancs.svg);
     background-size: 100% 100%;
 }
-.noir {
+.black {
     background-image: url(images/noir.svg);
     background-size: 100% 100%;
 }
-.blanc {
+.white {
     background-image: url(images/blanc.svg);
     background-size: 100% 100%;
 }
