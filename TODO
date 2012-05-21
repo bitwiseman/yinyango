@@ -1,12 +1,9 @@
-Tsumego (jQuery)
-
 Objectifs:
 - Séparer l'affichage du traitement des données
 - Avoir un affichage plus réactif grâce à javascript
 - Ajouter des effets visuels
 - Réécrire le code
 - Adapter le code pour avoir un support des bases de données
-- ...
 
 Idées en vrac:
 - Traduire les fichiers SGF en données JSON et vice-versa (php ou js?)
@@ -17,12 +14,4 @@ Idées en vrac:
     Afficher/masquer l'arbre
 - Afficher/masquer les commentaires
 - Traiter tout les calculs en php et envoyer toutes les grilles
-  (ou) envoyer la grille de la position actuelle seulement
-  (ou) envoyer les changements  
-
-Table SQL par SGF:
-
- ID   | branche1 | branche2 | branche3 ...
-coup1 | info+état|          |
-coup2 | ...      |          |
-coup3 | ...      |          |
+- Stocker les grilles calculées dans une BDD SQL
