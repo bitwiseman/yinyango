@@ -7,16 +7,48 @@ class sgf
     private $game;
     private $size;
     private $branchs;
-    
-    function __construct($file)
-    {
-        //TODO test si le fichier SGF est déjà enregistré dans la BDD
-        //et charge les variables, sinon calcule le déroulement de la
-        //partie et la stocke dans la BDD.
-        $temptab = $this->SgfToTab($file);
-        $this->size = $temptab[0][0]['SZ'];
-        $this->GameTable($temptab);
-    }
+
+    // construction des variables
+    function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
+        // connexion base de données
+        try {
+            $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+            $db = new PDO(
+                'mysql:host=' . $hostname . ';dbname=' . $dbname,
+                $dbuser,
+                $dbpass,
+                $pdo_options);
+        }
+        catch (Exception $e) {
+            die('Erreur : ' . $e->getMessage());
+        }
+
+        // récupère les données du fichier ou les enregistre si elles n'existent pas
+        $select = $db->prepare('SELECT * FROM sgf WHERE file=?');
+        $select->execute(array($file));
+        $vars = $select->fetch();
+        $select->closeCursor();
+        if (!empty($vars)) {
+            $this->game = json_decode($vars['game']);
+            $this->size = $vars['size'];
+            $this->branchs = $vars['branchs'];
+        }
+        else {
+            $temptab = $this->SgfToTab($file);
+            $this->size = $temptab[0][0]['SZ'];
+            $this->GameTable($temptab);
+            
+            $jsongame = json_encode($this->game);
+            $insert = $db->prepare('INSERT INTO sgf VALUES(:file, :game, :size, :branchs)');
+            $insert->execute(array(
+                'file' => $file,
+                'game' => $jsongame,
+                'size' => $this->size,
+                'branchs' => $this->branchs,
+            ));
+        }
+        $db = null; // ferme la connexion
+    }/*}}}*/
 
     public function getGame() {
         return $this->game;
