@@ -31,15 +31,15 @@ class sgf
 
         $sgftab = array();
 
-        $b = 0; // branche actuelle
-        $n = 0; // noeud actuel
-        $bm = 0; // marqueur de branche
-        $nmt = array(); // tableau des noeuds de la forme nmt[marqueur]
-        $nd = ''; // données du noeud
-        $eob = false; // fin de branche
-        $sof = true; // début de fichier
-        $rn = false; // retour au noeud de la branche suivante
-        $dw = false; // données du noeud précédent écrites
+        $branch = 0; // branche actuelle
+        $node = 0; // noeud actuel
+        $mark = 0; // marqueur de branche
+        $nodemark = array(); // tableau des noeuds de marqueurs pour revenir aux branches
+        $nodedata = ''; // données du noeud
+        $branchend = false; // fin de branche
+        $start = true; // début de fichier
+        $retnode = false; // retour au noeud de la branche suivante
+        $dataw = false; // données du noeud précédent écrites
 
         $file = fopen($data, "r"); // ouverture du fichier en lecture seule
 
@@ -48,48 +48,48 @@ class sgf
             switch ($char) {
             case "(": // début de branche
                 // si précédée de ) nouvelle branche
-                if ($eob) {
-                    $b++;
-                    $n = $nmt[$bm] + 1;
-                    $bm--;
-                    $eob = false;
-                    $rn = true;
+                if ($branchend) {
+                    $branch++;
+                    $node = $nodemark[$mark] + 1;
+                    $mark--;
+                    $branchend = false;
+                    $retnode = true;
                 }
                 // sinon on est encore dans la même et c'est un repère
                 else {
-                    if (!$sof) {
-                        $bm++;
-                        $nmt[$bm] = $n;
+                    if (!$start) {
+                        $mark++;
+                        $nodemark[$mark] = $node;
                     }
                 }
                 break;
             case ")": // fin de branche
-                if (!$dw) {
-                    $sgftab[$n][$b] = $nd;
-                    $nd = ''; // effacer les données
-                    $dw = true;
+                if (!$dataw) {
+                    $sgftab[$node][$branch] = $nodedata;
+                    $nodedata = ''; // effacer les données
+                    $dataw = true;
                 }
-                $eob = true;
+                $branchend = true;
                 break;
             case ";": // nouveau noeud
-                if (!$sof) {
-                    if (!$dw) {
-                        $sgftab[$n][$b] = $nd;
-                        $nd = ''; // effacer les données
+                if (!$start) {
+                    if (!$dataw) {
+                        $sgftab[$node][$branch] = $nodedata;
+                        $nodedata = ''; // effacer les données
                     }
-                    if (!$rn) {
-                        $n++; 
+                    if (!$retnode) {
+                        $node++; 
                     }
-                    $rn = false;
-                    $dw = false;
+                    $retnode = false;
+                    $dataw = false;
                 }
-                $sof = false;
+                $start = false;
                 break;
             default: // données
-                $nd .= $char;
+                $nodedata .= $char;
             }
         }
-        $this->branchs = $b;
+        $this->branchs = $branch;
         return $this->KeysTable($sgftab);
     }/*}}}*/
 

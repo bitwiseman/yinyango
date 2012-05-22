@@ -2,6 +2,7 @@ jQuery(document).ready(function($) {
     var game;
     var size;
 
+    // Ajuste la taille du goban en fonction de la fenêtre du navigateur 
     var ResizeGoban = function() {
         var gobansize;
 
@@ -14,7 +15,6 @@ jQuery(document).ready(function($) {
         $('#goban').css('height',gobansize + 'px');
     };
 
-    // Redimensionne le goban avec la fenêtre du navigateur 
     $(window).resize(function() {
         ResizeGoban(); 
     }); 
@@ -29,7 +29,6 @@ jQuery(document).ready(function($) {
             $('#goban').hide(); // Cache le goban 
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
 
-            // Ajuste la taille du goban en fonction de la fenêtre du navigateur 
             ResizeGoban(); 
 
             // Formation des lignes et colonnes du goban en enregistrant la coordonnée dans un data 
