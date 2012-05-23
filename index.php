@@ -27,18 +27,24 @@ function ListeSgf() {/*{{{*/
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Tsumego</title>
+        <title id="title">Tsumego</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="tsumego.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     </head>
     <body>
         <div id="header">
-        <h1>Tsumego</h1>
+            <h1>Tsumego</h1>
 
-        <?php ListeSgf(); ?>
-</div>
+            <?php ListeSgf(); ?>
+        </div>
+
         <table id="goban"></table>
+
+        <div id="navbar">
+            <input type="button" id="prev" value="<" />
+            <input type="button" id="next" value=">" />
+        </div>
 
         <script src="jquery.tsumego.js"></script>
     </body>
