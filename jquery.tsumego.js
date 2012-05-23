@@ -22,10 +22,10 @@ jQuery(document).ready(function($) {
     var PlaceStones = function() {
         black = game[node][branch]['b'].split(',');
         white = game[node][branch]['w'].split(',');
-        for (var b = 0; b < black.length; b++) {
+        for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','black');
         };
-        for (var w = 0; w < white.length; w++) {
+        for (var w = 0, cw = white.length; w < cw; w++) {
             $('#' + white[w]).attr('class','white');
         };
         $('#title').html(node);
