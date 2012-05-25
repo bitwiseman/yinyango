@@ -30,7 +30,9 @@ function ListeSgf() {/*{{{*/
         <title id="title">Tsumego</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="tsumego.css" />
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-darkness/jquery-ui.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
     </head>
     <body>
         <div id="header">

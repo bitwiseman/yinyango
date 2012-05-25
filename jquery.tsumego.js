@@ -44,9 +44,32 @@ jQuery(document).ready(function($) {
 
     $('#navbar').hide(); // cache la barre de navigation
 
-    $(window).resize(function() {
+    /*$(window).resize(function() {
         ResizeGoban(); 
-    }); 
+    }); */
+    
+    // touche enfoncée
+    $(window).keydown(function(event) {
+        if (event.which == 17) { // touche ctrl
+            $('#goban').draggable();
+        }
+        if (event.which == 18) { // touche alt
+            $('#goban').resizable({
+                grid: [size, size],
+                aspectRatio: 1
+            });
+        }
+    });
+
+    // touche relâchée
+    $(window).keyup(function(event) {
+        if (event.which == 17) { // touche ctrl
+            $('#goban').draggable('destroy');
+        }
+        if (event.which == 18) { // touche alt
+            $('#goban').resizable('destroy');
+        }
+    });
 
     // passage à l'état suivant
     $('#next').click(function() {
