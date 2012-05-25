@@ -10,20 +10,27 @@ body {
     border-collapse: collapse;
     /*cursor:none;*/
 }
-.blackp:hover {
-    background-image: url(images/noirs.svg);
-    background-size: 100% 100%;
-}
-.whitep:hover {
-    background-image: url(images/blancs.svg);
-    background-size: 100% 100%;
-}
 .black {
-    background-image: url(images/noir.svg);
+    background-image: url(images/black.svg);
     background-size: 100% 100%;
 }
 .white {
-    background-image: url(images/blanc.svg);
+    background-image: url(images/white.svg);
     background-size: 100% 100%;
 }
-
+.blackp {
+    background-image: url(images/blackp.svg);
+    background-size: 100% 100%;
+}
+.whitep {
+    background-image: url(images/whitep.svg);
+    background-size: 100% 100%;
+}
+.blacks:hover {
+    background-image: url(images/blacks.svg);
+    background-size: 100% 100%;
+}
+.whites:hover {
+    background-image: url(images/whites.svg);
+    background-size: 100% 100%;
+}

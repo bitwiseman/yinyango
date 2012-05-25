@@ -202,12 +202,14 @@ class sgf
                 $this->game[$node][$branch] = $this->game[$node-1][$b];
                 //TODO calculer les pierres mortes et les KO
                 $this->game[$node][$branch][$color] .= $coord.',';
+                $this->game[$node][$branch]['p'] = $color.','.$coord;
                 break;
             }
             $b--;
         }
         if ($b == -1) { //on n'a pas trouvé d'état précédent donc c'est un départ
             $this->game[$node][$branch][$color] = $coord.',';
+            $this->game[$node][$branch]['p'] = $color.','.$coord;
             $ocolor = ($color == 'b') ? 'w' : 'b';
             $this->game[$node][$branch][$ocolor] = '';
         }

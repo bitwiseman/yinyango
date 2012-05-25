@@ -22,20 +22,22 @@ jQuery(document).ready(function($) {
     var PlaceStones = function() {
         black = game[node][branch]['b'].split(',');
         white = game[node][branch]['w'].split(',');
+        played = game[node][branch]['p'].split(',');
+        playedcolor = (played[0] == 'b') ? 'black' : 'white';
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','black');
         };
         for (var w = 0, cw = white.length; w < cw; w++) {
             $('#' + white[w]).attr('class','white');
         };
-        $('#title').html(node);
+        $('#' + played[1]).attr('class',playedcolor + 'p'); // visualiser la dernière pierre jouée
     };
 
     // vide le goban de toutes ses pierres
     var ClearGoban = function() {
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
-                $('#' + coord[j] + coord[i]).attr('class','whitep');
+                $('#' + coord[j] + coord[i]).attr('class','whites');
             }
         }
     };
@@ -95,7 +97,7 @@ jQuery(document).ready(function($) {
             for (var i = 0; i < size; i++) {
                 $('#goban').append('<tr class="line' + i + '"></tr>');
                 for (var j = 0; j < size; j++) {
-                    $('.line' + i).append('<td class="whitep" id="' + coord[j] + coord[i] + '"></td>');
+                    $('.line' + i).append('<td class="whites" id="' + coord[j] + coord[i] + '"></td>');
                 }
             }
 
