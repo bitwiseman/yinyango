@@ -18,7 +18,7 @@ function ListeSgf() {/*{{{*/
             echo '<option>' . $sgf_table[$i] . '</option>';
         }
         echo '</select>';
-        echo '<input type="button" id="loadsgf" value="Charger" />';
+        echo '<button id="loadsgf">charger</button>';
     }
 }/*}}}*/
 
@@ -30,24 +30,17 @@ function ListeSgf() {/*{{{*/
         <title id="title">Tsumego</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="tsumego.css" />
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-darkness/jquery-ui.css" />
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/sunny/jquery-ui.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
     </head>
     <body>
-        <div id="header">
-            <h1>Tsumego</h1>
-
-            <?php ListeSgf(); ?>
-        </div>
-
         <table id="goban"></table>
-
-        <div id="navbar">
-            <input type="button" id="prev" value="<" />
-            <input type="button" id="next" value=">" />
-        </div>
-
+        <span id="navbar" class="ui-widget-header ui-corner-all">
+            <button id="prev">coup précédent</button>
+            <button id="next">coup suivant</button>
+            <?php ListeSgf(); ?>
+        </span>
         <script src="jquery.tsumego.js"></script>
     </body>
 </html>

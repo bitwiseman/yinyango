@@ -10,9 +10,9 @@ jQuery(document).ready(function($) {
         var gobansize;
 
         if ($(window).width() > $(window).height()) {
-            gobansize = Math.ceil(($(window).height() - $('#header').height() * 2) / size) * size;
+            gobansize = Math.floor($(window).height() / size) * size;
         } else {
-            gobansize = Math.ceil(($(window).width() - $('#header').height() * 2) / size) * size;
+            gobansize = Math.floor($(window).width() / size) * size;
         }
         $('#goban').css('width',gobansize + 'px');
         $('#goban').css('height',gobansize + 'px');
@@ -42,62 +42,90 @@ jQuery(document).ready(function($) {
         }
     };
 
-    $('#navbar').hide(); // cache la barre de navigation
+    /**
+     * INITIALISATION
+     */
+
+    // TODO images svg pour les boutons
+    $('#prev').button({
+        text: false,
+        icons: {
+            primary: "ui-icon-seek-prev"
+        }
+    });
+
+    $('#next').button({
+        text: false,
+        icons: {
+            primary: "ui-icon-seek-next"
+        }
+    });
+
+    $('#next').attr('disabled','disabled');
+    $('#prev').attr('disabled','disabled');
+
+    /**
+     * EVENEMENTS
+     */
 
     /*$(window).resize(function() {
         ResizeGoban(); 
     }); */
     
     // touche enfoncée
-    $(window).keydown(function(event) {
+    $(window).keydown(function(event) {//{{{
         if (event.which == 17) { // touche ctrl
             $('#goban').draggable();
+            $('#navbar').draggable();
         }
         if (event.which == 18) { // touche alt
             $('#goban').resizable({
                 grid: [size, size],
                 aspectRatio: 1
             });
+            $('#navbar').resizable();
         }
-    });
+    });//}}}
 
     // touche relâchée
-    $(window).keyup(function(event) {
+    $(window).keyup(function(event) {//{{{
         if (event.which == 17) { // touche ctrl
             $('#goban').draggable('destroy');
+            $('#navbar').draggable('destroy');
         }
         if (event.which == 18) { // touche alt
             $('#goban').resizable('destroy');
+            $('#navbar').resizable('destroy');
         }
-    });
+    });//}}}
 
     // passage à l'état suivant
-    $('#next').click(function() {
+    $('#next').click(function() {//{{{
         node++;
-        $('#prev').show();
+        $('#prev').removeAttr('disabled');
         // test si il existe un état suivant dans la branche actuelle
         if (game[node+1] == null || game[node+1][branch] == null) {
-            $('#next').hide();
+            $('#next').attr('disabled','disabled');
         };
         ClearGoban();
         if (game[node] != null) {
             PlaceStones();
         };
-    });
+    });//}}}
 
     // retour à l'état précédent
-    $('#prev').click(function() {
+    $('#prev').click(function() {//{{{
         node--;
-        $('#next').show();
+        $('#next').removeAttr('disabled');
         // test si on est au début de la branche
         if (node == 0) {
-            $('#prev').hide();
+            $('#prev').attr('disabled','disabled');
         };
         ClearGoban();
         if (game[node] != null) {
             PlaceStones();
         };
-    });
+    });//}}}
 
     // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
     $('#loadsgf').click(function() {//{{{
@@ -111,8 +139,10 @@ jQuery(document).ready(function($) {
 
             $('#goban').hide(); // cache le goban 
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
-
-            ResizeGoban(); 
+            
+            if ($('#goban').css('width') == '0px') {
+                ResizeGoban();
+            };
 
             // formation des lignes et colonnes du goban en enregistrant la coordonnée 
             $('#goban').html(''); // supprime l'ancien goban
@@ -133,7 +163,7 @@ jQuery(document).ready(function($) {
             };
 
             $('#goban').fadeIn(); // affiche le goban progressivement
-            $('#prev').hide(); // masque le bouton précédent
+            $('#next').removeAttr('disabled');
             $('#navbar').fadeIn(); // affiche la barre de navigation
         });
     });//}}}

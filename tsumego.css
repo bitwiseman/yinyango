@@ -4,11 +4,16 @@ body {
     text-align: center;
 }
 #goban {
-    /*background-image: url(images/goban19.svg);*/
     background-size: 100% 100%;
     margin: auto;
     border-collapse: collapse;
-    /*cursor:none;*/
+}
+#navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 14px;
+    font-size: 14px;
 }
 .black {
     background-image: url(images/black.svg);
