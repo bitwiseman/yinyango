@@ -4,7 +4,6 @@ include_once 'config.php';
 include_once 'sgf.class.php';
 
 //récupère le nom de fichier SGF
-$sgf = '';
 if (isset($_GET['file'])) {
     $file = $_GET['file'];
     //tester que le fichier existe

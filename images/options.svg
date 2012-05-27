@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="30"
+   height="30"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="prev.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient7460">
+      <stop
+         style="stop-color:#e3d099;stop-opacity:1;"
+         offset="0"
+         id="stop7462" />
+      <stop
+         style="stop-color:#eab139;stop-opacity:1;"
+         offset="1"
+         id="stop7464" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient7448">
+      <stop
+         style="stop-color:#544422;stop-opacity:1;"
+         offset="0"
+         id="stop7450" />
+      <stop
+         style="stop-color:#bc9120;stop-opacity:1;"
+         offset="1"
+         id="stop7452" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3767"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8"
+     inkscape:cx="9.842032"
+     inkscape:cy="21.775144"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1022.3622)">
+    <g
+       id="g5854"
+       transform="matrix(0.99186362,0,0,0.85268027,1.3155754,153.27675)"
+       style="fill:#000000;fill-opacity:1" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#0b0900;stroke-width:0.86838216;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:4"
+       clip-path="none"
+       d="M 13.21875 6.4375 C 13.152034 6.4327949 13.076283 6.4492592 13 6.46875 C 11.750517 6.7880038 13.098888 9.4070301 12 10.09375 C 10.926584 10.764552 9.2768814 8.2954953 8.46875 9.28125 C 7.6414414 10.290397 10.244211 11.627816 9.75 12.84375 C 9.2672444 14.031499 6.5245639 13.029369 6.4375 14.3125 C 6.34837 15.62608 9.2007629 15.125547 9.5 16.40625 C 9.7923007 17.657266 6.9889909 18.503355 7.65625 19.59375 C 8.3393433 20.710021 10.396613 18.581213 11.375 19.4375 C 12.330708 20.273938 10.552038 22.643835 11.71875 23.125 C 12.913148 23.617583 13.309923 20.676452 14.59375 20.78125 C 15.847817 20.883619 15.77948 23.843103 17 23.53125 C 18.249483 23.211996 16.901112 20.59297 18 19.90625 C 19.073416 19.235448 20.723119 21.704505 21.53125 20.71875 C 22.358559 19.709603 19.755789 18.372184 20.25 17.15625 C 20.732756 15.968501 23.475436 16.970631 23.5625 15.6875 C 23.65163 14.37392 20.799237 14.874453 20.5 13.59375 C 20.207699 12.342734 23.011009 11.496645 22.34375 10.40625 C 21.660657 9.2899795 19.603387 11.418787 18.625 10.5625 C 17.669292 9.7260619 19.447962 7.3561652 18.28125 6.875 C 17.086852 6.3824166 16.690077 9.3235482 15.40625 9.21875 C 14.230562 9.1227791 14.219495 6.5080765 13.21875 6.4375 z M 15 12 C 16.656854 12 18 13.343146 18 15 C 18 16.656854 16.656854 18 15 18 C 13.343146 18 12 16.656854 12 15 C 12 13.343146 13.343146 12 15 12 z "
+       transform="translate(0,1022.3622)"
+       id="path7518" />
+  </g>
+</svg>

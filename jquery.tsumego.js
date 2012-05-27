@@ -5,14 +5,32 @@ jQuery(document).ready(function($) {
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
 
-    // ajuste la taille du goban en fonction de la fenêtre du navigateur 
+    // ajuste la taille du goban en fonction de la fenêtre du navigateur
+    // et place la barre de navigation pour qu'elle occupe l'espace restant
     var ResizeGoban = function() {
         var gobansize;
+        var navbarsize;
 
-        if ($(window).width() > $(window).height()) {
+        if ($(window).width() >= $(window).height()) {
             gobansize = Math.floor($(window).height() / size) * size;
+            navbarsize = $(window).width() - gobansize - 20;
+            navbarsize = (navbarsize < 40) ? 40 : navbarsize;
+            $('#navbar').css('bottom','');
+            $('#navbar').css('top',0);
+            $('#navbar').css('width',navbarsize);
+            $('#navbar').css('height',$(window).height() - 20);
+            $('.button').css('height','32%');
+            $('.button').css('width','100%');
         } else {
             gobansize = Math.floor($(window).width() / size) * size;
+            navbarsize = $(window).height() - gobansize - 20;
+            navbarsize = (navbarsize < 40) ? 40 : navbarsize;
+            $('#navbar').css('top','');
+            $('#navbar').css('bottom',0);
+            $('#navbar').css('height',navbarsize);
+            $('#navbar').css('width',$(window).width() - 20);
+            $('.button').css('height','100%');
+            $('.button').css('width','32%');
         }
         $('#goban').css('width',gobansize + 'px');
         $('#goban').css('height',gobansize + 'px');
@@ -46,32 +64,17 @@ jQuery(document).ready(function($) {
      * INITIALISATION
      */
 
-    // TODO images svg pour les boutons
-    $('#prev').button({
-        text: false,
-        icons: {
-            primary: "ui-icon-seek-prev"
-        }
-    });
-
-    $('#next').button({
-        text: false,
-        icons: {
-            primary: "ui-icon-seek-next"
-        }
-    });
-
-    $('#next').attr('disabled','disabled');
-    $('#prev').attr('disabled','disabled');
+    $('#navbar').hide();
+    $('#next,#prev').attr('disabled','disabled');
 
     /**
      * EVENEMENTS
      */
 
-    /*$(window).resize(function() {
+    $(window).resize(function() {
         ResizeGoban(); 
-    }); */
-    
+    });
+
     // touche enfoncée
     $(window).keydown(function(event) {//{{{
         if (event.which == 17) { // touche ctrl
@@ -98,6 +101,11 @@ jQuery(document).ready(function($) {
             $('#navbar').resizable('destroy');
         }
     });//}}}
+
+    // bouton options
+    $('#options').click(function() {
+       $('#menu').fadeIn(); 
+    });
 
     // passage à l'état suivant
     $('#next').click(function() {//{{{
@@ -137,7 +145,8 @@ jQuery(document).ready(function($) {
             game = data.game;
             size = data.size;
 
-            $('#goban').hide(); // cache le goban 
+            $('#goban').hide(); // cache le goban
+            $('#menu').hide();
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if ($('#goban').css('width') == '0px') {
@@ -163,6 +172,7 @@ jQuery(document).ready(function($) {
             };
 
             $('#goban').fadeIn(); // affiche le goban progressivement
+            $('#navbar').fadeIn();
             $('#next').removeAttr('disabled');
             $('#navbar').fadeIn(); // affiche la barre de navigation
         });
