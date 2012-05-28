@@ -1,5 +1,5 @@
 body {
-    background-color: #bb9955;
+    background-color: #cda657;
     color: #000;
 }
 #menu {
@@ -13,7 +13,7 @@ body {
     background-color: #d9a62c;
     border-radius: 4px;
     border: 1px solid #262626;
-    font-size: 1.5em;
+    font-size: 1.3em;
     cursor: pointer;
 }
 .menubutton:hover {
@@ -36,7 +36,7 @@ body {
 }
 #comments {
     text-align: left;
-    font-size: 1em;
+    font-size: 1.1em;
 }
 .button {
     background-color: #d9a62c;

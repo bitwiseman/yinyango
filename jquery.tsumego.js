@@ -11,9 +11,10 @@ jQuery(document).ready(function($) {
         var navbarsize;
         var winw = $(window).width();
         var winh = $(window).height();
+        var sizeb = parseInt(size) + 2; // ajout des bordures
 
         if (winw >= winh) {
-            gobansize = Math.floor((winh - 70) / size) * size;
+            gobansize = Math.floor((winh - 70) / sizeb) * sizeb;
             navbarsize = winh - gobansize - 20;
             $('#navbar').css({
                 top: '',
@@ -32,7 +33,7 @@ jQuery(document).ready(function($) {
                 height: ''
             });
         } else {
-            gobansize = Math.floor((winw - 70) / size) * size;
+            gobansize = Math.floor((winw - 70) / sizeb) * sizeb;
             navbarsize = winw - gobansize - 20;
             $('#navbar').css({
                 top: 0,
@@ -179,10 +180,14 @@ jQuery(document).ready(function($) {
             // formation des lignes et colonnes du goban en enregistrant la coordonnée 
             $('#goban').html(''); // supprime l'ancien goban
 
-            for (var i = 0; i < size; i++) {
+            for (var i = -1; i <= size; i++) {
                 $('#goban').append('<tr class="line' + i + '"></tr>');
-                for (var j = 0; j < size; j++) {
-                    $('.line' + i).append('<td class="whites" id="' + coord[j] + coord[i] + '"></td>');
+                for (var j = -1; j <= size; j++) {
+                    if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
+                        $('.line' + i).append('<td></td>'); // cellules vides pour les bordures
+                    } else {
+                        $('.line' + i).append('<td class="whites" id="' + coord[j] + coord[i] + '"></td>');
+                    }
                 }
             }
 

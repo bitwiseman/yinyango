@@ -15,3 +15,5 @@ Idées en vrac:
 - Afficher/masquer les commentaires
 - Traiter tout les calculs en php et envoyer toutes les grilles
 - Stocker les grilles calculées dans une BDD SQL
+
+- Optimiser les SVG
