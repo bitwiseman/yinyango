@@ -10,12 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="30"
-   height="30"
+   width="50"
+   height="50"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="next.svg">
+   sodipodi:docname="prev.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -43,15 +43,16 @@
     <marker
        inkscape:stockid="Arrow1Lstart"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow1Lstart"
        style="overflow:visible">
       <path
          id="path3767"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
-         transform="scale(0.8) translate(12.5,0)" />
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
     </marker>
     <radialGradient
        inkscape:collect="always"
@@ -61,7 +62,7 @@
        cy="6.375"
        fx="-5.375"
        fy="6.375"
-       r="20.111222"
+       r="20.111221"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -78,9 +79,9 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
-     inkscape:window-height="996"
+     inkscape:window-height="498"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="498"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -90,7 +91,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -98,7 +99,7 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-1022.3622)">
+     transform="translate(0,-1002.3622)">
     <g
        id="g5854"
        transform="matrix(0.99186362,0,0,0.85268027,1.3155754,153.27675)"
@@ -118,8 +119,8 @@
        inkscape:rounded="0.16"
        inkscape:randomized="0"
        d="m 12.75,-22.625 c 0,3.637307 -16.5375,13.1852368 -19.6875,11.366583 -3.15,-1.818653 -3.15,-20.914513 0,-22.733166 3.15,-1.818654 19.6875,7.729276 19.6875,11.366583 z"
-       transform="matrix(-0.60803137,0,0,0.57816156,16.048854,1050.4431)"
-       inkscape:transform-center-x="0.87285713"
-       inkscape:transform-center-y="-8.3983872e-05" />
+       transform="matrix(-1.4766476,0,0,1.4041067,27.547217,1059.1301)"
+       inkscape:transform-center-x="2.1197958"
+       inkscape:transform-center-y="-0.00015499872" />
   </g>
 </svg>

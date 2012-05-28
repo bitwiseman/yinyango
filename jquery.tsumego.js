@@ -7,34 +7,39 @@ jQuery(document).ready(function($) {
 
     // ajuste la taille du goban en fonction de la fenêtre du navigateur
     // et place la barre de navigation pour qu'elle occupe l'espace restant
-    var ResizeGoban = function() {
+    var ResizeGoban = function() {//{{{
         var gobansize;
         var navbarsize;
+        var winw = $(window).width();
+        var winh = $(window).height();
 
-        if ($(window).width() >= $(window).height()) {
-            gobansize = Math.floor($(window).height() / size) * size;
-            navbarsize = $(window).width() - gobansize - 20;
-            navbarsize = (navbarsize < 40) ? 40 : navbarsize;
-            $('#navbar').css('bottom','');
-            $('#navbar').css('top',0);
-            $('#navbar').css('width',navbarsize);
-            $('#navbar').css('height',$(window).height() - 20);
-            $('.button').css('height','32%');
-            $('.button').css('width','100%');
+        if (winw >= winh) {
+            gobansize = Math.floor(winh / size) * size;
+            navbarsize = winw - gobansize - 20;
+            navbarsize = (navbarsize <= 50) ? 50 : navbarsize;
+            $('#navbar').css({
+                top: 0,
+                right: 0,
+                bottom: '',
+                left: '',
+                width: navbarsize,
+                height: winh - 20
+            });
         } else {
-            gobansize = Math.floor($(window).width() / size) * size;
-            navbarsize = $(window).height() - gobansize - 20;
-            navbarsize = (navbarsize < 40) ? 40 : navbarsize;
-            $('#navbar').css('top','');
-            $('#navbar').css('bottom',0);
-            $('#navbar').css('height',navbarsize);
-            $('#navbar').css('width',$(window).width() - 20);
-            $('.button').css('height','100%');
-            $('.button').css('width','32%');
+            gobansize = Math.floor(winw / size) * size;
+            navbarsize = winh - gobansize - 20;
+            navbarsize = (navbarsize <= 50) ? 50 : navbarsize;
+            $('#navbar').css({
+                top: '',
+                right: '',
+                bottom: 0,
+                left: 0,
+                width: winw - 20,
+                height: navbarsize
+            });
         }
-        $('#goban').css('width',gobansize + 'px');
-        $('#goban').css('height',gobansize + 'px');
-    };
+        $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
+    };//}}}
 
     // place les pierres de l'état actuel
     var PlaceStones = function() {
@@ -65,7 +70,6 @@ jQuery(document).ready(function($) {
      */
 
     $('#navbar').hide();
-    $('#next,#prev').attr('disabled','disabled');
 
     /**
      * EVENEMENTS
@@ -79,7 +83,6 @@ jQuery(document).ready(function($) {
     $(window).keydown(function(event) {//{{{
         if (event.which == 17) { // touche ctrl
             $('#goban').draggable();
-            $('#navbar').draggable();
         }
         if (event.which == 18) { // touche alt
             $('#goban').resizable({
@@ -94,13 +97,22 @@ jQuery(document).ready(function($) {
     $(window).keyup(function(event) {//{{{
         if (event.which == 17) { // touche ctrl
             $('#goban').draggable('destroy');
-            $('#navbar').draggable('destroy');
         }
         if (event.which == 18) { // touche alt
             $('#goban').resizable('destroy');
             $('#navbar').resizable('destroy');
         }
     });//}}}
+
+    // affiche la barre de navigation
+    $('#navbar').mouseenter(function () {
+        
+    });
+
+    // masque la barre de navigation
+    $('#navbar').mouseleave(function () {
+        
+    });
 
     // bouton options
     $('#options').click(function() {
@@ -147,6 +159,7 @@ jQuery(document).ready(function($) {
 
             $('#goban').hide(); // cache le goban
             $('#menu').hide();
+            $('#next,#prev').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if ($('#goban').css('width') == '0px') {
