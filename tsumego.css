@@ -1,15 +1,8 @@
 body {
-    background-color: #262626;
-    color: #c2c2b0;
+    background-color: #bb9955;
+    color: #000;
 }
 #menu {
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    width: 600px;
-    margin-left: -300px;
-    background-color: #aa4400;
-    border-radius: 8px;
     text-align: center;
     padding: 10px;
 }
@@ -36,6 +29,14 @@ body {
 #navbar {
     position: absolute;
     padding: 10px;
+}
+#infos {
+    position: absolute;
+    padding: 10px;
+}
+#comments {
+    text-align: left;
+    font-size: 1em;
 }
 .button {
     background-color: #d9a62c;

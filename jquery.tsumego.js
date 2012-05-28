@@ -5,8 +5,7 @@ jQuery(document).ready(function($) {
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
 
-    // ajuste la taille du goban en fonction de la fenêtre du navigateur
-    // et place la barre de navigation pour qu'elle occupe l'espace restant
+    // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function() {//{{{
         var gobansize;
         var navbarsize;
@@ -14,28 +13,42 @@ jQuery(document).ready(function($) {
         var winh = $(window).height();
 
         if (winw >= winh) {
-            gobansize = Math.floor(winh / size) * size;
+            gobansize = Math.floor((winh - 70) / size) * size;
+            navbarsize = winh - gobansize - 20;
+            $('#navbar').css({
+                top: '',
+                right: '',
+                bottom: 0,
+                left: 0,
+                width: gobansize - 20,
+                height: navbarsize
+            });
+            $('#infos').css({
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: '',
+                width: winw - gobansize - 20,
+                height: ''
+            });
+        } else {
+            gobansize = Math.floor((winw - 70) / size) * size;
             navbarsize = winw - gobansize - 20;
-            navbarsize = (navbarsize <= 50) ? 50 : navbarsize;
             $('#navbar').css({
                 top: 0,
                 right: 0,
                 bottom: '',
                 left: '',
                 width: navbarsize,
-                height: winh - 20
+                height: gobansize - 20
             });
-        } else {
-            gobansize = Math.floor(winw / size) * size;
-            navbarsize = winh - gobansize - 20;
-            navbarsize = (navbarsize <= 50) ? 50 : navbarsize;
-            $('#navbar').css({
+            $('#infos').css({
                 top: '',
-                right: '',
+                right: 0,
                 bottom: 0,
                 left: 0,
-                width: winw - 20,
-                height: navbarsize
+                width: '',
+                height: winh - gobansize - 20
             });
         }
         $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
@@ -104,19 +117,16 @@ jQuery(document).ready(function($) {
         }
     });//}}}
 
-    // affiche la barre de navigation
-    $('#navbar').mouseenter(function () {
-        
-    });
-
-    // masque la barre de navigation
-    $('#navbar').mouseleave(function () {
-        
-    });
-
     // bouton options
     $('#options').click(function() {
-       $('#menu').fadeIn(); 
+        $('#comments').hide();
+        $('#menu').fadeIn(); 
+    });
+
+    // bouton retour
+    $('#back').click(function() {
+        $('#menu').hide();
+        $('#comments').fadeIn();
     });
 
     // passage à l'état suivant

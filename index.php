@@ -36,16 +36,18 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <table id="goban"></table>
-        <div id="menu">
-            <h1>Menu</h1>
-            <?php ListeSgf(); ?>
-            <button class="menubutton" id="back">retour</button>
-        </div>
         <div id="navbar">
             <input type="image" class="button" id="prev" src="images/prev.svg" />
             <input type="image" class="button" id="next" src="images/next.svg" />
             <input type="image" class="button" id="comment" src="images/comment.svg" />
             <input type="image" class="button" id="options" src="images/options.svg" />
+        </div>
+        <div id="infos">
+            <div id="comments"><p>commentaires</p></div>
+            <div id="menu">
+                <?php ListeSgf(); ?>
+                <button class="menubutton" id="back">retour</button>
+            </div>
         </div>
         <script src="jquery.tsumego.js"></script>
     </body>

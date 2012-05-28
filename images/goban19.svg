@@ -19,22 +19,22 @@
      id="defs4" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#e0b561"
+     pagecolor="#cda657"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4204163"
      inkscape:cx="262.25834"
-     inkscape:cy="551.40309"
+     inkscape:cy="293.26477"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      showguides="true"
      inkscape:window-width="1280"
-     inkscape:window-height="498"
+     inkscape:window-height="996"
      inkscape:window-x="0"
-     inkscape:window-y="498"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:snap-bbox="true"
      inkscape:snap-bbox-midpoints="true"
@@ -70,14 +70,7 @@
      id="layer1"
      transform="translate(-15,-467.36218)">
     <g
-       id="g5184">
-      <rect
-         y="467.36218"
-         x="15"
-         height="570"
-         width="570"
-         id="rect3028"
-         style="fill:#e2bd48;fill-opacity:1" />
+       id="g3928">
       <path
          inkscape:connector-curvature="0"
          id="path3027"
