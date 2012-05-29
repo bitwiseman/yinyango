@@ -14,34 +14,44 @@ jQuery(document).ready(function($) {
         var sizeb = parseInt(size) + 2; // ajout des bordures
 
         if (winw >= winh) {
-            gobansize = Math.floor((winh - 70) / sizeb) * sizeb;
-            navbarsize = winh - gobansize - 20;
+            navbarsize = winh * 0.1; // encombrement 10%
+            gobansize = Math.floor((winh - navbarsize) / sizeb) * sizeb;
+            navbarsize = winh - gobansize;
             $('#navbar').css({
                 top: '',
                 right: '',
                 bottom: 0,
                 left: 0,
-                width: gobansize - 20,
+                width: gobansize,
                 height: navbarsize
+            });
+            $('.button').css({
+                width: '10%',
+                height: ''
             });
             $('#infos').css({
                 top: 0,
                 right: 0,
                 bottom: 0,
                 left: '',
-                width: winw - gobansize - 20,
+                width: winw - gobansize,
                 height: ''
             });
         } else {
-            gobansize = Math.floor((winw - 70) / sizeb) * sizeb;
-            navbarsize = winw - gobansize - 20;
+            navbarsize = winw * 0.1;
+            gobansize = Math.floor((winw - navbarsize) / sizeb) * sizeb;
+            navbarsize = winw - gobansize;
             $('#navbar').css({
                 top: 0,
                 right: 0,
                 bottom: '',
                 left: '',
                 width: navbarsize,
-                height: gobansize - 20
+                height: gobansize
+            });
+            $('.button').css({
+                width: '',
+                height: '10%'
             });
             $('#infos').css({
                 top: '',
@@ -49,7 +59,7 @@ jQuery(document).ready(function($) {
                 bottom: 0,
                 left: 0,
                 width: '',
-                height: winh - gobansize - 20
+                height: winh - gobansize
             });
         }
         $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
