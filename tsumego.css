@@ -4,20 +4,10 @@ body {
 }
 #menu {
     text-align: center;
-    padding: 10px;
 }
 .menubutton {
-    display: block;
-    width: 80%;
-    margin: auto;
-    background-color: #d9a62c;
-    border-radius: 4px;
-    border: 1px solid #262626;
     font-size: 1.3em;
     cursor: pointer;
-}
-.menubutton:hover {
-    background-color: #eab139;
 }
 #goban {
     position: absolute;
@@ -25,7 +15,6 @@ body {
     left: 0;
     background-size: 100% 100%;
     border-collapse: collapse;
-    border-spacing: 0px;
 }
 #navbar {
     position: absolute;

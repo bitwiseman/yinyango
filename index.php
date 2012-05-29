@@ -18,7 +18,7 @@ function ListeSgf() {/*{{{*/
             echo '<option>' . $sgf_table[$i] . '</option>';
         }
         echo '</select>';
-        echo '<button class="menubutton" id="loadsgf">charger</button>';
+        echo '<p class="menubutton" id="loadsgf">charger</p>';
     }
 }/*}}}*/
 
@@ -46,7 +46,7 @@ function ListeSgf() {/*{{{*/
             <div id="comments"><p>Commentaires: Je t'aiiiiiiiiiiiiiiimmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeee</p></div>
             <div id="menu">
                 <?php ListeSgf(); ?>
-                <button class="menubutton" id="back">retour</button>
+                <p class="menubutton" id="back">retour</p>
             </div>
         </div>
         <script src="jquery.tsumego.js"></script>

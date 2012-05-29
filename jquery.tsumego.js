@@ -4,6 +4,7 @@ jQuery(document).ready(function($) {
     var node;
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
+    var com = false;
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function() {//{{{
@@ -97,6 +98,7 @@ jQuery(document).ready(function($) {
      */
 
     $('#navbar').hide();
+    $('#comments').hide();
 
     /**
      * EVENEMENTS
@@ -133,14 +135,20 @@ jQuery(document).ready(function($) {
 
     // bouton options
     $('#options').click(function() {
-        $('#comments').hide();
+        if (com) { $('#comments').hide() };
         $('#menu').fadeIn(); 
+    });
+    
+    // bouton commentaires
+    $('#comment').click(function() {
+        com ? $('#comments').hide() : $('#comments').fadeIn(); 
+        com ? com = false : com = true;
     });
 
     // bouton retour
     $('#back').click(function() {
         $('#menu').hide();
-        $('#comments').fadeIn();
+        if (com) { $('#comments').fadeIn() };
     });
 
     // passage à l'état suivant
@@ -184,7 +192,6 @@ jQuery(document).ready(function($) {
 
             $('#goban').hide();
             $('#menu').hide();
-            $('#comments').fadeIn();
             $('#next,#prev').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
