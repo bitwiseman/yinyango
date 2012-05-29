@@ -25,6 +25,7 @@ body {
     left: 0;
     background-size: 100% 100%;
     border-collapse: collapse;
+    border-spacing: 0px;
 }
 #navbar {
     position: absolute;
@@ -36,6 +37,7 @@ body {
 }
 #comments {
     text-align: left;
+    word-wrap: break-word;
     font-size: 1.1em;
 }
 .button {

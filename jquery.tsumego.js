@@ -52,6 +52,7 @@ jQuery(document).ready(function($) {
                 height: winh - gobansize - 20
             });
         }
+        console.log(gobansize);
         $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
     };//}}}
 
@@ -74,7 +75,7 @@ jQuery(document).ready(function($) {
     var ClearGoban = function() {
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
-                $('#' + coord[j] + coord[i]).attr('class','whites');
+                $('#' + coord[j] + coord[i]).removeAttr('class');
             }
         }
     };
@@ -163,21 +164,23 @@ jQuery(document).ready(function($) {
         var sgf_file = 'sgf/' + $("#sgflist").val();
         var black;
         var white;
+        var oldsize = size;
 
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             game = data.game;
             size = data.size;
 
-            $('#goban').hide(); // cache le goban
+            $('#goban').hide();
             $('#menu').hide();
+            $('#comments').fadeIn();
             $('#next,#prev').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
-            if ($('#goban').css('width') == '0px') {
+            if (size != oldsize) {
                 ResizeGoban();
             };
 
-            // formation des lignes et colonnes du goban en enregistrant la coordonnée 
+            // formation des cellules du goban en identifiant la coordonnée 
             $('#goban').html(''); // supprime l'ancien goban
 
             for (var i = -1; i <= size; i++) {
@@ -186,10 +189,12 @@ jQuery(document).ready(function($) {
                     if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
                         $('.line' + i).append('<td></td>'); // cellules vides pour les bordures
                     } else {
-                        $('.line' + i).append('<td class="whites" id="' + coord[j] + coord[i] + '"></td>');
+                        $('.line' + i).append('<td id="' + coord[j] + coord[i] + '"></td>');
                     }
                 }
             }
+            
+            $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
 
             node = 0;
             branch = 0; 
@@ -198,11 +203,12 @@ jQuery(document).ready(function($) {
             if (game[node] != null) {
                 PlaceStones(); 
             };
-
-            $('#goban').fadeIn(); // affiche le goban progressivement
+            
+            // affiche l'interface
+            $('#goban').fadeIn();
             $('#navbar').fadeIn();
             $('#next').removeAttr('disabled');
-            $('#navbar').fadeIn(); // affiche la barre de navigation
+            $('#navbar').fadeIn();
         });
     });//}}}
 

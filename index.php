@@ -43,7 +43,7 @@ function ListeSgf() {/*{{{*/
             <input type="image" class="button" id="options" src="images/options.svg" />
         </div>
         <div id="infos">
-            <div id="comments"><p>commentaires</p></div>
+            <div id="comments"><p>Commentaires: Je t'aiiiiiiiiiiiiiiimmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeee</p></div>
             <div id="menu">
                 <?php ListeSgf(); ?>
                 <button class="menubutton" id="back">retour</button>
