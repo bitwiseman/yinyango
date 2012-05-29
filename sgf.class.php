@@ -135,6 +135,7 @@ class sgf
                 //lecture caractère par caratère
                 $valchars = str_split($value);
                 $key = '';
+                $prevkey = '';
                 $isval = false;
                 $val = '';
                 foreach ($valchars as $char) {
@@ -143,8 +144,13 @@ class sgf
                         $isval = true;
                         break;
                     case "]": //fin de valeur
-                        $keys_table[$i][$j][$key] = $val;
-                        $key = '';
+                        if ($key == '') { // valeur supplémentaire de la clé précédente
+                            $keys_table[$i][$j][$prevkey] .= ','.$val;
+                        } else {
+                            $keys_table[$i][$j][$key] = $val;
+                            $prevkey = $key;
+                            $key = '';
+                        }
                         $isval = false;
                         $val = '';
                         break;
@@ -194,31 +200,29 @@ class sgf
 
     //joue un coup et calcul l'état du goban en fonction de l'état précédent
     protected function PlayMove($node,$branch,$color,$coord) {/*{{{*/
-
         $b = $branch;
 
         while ($b >= 0) { //cherche un état précédent
             if (isset($this->game[$node-1][$b])) {
                 $this->game[$node][$branch] = $this->game[$node-1][$b];
                 //TODO calculer les pierres mortes et les KO
-                $this->game[$node][$branch][$color] .= $coord.',';
-                $this->game[$node][$branch]['p'] = $color.','.$coord;
+                $this->game[$node][$branch][$color] .=
+                    ($this->game[$node][$branch][$color] != '') ? ','.$coord : $coord;
                 break;
             }
             $b--;
         }
         if ($b == -1) { //on n'a pas trouvé d'état précédent donc c'est un départ
-            $this->game[$node][$branch][$color] = $coord.',';
-            $this->game[$node][$branch]['p'] = $color.','.$coord;
+            $this->game[$node][$branch][$color] = $coord;
             $ocolor = ($color == 'b') ? 'w' : 'b';
             $this->game[$node][$branch][$ocolor] = '';
         }
-
+        $this->game[$node][$branch]['p'] = $color.','.$coord;
     }/*}}}*/
 
 
     protected function AddMove($node,$branch,$color,$coord) {
-
+        $this->game[$node][$branch][$color] = $coord;
     }
 }
 ?>

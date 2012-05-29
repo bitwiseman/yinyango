@@ -52,24 +52,26 @@ jQuery(document).ready(function($) {
                 height: winh - gobansize - 20
             });
         }
-        console.log(gobansize);
         $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
     };//}}}
 
     // place les pierres de l'état actuel
-    var PlaceStones = function() {
+    var PlaceStones = function() {//{{{
         black = game[node][branch]['b'].split(',');
         white = game[node][branch]['w'].split(',');
-        played = game[node][branch]['p'].split(',');
-        playedcolor = (played[0] == 'b') ? 'black' : 'white';
+        
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','black');
         };
         for (var w = 0, cw = white.length; w < cw; w++) {
             $('#' + white[w]).attr('class','white');
         };
-        $('#' + played[1]).attr('class',playedcolor + 'p'); // visualiser la dernière pierre jouée
-    };
+        if (game[node][branch]['p'] != null) {
+            played = game[node][branch]['p'].split(',');
+            playedcolor = (played[0] == 'b') ? 'blackp' : 'whitep';
+            $('#' + played[1]).attr('class',playedcolor); // visualiser la dernière pierre jouée
+        }
+    };//}}}
 
     // vide le goban de toutes ses pierres
     var ClearGoban = function() {
@@ -207,7 +209,9 @@ jQuery(document).ready(function($) {
             // affiche l'interface
             $('#goban').fadeIn();
             $('#navbar').fadeIn();
-            $('#next').removeAttr('disabled');
+            if (game[node+1] != null) {
+                $('#next').removeAttr('disabled');
+            }
             $('#navbar').fadeIn();
         });
     });//}}}
