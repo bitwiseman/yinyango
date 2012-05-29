@@ -6,14 +6,9 @@ Objectifs:
 - Adapter le code pour avoir un support des bases de données
 
 Idées en vrac:
-- Traduire les fichiers SGF en données JSON et vice-versa (php ou js?)
+- Traduire les fichiers SGF en données JSON et vice-versa
 - Système de branches simplifié pour les différentes variations:
     Par exemple afficher les différents coups joués en transparence
     ou avec des lettres en miniatures
     Afficher le nombre de variations sur le noeud
     Afficher/masquer l'arbre
-- Afficher/masquer les commentaires
-- Traiter tout les calculs en php et envoyer toutes les grilles
-- Stocker les grilles calculées dans une BDD SQL
-
-- Optimiser les SVG

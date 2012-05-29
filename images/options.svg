@@ -1,103 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="50"
-   height="50"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="options.svg">
-  <defs
-     id="defs4">
-    <linearGradient
-       id="linearGradient7460">
-      <stop
-         style="stop-color:#e3d099;stop-opacity:1;"
-         offset="0"
-         id="stop7462" />
-      <stop
-         style="stop-color:#eab139;stop-opacity:1;"
-         offset="1"
-         id="stop7464" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient7448">
-      <stop
-         style="stop-color:#544422;stop-opacity:1;"
-         offset="0"
-         id="stop7450" />
-      <stop
-         style="stop-color:#bc9120;stop-opacity:1;"
-         offset="1"
-         id="stop7452" />
-    </linearGradient>
-    <marker
-       inkscape:stockid="Arrow1Lstart"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow1Lstart"
-       style="overflow:visible">
-      <path
-         id="path3767"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
-         transform="matrix(0.8,0,0,0.8,10,0)"
-         inkscape:connector-curvature="0" />
-    </marker>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="9.842032"
-     inkscape:cy="21.775144"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="498"
-     inkscape:window-x="0"
-     inkscape:window-y="498"
-     inkscape:window-maximized="0" />
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Calque 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-1002.3622)">
-    <g
-       id="g5854"
-       transform="matrix(0.99186362,0,0,0.85268027,1.3155754,153.27675)"
-       style="fill:#000000;fill-opacity:1" />
-    <path
-       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#0b0900;stroke-width:1.83411479;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:4"
-       clip-path="none"
-       d="m 21.239118,1009.2792 c -0.140862,0 -0.300801,0.026 -0.461863,0.067 -2.638123,0.6745 0.208794,6.2081 -2.111372,7.659 -2.26638,1.4174 -5.749517,-3.7995 -7.455783,-1.7166 -1.7467564,2.1321 3.748659,4.9578 2.705196,7.5268 -1.019277,2.5096 -6.8100966,0.3922 -6.9939208,3.1033 -0.1881866,2.7755 5.8342768,1.7179 6.4660768,4.4238 0.617156,2.6432 -5.3016742,4.431 -3.8928419,6.7347 1.4422639,2.3585 5.7859259,-2.1394 7.8516649,-0.3301 2.017856,1.7672 -1.737579,6.7745 0.725785,7.7911 2.521819,1.0407 3.359559,-5.1734 6.070195,-4.952 2.647802,0.2162 2.503517,6.4692 5.08049,5.8103 2.638123,-0.6746 -0.208794,-6.2081 2.111371,-7.659 2.266381,-1.4174 5.749518,3.7994 7.455785,1.7166 1.746757,-2.1321 -3.74866,-4.9578 -2.705197,-7.5269 1.019278,-2.5096 6.810097,-0.3921 6.993921,-3.1032 0.188187,-2.7756 -5.834277,-1.7179 -6.466077,-4.4238 -0.617157,-2.6433 5.301674,-4.431 3.892843,-6.7348 -1.442264,-2.3584 -5.785927,2.1395 -7.851666,0.3302 -2.017856,-1.7672 1.737579,-6.7745 -0.725785,-7.7911 -2.521819,-1.0408 -3.359559,5.1734 -6.070195,4.952 -2.482315,-0.2032 -2.505682,-5.7273 -4.618627,-5.8764 z M 25,1021.032 c 3.498235,0 6.334116,2.8378 6.334116,6.3385 0,3.5006 -2.835881,6.3384 -6.334116,6.3384 -3.498236,0 -6.334117,-2.8378 -6.334117,-6.3384 0,-3.5007 2.835881,-6.3385 6.334117,-6.3385 z"
-       id="path7518"
-       inkscape:connector-curvature="0" />
-  </g>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="50" width="50" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<defs></defs>
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+<dc:title/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g transform="translate(0,-1002.3622)">
+<path stroke-linejoin="round" d="m21.239,1009.3c-0.14086,0-0.3008,0.026-0.46186,0.067-2.6381,0.6745,0.20879,6.2081-2.1114,7.659-2.2664,1.4174-5.7495-3.7995-7.4558-1.7166-1.7468,2.1321,3.7487,4.9578,2.7052,7.5268-1.0193,2.5096-6.8101,0.3922-6.9939,3.1033-0.18819,2.7755,5.8343,1.7179,6.4661,4.4238,0.61716,2.6432-5.3017,4.431-3.8928,6.7347,1.4423,2.3585,5.7859-2.1394,7.8517-0.3301,2.0179,1.7672-1.7376,6.7745,0.72578,7.7911,2.5218,1.0407,3.3596-5.1734,6.0702-4.952,2.6478,0.2162,2.5035,6.4692,5.0805,5.8103,2.6381-0.6746-0.20879-6.2081,2.1114-7.659,2.2664-1.4174,5.7495,3.7994,7.4558,1.7166,1.7468-2.1321-3.7487-4.9578-2.7052-7.5269,1.0193-2.5096,6.8101-0.3921,6.9939-3.1032,0.18819-2.7756-5.8343-1.7179-6.4661-4.4238-0.61716-2.6433,5.3017-4.431,3.8928-6.7348-1.4423-2.3584-5.7859,2.1395-7.8517,0.3302-2.0179-1.7672,1.7376-6.7745-0.72578-7.7911-2.5218-1.0408-3.3596,5.1734-6.0702,4.952-2.4823-0.2032-2.5057-5.7273-4.6186-5.8764zm3.761,11.7c3.4982,0,6.3341,2.8378,6.3341,6.3385,0,3.5006-2.8359,6.3384-6.3341,6.3384s-6.3341-2.8378-6.3341-6.3384c0-3.5007,2.8359-6.3385,6.3341-6.3385z" clip-path="none" fill-rule="nonzero" stroke-dashoffset="4" stroke="#0b0900" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="1.83411479" fill="#000"/>
+</g>
 </svg>
