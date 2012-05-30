@@ -4,66 +4,35 @@ jQuery(document).ready(function($) {
     var node;
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
-    var com = false;
+    var com = true; // commentaires
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function() {//{{{
-        var gobansize;
-        var navbarsize;
+        var heightleft; // hauteur restante pour le goban
         var winw = $(window).width();
         var winh = $(window).height();
         var sizeb = parseInt(size) + 2; // ajout des bordures
 
-        if (winw >= winh) {
-            navbarsize = winh * 0.1; // encombrement 10%
-            gobansize = Math.floor((winh - navbarsize) / sizeb) * sizeb;
-            navbarsize = winh - gobansize;
-            $('#navbar').css({
-                top: '',
-                right: '',
-                bottom: 0,
-                left: 0,
-                width: gobansize,
-                height: navbarsize
-            });
-            $('.button').css({
-                width: '10%',
-                height: ''
-            });
-            $('#infos').css({
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: '',
-                width: winw - gobansize,
-                height: ''
-            });
+        if (com) {
+            heightleft = winh - $('#navbar').outerHeight() - 200; // TODO infos redimensionnable
         } else {
-            navbarsize = winw * 0.1;
-            gobansize = Math.floor((winw - navbarsize) / sizeb) * sizeb;
-            navbarsize = winw - gobansize;
-            $('#navbar').css({
-                top: 0,
-                right: 0,
-                bottom: '',
-                left: '',
-                width: navbarsize,
-                height: gobansize
-            });
-            $('.button').css({
-                width: '',
-                height: '10%'
-            });
-            $('#infos').css({
-                top: '',
-                right: 0,
-                bottom: 0,
-                left: 0,
-                width: '',
-                height: winh - gobansize
-            });
+            heightleft = winh - $('#navbar').outerHeight();
         }
-        $('#goban').css({ width: gobansize + 'px', height: gobansize + 'px' });
+        var smaller = (heightleft >= winw) ? winw : heightleft;
+        var gobansize = Math.floor(smaller / sizeb) * sizeb;
+        $('#goban').css({
+            top: $('#navbar').outerHeight(),
+            left: '50%',
+            marginLeft: - (gobansize / 2),
+            width: gobansize,
+            height: gobansize
+        });
+        $('#comments').css({
+            top: $('#navbar').outerHeight() + gobansize,
+            right: 0,
+            bottom: 0,
+            left: 0,
+        });
     };//}}}
 
     // place les pierres de l'état actuel
@@ -85,27 +54,44 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // vide le goban de toutes ses pierres
-    var ClearGoban = function() {
+    var ClearGoban = function() {//{{{
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
                 $('#' + coord[j] + coord[i]).removeAttr('class');
             }
         }
-    };
+    };//}}}
+
+    // création du goban en identifiant les coordonnées
+    var CreateGoban = function() {//{{{
+        $('#goban').html(''); // supprime l'ancien goban
+
+        for (var i = -1; i <= size; i++) {
+            $('#goban').append('<tr class="line' + i + '"></tr>');
+            for (var j = -1; j <= size; j++) {
+                if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
+                    $('.line' + i).append('<td></td>'); // cellules vides pour les bordures
+                } else {
+                    $('.line' + i).append('<td id="' + coord[j] + coord[i] + '"></td>');
+                }
+            }
+        }
+    };//}}}
 
     /**
      * INITIALISATION
      */
 
     $('#goban').hide();
-    $('#navbar').hide();
     $('#comments').hide();
-    $('#comment').attr('disabled','disabled');
+    $('#loadlist').hide();
+    $('#prev,#next,#comment').attr('disabled','disabled');
 
     /**
      * EVENEMENTS
      */
-
+    
+    // fenêtre du navigateur redimensionnée
     $(window).resize(function() {
         ResizeGoban(); 
     });
@@ -135,38 +121,7 @@ jQuery(document).ready(function($) {
         }
     });//}}}
 
-    // bouton options
-    $('#options').click(function() {
-        $('#comments').hide();
-        $('#menu').fadeIn(); 
-    });
-    
-    // bouton commentaires
-    $('#comment').click(function() {
-
-    });
-
-    // bouton retour
-    $('#back').click(function() {
-        $('#menu').hide();
-        $('#comments').fadeIn();
-    });
-
-    // passage à l'état suivant
-    $('#next').click(function() {//{{{
-        node++;
-        $('#prev').removeAttr('disabled');
-        // test si il existe un état suivant dans la branche actuelle
-        if (game[node+1] == null || game[node+1][branch] == null) {
-            $('#next').attr('disabled','disabled');
-        };
-        ClearGoban();
-        if (game[node] != null) {
-            PlaceStones();
-        };
-    });//}}}
-
-    // retour à l'état précédent
+    // bouton précédent
     $('#prev').click(function() {//{{{
         node--;
         $('#next').removeAttr('disabled');
@@ -180,39 +135,54 @@ jQuery(document).ready(function($) {
         };
     });//}}}
 
-    // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
+    // bouton suivant
+    $('#next').click(function() {//{{{
+        node++;
+        $('#prev').removeAttr('disabled');
+        // test si il existe un état suivant dans la branche actuelle
+        if (game[node+1] == null || game[node+1][branch] == null) {
+            $('#next').attr('disabled','disabled');
+        };
+        ClearGoban();
+        if (game[node] != null) {
+            PlaceStones();
+        };
+    });//}}}
+
+    // bouton commentaires
+    $('#comment').click(function() {
+        com ? com = false : com = true;
+        com ? $('#comments').show() : $('#comments').hide();
+        ResizeGoban();
+    });
+
+    // bouton options
+    $('#options').click(function() {
+        $('#loadlist').fadeIn();
+    });
+
+    // bouton charger
     $('#loadsgf').click(function() {//{{{
         var sgf_file = 'sgf/' + $("#sgflist").val();
         var black;
         var white;
         var oldsize = size;
 
+        // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             game = data.game;
             size = data.size;
 
-            $('#goban').hide();
-            $('#menu').hide();
-            $('#comments').hide();
-            $('#next,#prev').attr('disabled','disabled');
+            $('#loadlist').hide();
+            $('#prev,#next').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if (size != oldsize) {
+                $('#goban').hide();
                 ResizeGoban();
-            }
-
-            // formation des cellules du goban en identifiant la coordonnée 
-            $('#goban').html(''); // supprime l'ancien goban
-
-            for (var i = -1; i <= size; i++) {
-                $('#goban').append('<tr class="line' + i + '"></tr>');
-                for (var j = -1; j <= size; j++) {
-                    if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
-                        $('.line' + i).append('<td></td>'); // cellules vides pour les bordures
-                    } else {
-                        $('.line' + i).append('<td id="' + coord[j] + coord[i] + '"></td>');
-                    }
-                }
+                CreateGoban(); 
+            } else {
+                ClearGoban();
             }
             
             $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
@@ -227,8 +197,8 @@ jQuery(document).ready(function($) {
             
             // affiche l'interface
             $('#goban').fadeIn();
-            $('#navbar').fadeIn();
-            $('#comments').fadeIn();
+            $('#comment').removeAttr('disabled');
+            com ? $('#comments').show() : $('#comments').hide();
             if (game[node+1] != null) {
                 $('#next').removeAttr('disabled');
             }

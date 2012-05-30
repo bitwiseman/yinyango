@@ -2,33 +2,27 @@ body {
     background-color: #cda657;
     color: #000;
 }
-#menu {
-    text-align: center;
-}
-.menubutton {
-    font-size: 1.3em;
-    cursor: pointer;
-}
 #goban {
     position: absolute;
-    top: 0;
-    left: 0;
     background-size: 100% 100%;
     border-collapse: collapse;
 }
 #navbar {
     position: absolute;
-}
-#infos {
-    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
 }
 #comments {
+    position: absolute;
     text-align: left;
     word-wrap: break-word;
     font-size: 1.1em;
 }
 .button {
     float: left;
+    height: 50px;
+    font-size: 1.3em;
 }
 .button:disabled {
     opacity: 0.2;

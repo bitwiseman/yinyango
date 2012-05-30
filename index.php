@@ -13,12 +13,12 @@ function ListeSgf() {/*{{{*/
     }
 
     if (!empty($sgf_table)) {
-        echo '<select class="menubutton" id="sgflist">';
+        echo '<select class="button" id="sgflist">';
         for ($i = 0; $i < count($sgf_table); $i++) {
             echo '<option>' . $sgf_table[$i] . '</option>';
         }
         echo '</select>';
-        echo '<p class="menubutton" id="loadsgf">charger</p>';
+        echo '<button class="button" id="loadsgf">charger</button>';
     }
 }/*}}}*/
 
@@ -41,13 +41,10 @@ function ListeSgf() {/*{{{*/
             <input type="image" class="button" id="next" src="images/next.svg" />
             <input type="image" class="button" id="comment" src="images/comment.svg" />
             <input type="image" class="button" id="options" src="images/options.svg" />
+            <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
-        <div id="infos">
-            <div id="comments"><p>Commentaires: Je t'aiiiiiiiiiiiiiiimmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeee</p></div>
-            <div id="menu">
-                <?php ListeSgf(); ?>
-                <p class="menubutton" id="back">retour</p>
-            </div>
+        <div id="comments">
+            <p>Commentaires: Je t'aiiiiiiiiiiiiiiimmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeee</p>
         </div>
         <script src="jquery.tsumego.js"></script>
     </body>
