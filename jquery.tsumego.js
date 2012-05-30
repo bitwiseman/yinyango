@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
     var com = true; // commentaires
+    var comsize = 200;
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function() {//{{{
@@ -13,11 +14,8 @@ jQuery(document).ready(function($) {
         var winh = $(window).height();
         var sizeb = parseInt(size) + 2; // ajout des bordures
 
-        if (com) {
-            heightleft = winh - $('#navbar').outerHeight() - 200; // TODO infos redimensionnable
-        } else {
-            heightleft = winh - $('#navbar').outerHeight();
-        }
+        com ? heightleft = winh - $('#navbar').outerHeight() - comsize : // TODO redimensionnable
+              heightleft = winh - $('#navbar').outerHeight();
         var smaller = (heightleft >= winw) ? winw : heightleft;
         var gobansize = Math.floor(smaller / sizeb) * sizeb;
         $('#goban').css({
@@ -27,12 +25,8 @@ jQuery(document).ready(function($) {
             width: gobansize,
             height: gobansize
         });
-        $('#comments').css({
-            top: $('#navbar').outerHeight() + gobansize,
-            right: 0,
-            bottom: 0,
-            left: 0,
-        });
+        $('#comments').css('top',$('#navbar').outerHeight() + gobansize);
+        $('textarea').css('height',$('#comments').outerHeight() - 5);
     };//}}}
 
     // place les pierres de l'état actuel

@@ -44,7 +44,25 @@ function ListeSgf() {/*{{{*/
             <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
         <div id="comments">
-            <p>Commentaires: Je t'aiiiiiiiiiiiiiiimmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeee</p>
+            <div id="resizer"></div>
+            <textarea readonly>a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a</textarea>
         </div>
         <script src="jquery.tsumego.js"></script>
     </body>

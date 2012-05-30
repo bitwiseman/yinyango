@@ -2,6 +2,16 @@ body {
     background-color: #cda657;
     color: #000;
 }
+textarea {
+    background: transparent;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    resize: none;
+    outline: none;
+    font-size: 1.3em;
+}
 #goban {
     position: absolute;
     background-size: 100% 100%;
@@ -13,16 +23,22 @@ body {
     right: 0;
     left: 0;
 }
+#resizer {
+    background-color: #000;
+    width: 100%;
+    height: 5px;
+}
 #comments {
     position: absolute;
-    text-align: left;
-    word-wrap: break-word;
-    font-size: 1.1em;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
 }
 .button {
     float: left;
     height: 50px;
     font-size: 1.3em;
+    outline: none;
 }
 .button:disabled {
     opacity: 0.2;
@@ -45,10 +61,12 @@ body {
     background-size: 100% 100%;
 }
 .blacks:hover {
-    background-image: url(images/blacks.svg);
+    background-image: url(images/black.svg);
     background-size: 100% 100%;
+    opacity: 0.5;
 }
 .whites:hover {
-    background-image: url(images/whites.svg);
+    background-image: url(images/white.svg);
     background-size: 100% 100%;
+    opacity: 0.5;
 }
