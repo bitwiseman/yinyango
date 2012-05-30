@@ -37,10 +37,10 @@ function ListeSgf() {/*{{{*/
     <body>
         <table id="goban"></table>
         <div id="navbar">
-            <input type="image" class="button" id="prev" src="images/prev.svg" />
-            <input type="image" class="button" id="next" src="images/next.svg" />
-            <input type="image" class="button" id="comment" src="images/comment.svg" />
-            <input type="image" class="button" id="options" src="images/options.svg" />
+            <input type="image" class="button" id="prev" src="images/prev.png" />
+            <input type="image" class="button" id="next" src="images/next.png" />
+            <input type="image" class="button" id="comment" src="images/comment.png" />
+            <input type="image" class="button" id="options" src="images/options.png" />
             <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
         <div id="comments">

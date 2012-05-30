@@ -2,6 +2,35 @@ body {
     background-color: #cda657;
     color: #000;
 }
+#navbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+.button {
+    float: left;
+    height: 50px;
+    font-size: 1.3em;
+    outline: none;
+}
+.button:disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+#comments {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+}
+#resizer {
+    background: #000;
+    width: 100px;
+    height: 6px;
+    margin: auto;
+    cursor: n-resize;
+}
 textarea {
     background: transparent;
     width: 100%;
@@ -16,33 +45,6 @@ textarea {
     position: absolute;
     background-size: 100% 100%;
     border-collapse: collapse;
-}
-#navbar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-}
-#resizer {
-    background-color: #000;
-    width: 100%;
-    height: 5px;
-}
-#comments {
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
-}
-.button {
-    float: left;
-    height: 50px;
-    font-size: 1.3em;
-    outline: none;
-}
-.button:disabled {
-    opacity: 0.2;
-    cursor: default;
 }
 .black {
     background-image: url(images/black.svg);

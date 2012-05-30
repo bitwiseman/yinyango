@@ -4,8 +4,26 @@ jQuery(document).ready(function($) {
     var node;
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
+    var gobansize;
     var com = true; // commentaires
     var comsize = 200;
+
+    // désactive la sélection d'éléments
+    // ref: http://stackoverflow.com/questions/2700000/how-to-disable-text-selection-using-jquery
+    $.fn.disableSelection = function() {//{{{
+        return this.each(function() {           
+            $(this).attr('unselectable', 'on')
+            .css({
+                '-moz-user-select':'none',
+                '-webkit-user-select':'none',
+                'user-select':'none',
+                '-ms-user-select':'none'
+            })
+            .each(function() {
+                this.onselectstart = function() { return false; };
+            });
+        });
+    };//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function() {//{{{
@@ -13,20 +31,24 @@ jQuery(document).ready(function($) {
         var winw = $(window).width();
         var winh = $(window).height();
         var sizeb = parseInt(size) + 2; // ajout des bordures
+        var oldgobansize = gobansize;
 
+        if (comsize > (winh / 2)) { comsize = (winh / 2) };
         com ? heightleft = winh - $('#navbar').outerHeight() - comsize : // TODO redimensionnable
               heightleft = winh - $('#navbar').outerHeight();
         var smaller = (heightleft >= winw) ? winw : heightleft;
-        var gobansize = Math.floor(smaller / sizeb) * sizeb;
-        $('#goban').css({
-            top: $('#navbar').outerHeight(),
-            left: '50%',
-            marginLeft: - (gobansize / 2),
-            width: gobansize,
-            height: gobansize
-        });
-        $('#comments').css('top',$('#navbar').outerHeight() + gobansize);
-        $('textarea').css('height',$('#comments').outerHeight() - 5);
+        gobansize = Math.floor(smaller / sizeb) * sizeb;
+        if (gobansize != oldgobansize) { // évite du travail inutile
+            $('#goban').css({
+                top: $('#navbar').outerHeight(),
+                left: '50%',
+                marginLeft: - (gobansize / 2),
+                width: gobansize,
+                height: gobansize
+            });
+            $('#comments').css('top',$('#navbar').outerHeight() + gobansize);
+        }
+        $('textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
 
     // place les pierres de l'état actuel
@@ -80,6 +102,7 @@ jQuery(document).ready(function($) {
     $('#comments').hide();
     $('#loadlist').hide();
     $('#prev,#next,#comment').attr('disabled','disabled');
+    $(':not(textarea)').disableSelection();
 
     /**
      * EVENEMENTS
@@ -113,6 +136,23 @@ jQuery(document).ready(function($) {
             $('#goban').resizable('destroy');
             $('#navbar').resizable('destroy');
         }
+    });//}}}
+
+    // redimensionne commentaires 
+    // ref: http://www.jquery.info/spip.php?article44
+    $('#resizer').mousedown(function(e) {//{{{
+        var winh = $(window).height();
+        var h = comsize; // taille commentaire avant redimensionnement
+        var y = winh - e.clientY; // position curseur par rapport au bas
+        var moveHandler = function(e) {
+            comsize = Math.max(100, (winh - e.clientY) + h - y); // minimum 100 pixels
+            if (comsize > (winh / 2)) { comsize = (winh / 2) }; // max la moitié de la hauteur
+            ResizeGoban();
+        };
+        var upHandler = function(e) {
+            $('html').unbind('mousemove',moveHandler).unbind('mouseup',upHandler);
+        };
+        $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
     });//}}}
 
     // bouton précédent
