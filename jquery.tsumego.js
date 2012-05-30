@@ -97,8 +97,10 @@ jQuery(document).ready(function($) {
      * INITIALISATION
      */
 
+    $('#goban').hide();
     $('#navbar').hide();
     $('#comments').hide();
+    $('#comment').attr('disabled','disabled');
 
     /**
      * EVENEMENTS
@@ -135,20 +137,19 @@ jQuery(document).ready(function($) {
 
     // bouton options
     $('#options').click(function() {
-        if (com) { $('#comments').hide() };
+        $('#comments').hide();
         $('#menu').fadeIn(); 
     });
     
     // bouton commentaires
     $('#comment').click(function() {
-        com ? $('#comments').hide() : $('#comments').fadeIn(); 
-        com ? com = false : com = true;
+
     });
 
     // bouton retour
     $('#back').click(function() {
         $('#menu').hide();
-        if (com) { $('#comments').fadeIn() };
+        $('#comments').fadeIn();
     });
 
     // passage à l'état suivant
@@ -192,12 +193,13 @@ jQuery(document).ready(function($) {
 
             $('#goban').hide();
             $('#menu').hide();
+            $('#comments').hide();
             $('#next,#prev').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if (size != oldsize) {
                 ResizeGoban();
-            };
+            }
 
             // formation des cellules du goban en identifiant la coordonnée 
             $('#goban').html(''); // supprime l'ancien goban
@@ -226,10 +228,10 @@ jQuery(document).ready(function($) {
             // affiche l'interface
             $('#goban').fadeIn();
             $('#navbar').fadeIn();
+            $('#comments').fadeIn();
             if (game[node+1] != null) {
                 $('#next').removeAttr('disabled');
             }
-            $('#navbar').fadeIn();
         });
     });//}}}
 
