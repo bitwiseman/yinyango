@@ -35,18 +35,16 @@ jQuery(document).ready(function($) {
         var oldgobansize = gobansize;
         
         if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        com ? heightleft = winh - $('#navbar').outerHeight() - comsize :
-              heightleft = winh - $('#navbar').outerHeight();
+        com ? heightleft = winh - 50 - comsize :
+              heightleft = winh - 50;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize) { // évite du travail inutile
             $('#goban').css({
-                top: $('#navbar').outerHeight(),
-                marginLeft: - (gobansize / 2),
                 width: gobansize,
                 height: gobansize
             });
-            $('#comments').css('top',$('#navbar').outerHeight() + gobansize);
+            $('#comments').css('top',gobansize + 50);
         }
         $('textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}

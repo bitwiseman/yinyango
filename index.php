@@ -33,7 +33,6 @@ function ListeSgf() {/*{{{*/
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     </head>
     <body>
-        <table id="goban"></table>
         <div id="navbar">
             <input type="image" class="button" id="comment" src="images/comment.png" />
             <input type="image" class="button" id="start" src="images/start.png" />
@@ -45,6 +44,7 @@ function ListeSgf() {/*{{{*/
             <input type="image" class="button" id="options" src="images/options.png" />
             <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
+        <table id="goban"></table>
         <div id="comments">
             <div id="resizer"></div>
             <textarea readonly>

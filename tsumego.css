@@ -1,17 +1,15 @@
 body {
     background-color: #cda657;
     color: #000;
+    margin: 0;
 }
 #navbar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 50%;
-    margin-left: -200px;
+    margin: auto;
+    width: 400px;
+    height: 50px;
 }
 .button {
     float: left;
-    font-size: 1.3em;
     outline: none;
 }
 .button:disabled {
@@ -34,7 +32,6 @@ body {
 textarea {
     background: transparent;
     width: 100%;
-    margin: 0;
     padding: 0;
     border: 0;
     resize: none;
@@ -42,8 +39,7 @@ textarea {
     font-size: 1.3em;
 }
 #goban {
-    position: absolute;
-    left: 50%;
+    margin: auto;
     background-size: 100% 100%;
     border-collapse: collapse;
 }
