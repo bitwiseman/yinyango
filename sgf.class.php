@@ -176,6 +176,10 @@ class sgf
         for ($i = 0; $i <= $this->branchs; $i++) {
             for ($j = 0; $j < sizeof($table); $j++) {
                 if (isset($table[$j][$i])) {
+                    // toujours avoir au moins un goban vide
+                    $this->game[$j][$i]['b'] = '';
+                    $this->game[$j][$i]['w'] = '';
+                    // ajouter les pierres jouées ou placées
                     foreach ($table[$j][$i] as $key => $value) {
                         switch ($key) {
                         case 'B': //noir joue
@@ -211,11 +215,6 @@ class sgf
                 break;
             }
             $b--;
-        }
-        if ($b == -1) { //on n'a pas trouvé d'état précédent donc c'est un départ
-            $this->game[$node][$branch][$color] = $coord;
-            $ocolor = ($color == 'b') ? 'w' : 'b';
-            $this->game[$node][$branch][$ocolor] = '';
         }
         $this->game[$node][$branch]['p'] = $color.','.$coord;
     }/*}}}*/

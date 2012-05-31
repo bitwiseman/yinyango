@@ -6,7 +6,8 @@ jQuery(document).ready(function($) {
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
     var gobansize;
     var com = true; // commentaires
-    var comsize = 200;
+    var comsize = 200; // taille commentaires
+    var nodemax; // dernier noeud de la branche actuelle
 
     // désactive la sélection d'éléments
     // ref: http://stackoverflow.com/questions/2700000/how-to-disable-text-selection-using-jquery
@@ -32,16 +33,15 @@ jQuery(document).ready(function($) {
         var winh = $(window).height();
         var sizeb = parseInt(size) + 2; // ajout des bordures
         var oldgobansize = gobansize;
-
+        
         if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        com ? heightleft = winh - $('#navbar').outerHeight() - comsize : // TODO redimensionnable
+        com ? heightleft = winh - $('#navbar').outerHeight() - comsize :
               heightleft = winh - $('#navbar').outerHeight();
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize) { // évite du travail inutile
             $('#goban').css({
                 top: $('#navbar').outerHeight(),
-                left: '50%',
                 marginLeft: - (gobansize / 2),
                 width: gobansize,
                 height: gobansize
@@ -51,10 +51,18 @@ jQuery(document).ready(function($) {
         $('textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
 
+    // cherche le dernier noeud de la branche actuelle
+    var SetNodeMax = function() {//{{{
+        nodemax = node;
+        while (game[nodemax+1] != null && game[nodemax+1][branch] != null) {
+            nodemax++;
+        }
+    };//}}}
+
     // place les pierres de l'état actuel
     var PlaceStones = function() {//{{{
-        black = game[node][branch]['b'].split(',');
-        white = game[node][branch]['w'].split(',');
+        var black = game[node][branch]['b'].split(',');
+        var white = game[node][branch]['w'].split(',');
         
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','black');
@@ -101,7 +109,7 @@ jQuery(document).ready(function($) {
     $('#goban').hide();
     $('#comments').hide();
     $('#loadlist').hide();
-    $('#prev,#next,#comment').attr('disabled','disabled');
+    $('.button:not(#options,#sgflist,#loadsgf)').attr('disabled','disabled');
     $(':not(textarea)').disableSelection();
 
     /**
@@ -112,31 +120,6 @@ jQuery(document).ready(function($) {
     $(window).resize(function() {
         ResizeGoban(); 
     });
-
-    // touche enfoncée
-    $(window).keydown(function(event) {//{{{
-        if (event.which == 17) { // touche ctrl
-            $('#goban').draggable();
-        }
-        if (event.which == 18) { // touche alt
-            $('#goban').resizable({
-                grid: [size, size],
-                aspectRatio: 1
-            });
-            $('#navbar').resizable();
-        }
-    });//}}}
-
-    // touche relâchée
-    $(window).keyup(function(event) {//{{{
-        if (event.which == 17) { // touche ctrl
-            $('#goban').draggable('destroy');
-        }
-        if (event.which == 18) { // touche alt
-            $('#goban').resizable('destroy');
-            $('#navbar').resizable('destroy');
-        }
-    });//}}}
 
     // redimensionne commentaires 
     // ref: http://www.jquery.info/spip.php?article44
@@ -155,32 +138,70 @@ jQuery(document).ready(function($) {
         $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
     });//}}}
 
+    // bouton début
+    $('#start').click(function() {//{{{
+        node = 0;
+        $('[id$="next"],#end').removeAttr('disabled');
+        $('[id$="prev"],#start').attr('disabled','disabled');
+        ClearGoban();
+        PlaceStones();
+    });//}}}
+
+    // bouton retour rapide
+    $('#fastprev').click(function() {//{{{
+        node = node - 10 < 0 ? 0 : node - 10;
+        $('[id$="next"],#end').removeAttr('disabled');
+        // TODO test si il existe un coup précédent
+        if (node == 0) {
+            $('[id$="prev"],#start').attr('disabled','disabled');
+        };
+        ClearGoban();
+        PlaceStones();
+    });//}}}
+
     // bouton précédent
     $('#prev').click(function() {//{{{
         node--;
-        $('#next').removeAttr('disabled');
-        // test si on est au début de la branche
-        if (node == 0) {
-            $('#prev').attr('disabled','disabled');
+        $('[id$="next"],#end').removeAttr('disabled');
+        // TODO test si il existe un coup précédent
+        if (game[node-1] == null || game[node-1][branch] == null) {
+            $('[id$="prev"],#start').attr('disabled','disabled');
         };
         ClearGoban();
-        if (game[node] != null) {
-            PlaceStones();
-        };
+        PlaceStones();
     });//}}}
 
     // bouton suivant
     $('#next').click(function() {//{{{
         node++;
-        $('#prev').removeAttr('disabled');
-        // test si il existe un état suivant dans la branche actuelle
+        $('[id$="prev"],#start').removeAttr('disabled');
+        // TODO test si il existe un coup suivant
         if (game[node+1] == null || game[node+1][branch] == null) {
-            $('#next').attr('disabled','disabled');
+            $('[id$="next"],#end').attr('disabled','disabled');
         };
         ClearGoban();
-        if (game[node] != null) {
-            PlaceStones();
+        PlaceStones();
+    });//}}}
+
+    // bouton avance rapide
+    $('#fastnext').click(function() {//{{{
+        node = node + 10 > nodemax ? nodemax : node + 10;
+        $('[id$="prev"],#start').removeAttr('disabled');
+        // TODO test si il existe un coup précédent
+        if (node == nodemax) {
+            $('[id$="next"],#end').attr('disabled','disabled');
         };
+        ClearGoban();
+        PlaceStones();
+    });//}}}
+
+    // bouton fin
+    $('#end').click(function() {//{{{
+        node = nodemax;
+        $('[id$="prev"],#start').removeAttr('disabled');
+        $('[id$="next"],#end').attr('disabled','disabled');
+        ClearGoban();
+        PlaceStones();
     });//}}}
 
     // bouton commentaires
@@ -198,17 +219,18 @@ jQuery(document).ready(function($) {
     // bouton charger
     $('#loadsgf').click(function() {//{{{
         var sgf_file = 'sgf/' + $("#sgflist").val();
-        var black;
-        var white;
         var oldsize = size;
 
         // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             game = data.game;
             size = data.size;
+            node = 0;
+            branch = 0;
+
+            SetNodeMax();
 
             $('#loadlist').hide();
-            $('#prev,#next').attr('disabled','disabled');
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if (size != oldsize) {
@@ -221,20 +243,16 @@ jQuery(document).ready(function($) {
             
             $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
 
-            node = 0;
-            branch = 0; 
-
             // affiche l'état du début de jeu
-            if (game[node] != null) {
-                PlaceStones(); 
-            };
+            PlaceStones(); 
             
             // affiche l'interface
+            $('[id$="prev"],#start').attr('disabled','disabled');
             $('#goban').fadeIn();
             $('#comment').removeAttr('disabled');
             com ? $('#comments').show() : $('#comments').hide();
-            if (game[node+1] != null) {
-                $('#next').removeAttr('disabled');
+            if (nodemax != 0) {
+                $('[id$="next"],#end').removeAttr('disabled');
             }
         });
     });//}}}
