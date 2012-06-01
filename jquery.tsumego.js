@@ -8,6 +8,7 @@ jQuery(document).ready(function($) {
     var com = true; // commentaires
     var comsize = 200; // taille commentaires
     var nodemax; // dernier noeud de la branche actuelle
+    var options; // affichage des boutons d'options
 
     // désactive la sélection d'éléments
     // ref: http://stackoverflow.com/questions/2700000/how-to-disable-text-selection-using-jquery
@@ -107,7 +108,7 @@ jQuery(document).ready(function($) {
     $('#goban').hide();
     $('#comments').hide();
     $('#loadlist').hide();
-    $('.button:not(#options,#sgflist,#loadsgf)').attr('disabled','disabled');
+    $('.button:not(#load)').hide();
     $(':not(textarea)').disableSelection();
 
     /**
@@ -209,9 +210,22 @@ jQuery(document).ready(function($) {
         ResizeGoban();
     });
 
+    // bouton pour charger une partie
+    $('#load').click(function() {
+        $('#loadlist').fadeIn();
+    });
+
     // bouton options
     $('#options').click(function() {
-        $('#loadlist').fadeIn();
+        if (options) {
+            $('#load').hide();
+            $('.button:not(#load)').show();
+            options = false;
+        } else {
+            $('.button:not(#options)').hide();
+            $('#load').show();
+            options = true;
+        }
     });
 
     // bouton charger
@@ -229,6 +243,8 @@ jQuery(document).ready(function($) {
             SetNodeMax();
 
             $('#loadlist').hide();
+            $('#load').hide();
+            options = false;
             $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
             
             if (size != oldsize) {
@@ -245,13 +261,14 @@ jQuery(document).ready(function($) {
             PlaceStones(); 
             
             // affiche l'interface
-            $('[id$="prev"],#start').attr('disabled','disabled');
-            $('#goban').fadeIn();
+            $('#start,[id$="prev"],[id$="next"],#end').attr('disabled','disabled');
+            if (size != oldsize) { $('#goban').fadeIn() };
             $('#comment').removeAttr('disabled');
             com ? $('#comments').show() : $('#comments').hide();
             if (nodemax != 0) {
                 $('[id$="next"],#end').removeAttr('disabled');
             }
+            $('.button:not(#load)').show();
         });
     });//}}}
 
