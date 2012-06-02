@@ -6,6 +6,8 @@ class sgf
 {
     private $game;
     private $size;
+    private $black;
+    private $white;
     private $branchs;
 
     // construction des variables
@@ -31,19 +33,25 @@ class sgf
         if (!empty($vars)) {
             $this->game = json_decode($vars['game']);
             $this->size = $vars['size'];
+            $this->black = $vars['black'];
+            $this->white = $vars['white'];
             $this->branchs = $vars['branchs'];
         }
         else {
             $temptab = $this->SgfToTab($file);
             $this->size = $temptab[0][0]['SZ'];
+            $this->black = $temptab[0][0]['PB'];
+            $this->white = $temptab[0][0]['PW'];
             $this->GameTable($temptab);
             
             $jsongame = json_encode($this->game);
-            $insert = $db->prepare('INSERT INTO sgf VALUES(:file, :game, :size, :branchs)');
+            $insert = $db->prepare('INSERT INTO sgf VALUES(:file, :game, :size, :black, :white, :branchs)');
             $insert->execute(array(
                 'file' => $file,
                 'game' => $jsongame,
                 'size' => $this->size,
+                'black' => $this->black,
+                'white' => $this->white,
                 'branchs' => $this->branchs,
             ));
         }
