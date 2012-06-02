@@ -6,9 +6,8 @@ class sgf
 {
     private $game;
     private $size;
-    private $black;
-    private $white;
     private $branchs;
+    private $infos; // infos de la partie
 
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
@@ -32,38 +31,52 @@ class sgf
         $select->closeCursor();
         if (!empty($vars)) {
             $this->game = json_decode($vars['game']);
-            $this->size = $vars['size'];
-            $this->black = $vars['black'];
-            $this->white = $vars['white'];
+            $this->size = $vars['SZ'];
             $this->branchs = $vars['branchs'];
+            $this->infos['PB'] = $vars['PB'];
+            $this->infos['BR'] = $vars['BR'];
+            $this->infos['PW'] = $vars['PW'];
+            $this->infos['WR'] = $vars['WR'];
+            $this->infos['KM'] = $vars['KM'];
+            $this->infos['DT'] = $vars['DT'];
+            $this->infos['PC'] = $vars['PC'];
+            $this->infos['TM'] = $vars['TM'];
+            $this->infos['OT'] = $vars['OT'];
+            $this->infos['RU'] = $vars['RU'];
         }
         else {
-            $temptab = $this->SgfToTab($file);
-            $this->size = $temptab[0][0]['SZ'];
-            $this->black = $temptab[0][0]['PB'];
-            $this->white = $temptab[0][0]['PW'];
-            $this->GameTable($temptab);
+            $data = $this->SgfToTab($file);
+            $this->size = $data[0][0]['SZ'];
+            $this->GameTable($data);
             
             $jsongame = json_encode($this->game);
-            $insert = $db->prepare('INSERT INTO sgf VALUES(:file, :game, :size, :black, :white, :branchs)');
+            $insert = $db->prepare('INSERT INTO sgf VALUES(
+                :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC, :TM, :OT, :RU, :branchs, :game)');
             $insert->execute(array(
                 'file' => $file,
-                'game' => $jsongame,
-                'size' => $this->size,
-                'black' => $this->black,
-                'white' => $this->white,
+                'SZ' => $this->size,
+                'PB' => $this->infos['PB'] = empty($data[0][0]['PB']) ? NULL : $data[0][0]['PB'],
+                'BR' => $this->infos['BR'] = empty($data[0][0]['BR']) ? NULL : $data[0][0]['BR'],
+                'PW' => $this->infos['PW'] = empty($data[0][0]['PW']) ? NULL : $data[0][0]['PW'],
+                'WR' => $this->infos['WR'] = empty($data[0][0]['WR']) ? NULL : $data[0][0]['WR'],
+                'KM' => $this->infos['KM'] = empty($data[0][0]['KM']) ? NULL : $data[0][0]['KM'],
+                'DT' => $this->infos['DT'] = empty($data[0][0]['DT']) ? NULL : $data[0][0]['DT'],
+                'PC' => $this->infos['PC'] = empty($data[0][0]['PC']) ? NULL : $data[0][0]['PC'],
+                'TM' => $this->infos['TM'] = empty($data[0][0]['TM']) ? NULL : $data[0][0]['TM'],
+                'OT' => $this->infos['OT'] = empty($data[0][0]['OT']) ? NULL : $data[0][0]['OT'],
+                'RU' => $this->infos['RU'] = empty($data[0][0]['RU']) ? NULL : $data[0][0]['RU'],
                 'branchs' => $this->branchs,
+                'game' => $jsongame,
             ));
         }
         $db = null; // ferme la connexion
     }/*}}}*/
 
-    public function getGame() {
-        return $this->game;
-    }
-
-    public function getSize() {
-        return $this->size;
+    public function getData() {
+        $sgfdata['size'] = $this->size;
+        $sgfdata['infos'] = $this->infos;
+        $sgfdata['game'] = $this->game;
+        return $sgfdata;
     }
 
     // lit un SGF et le stocke dans une table[noeud][branche]

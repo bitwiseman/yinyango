@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
-    var game;
     var size;
+    var infos; // infos de la partie
+    var game;
     var node;
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
@@ -47,7 +48,7 @@ jQuery(document).ready(function($) {
             });
             $('#comments').css('top',gobansize + 50);
         }
-        $('textarea').css('height',$('#comments').outerHeight() - 6);
+        $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
 
     // cherche le dernier noeud de la branche actuelle
@@ -100,6 +101,23 @@ jQuery(document).ready(function($) {
             }
         }
     };//}}}
+
+    // affiche les infos de la partie dans la zone de commentaires
+    var ShowInfos = function() {
+        var text = '<p>';
+        // TODO récupérer les textes dans un fichier selon la langue
+        if (infos['PB'] != null) { text += '<em>Noir:</em> ' + infos['PB'] };
+        if (infos['BR'] != null) { text += ' (' + infos['BR'] + ')' };
+        if (infos['PW'] != null) { text += ' <br /><em>Blanc:</em> ' + infos['PW'] };
+        if (infos['WR'] != null) { text += ' (' + infos['WR'] + ')' };
+        if (infos['DT'] != null) { text += ' <br /><em>Date:</em> ' + infos['DT'] };
+        if (infos['PC'] != null) { text += ' <br /><em>Emplacement:</em> ' + infos['PC'] };
+        if (infos['RU'] != null) { text += ' <br /><em>Règles:</em> ' + infos['RU'] };
+        text += '</p>';
+
+        $('#textarea').html(''); // vide la zone commentaires
+        $('#textarea').html(text);
+    };
 
     /**
      * INITIALISATION
@@ -235,8 +253,9 @@ jQuery(document).ready(function($) {
 
         // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
-            game = data.game;
             size = data.size;
+            infos = data.infos;
+            game = data.game;
             node = 0;
             branch = 0;
 
@@ -258,7 +277,8 @@ jQuery(document).ready(function($) {
             $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
 
             // affiche l'état du début de jeu
-            PlaceStones(); 
+            PlaceStones();
+            ShowInfos();
             
             // affiche l'interface
             $('#start,[id$="prev"],[id$="next"],#end').attr('disabled','disabled');

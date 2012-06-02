@@ -40,8 +40,8 @@ function ListeSgf() {/*{{{*/
         <table id="goban"></table>
         <div id="comments">
             <div id="resizer"></div>
-            <textarea readonly>
-Portez ce vieux whisky au juge blond qui fume sur son île intérieure, à
+            <div id="textarea">
+Portez ce <u>vieux whisky</u> au juge blond qui fume sur son île intérieure, à
 côté de l'alcôve ovoïde, où les bûches se consument dans l'âtre, ce
 qui lui permet de penser à la cænogenèse de l'être dont il est question
 dans la cause ambiguë entendue à Moÿ, dans un capharnaüm qui,
@@ -59,7 +59,7 @@ canoë au delà des îles, près du mälström où brûlent les novæ.
 1 2 3 4 5 6 7 8 9 0 + * / % = € $ £
 < > ( ) [ ] { } « » " ' , ? ; . : !
 & ~ # | _ \ ^ @ ° ø % µ þ ß ð © ↓ →
-            </textarea>
+            </div>
         </div>
         <script src="jquery.tsumego.js"></script>
     </body>

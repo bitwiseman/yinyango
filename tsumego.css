@@ -29,14 +29,12 @@ body {
     margin: auto;
     cursor: n-resize;
 }
-textarea {
-    background: transparent;
+#textarea {
     width: 100%;
     padding: 0;
     border: 0;
-    resize: none;
-    outline: none;
-    font-size: 1.3em;
+    overflow: auto;
+    font-size: 1em;
 }
 #goban {
     margin: auto;
