@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="Nouveau document 1">
+   sodipodi:docname="loaddev.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -62,7 +62,29 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>hickop@gmail.com</dc:title>
+          </cc:Agent>
+        </dc:creator>
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -101,7 +123,7 @@
          style="fill:none;stroke:#000000;stroke-width:0.99965149px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       <path
          transform="matrix(0.95000594,0,0,0.95000594,0.99988122,1003.3621)"
-         d="m 25,20 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+         d="m 25,20 c 0,2.761424 -2.238576,5 -5,5 -2.761424,0 -5,-2.238576 -5,-5 0,-2.761424 2.238576,-5 5,-5 2.761424,0 5,2.238576 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="20"
@@ -111,7 +133,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(0.95000594,0,0,0.95000594,10.999881,1013.3621)"
-         d="m 25,20 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+         d="m 25,20 c 0,2.761424 -2.238576,5 -5,5 -2.761424,0 -5,-2.238576 -5,-5 0,-2.761424 2.238576,-5 5,-5 2.761424,0 5,2.238576 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="20"

@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="whitep.svg">
+   sodipodi:docname="whitepdev.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -32,9 +32,9 @@
      showgrid="true"
      inkscape:snap-global="true"
      inkscape:window-width="1280"
-     inkscape:window-height="498"
+     inkscape:window-height="996"
      inkscape:window-x="0"
-     inkscape:window-y="498"
+     inkscape:window-y="0"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -52,8 +52,30 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>hickop@gmail.com</dc:title>
+          </cc:Agent>
+        </dc:creator>
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -65,7 +87,7 @@
        id="g4384">
       <path
          transform="translate(0,1022.3622)"
-         d="M 30,15 A 15,15 0 1 1 0,15 15,15 0 1 1 30,15 z"
+         d="M 30,15 C 30,23.284271 23.284271,30 15,30 6.7157288,30 0,23.284271 0,15 0,6.7157288 6.7157288,0 15,0 23.284271,0 30,6.7157288 30,15 z"
          sodipodi:ry="15"
          sodipodi:rx="15"
          sodipodi:cy="15"
@@ -75,7 +97,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(2.3332916,0,0,1.5555278,-12.999499,1021.0292)"
-         d="m 15,10.5 a 3,4.5 0 1 1 -6,0 3,4.5 0 1 1 6,0 z"
+         d="M 15,10.5 C 15,12.985281 13.656854,15 12,15 10.343146,15 9,12.985281 9,10.5 9,8.0147186 10.343146,6 12,6 c 1.656854,0 3,2.0147186 3,4.5 z"
          sodipodi:ry="4.5"
          sodipodi:rx="3"
          sodipodi:cy="10.5"
