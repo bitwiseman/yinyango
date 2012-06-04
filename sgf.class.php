@@ -6,7 +6,8 @@ class sgf
 {
     private $size;
     private $infos; // infos de la partie
-    private $comments;
+    private $comments; // commentaires
+    private $symbols; // annotations sur le goban
     private $branchs;
     private $game;
 
@@ -43,6 +44,7 @@ class sgf
             $this->infos['OT'] = $vars['OT'];
             $this->infos['RU'] = $vars['RU'];
             $this->comments = json_decode($vars['comments']);
+            $this->symbols = json_decode($vars['symbols']);
             $this->branchs = $vars['branchs'];
             $this->game = json_decode($vars['game']);
         }
@@ -51,11 +53,13 @@ class sgf
             $this->size = $data[0][0]['SZ'];
             $this->GameTable($data);
             
-            $jsongame = json_encode($this->game);
             $jsoncomments = json_encode($this->comments);
+            $jsonsymbols = json_encode($this->symbols);
+            $jsongame = json_encode($this->game);
+
             $insert = $db->prepare('INSERT INTO sgf VALUES(
                 :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
-                :TM, :OT, :RU, :comments, :branchs, :game)');
+                :TM, :OT, :RU, :comments, :symbols, :branchs, :game)');
             $insert->execute(array(
                 'file' => $file,
                 'SZ' => $this->size,
@@ -70,6 +74,7 @@ class sgf
                 'OT' => $this->infos['OT'] = empty($data[0][0]['OT']) ? NULL : $data[0][0]['OT'],
                 'RU' => $this->infos['RU'] = empty($data[0][0]['RU']) ? NULL : $data[0][0]['RU'],
                 'comments' => $jsoncomments,
+                'symbols' => $jsonsymbols,
                 'branchs' => $this->branchs,
                 'game' => $jsongame,
             ));
@@ -81,6 +86,7 @@ class sgf
         $sgfdata['size'] = $this->size;
         $sgfdata['infos'] = $this->infos;
         $sgfdata['comments'] = $this->comments;
+        $sgfdata['symbols'] = $this->symbols;
         $sgfdata['game'] = $this->game;
         return $sgfdata;
     }
@@ -235,20 +241,32 @@ class sgf
                     // ajouter les pierres jouées ou placées
                     foreach ($table[$j][$i] as $key => $value) {
                         switch ($key) {
-                        case 'B': //noir joue
+                        case 'B': // noir joue
                             $this->PlayMove($j,$i,'b',$value);
                             break;
-                        case 'W': //blanc joue
+                        case 'W': // blanc joue
                             $this->PlayMove($j,$i,'w',$value);
                             break;
-                        case 'AB': //ajout de pierre(s) noire(s)
-                            $this->AddMove($j,$i,'b',$value);
+                        case 'AB': // ajout de pierre(s) noire(s)
+                            $this->game[$j][$i]['b'] = $value;
                             break;
-                        case 'AW': //ajout de pierre(s) blanche(s)
-                            $this->AddMove($j,$i,'w',$value);
+                        case 'AW': // ajout de pierre(s) blanche(s)
+                            $this->game[$j][$i]['w'] = $value;
+                            break;
+                        case 'CR': // ajout symbole cercle
+                            $this->symbols[$j][$i]['CR'] = $value;
+                            break;
+                        case 'SQ': // ajout symbole carré
+                            $this->symbols[$j][$i]['SQ'] = $value;
+                            break;
+                        case 'TR': // ajout symbole triangle
+                            $this->symbols[$j][$i]['TR'] = $value;
+                            break;
+                        case 'LB': // ajout symbole label
+                            $this->symbols[$j][$i]['LB'] = $value;
                             break;
                         case 'C': // ajout de commentaire(s)
-                            $this->AddComment($j,$i,$value);
+                            $this->comments[$j][$i] = $value;
                             break;
                         default:
                         }
@@ -275,13 +293,5 @@ class sgf
         $this->game[$node][$branch]['p'] = $color.','.$coord;
     }/*}}}*/
 
-
-    protected function AddMove($node,$branch,$color,$coord) {
-        $this->game[$node][$branch][$color] = $coord;
-    }
-
-    protected function AddComment($node,$branch,$comment) {
-        $this->comments[$node][$branch] = $comment;
-    }
 }
 ?>

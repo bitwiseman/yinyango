@@ -49,14 +49,6 @@ body {
     background-image: url(images/white.svg);
     background-size: 100% 100%;
 }
-.blackp {
-    background-image: url(images/blackp.svg);
-    background-size: 100% 100%;
-}
-.whitep {
-    background-image: url(images/whitep.svg);
-    background-size: 100% 100%;
-}
 .blacks:hover {
     background-image: url(images/black.svg);
     background-size: 100% 100%;
@@ -66,4 +58,28 @@ body {
     background-image: url(images/white.svg);
     background-size: 100% 100%;
     opacity: 0.5;
+}
+.symcr {
+    background-image: url(images/symcr.svg);
+    background-size: 100% 100%;
+}
+.symcrw {
+    background-image: url(images/symcrw.svg);
+    background-size: 100% 100%;
+}
+.symsq {
+    background-image: url(images/symsq.svg);
+    background-size: 100% 100%;
+}
+.symsqw {
+    background-image: url(images/symsqw.svg);
+    background-size: 100% 100%;
+}
+.symtr {
+    background-image: url(images/symtr.svg);
+    background-size: 100% 100%;
+}
+.symtrw {
+    background-image: url(images/symtrw.svg);
+    background-size: 100% 100%;
 }

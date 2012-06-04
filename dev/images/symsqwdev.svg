@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="whitepdev.svg">
+   sodipodi:docname="squarewdev.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="1.7369027"
-     inkscape:cy="15.436692"
+     inkscape:zoom="7.919596"
+     inkscape:cx="-2.5136794"
+     inkscape:cy="15.858142"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:snap-global="true"
      inkscape:window-width="1280"
-     inkscape:window-height="996"
+     inkscape:window-height="498"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="498"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
         <dc:creator>
@@ -83,28 +83,12 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1022.3622)">
-    <g
-       id="g4384">
-      <path
-         transform="translate(0,1022.3622)"
-         d="M 30,15 C 30,23.284271 23.284271,30 15,30 6.7157288,30 0,23.284271 0,15 0,6.7157288 6.7157288,0 15,0 23.284271,0 30,6.7157288 30,15 z"
-         sodipodi:ry="15"
-         sodipodi:rx="15"
-         sodipodi:cy="15"
-         sodipodi:cx="15"
-         id="path2987"
-         style="fill:#ffffff;fill-opacity:1"
-         sodipodi:type="arc" />
-      <path
-         transform="matrix(2.3332916,0,0,1.5555278,-12.999499,1021.0292)"
-         d="M 15,10.5 C 15,12.985281 13.656854,15 12,15 10.343146,15 9,12.985281 9,10.5 9,8.0147186 10.343146,6 12,6 c 1.656854,0 3,2.0147186 3,4.5 z"
-         sodipodi:ry="4.5"
-         sodipodi:rx="3"
-         sodipodi:cy="10.5"
-         sodipodi:cx="12"
-         id="path3885"
-         style="fill:none;stroke:#000000;stroke-width:1.04980007;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         sodipodi:type="arc" />
-    </g>
+    <rect
+       style="fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:4"
+       id="rect3018"
+       width="19"
+       height="19"
+       x="5.5"
+       y="1027.8622" />
   </g>
 </svg>

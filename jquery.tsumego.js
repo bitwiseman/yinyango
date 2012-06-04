@@ -2,6 +2,7 @@ jQuery(document).ready(function($) {
     var size;
     var infos; // infos de la partie
     var comments; // commentaires
+    var symbols; // annotations sur le goban
     var game;
     var node;
     var branch;
@@ -48,6 +49,7 @@ jQuery(document).ready(function($) {
                 height: gobansize
             });
             $('#comments').css('top',gobansize + 50);
+            $('[class^="sym"]').css('height',gobansize / sizeb - 2);
         }
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
@@ -67,14 +69,56 @@ jQuery(document).ready(function($) {
         
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','black');
-        };
+        }
         for (var w = 0, cw = white.length; w < cw; w++) {
             $('#' + white[w]).attr('class','white');
-        };
+        }
         if (game[node][branch]['p'] != null) {
-            played = game[node][branch]['p'].split(',');
-            playedcolor = (played[0] == 'b') ? 'blackp' : 'whitep';
-            $('#' + played[1]).attr('class',playedcolor); // visualiser la dernière pierre jouée
+            var played = game[node][branch]['p'].split(',');
+            var playedcolor = (played[0] == 'b') ? 'symcrw' : 'symcr';
+            $('#' + played[1] + ' > div').attr('class',playedcolor); // dernière pierre jouée
+        }
+    };//}}}
+
+    // affiche les annotations présentes sur le goban
+    var ShowSymbols = function() {//{{{
+        if (symbols != null && symbols[node] != null && symbols[node][branch] != null) {
+            if (symbols[node][branch]['CR'] != null) {
+                var circle = symbols[node][branch]['CR'].split(','); 
+                for (var c = 0, cc = circle.length; c < cc; c++) {
+                    var cell = $('#' + circle[c]);
+                    if (cell.attr('class') == 'black') {
+                        cell.html('<div class="symcrw"></div>');
+                    } else {
+                        cell.html('<div class="symcr"></div>');
+                    }
+                }
+            }
+            if (symbols[node][branch]['SQ'] != null) {
+                var square = symbols[node][branch]['SQ'].split(','); 
+                for (var s = 0, cs = square.length; s < cs; s++) {
+                    var cell = $('#' + square[s]);
+                    if (cell.attr('class') == 'black') {
+                        cell.html('<div class="symsqw"></div>');
+                    } else {
+                        cell.html('<div class="symsq"></div>');
+                    }
+                }
+            }
+            if (symbols[node][branch]['TR'] != null) {
+                var triangle = symbols[node][branch]['TR'].split(','); 
+                for (var t = 0, ct = square.length; t < ct; t++) {
+                    var cell = $('#' + triangle[t]);
+                    if (cell.attr('class') == 'black') {
+                        cell.html('<div class="symtrw"></div>');
+                    } else {
+                        cell.html('<div class="symtr"></div>');
+                    }
+                }
+            }
+            if (symbols[node][branch]['LB'] != null) {
+                // TODO
+            }
         }
     };//}}}
 
@@ -83,6 +127,7 @@ jQuery(document).ready(function($) {
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
                 $('#' + coord[j] + coord[i]).removeAttr('class');
+                $('#' + coord[j] + coord[i] + ' > div').attr('class','sym');
             }
         }
     };//}}}
@@ -95,9 +140,10 @@ jQuery(document).ready(function($) {
             $('#goban').append('<tr class="line' + i + '"></tr>');
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
-                    $('.line' + i).append('<td></td>'); // cellules vides pour les bordures
+                    $('.line' + i).append('<td><div class="sym"></div></td>'); // bordures
                 } else {
-                    $('.line' + i).append('<td id="' + coord[j] + coord[i] + '"></td>');
+                    $('.line' + i).append('<td id="' + coord[j] + coord[i] + 
+                                          '"><div class="sym"></div></td>');
                 }
             }
         }
@@ -241,19 +287,19 @@ jQuery(document).ready(function($) {
     });//}}}
 
     // bouton commentaires
-    $('#comment').click(function() {
+    $('#comment').click(function() {//{{{
         com ? com = false : com = true;
         com ? $('#comments').show() : $('#comments').hide();
         ResizeGoban();
-    });
+    });//}}}
 
     // bouton pour charger une partie
-    $('#load').click(function() {
+    $('#load').click(function() {//{{{
         $('#loadlist').show();
-    });
+    });//}}}
 
     // bouton options
-    $('#options').click(function() {
+    $('#options').click(function() {//{{{
         if (options) {
             ShowComments();
             $('#load').hide();
@@ -265,7 +311,7 @@ jQuery(document).ready(function($) {
             $('#load').show();
             options = true;
         }
-    });
+    });//}}}
 
     // bouton charger
     $('#loadsgf').click(function() {//{{{
@@ -277,6 +323,7 @@ jQuery(document).ready(function($) {
             size = data.size;
             infos = data.infos;
             comments = data.comments;
+            symbols = data.symbols;
             game = data.game;
             node = 0;
             branch = 0;
@@ -290,7 +337,6 @@ jQuery(document).ready(function($) {
             
             if (size != oldsize) {
                 $('#goban').hide();
-                ResizeGoban();
                 CreateGoban(); 
             } else {
                 ClearGoban();
@@ -298,11 +344,13 @@ jQuery(document).ready(function($) {
             
             $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
 
-            // affiche l'état du début de jeu
+            // charge l'état du début de jeu
             PlaceStones();
+            ShowSymbols();
             ShowComments();
-            
+
             // affiche l'interface
+            ResizeGoban();
             $('#start,[id$="prev"],[id$="next"],#end').attr('disabled','disabled');
             if (size != oldsize) { $('#goban').fadeIn() };
             $('#comment').removeAttr('disabled');

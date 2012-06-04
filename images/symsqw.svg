@@ -24,7 +24,6 @@
 </rdf:RDF>
 </metadata>
 <g transform="translate(0,-1022.3622)">
-<path d="M30,15c0,8.284-6.716,15-15,15-8.2843,0-15-6.716-15-15,0-8.2843,6.7157-15,15-15,8.284,0,15,6.7157,15,15z" transform="translate(0,1022.3622)" fill="#000"/>
-<path d="m25,13c0,3.3137-2.6863,6-6,6s-6-2.6863-6-6,2.6863-6,6-6,6,2.6863,6,6z" transform="matrix(1.1666897,0,0,1.1666897,-7.1671044,1022.1952)" stroke="#FFF" stroke-dasharray="none" stroke-miterlimit="4" stroke-width="1.71425187" fill="none"/>
+<rect stroke-linejoin="miter" stroke-dasharray="none" stroke-dashoffset="4" height="19" width="19" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" y="1027.9" x="5.5" stroke-width="2" fill="none"/>
 </g>
 </svg>
