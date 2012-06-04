@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
     var size;
     var infos; // infos de la partie
+    var comments; // commentaires
     var game;
     var node;
     var branch;
@@ -103,13 +104,13 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // affiche les infos de la partie dans la zone de commentaires
-    var ShowInfos = function() {
+    var ShowInfos = function() {//{{{
         var text = '<p>';
         // TODO récupérer les textes dans un fichier selon la langue
         if (infos['PB'] != null) { text += '<em>Noir:</em> ' + infos['PB'] };
-        if (infos['BR'] != null) { text += ' (' + infos['BR'] + ')' };
+        if (infos['BR'] != null) { text += ' [' + infos['BR'] + ']' };
         if (infos['PW'] != null) { text += ' <br /><em>Blanc:</em> ' + infos['PW'] };
-        if (infos['WR'] != null) { text += ' (' + infos['WR'] + ')' };
+        if (infos['WR'] != null) { text += ' [' + infos['WR'] + ']' };
         if (infos['DT'] != null) { text += ' <br /><em>Date:</em> ' + infos['DT'] };
         if (infos['PC'] != null) { text += ' <br /><em>Emplacement:</em> ' + infos['PC'] };
         if (infos['RU'] != null) { text += ' <br /><em>Règles:</em> ' + infos['RU'] };
@@ -117,7 +118,19 @@ jQuery(document).ready(function($) {
 
         $('#textarea').html(''); // vide la zone commentaires
         $('#textarea').html(text);
-    };
+    };//}}}
+
+    // affiche les commentaires
+    var ShowComments = function() {//{{{
+        var text = '<p>';
+        if (comments != null && comments[node] != null && comments[node][branch] != null) {
+            text += comments[node][branch];
+        }
+        text += '</p>';
+
+        $('#textarea').html(''); // vide la zone commentaires
+        $('#textarea').html(text);
+    };//}}}
 
     /**
      * INITIALISATION
@@ -162,6 +175,7 @@ jQuery(document).ready(function($) {
         $('[id$="prev"],#start').attr('disabled','disabled');
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton retour rapide
@@ -174,6 +188,7 @@ jQuery(document).ready(function($) {
         };
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton précédent
@@ -186,6 +201,7 @@ jQuery(document).ready(function($) {
         };
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton suivant
@@ -198,6 +214,7 @@ jQuery(document).ready(function($) {
         };
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton avance rapide
@@ -210,6 +227,7 @@ jQuery(document).ready(function($) {
         };
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton fin
@@ -219,6 +237,7 @@ jQuery(document).ready(function($) {
         $('[id$="next"],#end').attr('disabled','disabled');
         ClearGoban();
         PlaceStones();
+        ShowComments();
     });//}}}
 
     // bouton commentaires
@@ -230,17 +249,19 @@ jQuery(document).ready(function($) {
 
     // bouton pour charger une partie
     $('#load').click(function() {
-        $('#loadlist').fadeIn();
+        $('#loadlist').show();
     });
 
     // bouton options
     $('#options').click(function() {
         if (options) {
+            ShowComments();
             $('#load').hide();
             $('.button:not(#load)').show();
             options = false;
         } else {
-            $('.button:not(#options)').hide();
+            ShowInfos();
+            $('.button:not(#comment,#options)').hide();
             $('#load').show();
             options = true;
         }
@@ -255,6 +276,7 @@ jQuery(document).ready(function($) {
         $.getJSON('sgf.php', { file: sgf_file }, function(data) {
             size = data.size;
             infos = data.infos;
+            comments = data.comments;
             game = data.game;
             node = 0;
             branch = 0;
@@ -278,7 +300,7 @@ jQuery(document).ready(function($) {
 
             // affiche l'état du début de jeu
             PlaceStones();
-            ShowInfos();
+            ShowComments();
             
             // affiche l'interface
             $('#start,[id$="prev"],[id$="next"],#end').attr('disabled','disabled');

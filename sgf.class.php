@@ -4,10 +4,11 @@
  */
 class sgf
 {
-    private $game;
     private $size;
-    private $branchs;
     private $infos; // infos de la partie
+    private $comments;
+    private $branchs;
+    private $game;
 
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
@@ -30,9 +31,7 @@ class sgf
         $vars = $select->fetch();
         $select->closeCursor();
         if (!empty($vars)) {
-            $this->game = json_decode($vars['game']);
             $this->size = $vars['SZ'];
-            $this->branchs = $vars['branchs'];
             $this->infos['PB'] = $vars['PB'];
             $this->infos['BR'] = $vars['BR'];
             $this->infos['PW'] = $vars['PW'];
@@ -43,6 +42,9 @@ class sgf
             $this->infos['TM'] = $vars['TM'];
             $this->infos['OT'] = $vars['OT'];
             $this->infos['RU'] = $vars['RU'];
+            $this->comments = json_decode($vars['comments']);
+            $this->branchs = $vars['branchs'];
+            $this->game = json_decode($vars['game']);
         }
         else {
             $data = $this->SgfToTab($file);
@@ -50,8 +52,10 @@ class sgf
             $this->GameTable($data);
             
             $jsongame = json_encode($this->game);
+            $jsoncomments = json_encode($this->comments);
             $insert = $db->prepare('INSERT INTO sgf VALUES(
-                :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC, :TM, :OT, :RU, :branchs, :game)');
+                :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
+                :TM, :OT, :RU, :comments, :branchs, :game)');
             $insert->execute(array(
                 'file' => $file,
                 'SZ' => $this->size,
@@ -65,6 +69,7 @@ class sgf
                 'TM' => $this->infos['TM'] = empty($data[0][0]['TM']) ? NULL : $data[0][0]['TM'],
                 'OT' => $this->infos['OT'] = empty($data[0][0]['OT']) ? NULL : $data[0][0]['OT'],
                 'RU' => $this->infos['RU'] = empty($data[0][0]['RU']) ? NULL : $data[0][0]['RU'],
+                'comments' => $jsoncomments,
                 'branchs' => $this->branchs,
                 'game' => $jsongame,
             ));
@@ -75,6 +80,7 @@ class sgf
     public function getData() {
         $sgfdata['size'] = $this->size;
         $sgfdata['infos'] = $this->infos;
+        $sgfdata['comments'] = $this->comments;
         $sgfdata['game'] = $this->game;
         return $sgfdata;
     }
@@ -155,6 +161,8 @@ class sgf
             foreach ($table[$i] as $j => $value) {
                 //lecture caractère par caratère
                 $valchars = str_split($value);
+                $escape = false;
+                $space = false;
                 $key = '';
                 $prevkey = '';
                 $isval = false;
@@ -162,22 +170,46 @@ class sgf
                 foreach ($valchars as $char) {
                     switch ($char) {
                     case "[": //début de valeur
-                        $isval = true;
+                        if ($space) {
+                            $val .= $char;
+                            $space = false;
+                        } else {
+                            $isval = true;
+                        }
+                        break;
+                    case "\\": // pour prendre en compte les ] dans les commentaires
+                        $space = false;
+                        $escape = true;
+                        break;
+                    case " ": // pour prendre en compte les [ dans les commentaires
+                        $val .= $char;
+                        $space = true;
                         break;
                     case "]": //fin de valeur
-                        if ($key == '') { // valeur supplémentaire de la clé précédente
-                            $keys_table[$i][$j][$prevkey] .= ','.$val;
+                        $space = false;
+                        if ($escape) {
+                            $val .= $char;
+                            $escape = false;
                         } else {
-                            $keys_table[$i][$j][$key] = $val;
-                            $prevkey = $key;
-                            $key = '';
+                            if ($key == '') { // valeur supplémentaire de la clé précédente
+                                $keys_table[$i][$j][$prevkey] .= ','.$val;
+                            } else {
+                                $keys_table[$i][$j][$key] = $val;
+                                $prevkey = $key;
+                                $key = '';
+                            }
+                            $isval = false;
+                            $val = '';
                         }
-                        $isval = false;
-                        $val = '';
                         break;
                     default:
+                        $space = false;
                         if ($isval) {
-                            $val .= $char;
+                            if ($char == "\n") {
+                                $val .= "<br />"; // retour à la ligne pour affichage html
+                            } else {
+                                $val .= $char;
+                            }
                         }
                         else {
                             if ($char != "\n") {
@@ -215,6 +247,9 @@ class sgf
                         case 'AW': //ajout de pierre(s) blanche(s)
                             $this->AddMove($j,$i,'w',$value);
                             break;
+                        case 'C': // ajout de commentaire(s)
+                            $this->AddComment($j,$i,$value);
+                            break;
                         default:
                         }
                     }
@@ -243,6 +278,10 @@ class sgf
 
     protected function AddMove($node,$branch,$color,$coord) {
         $this->game[$node][$branch][$color] = $coord;
+    }
+
+    protected function AddComment($node,$branch,$comment) {
+        $this->comments[$node][$branch] = $comment;
     }
 }
 ?>

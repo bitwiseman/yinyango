@@ -34,32 +34,13 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <div id="navbar">
-            <input type="image" class="button" id="load" src="images/load.png" /><input type="image" class="button" id="comment" src="images/comment.png" /><input type="image" class="button" id="start" src="images/start.png" /><input type="image" class="button" id="fastprev" src="images/fastprev.png" /><input type="image" class="button" id="prev" src="images/prev.png" /><input type="image" class="button" id="next" src="images/next.png" /><input type="image" class="button" id="fastnext" src="images/fastnext.png" /><input type="image" class="button" id="end" src="images/end.png" /><input type="image" class="button" id="options" src="images/options.png" />
+            <input type="image" class="button" id="comment" src="images/comment.png" /><input type="image" class="button" id="load" src="images/load.png" /><input type="image" class="button" id="start" src="images/start.png" /><input type="image" class="button" id="fastprev" src="images/fastprev.png" /><input type="image" class="button" id="prev" src="images/prev.png" /><input type="image" class="button" id="next" src="images/next.png" /><input type="image" class="button" id="fastnext" src="images/fastnext.png" /><input type="image" class="button" id="end" src="images/end.png" /><input type="image" class="button" id="options" src="images/options.png" />
             <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
         <table id="goban"></table>
         <div id="comments">
             <div id="resizer"></div>
-            <div id="textarea">
-Portez ce <u>vieux whisky</u> au juge blond qui fume sur son île intérieure, à
-côté de l'alcôve ovoïde, où les bûches se consument dans l'âtre, ce
-qui lui permet de penser à la cænogenèse de l'être dont il est question
-dans la cause ambiguë entendue à Moÿ, dans un capharnaüm qui,
-pense-t-il, diminue çà et là la qualité de son œuvre. 
-
-l'île exiguë
-Où l'obèse jury mûr
-Fête l'haï volapük,
-Âne ex aéquo au whist,
-Ôtez ce vœu déçu.
-
-Le cœur déçu mais l'âme plutôt naïve, Louÿs rêva de crapaüter en
-canoë au delà des îles, près du mälström où brûlent les novæ.
-
-1 2 3 4 5 6 7 8 9 0 + * / % = € $ £
-< > ( ) [ ] { } « » " ' , ? ; . : !
-& ~ # | _ \ ^ @ ° ø % µ þ ß ð © ↓ →
-            </div>
+            <div id="textarea"></div>
         </div>
         <script src="jquery.tsumego.js"></script>
     </body>
