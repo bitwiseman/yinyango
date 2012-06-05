@@ -50,6 +50,7 @@ jQuery(document).ready(function($) {
             });
             $('#comments').css('top',gobansize + 50);
             $('[class^="sym"]').css('height',gobansize / sizeb - 2);
+            $('[class^="sym"]').css('width',gobansize / sizeb - 2);
         }
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
@@ -314,7 +315,7 @@ jQuery(document).ready(function($) {
     });//}}}
 
     // bouton charger
-    $('#loadsgf').click(function() {//{{{
+    $('#loadsgf').click(function() {//{{{   
         var sgf_file = 'sgf/' + $("#sgflist").val();
         var oldsize = size;
 
