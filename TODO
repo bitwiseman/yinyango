@@ -14,8 +14,3 @@ Idées en vrac:
     Afficher/masquer l'arbre
 - différents modes: jeu, démo, édition ...
 - réécrire les données au format SGF (ajouter au class)
-
-<style>
-g{display:none}
-g:target{display:inline}
-</style>

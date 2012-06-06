@@ -34,53 +34,40 @@ body {
     padding: 0;
     border: 0;
     overflow: auto;
-    font-size: 1em;
 }
 #goban {
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    background-size: 100% 100%;
+    margin: auto;
+    border-collapse: collapse;
 }
-.black {
-    background-image: url(images/black.svg);
-    background-size: 100% 100%;
+[class^="cell"] {
+    text-align: center;
+    font-family: serif;
 }
-.white {
-    background-image: url(images/white.svg);
-    background-size: 100% 100%;
+.cellb {
+    background-image: url(images/b.svg);
 }
-.blacks:hover {
-    background-image: url(images/black.svg);
-    background-size: 100% 100%;
-    opacity: 0.5;
+.cellw {
+    background-image: url(images/w.svg);
 }
-.whites:hover {
-    background-image: url(images/white.svg);
-    background-size: 100% 100%;
-    opacity: 0.5;
+[class^="sym"] {
+    width: 100%;
+    height: 100%;
 }
-.symcr {
-    background-image: url(images/symcr.svg);
-    background-size: 100% 100%;
+.symwcr {
+    background-image: url(images/wcr.svg);
 }
-.symcrw {
-    background-image: url(images/symcrw.svg);
-    background-size: 100% 100%;
+.symbcr {
+    background-image: url(images/bcr.svg);
 }
-.symsq {
-    background-image: url(images/symsq.svg);
-    background-size: 100% 100%;
+.symwsq {
+    background-image: url(images/wsq.svg);
 }
-.symsqw {
-    background-image: url(images/symsqw.svg);
-    background-size: 100% 100%;
+.symbsq {
+    background-image: url(images/bsq.svg);
 }
-.symtr {
-    background-image: url(images/symtr.svg);
-    background-size: 100% 100%;
+.symwtr {
+    background-image: url(images/wtr.svg);
 }
-.symtrw {
-    background-image: url(images/symtrw.svg);
-    background-size: 100% 100%;
+.symbtr {
+    background-image: url(images/btr.svg);
 }

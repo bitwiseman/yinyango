@@ -44,13 +44,12 @@ jQuery(document).ready(function($) {
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize) { // évite du travail inutile
-            $('#goban').css({
-                width: gobansize,
-                height: gobansize
-            });
             $('#comments').css('top',gobansize + 50);
-            $('[class^="sym"]').css('height',gobansize / sizeb - 2);
-            $('[class^="sym"]').css('width',gobansize / sizeb - 2);
+            $('[class^="cell"]').css({
+                fontSize: gobansize / sizeb / 2,
+                height: gobansize / sizeb - 2,
+                width: gobansize / sizeb - 2
+            });
         }
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
@@ -69,15 +68,15 @@ jQuery(document).ready(function($) {
         var white = game[node][branch]['w'].split(',');
         
         for (var b = 0, cb = black.length; b < cb; b++) {
-            $('#' + black[b]).attr('class','black');
+            $('#' + black[b]).attr('class','cellb');
         }
         for (var w = 0, cw = white.length; w < cw; w++) {
-            $('#' + white[w]).attr('class','white');
+            $('#' + white[w]).attr('class','cellw');
         }
         if (game[node][branch]['p'] != null) {
             var played = game[node][branch]['p'].split(',');
-            var playedcolor = (played[0] == 'b') ? 'symcrw' : 'symcr';
-            $('#' + played[1] + ' > div').attr('class',playedcolor); // dernière pierre jouée
+            var symbol = (played[0] == 'b') ? 'symwcr' : 'symbcr';
+            $('#' + played[1] + ' > div').attr('class',symbol);
         }
     };//}}}
 
@@ -85,35 +84,38 @@ jQuery(document).ready(function($) {
     var ShowSymbols = function() {//{{{
         if (symbols != null && symbols[node] != null && symbols[node][branch] != null) {
             if (symbols[node][branch]['CR'] != null) {
-                var circle = symbols[node][branch]['CR'].split(','); 
-                for (var c = 0, cc = circle.length; c < cc; c++) {
-                    var cell = $('#' + circle[c]);
-                    if (cell.attr('class') == 'black') {
-                        cell.html('<div class="symcrw"></div>');
+                var list = symbols[node][branch]['CR'].split(','); 
+                for (var i = 0, ci = list.length; i < ci; i++) {
+                    var cell = $('#' + list[i]);
+                    var sym = $('#' + list[i] + ' > div');
+                    if (cell.attr('class') == 'cellb') {
+                        sym.attr('class','symwcr');
                     } else {
-                        cell.html('<div class="symcr"></div>');
+                        sym.attr('class','symbcr');
                     }
                 }
             }
             if (symbols[node][branch]['SQ'] != null) {
-                var square = symbols[node][branch]['SQ'].split(','); 
-                for (var s = 0, cs = square.length; s < cs; s++) {
-                    var cell = $('#' + square[s]);
-                    if (cell.attr('class') == 'black') {
-                        cell.html('<div class="symsqw"></div>');
+                var list = symbols[node][branch]['SQ'].split(','); 
+                for (var i = 0, ci = list.length; i < ci; i++) {
+                    var cell = $('#' + list[i]);
+                    var sym = $('#' + list[i] + ' > div');
+                    if (cell.attr('class') == 'cellb') {
+                        sym.attr('class','symwsq');
                     } else {
-                        cell.html('<div class="symsq"></div>');
+                        sym.attr('class','symbsq');
                     }
                 }
             }
             if (symbols[node][branch]['TR'] != null) {
-                var triangle = symbols[node][branch]['TR'].split(','); 
-                for (var t = 0, ct = square.length; t < ct; t++) {
-                    var cell = $('#' + triangle[t]);
-                    if (cell.attr('class') == 'black') {
-                        cell.html('<div class="symtrw"></div>');
+                var list = symbols[node][branch]['TR'].split(','); 
+                for (var i = 0, ci = list.length; i < ci; i++) {
+                    var cell = $('#' + list[i]);
+                    var sym = $('#' + list[i] + ' > div');
+                    if (cell.attr('class') == 'cellb') {
+                        sym.attr('class','symwtr');
                     } else {
-                        cell.html('<div class="symtr"></div>');
+                        sym.attr('class','symbtr');
                     }
                 }
             }
@@ -123,28 +125,36 @@ jQuery(document).ready(function($) {
         }
     };//}}}
 
-    // vide le goban de toutes ses pierres
+    // vide le goban de toutes ses pierres et symboles
     var ClearGoban = function() {//{{{
-        for (var i = 0; i < size; i++) {
-            for (var j = 0; j < size; j++) {
-                $('#' + coord[j] + coord[i]).removeAttr('class');
-                $('#' + coord[j] + coord[i] + ' > div').attr('class','sym');
-            }
-        }
+        $('[class^="cell"]:not([class="cell"])').attr('class','cell');
+        $('[class^="sym"]:not([class="sym"])').attr('class','sym');
     };//}}}
 
     // création du goban en identifiant les coordonnées
     var CreateGoban = function() {//{{{
+        var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
         $('#goban').html(''); // supprime l'ancien goban
 
         for (var i = -1; i <= size; i++) {
-            $('#goban').append('<tr class="line' + i + '"></tr>');
+            $('#goban').append('<tr class="row' + i + '"></tr>');
             for (var j = -1; j <= size; j++) {
-                if (i == -1 || i == size || (i != -1 && (j == -1 || j == size))) {
-                    $('.line' + i).append('<td><div class="sym"></div></td>'); // bordures
+                if (i == -1 || i == size) {
+                    if (j != -1 && j != size) {
+                        $('.row' + i).append('<td class="cell">' + letters[j] + '</td>');
+                    } else {
+                        $('.row' + i).append('<td class="cell"></td>');
+                    }
+                }
+                else if (j == -1 || j == size) {
+                    if (i != -1 && i != size) {
+                        $('.row' + i).append('<td class="cell">' + (size - i) + '</td>');
+                    } else {
+                        $('.row' + i).append('<td class="cell"></td>');
+                    }
                 } else {
-                    $('.line' + i).append('<td id="' + coord[j] + coord[i] + 
-                                          '"><div class="sym"></div></td>');
+                    $('.row' + i).append('<td id="' + coord[j] + coord[i] + 
+                                         '" class="cell"><div class="sym"></div></td>');
                 }
             }
         }
@@ -187,7 +197,7 @@ jQuery(document).ready(function($) {
     $('#comments').hide();
     $('#loadlist').hide();
     $('.button:not(#load)').hide();
-    $(':not(textarea)').disableSelection();
+    $('#goban,#resizer').disableSelection();
 
     /**
      * EVENEMENTS
@@ -334,7 +344,7 @@ jQuery(document).ready(function($) {
             $('#loadlist').hide();
             $('#load').hide();
             options = false;
-            $('#goban').css('background-image', 'url(images/goban' + size + '.svg)');
+            $('#goban').css('background-image', 'url(images/' + size + '.svg)');
             
             if (size != oldsize) {
                 $('#goban').hide();
@@ -343,7 +353,7 @@ jQuery(document).ready(function($) {
                 ClearGoban();
             }
             
-            $('td[id]').attr('class','blacks'); // TODO affiche/masque curseur en fonction du mode
+            // TODO affiche/masque curseur en fonction du mode
 
             // charge l'état du début de jeu
             PlaceStones();
