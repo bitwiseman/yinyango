@@ -43,7 +43,6 @@ jQuery(document).ready(function($) {
               heightleft = winh - 50;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
-        console.log(force);
         if (gobansize != oldgobansize || force) { // évite du travail inutile
             $('#comments').css('top',gobansize + 50);
             $('[class^="cell"]').css({
@@ -326,7 +325,7 @@ jQuery(document).ready(function($) {
     $('#options').click(function() {//{{{
         if (options) {
             ShowComments();
-            $('[id^="load"]').hide();
+            $('#load,#loadlist').hide();
             $('[class^="button"]:not(#load)').show();
             options = false;
         } else {

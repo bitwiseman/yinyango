@@ -1,0 +1,28 @@
+body {
+    background-color: #cda657;
+    color: #000;
+    margin: 0;
+}
+#loadlist {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    background-color: #998877;
+    border: 2px solid #000;
+    overflow: auto;
+}
+#loadlist table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+#loadlist td {
+    padding: 20px;
+}
+#loadlist tr:hover {
+    background: #776655;
+    cursor: pointer;
+}
