@@ -34,7 +34,15 @@ function ListeSgf() {/*{{{*/
     </head>
     <body>
         <div id="navbar">
-            <input type="image" class="button" id="comment" src="images/comment.png" /><input type="image" class="button" id="load" src="images/load.png" /><input type="image" class="button" id="start" src="images/start.png" /><input type="image" class="button" id="fastprev" src="images/fastprev.png" /><input type="image" class="button" id="prev" src="images/prev.png" /><input type="image" class="button" id="next" src="images/next.png" /><input type="image" class="button" id="fastnext" src="images/fastnext.png" /><input type="image" class="button" id="end" src="images/end.png" /><input type="image" class="button" id="options" src="images/options.png" />
+            <div class="button" id="comment"></div>
+            <div class="button" id="load"></div>
+            <div class="button" id="start"></div>
+            <div class="button" id="fastprev"></div>
+            <div class="button" id="prev"></div>
+            <div class="button" id="next"></div>
+            <div class="button" id="fastnext"></div>
+            <div class="button" id="end"></div>
+            <div class="button" id="options"></div>
             <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
         <table id="goban"></table>

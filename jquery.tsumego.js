@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
-    var ResizeGoban = function() {//{{{
+    var ResizeGoban = function(force) {//{{{
         var heightleft; // hauteur restante pour le goban
         var winw = $(window).width();
         var winh = $(window).height();
@@ -43,7 +43,8 @@ jQuery(document).ready(function($) {
               heightleft = winh - 50;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
-        if (gobansize != oldgobansize) { // évite du travail inutile
+        console.log(force);
+        if (gobansize != oldgobansize || force) { // évite du travail inutile
             $('#comments').css('top',gobansize + 50);
             $('[class^="cell"]').css({
                 fontSize: gobansize / sizeb / 2,
@@ -196,7 +197,7 @@ jQuery(document).ready(function($) {
     $('#goban').hide();
     $('#comments').hide();
     $('#loadlist').hide();
-    $('.button:not(#load)').hide();
+    $('[class^="button"]:not(#load)').hide();
     $('#goban,#resizer').disableSelection();
 
     /**
@@ -227,74 +228,86 @@ jQuery(document).ready(function($) {
 
     // bouton début
     $('#start').click(function() {//{{{
-        node = 0;
-        $('[id$="next"],#end').removeAttr('disabled');
-        $('[id$="prev"],#start').attr('disabled','disabled');
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#start').attr('class') == 'button') {
+            node = 0;
+            $('[id$="next"],#end').attr('class','button');
+            $('[id$="prev"],#start').attr('class','buttond');
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton retour rapide
     $('#fastprev').click(function() {//{{{
-        node = node - 10 < 0 ? 0 : node - 10;
-        $('[id$="next"],#end').removeAttr('disabled');
-        // TODO test si il existe un coup précédent
-        if (node == 0) {
-            $('[id$="prev"],#start').attr('disabled','disabled');
-        };
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#fastprev').attr('class') == 'button') {
+            node = node - 10 < 0 ? 0 : node - 10;
+            $('[id$="next"],#end').attr('class','button');
+            // TODO test si il existe un coup précédent
+            if (node == 0) {
+                $('[id$="prev"],#start').attr('class','buttond');
+            };
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton précédent
     $('#prev').click(function() {//{{{
-        node--;
-        $('[id$="next"],#end').removeAttr('disabled');
-        // TODO test si il existe un coup précédent
-        if (game[node-1] == null || game[node-1][branch] == null) {
-            $('[id$="prev"],#start').attr('disabled','disabled');
-        };
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#prev').attr('class') == 'button') {
+            node--;
+            $('[id$="next"],#end').attr('class','button');
+            // TODO test si il existe un coup précédent
+            if (game[node-1] == null || game[node-1][branch] == null) {
+                $('[id$="prev"],#start').attr('class','buttond');
+            };
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton suivant
     $('#next').click(function() {//{{{
-        node++;
-        $('[id$="prev"],#start').removeAttr('disabled');
-        // TODO test si il existe un coup suivant
-        if (game[node+1] == null || game[node+1][branch] == null) {
-            $('[id$="next"],#end').attr('disabled','disabled');
-        };
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#next').attr('class') == 'button') {
+            node++;
+            $('[id$="prev"],#start').attr('class','button');
+            // TODO test si il existe un coup suivant
+            if (game[node+1] == null || game[node+1][branch] == null) {
+                $('[id$="next"],#end').attr('class','buttond');
+            };
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton avance rapide
     $('#fastnext').click(function() {//{{{
-        node = node + 10 > nodemax ? nodemax : node + 10;
-        $('[id$="prev"],#start').removeAttr('disabled');
-        // TODO test si il existe un coup précédent
-        if (node == nodemax) {
-            $('[id$="next"],#end').attr('disabled','disabled');
-        };
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#fastnext').attr('class') == 'button') {
+            node = node + 10 > nodemax ? nodemax : node + 10;
+            $('[id$="prev"],#start').attr('class','button');
+            // TODO test si il existe un coup précédent
+            if (node == nodemax) {
+                $('[id$="next"],#end').attr('class','buttond');
+            };
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton fin
     $('#end').click(function() {//{{{
-        node = nodemax;
-        $('[id$="prev"],#start').removeAttr('disabled');
-        $('[id$="next"],#end').attr('disabled','disabled');
-        ClearGoban();
-        PlaceStones();
-        ShowComments();
+        if ($('#end').attr('class') == 'button') {
+            node = nodemax;
+            $('[id$="prev"],#start').attr('class','button');
+            $('[id$="next"],#end').attr('class','buttond');
+            ClearGoban();
+            PlaceStones();
+            ShowComments();
+        }
     });//}}}
 
     // bouton commentaires
@@ -313,12 +326,12 @@ jQuery(document).ready(function($) {
     $('#options').click(function() {//{{{
         if (options) {
             ShowComments();
-            $('#load').hide();
-            $('.button:not(#load)').show();
+            $('[id^="load"]').hide();
+            $('[class^="button"]:not(#load)').show();
             options = false;
         } else {
             ShowInfos();
-            $('.button:not(#comment,#options)').hide();
+            $('[class^="button"]:not(#comment,#options)').hide();
             $('#load').show();
             options = true;
         }
@@ -361,15 +374,15 @@ jQuery(document).ready(function($) {
             ShowComments();
 
             // affiche l'interface
-            ResizeGoban();
-            $('#start,[id$="prev"],[id$="next"],#end').attr('disabled','disabled');
+            ResizeGoban(true); // forcer le redimensionnement
+            $('#start,[id$="prev"],[id$="next"],#end').attr('class','buttond');
             if (size != oldsize) { $('#goban').fadeIn() };
-            $('#comment').removeAttr('disabled');
+            $('#comment').attr('class','button');
             com ? $('#comments').show() : $('#comments').hide();
             if (nodemax != 0) {
-                $('[id$="next"],#end').removeAttr('disabled');
+                $('[id$="next"],#end').attr('class','button');
             }
-            $('.button:not(#load)').show();
+            $('[class^="button"]:not(#load)').show();
         });
     });//}}}
 
