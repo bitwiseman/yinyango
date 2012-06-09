@@ -59,7 +59,7 @@ body {
 }
 #loadlist {
     position: absolute;
-    top: 55px;
+    top: 50px;
     right: 20px;
     bottom: 20px;
     left: 20px;
@@ -103,7 +103,7 @@ body {
     margin: auto;
     border-collapse: collapse;
 }
-[class^="cell"] {
+#goban td {
     text-align: center;
     font-family: serif;
 }

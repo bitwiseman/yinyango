@@ -1,9 +1,9 @@
 jQuery(document).ready(function($) {
-    var sql;
+    var sql = new Array();
     var size;
-    var infos = new Array(); // infos de la partie
-    var comments; // commentaires
-    var symbols; // annotations sur le goban
+    var infos = new Array();
+    var comments = new Array();
+    var symbols = new Array();
     var game = new Array();
     var node;
     var branch;
@@ -47,7 +47,7 @@ jQuery(document).ready(function($) {
         if (gobansize != oldgobansize || force) { // évite du travail inutile
             $('#comments').css('top',gobansize + 50);
             $('#goban tr').css('height',gobansize / sizeb); // pour firefox
-            $('[class^="cell"]').css({
+            $('#goban td').css({
                 fontSize: gobansize / sizeb / 2,
                 height: gobansize / sizeb - 2,
                 width: gobansize / sizeb - 2
@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
         if (game[node][branch]['p'] != null) {
             var played = game[node][branch]['p'].split(',');
             var symbol = (played[0] == 'b') ? 'symwcr' : 'symbcr';
-            $('#' + played[1] + ' .sym').attr('class',symbol);
+            $('#' + played[1] + ' > div').attr('class',symbol);
         }
     };//}}}
 
@@ -129,37 +129,39 @@ jQuery(document).ready(function($) {
 
     // vide le goban de toutes ses pierres et symboles
     var ClearGoban = function() {//{{{
-        $('[class^="cell"]:not([class="cell"])').attr('class','cell');
-        $('[class^="sym"]:not([class="sym"])').attr('class','sym');
+        $('[class^="cell"],[class^="sym"]').removeAttr('class');
     };//}}}
 
     // création du goban en identifiant les coordonnées
     var CreateGoban = function() {//{{{
         var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        var table = '';
         $('#goban').html(''); // supprime l'ancien goban
 
         for (var i = -1; i <= size; i++) {
-            $('#goban').append('<tr class="row' + i + '"></tr>');
+            table += '<tr>';
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size) {
                     if (j != -1 && j != size) {
-                        $('.row' + i).append('<td class="cell">' + letters[j] + '</td>');
+                        table += '<td>' + letters[j] + '</td>';
                     } else {
-                        $('.row' + i).append('<td class="cell"></td>');
+                        table += '<td></td>';
                     }
                 }
                 else if (j == -1 || j == size) {
                     if (i != -1 && i != size) {
-                        $('.row' + i).append('<td class="cell">' + (size - i) + '</td>');
+                        table += '<td>' + (size - i) + '</td>';
                     } else {
-                        $('.row' + i).append('<td class="cell"></td>');
+                        table += '<td></td>';
                     }
                 } else {
-                    $('.row' + i).append('<td id="' + coord[j] + coord[i] + 
-                                         '" class="cell"><div class="sym"></div></td>');
+                    table += '<td id="' + coord[j] + coord[i] + 
+                                         '"><div></div></td>';
                 }
             }
+            table += '</tr>';
         }
+        $('#goban').html(table); // écrit le nouveau goban
     };//}}}
 
     // affiche les infos de la partie dans la zone de commentaires
