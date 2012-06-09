@@ -1,9 +1,10 @@
 jQuery(document).ready(function($) {
+    var sql;
     var size;
-    var infos; // infos de la partie
+    var infos = new Array(); // infos de la partie
     var comments; // commentaires
     var symbols; // annotations sur le goban
-    var game;
+    var game = new Array();
     var node;
     var branch;
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
@@ -45,7 +46,7 @@ jQuery(document).ready(function($) {
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
             $('#comments').css('top',gobansize + 50);
-            $('[class^="row"]').css('height',gobansize / sizeb); // pour firefox
+            $('#goban tr').css('height',gobansize / sizeb); // pour firefox
             $('[class^="cell"]').css({
                 fontSize: gobansize / sizeb / 2,
                 height: gobansize / sizeb - 2,
@@ -77,7 +78,7 @@ jQuery(document).ready(function($) {
         if (game[node][branch]['p'] != null) {
             var played = game[node][branch]['p'].split(',');
             var symbol = (played[0] == 'b') ? 'symwcr' : 'symbcr';
-            $('#' + played[1] + ' > div').attr('class',symbol);
+            $('#' + played[1] + ' .sym').attr('class',symbol);
         }
     };//}}}
 
@@ -317,17 +318,14 @@ jQuery(document).ready(function($) {
         ResizeGoban();
     });//}}}
 
-    // bouton pour charger une partie
-    $('#load').click(function() {//{{{
-        $('#loadlist').show();
-    });//}}}
-
     // bouton options
     $('#options').click(function() {//{{{
         if (options) {
             ShowComments();
             $('#load,#loadlist').hide();
             $('[class^="button"]:not(#load)').show();
+            $('#goban').show();
+            if (com) $('#comments').show();
             options = false;
         } else {
             ShowInfos();
@@ -337,53 +335,89 @@ jQuery(document).ready(function($) {
         }
     });//}}}
 
-    // bouton charger
-    $('#loadsgf').click(function() {//{{{   
-        var sgf_file = 'sgf/' + $("#sgflist").val();
+    // bouton pour charger une partie
+    $('#load').click(function() {//{{{
+        var table = '<table>';
+        $('#goban,#comments,#options,#comment').hide();
+        // TODO tester si les données sont déjà chargées
+        // prévoir rafraichissement, limiter les données affichées
+        $.getJSON('sgf.php', 'sql', function(data) {
+            sql = data;
+            for (var i = 0, ci = sql.length; i < ci; i ++) {
+                table += '<tr>';
+                table += '<td>' + sql[i]['file'] + '</td>';
+                if (sql[i]['PB'] != null) {
+                    table += '<td>' + sql[i]['PB'] + '</td>';
+                } else {
+                    table += '<td></td>';
+                }
+                if (sql[i]['PW'] != null) {
+                    table += '<td>' + sql[i]['PW'] + '</td>';
+                } else {
+                    table += '<td></td>';
+                }
+                if (sql[i]['DT'] != null) {
+                    table += '<td>' + sql[i]['DT'] + '</td>';
+                } else {
+                    table += '<td></td>';
+                }
+                table += '</tr>';
+            }; 
+            table += '</table>';
+            $('#loadlist').html(table).fadeIn();
+        });
+    });//}}}
+
+    // chargement
+    $('#loadlist tr').live('click',function() {//{{{
+        var num = $(this).index();
         var oldsize = size;
 
-        // récupère la traduction du fichier SGF sous forme de tableau et l'affiche
-        $.getJSON('sgf.php', { file: sgf_file }, function(data) {
-            size = data.size;
-            infos = data.infos;
-            comments = data.comments;
-            symbols = data.symbols;
-            game = data.game;
-            node = 0;
-            branch = 0;
+        size = sql[num]['SZ'];
+        infos['PB'] = sql[num]['PB'];
+        infos['BR'] = sql[num]['BR'];
+        infos['PW'] = sql[num]['PW'];
+        infos['WR'] = sql[num]['WR'];
+        infos['DT'] = sql[num]['DT'];
+        infos['PC'] = sql[num]['PC'];
+        infos['RU'] = sql[num]['RU'];
+        comments = $.parseJSON(sql[num]['comments']);
+        symbols = $.parseJSON(sql[num]['symbols']);
+        game = $.parseJSON(sql[num]['game']);
+        node = 0;
+        branch = 0;
 
-            SetNodeMax();
+        SetNodeMax();
 
-            $('#loadlist').hide();
-            $('#load').hide();
-            options = false;
-            $('#goban').css('background-image', 'url(images/' + size + '.svg)');
-            
-            if (size != oldsize) {
-                $('#goban').hide();
-                CreateGoban(); 
-            } else {
-                ClearGoban();
-            }
-            
-            // TODO affiche/masque curseur en fonction du mode
+        $('#loadlist').hide();
+        $('#load').hide();
+        options = false;
+        $('#goban').css('background-image', 'url(images/' + size + '.svg)');
 
-            // charge l'état du début de jeu
-            PlaceStones();
-            ShowSymbols();
-            ShowComments();
+        if (size != oldsize) {
+            $('#goban').hide();
+            CreateGoban(); 
+        } else {
+            ClearGoban();
+        }
 
-            // affiche l'interface
-            ResizeGoban(true); // forcer le redimensionnement
-            $('#start,[id$="prev"],[id$="next"],#end').attr('class','buttond');
-            if (size != oldsize) { $('#goban').fadeIn() };
-            $('#comment').attr('class','button');
-            com ? $('#comments').show() : $('#comments').hide();
-            if (nodemax != 0) {
-                $('[id$="next"],#end').attr('class','button');
-            }
-            $('[class^="button"]:not(#load)').show();
-        });
+        // TODO affiche/masque curseur en fonction du mode
+
+        // charge l'état du début de jeu
+        PlaceStones();
+        ShowSymbols();
+        ShowComments();
+
+        // affiche l'interface
+        ResizeGoban(true); // forcer le redimensionnement
+        $('#start,[id$="prev"],[id$="next"],#end').attr('class','buttond');
+        $('#goban').fadeIn();
+        $('#comment').attr('class','button');
+        com ? $('#comments').show() : $('#comments').hide();
+        if (nodemax != 0) {
+            $('[id$="next"],#end').attr('class','button');
+        }
+        $('[class^="button"]:not(#load)').show();
     });//}}}
 
 });

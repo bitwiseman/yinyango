@@ -57,7 +57,9 @@ class sgf
             $jsonsymbols = json_encode($this->symbols);
             $jsongame = json_encode($this->game);
 
-            $insert = $db->prepare('INSERT INTO sgf VALUES(
+            $insert = $db->prepare('INSERT INTO sgf(
+                file, SZ, PB, BR, PW, WR, KM, DT, PC,
+                TM, OT, RU, comments, symbols, branchs, game) VALUES(
                 :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
                 :TM, :OT, :RU, :comments, :symbols, :branchs, :game)');
             $insert->execute(array(

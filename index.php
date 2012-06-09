@@ -43,8 +43,8 @@ function ListeSgf() {/*{{{*/
             <div class="button" id="fastnext"></div>
             <div class="button" id="end"></div>
             <div class="button" id="options"></div>
-            <div id="loadlist"><?php ListeSgf(); ?></div>
         </div>
+        <div id="loadlist"></div>
         <table id="goban"></table>
         <div id="comments">
             <div id="resizer"></div>
