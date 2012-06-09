@@ -45,6 +45,7 @@ jQuery(document).ready(function($) {
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
             $('#comments').css('top',gobansize + 50);
+            $('[class^="row"]').css('height',gobansize / sizeb); // pour firefox
             $('[class^="cell"]').css({
                 fontSize: gobansize / sizeb / 2,
                 height: gobansize / sizeb - 2,
