@@ -122,7 +122,22 @@ jQuery(document).ready(function($) {
                 }
             }
             if (symbols[node][branch]['LB'] != null) {
-                // TODO
+                var list = symbols[node][branch]['LB'].split(','); 
+                for (var i = 0, ci = list.length; i < ci; i++) {
+                    var label = list[i].split(':');
+                    var cell = $('#' + label[0]);
+                    if (cell.attr('class') != null) {
+                        if (cell.attr('class') == 'cellb') {
+                            cell.css('color','white');
+                        }
+                        // TODO resizegoban avec différente tailles de polices
+                        // selon la longeur du label
+                        cell.append(label[1]);
+                    } else {
+                        cell.attr('class','celle');
+                        cell.append(label[1]);
+                    }
+                }
             }
         }
     };//}}}
