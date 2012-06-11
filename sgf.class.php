@@ -14,7 +14,7 @@ class sgf
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
         // connexion base de données
-        try {
+        /*try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
             $db = new PDO(
                 'mysql:host=' . $hostname . ';dbname=' . $dbname,
@@ -48,7 +48,7 @@ class sgf
             $this->branchs = $vars['branchs'];
             $this->game = json_decode($vars['game']);
         }
-        else {
+        else {*/
             $data = $this->SgfToTab($file);
             $this->size = $data[0][0]['SZ'];
             $this->GameTable($data);
@@ -57,7 +57,7 @@ class sgf
             $jsonsymbols = json_encode($this->symbols);
             $jsongame = json_encode($this->game);
 
-            $insert = $db->prepare('INSERT INTO sgf(
+            /*$insert = $db->prepare('INSERT INTO sgf(
                 file, SZ, PB, BR, PW, WR, KM, DT, PC,
                 TM, OT, RU, comments, symbols, branchs, game) VALUES(
                 :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
@@ -80,7 +80,7 @@ class sgf
                 'branchs' => $this->branchs,
                 'game' => $jsongame,
             ));
-        }
+        }*/
         $db = null; // ferme la connexion
     }/*}}}*/
 
@@ -285,6 +285,10 @@ class sgf
         while ($b >= 0) { //cherche un état précédent
             if (isset($this->game[$node-1][$b])) {
                 $this->game[$node][$branch] = $this->game[$node-1][$b];
+                $state = $this->GobanState($node,$branch);
+                $x = ord(substr($coord,0,1)) - 97;
+                $y = ord(substr($coord,1,1)) - 97;
+                $this->TestDeath($state,$color,$x,$y);
                 //TODO calculer les pierres mortes et les KO
                 $this->game[$node][$branch][$color] .=
                     ($this->game[$node][$branch][$color] != '') ? ','.$coord : $coord;
@@ -295,5 +299,34 @@ class sgf
         $this->game[$node][$branch]['p'] = $color.','.$coord;
     }/*}}}*/
 
+    // enregistre l'état du goban
+    protected function GobanState($node,$branch) {/*{{{*/
+        $bstones = explode(',',$this->game[$node][$branch]['b']);
+        $wstones = explode(',',$this->game[$node][$branch]['w']);
+        $sb = count($bstones);
+        $sw = count($wstones);
+        // vide l'état précédent
+        for ($i = 0; $i < $this->size; $i++) {
+            for ($j = 0; $j < $this->size; $j++) {
+                $state[$i][$j] = '';
+            }
+        }
+        // enregistre l'état
+        for ($b = 0; $b < $sb; $b++) {
+            $x = ord(substr($bstones[$b],0,1)) - 97;
+            $y = ord(substr($bstones[$b],1,1)) - 97;
+            if ($x > 0 && $y > 0) $state[$x][$y] = 'b';
+        }
+        for ($w = 0; $w < $sw; $w++) {
+            $x = ord(substr($wstones[$w],0,1)) - 97;
+            $y = ord(substr($wstones[$w],1,1)) - 97;
+            if ($x > 0 && $y > 0) $state[$x][$y] = 'w';
+        }
+        return $state;
+    }/*}}}*/
+
+    // test des pierres mortes
+    protected function TestDeath($state,$color,$x,$y) {
+    }
 }
 ?>

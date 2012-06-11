@@ -17,8 +17,8 @@ if (isset($_GET['file'])) {
         $data = $sgf->getData();
 
         // renvoi le déroulement de la partie et la taille du goban encodé en json
-        header('Content-type: application/json');
-        echo json_encode($data);
+        //header('Content-type: application/json');
+        //echo json_encode($data);
     }
 }
 if (isset($_GET['sql'])) {
