@@ -10,6 +10,7 @@ class sgf
     private $symbols; // annotations sur le goban
     private $branchs;
     private $game;
+    private $deads; // pierres potentiellement mortes
 
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
@@ -288,6 +289,7 @@ class sgf
                 $state = $this->GobanState($node,$branch);
                 $x = ord(substr($coord,0,1)) - 97;
                 $y = ord(substr($coord,1,1)) - 97;
+                $state[$x][$y] = $color; // ajoute le coup joué à l'état
                 $this->TestDeath($state,$color,$x,$y);
                 //TODO calculer les pierres mortes et les KO
                 $this->game[$node][$branch][$color] .=
@@ -327,6 +329,35 @@ class sgf
 
     // test des pierres mortes
     protected function TestDeath($state,$color,$x,$y) {
+        $deads = [];
+        if (!$this->TestLiberties($state,$color,$x-1,$y)) {
+            // TODO si on a pas de libertés alors procéder à la capture
+            // des morts potentiels
+            // modifier $state pour enlever les pierres mortes
+        }
+        if (!$this->TestLiberties($state,$color,$x,$y-1)) {
+        }
+        if (!$this->TestLiberties($state,$color,$x+1,$y)) {
+        }
+        if !($this->TestLiberties($state,$color,$x,$y+1)) {
+        }
+    }
+
+    // test les libertés d'une pierre ou un groupe de pierres
+    protected function TestLiberties($state,$color,$x,$y) {
+        $ennemy = ($color == 'b') ? 'w' : 'b';
+
+        if ($state[$x][$y] == '') return 1; // liberté
+        if ($state[$x][$y] == $ennemy) {
+            $dead = $x . ',' . $y;
+            $deads[] = $dead;
+
+            if ($this->TestLiberties($state,$color,$x-1,$y)) return 1;
+            if ($this->TestLiberties($state,$color,$x,$y-1)) return 1;
+            if ($this->TestLiberties($state,$color,$x+1,$y)) return 1;
+            if ($this->TestLiberties($state,$color,$x,$y+1)) return 1;
+            return 0; // aucune liberté
+        }
     }
 }
 ?>
