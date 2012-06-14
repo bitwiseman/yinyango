@@ -12,11 +12,12 @@ class sgf
     private $game;
     private $state; // état du goban
     private $deads; // pierres potentiellement mortes
+    private $prison = Array('b' => 0, 'w' => 0); // prisonniers
 
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
         // connexion base de données
-        /*try {
+        try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
             $db = new PDO(
                 'mysql:host=' . $hostname . ';dbname=' . $dbname,
@@ -50,7 +51,7 @@ class sgf
             $this->branchs = $vars['branchs'];
             $this->game = json_decode($vars['game']);
         }
-        else {*/
+        else {
             $data = $this->SgfToTab($file);
             $this->size = $data[0][0]['SZ'];
             $this->GameTable($data);
@@ -59,7 +60,7 @@ class sgf
             $jsonsymbols = json_encode($this->symbols);
             $jsongame = json_encode($this->game);
 
-            /*$insert = $db->prepare('INSERT INTO sgf(
+            $insert = $db->prepare('INSERT INTO sgf(
                 file, SZ, PB, BR, PW, WR, KM, DT, PC,
                 TM, OT, RU, comments, symbols, branchs, game) VALUES(
                 :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
@@ -82,7 +83,7 @@ class sgf
                 'branchs' => $this->branchs,
                 'game' => $jsongame,
             ));
-        }*/
+        }
         $db = null; // ferme la connexion
     }/*}}}*/
 
@@ -286,15 +287,13 @@ class sgf
 
         while ($b >= 0) { //cherche un état précédent
             if (isset($this->game[$node-1][$b])) {
-                $this->game[$node][$branch] = $this->game[$node-1][$b];
-                $this->state = $this->GobanState($node,$branch);
+                $this->state = $this->GobanState($node-1,$b);
                 $x = ord(substr($coord,0,1)) - 97;
                 $y = ord(substr($coord,1,1)) - 97;
                 $this->state[$x][$y] = $color; // ajoute le coup joué à l'état
-                $this->TestDeath($color,$x,$y);
+                $this->TestDeath($color,$x,$y); // test pierres mortes
+                $this->StateToGame($node,$branch); // enregistre le jeu
                 //TODO calculer les pierres mortes et les KO
-                $this->game[$node][$branch][$color] .=
-                    ($this->game[$node][$branch][$color] != '') ? ','.$coord : $coord;
                 break;
             }
             $b--;
@@ -309,9 +308,9 @@ class sgf
         $sb = count($bstones);
         $sw = count($wstones);
         // vide l'état précédent
-        for ($i = 0; $i < $this->size; $i++) {
-            for ($j = 0; $j < $this->size; $j++) {
-                $state[$i][$j] = '';
+        for ($x = 0; $x < $this->size; $x++) {
+            for ($y = 0; $y < $this->size; $y++) {
+                $state[$x][$y] = '';
             }
         }
         // enregistre l'état
@@ -328,35 +327,38 @@ class sgf
         return $state;
     }/*}}}*/
 
+    // convertit l'état du goban sous forme de coordonnées en lettres
+    protected function StateToGame($node,$branch) {/*{{{*/
+        $let = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
+        for ($x = 0; $x < $this->size; $x++) {
+            for ($y = 0; $y < $this->size; $y++) {
+                $coord = $let[$x].$let[$y];
+                if ($this->state[$x][$y] == 'b') {
+                    $this->game[$node][$branch]['b'] .=
+                    ($this->game[$node][$branch]['b'] != '') ? ','.$coord : $coord;
+                }
+                else if ($this->state[$x][$y] == 'w') {
+                    $this->game[$node][$branch]['w'] .=
+                    ($this->game[$node][$branch]['w'] != '') ? ','.$coord : $coord;
+                }
+            }
+        }
+    }/*}}}*/
+
     // test des pierres mortes
-    protected function TestDeath($color,$x,$y) {
+    protected function TestDeath($color,$x,$y) {/*{{{*/
         $this->deads = [];
-        if ($this->TestLiberties($color,$x-1,$y) == 0) {
-            // TODO si on a pas de libertés alors procéder à la capture
-            // des morts potentiels
-            // modifier $state pour enlever les pierres mortes
-            $prison = implode($this->deads);
-            echo 'kill:'.$prison.';';
-        }
+        if ($this->TestLiberties($color,$x-1,$y) == 0) $this->KillStones($color);
+        $this->deads = []; // vider les morts d'avant à chaque test
+        if ($this->TestLiberties($color,$x,$y-1) == 0) $this->KillStones($color);
         $this->deads = [];
-        if ($this->TestLiberties($color,$x,$y-1) == 0) {
-            $prison = implode($this->deads);
-            echo 'kill:'.$prison.';';
-        }
+        if ($this->TestLiberties($color,$x+1,$y) == 0) $this->KillStones($color);
         $this->deads = [];
-        if ($this->TestLiberties($color,$x+1,$y) == 0) {
-            $prison = implode($this->deads);
-            echo 'kill:'.$prison.';';
-        }
-        $this->deads = [];
-        if ($this->TestLiberties($color,$x,$y+1) == 0) {
-            $prison = implode($this->deads);
-            echo 'kill:'.$prison.';';
-        }
-    }
+        if ($this->TestLiberties($color,$x,$y+1) == 0) $this->KillStones($color);
+    }/*}}}*/
 
     // test les libertés d'une pierre ou un groupe de pierres
-    protected function TestLiberties($color,$x,$y) {
+    protected function TestLiberties($color,$x,$y) {/*{{{*/
         $ennemy = ($color == 'b') ? 'w' : 'b';
         if (isset($this->state[$x][$y])) {
             if ($this->state[$x][$y] == '') {
@@ -364,10 +366,11 @@ class sgf
             }
             if ($this->state[$x][$y] == $ennemy) {
                 $dead = $x . ',' . $y;
+                for ($i = 0, $ci = count($this->deads); $i < $ci; $i++) {
+                    if ($this->deads[$i] == $dead) return 0; // déjà dans la liste des morts
+                }
                 $this->deads[] = $dead;
-                // TODO problème mémoire de la récursivité
-                // éviter certains appels ?
-                // ne pas retester une pierre déjà testée
+
                 if ($this->TestLiberties($color,$x-1,$y) == 1) return 1;
                 if ($this->TestLiberties($color,$x,$y-1) == 1) return 1;
                 if ($this->TestLiberties($color,$x+1,$y) == 1) return 1;
@@ -376,6 +379,17 @@ class sgf
             }
             return 2; // pierre de la même couleur
         } else return 2; // bord du goban
-    }
+    }/*}}}*/
+
+    // supprime les pierres mortes de l'état actuel du goban
+    protected function KillStones($color) {/*{{{*/
+        $ci = count($this->deads);
+        $this->prison[$color] += $ci; // ajoute prisonniers pour le score
+        for ($i = 0; $i < $ci; $i++) {
+            $coord = explode(',',$this->deads[$i]);
+            $this->state[$coord[0]][$coord[1]] = ''; // enlève la pierre  morte du goban
+        }
+    }/*}}}*/
+
 }
 ?>
