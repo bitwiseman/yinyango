@@ -121,7 +121,6 @@ class sgf
                 if ($branchend) {
                     $branch++;
                     $node = $nodemark[$mark] + 1;
-                    $mark--;
                     $branchend = false;
                     $retnode = true;
                 }
@@ -134,6 +133,9 @@ class sgf
                 }
                 break;
             case ")": // fin de branche
+                if ($branchend) { // si ) supplémentaire retour à la marque précédente
+                    $mark--;
+                }
                 if (!$dataw) {
                     $sgftab[$node][$branch] = $nodedata;
                     $nodedata = ''; // effacer les données
@@ -159,7 +161,7 @@ class sgf
                 $nodedata .= $char;
             }
         }
-        $this->branchs = $branch;
+        $this->branchs = $branch + 1;
         return $this->KeysTable($sgftab);
     }/*}}}*/
 

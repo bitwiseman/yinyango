@@ -7,9 +7,10 @@ jQuery(document).ready(function($) {
     var game = new Array();
     var node;
     var branch;
+    var branchs; // nombre total de variantes
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
     var gobansize;
-    var com = true; // commentaires
+    var com = false; // commentaires
     var comsize = 200; // taille commentaires
     var nodemax; // dernier noeud de la branche actuelle
     var options; // affichage des boutons d'options
@@ -81,6 +82,27 @@ jQuery(document).ready(function($) {
             $('#' + played[1] + ' > div').attr('class',symbol);
         }
     };//}}}
+
+    // retourne la branche parent d'une branche
+    var ParentBranch = function(b) {
+        for (var i = b; i >= 0; i--) {
+            if (game[node-1][i] != null) return i;   
+        }
+        return 0;
+    };
+
+    // affiche les variantes
+    var ShowBranchs = function() {
+        var nv = 0; // numéro de variante
+        for (var i = branch+1; i < branchs; i++) {
+            if (game[node][i] != null && game[node-1] != null && game[node-1][i] == null) {
+                if (ParentBranch(i) == branch) {
+                    nv++;
+                    // TODO afficher
+                }
+            }
+        }
+    };
 
     // affiche les annotations présentes sur le goban
     var ShowSymbols = function() {//{{{
@@ -253,6 +275,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -268,6 +291,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -283,6 +307,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -298,6 +323,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -313,6 +339,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -325,6 +352,7 @@ jQuery(document).ready(function($) {
             ClearGoban();
             PlaceStones();
             ShowComments();
+            ShowBranchs();
         }
     });//}}}
 
@@ -401,6 +429,7 @@ jQuery(document).ready(function($) {
         comments = $.parseJSON(sql[num]['comments']);
         symbols = $.parseJSON(sql[num]['symbols']);
         game = $.parseJSON(sql[num]['game']);
+        branchs = sql[num]['branchs'];
         node = 0;
         branch = 0;
 
@@ -424,6 +453,7 @@ jQuery(document).ready(function($) {
         PlaceStones();
         ShowSymbols();
         ShowComments();
+        ShowBranchs();
 
         // affiche l'interface
         ResizeGoban(true); // forcer le redimensionnement
