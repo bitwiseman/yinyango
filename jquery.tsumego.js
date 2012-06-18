@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
 
-    // cherche le dernier noeud de la branche actuelle
+    // défini le dernier noeud de la branche actuelle
     var SetNodeMax = function() {//{{{
         nodemax = node;
         while (game[nodemax+1] != null && game[nodemax+1][branch] != null) {
@@ -65,11 +65,70 @@ jQuery(document).ready(function($) {
         }
     };//}}}
 
-    // place les pierres de l'état actuel
-    var PlaceStones = function() {//{{{
+    // retourne la branche parent d'une branche
+    var ParentBranch = function(b) {//{{{
+        for (var i = b; i >= 0; i--) {
+            if (game[node-1][i] != null) return i;   
+        }
+        return 0;
+    };//}}}
+
+    // variantes
+    var Variations = function() {//{{{
+        var nv = 0; // numéro de variante
+        var varis = '';
+        for (var i = branch+1; i < branchs; i++) {
+            if (game[node][i] != null && game[node-1] != null && game[node-1][i] == null) {
+                if (ParentBranch(i) == branch) {
+                    nv++;
+                    varis += '<button id="vari' + i + '">' + nv + '</button> ';
+                    // TODO afficher
+                }
+            }
+        }
+        return varis;
+    };//}}}
+
+    // création du goban en identifiant les coordonnées
+    var CreateGoban = function() {//{{{
+        var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        var table = '';
+        $('#goban').html(''); // supprime l'ancien goban
+
+        for (var i = -1; i <= size; i++) {
+            table += '<tr>';
+            for (var j = -1; j <= size; j++) {
+                if (i == -1 || i == size) {
+                    if (j != -1 && j != size) {
+                        table += '<td>' + letters[j] + '</td>';
+                    } else {
+                        table += '<td></td>';
+                    }
+                }
+                else if (j == -1 || j == size) {
+                    if (i != -1 && i != size) {
+                        table += '<td>' + (size - i) + '</td>';
+                    } else {
+                        table += '<td></td>';
+                    }
+                } else {
+                    table += '<td id="' + coord[j] + coord[i] + 
+                                         '"><div></div></td>';
+                }
+            }
+            table += '</tr>';
+        }
+        $('#goban').html(table); // écrit le nouveau goban
+    };//}}}
+
+    // charge les pierres de l'état actuel
+    var LoadStones = function() {//{{{
         var black = game[node][branch]['b'].split(',');
         var white = game[node][branch]['w'].split(',');
         
+        // vide le goban de toutes ses pierres et symboles
+        $('[class^="cell"],[class^="sym"]').removeAttr('class');
+
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','cellb');
         }
@@ -81,31 +140,11 @@ jQuery(document).ready(function($) {
             var symbol = (played[0] == 'b') ? 'symwcr' : 'symbcr';
             $('#' + played[1] + ' > div').attr('class',symbol);
         }
+        LoadSymbols();
     };//}}}
 
-    // retourne la branche parent d'une branche
-    var ParentBranch = function(b) {
-        for (var i = b; i >= 0; i--) {
-            if (game[node-1][i] != null) return i;   
-        }
-        return 0;
-    };
-
-    // affiche les variantes
-    var ShowBranchs = function() {
-        var nv = 0; // numéro de variante
-        for (var i = branch+1; i < branchs; i++) {
-            if (game[node][i] != null && game[node-1] != null && game[node-1][i] == null) {
-                if (ParentBranch(i) == branch) {
-                    nv++;
-                    // TODO afficher
-                }
-            }
-        }
-    };
-
-    // affiche les annotations présentes sur le goban
-    var ShowSymbols = function() {//{{{
+    // charge les annotations présentes sur le goban
+    var LoadSymbols = function() {//{{{
         if (symbols != null && symbols[node] != null && symbols[node][branch] != null) {
             if (symbols[node][branch]['CR'] != null) {
                 var list = symbols[node][branch]['CR'].split(','); 
@@ -164,45 +203,8 @@ jQuery(document).ready(function($) {
         }
     };//}}}
 
-    // vide le goban de toutes ses pierres et symboles
-    var ClearGoban = function() {//{{{
-        $('[class^="cell"],[class^="sym"]').removeAttr('class');
-    };//}}}
-
-    // création du goban en identifiant les coordonnées
-    var CreateGoban = function() {//{{{
-        var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
-        var table = '';
-        $('#goban').html(''); // supprime l'ancien goban
-
-        for (var i = -1; i <= size; i++) {
-            table += '<tr>';
-            for (var j = -1; j <= size; j++) {
-                if (i == -1 || i == size) {
-                    if (j != -1 && j != size) {
-                        table += '<td>' + letters[j] + '</td>';
-                    } else {
-                        table += '<td></td>';
-                    }
-                }
-                else if (j == -1 || j == size) {
-                    if (i != -1 && i != size) {
-                        table += '<td>' + (size - i) + '</td>';
-                    } else {
-                        table += '<td></td>';
-                    }
-                } else {
-                    table += '<td id="' + coord[j] + coord[i] + 
-                                         '"><div></div></td>';
-                }
-            }
-            table += '</tr>';
-        }
-        $('#goban').html(table); // écrit le nouveau goban
-    };//}}}
-
-    // affiche les infos de la partie dans la zone de commentaires
-    var ShowInfos = function() {//{{{
+    // charge les infos de la partie dans la zone de commentaires
+    var LoadInfos = function() {//{{{
         var text = '<p>';
         // TODO récupérer les textes dans un fichier selon la langue
         if (infos['PB'] != null) { text += '<em>Noir:</em> ' + infos['PB'] };
@@ -218,9 +220,11 @@ jQuery(document).ready(function($) {
         $('#textarea').html(text);
     };//}}}
 
-    // affiche les commentaires
-    var ShowComments = function() {//{{{
+    // charge les commentaires
+    var LoadComments = function() {//{{{
         var text = '<p>';
+        var varis = Variations();
+        if (varis != '') text += 'Variantes: ' + varis + '</p><p>'; // TODO LANG
         if (comments != null && comments[node] != null && comments[node][branch] != null) {
             text += comments[node][branch];
         }
@@ -272,10 +276,8 @@ jQuery(document).ready(function($) {
             node = 0;
             $('[id$="next"],#end').attr('class','button');
             $('[id$="prev"],#start').attr('class','buttond');
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -288,10 +290,8 @@ jQuery(document).ready(function($) {
             if (node == 0) {
                 $('[id$="prev"],#start').attr('class','buttond');
             };
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -304,10 +304,8 @@ jQuery(document).ready(function($) {
             if (game[node-1] == null || game[node-1][branch] == null) {
                 $('[id$="prev"],#start').attr('class','buttond');
             };
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -320,10 +318,8 @@ jQuery(document).ready(function($) {
             if (game[node+1] == null || game[node+1][branch] == null) {
                 $('[id$="next"],#end').attr('class','buttond');
             };
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -336,10 +332,8 @@ jQuery(document).ready(function($) {
             if (node == nodemax) {
                 $('[id$="next"],#end').attr('class','buttond');
             };
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -349,10 +343,8 @@ jQuery(document).ready(function($) {
             node = nodemax;
             $('[id$="prev"],#start').attr('class','button');
             $('[id$="next"],#end').attr('class','buttond');
-            ClearGoban();
-            PlaceStones();
-            ShowComments();
-            ShowBranchs();
+            LoadStones();
+            LoadComments();
         }
     });//}}}
 
@@ -363,17 +355,23 @@ jQuery(document).ready(function($) {
         ResizeGoban();
     });//}}}
 
+    // changement de branche
+    $(':button[id^="vari"]').live('click',function() {//{{{
+        var newbranch = $(this).attr('id').substr(4);
+        console.log(newbranch);
+    });//}}}
+
     // bouton options
     $('#options').click(function() {//{{{
         if (options) {
-            ShowComments();
+            LoadComments();
             $('#load,#loadlist').hide();
             $('[class^="button"]:not(#load)').show();
             $('#goban').show();
             if (com) $('#comments').show();
             options = false;
         } else {
-            ShowInfos();
+            LoadInfos();
             $('[class^="button"]:not(#comment,#options)').hide();
             $('#load').show();
             options = true;
@@ -443,17 +441,13 @@ jQuery(document).ready(function($) {
         if (size != oldsize) {
             $('#goban').hide();
             CreateGoban(); 
-        } else {
-            ClearGoban();
         }
 
         // TODO affiche/masque curseur en fonction du mode
 
         // charge l'état du début de jeu
-        PlaceStones();
-        ShowSymbols();
-        ShowComments();
-        ShowBranchs();
+        LoadStones();
+        LoadComments();
 
         // affiche l'interface
         ResizeGoban(true); // forcer le redimensionnement
