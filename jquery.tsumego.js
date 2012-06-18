@@ -7,10 +7,11 @@ jQuery(document).ready(function($) {
     var game = new Array();
     var node;
     var branch;
+    var bbranch; // branche naviguée
     var branchs; // nombre total de variantes
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
     var gobansize;
-    var com = false; // commentaires
+    var com = true; // commentaires
     var comsize = 200; // taille commentaires
     var nodemax; // dernier noeud de la branche actuelle
     var options; // affichage des boutons d'options
@@ -57,6 +58,13 @@ jQuery(document).ready(function($) {
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
     };//}}}
 
+    // active/désactive les boutons de navigation
+    var NavState = function() {//{{{
+        $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
+        if (node == 0) $('[id$="prev"],#start').attr('class','buttond');
+        if (node == nodemax) $('[id$="next"],#end').attr('class','buttond');
+    };//}}}
+
     // défini le dernier noeud de la branche actuelle
     var SetNodeMax = function() {//{{{
         nodemax = node;
@@ -66,29 +74,45 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // retourne la branche parent d'une branche
-    var ParentBranch = function(b) {//{{{
+    var ParentBranch = function(n,b) {//{{{
         for (var i = b; i >= 0; i--) {
-            if (game[node-1][i] != null) return i;   
+            if (game[n] != null && game[n][i] != null) return i;   
         }
         return 0;
     };//}}}
 
-    // variantes
-    var Variations = function() {//{{{
-        var nv = 0; // numéro de variante
-        var varis = '';
-        for (var i = branch+1; i < branchs; i++) {
-            if (game[node][i] != null && game[node-1] != null && game[node-1][i] == null) {
-                if (ParentBranch(i) == branch) {
-                    nv++;
-                    varis += '<button id="vari' + i + '">' + nv + '</button> ';
-                    // TODO afficher
+    // cherche la branche à afficher en fonction de la branche naviguée
+    var GetBranch = function() {//{{{
+        if (game[node][bbranch] != null) branch = bbranch;
+        else {
+            for (var i = branch+1; i < bbranch; i ++) {
+                if (game[node][i] != null) {
+                    branch = i;
+                    break;
                 }
             }
         }
+    };//}}}
+
+    // variantes
+    var Variations = function() {//{{{
+        var nv = 0; // nombre de variante
+        var varis = '';
+        var pbranch = ParentBranch(node-1,branch);
+        console.log(node+','+branch+','+bbranch+','+pbranch);
+        for (var i = 0; i < branchs; i++) {
+            if (game[node][i] != null && game[node-1] != null) {
+                if (ParentBranch(node-1,i) == pbranch) {
+                    nv++;
+                    varis += '<button class="vari">' + i + '</button> ';
+                }
+            }
+        }
+        if (nv <= 1) varis = ''; // ne pas afficher si aucune variante
         return varis;
     };//}}}
 
+    
     // création du goban en identifiant les coordonnées
     var CreateGoban = function() {//{{{
         var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
@@ -274,8 +298,8 @@ jQuery(document).ready(function($) {
     $('#start').click(function() {//{{{
         if ($('#start').attr('class') == 'button') {
             node = 0;
-            $('[id$="next"],#end').attr('class','button');
-            $('[id$="prev"],#start').attr('class','buttond');
+            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -285,11 +309,8 @@ jQuery(document).ready(function($) {
     $('#fastprev').click(function() {//{{{
         if ($('#fastprev').attr('class') == 'button') {
             node = node - 10 < 0 ? 0 : node - 10;
-            $('[id$="next"],#end').attr('class','button');
-            // TODO test si il existe un coup précédent
-            if (node == 0) {
-                $('[id$="prev"],#start').attr('class','buttond');
-            };
+            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -299,11 +320,8 @@ jQuery(document).ready(function($) {
     $('#prev').click(function() {//{{{
         if ($('#prev').attr('class') == 'button') {
             node--;
-            $('[id$="next"],#end').attr('class','button');
-            // TODO test si il existe un coup précédent
-            if (game[node-1] == null || game[node-1][branch] == null) {
-                $('[id$="prev"],#start').attr('class','buttond');
-            };
+            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -313,11 +331,8 @@ jQuery(document).ready(function($) {
     $('#next').click(function() {//{{{
         if ($('#next').attr('class') == 'button') {
             node++;
-            $('[id$="prev"],#start').attr('class','button');
-            // TODO test si il existe un coup suivant
-            if (game[node+1] == null || game[node+1][branch] == null) {
-                $('[id$="next"],#end').attr('class','buttond');
-            };
+            GetBranch();
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -327,11 +342,8 @@ jQuery(document).ready(function($) {
     $('#fastnext').click(function() {//{{{
         if ($('#fastnext').attr('class') == 'button') {
             node = node + 10 > nodemax ? nodemax : node + 10;
-            $('[id$="prev"],#start').attr('class','button');
-            // TODO test si il existe un coup précédent
-            if (node == nodemax) {
-                $('[id$="next"],#end').attr('class','buttond');
-            };
+            GetBranch();
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -341,8 +353,8 @@ jQuery(document).ready(function($) {
     $('#end').click(function() {//{{{
         if ($('#end').attr('class') == 'button') {
             node = nodemax;
-            $('[id$="prev"],#start').attr('class','button');
-            $('[id$="next"],#end').attr('class','buttond');
+            GetBranch();
+            NavState();
             LoadStones();
             LoadComments();
         }
@@ -356,9 +368,13 @@ jQuery(document).ready(function($) {
     });//}}}
 
     // changement de branche
-    $(':button[id^="vari"]').live('click',function() {//{{{
-        var newbranch = $(this).attr('id').substr(4);
-        console.log(newbranch);
+    $('.vari').live('click',function() {//{{{
+        bbranch = $(this).html();
+        branch = bbranch;
+        SetNodeMax();
+        NavState();
+        LoadStones();
+        LoadComments();
     });//}}}
 
     // bouton options
@@ -430,6 +446,7 @@ jQuery(document).ready(function($) {
         branchs = sql[num]['branchs'];
         node = 0;
         branch = 0;
+        bbranch = 0;
 
         SetNodeMax();
 
@@ -451,13 +468,10 @@ jQuery(document).ready(function($) {
 
         // affiche l'interface
         ResizeGoban(true); // forcer le redimensionnement
-        $('#start,[id$="prev"],[id$="next"],#end').attr('class','buttond');
+        NavState();
         $('#goban').fadeIn();
         $('#comment').attr('class','button');
         com ? $('#comments').show() : $('#comments').hide();
-        if (nodemax != 0) {
-            $('[id$="next"],#end').attr('class','button');
-        }
         $('[class^="button"]:not(#load)').show();
     });//}}}
 
