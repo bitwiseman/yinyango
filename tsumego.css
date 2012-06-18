@@ -78,6 +78,23 @@ body {
     background: #ddbb77;
     cursor: pointer;
 }
+#variations {
+    text-align: center;
+    height: 20px;
+}
+[id^="varbu"] {
+    display: inline-block;
+    border: 2px solid #000;
+    border-radius: 10px;
+    margin: 0px 2px 0px 2px;
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}
+[id^="varbua"] {
+    background: #000;
+    cursor: default;
+}
 #comments {
     position: absolute;
     right: 5px;

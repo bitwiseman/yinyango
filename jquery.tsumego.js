@@ -13,6 +13,7 @@ jQuery(document).ready(function($) {
     var gobansize;
     var com = true; // commentaires
     var comsize = 200; // taille commentaires
+    var vari = false; // variantes
     var nodemax; // dernier noeud de la branche actuelle
     var options; // affichage des boutons d'options
 
@@ -42,12 +43,12 @@ jQuery(document).ready(function($) {
         var oldgobansize = gobansize;
         
         if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        com ? heightleft = winh - 50 - comsize :
-              heightleft = winh - 50;
+        com ? heightleft = winh - 70 - comsize :
+              heightleft = winh - 70;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
-            $('#comments').css('top',gobansize + 50);
+            $('#comments').css('top',gobansize + 70);
             $('#goban tr').css('height',gobansize / sizeb); // pour firefox
             $('#goban td').css({
                 fontSize: gobansize / sizeb / 2,
@@ -96,22 +97,21 @@ jQuery(document).ready(function($) {
 
     // variantes
     var Variations = function() {//{{{
-        var nv = 0; // nombre de variante
+        var nv = 0; // nombre de variantes
         var varis = '';
         var pbranch = ParentBranch(node-1,branch);
-        console.log(node+','+branch+','+bbranch+','+pbranch);
         for (var i = 0; i < branchs; i++) {
             if (game[node][i] != null && game[node-1] != null) {
                 if (ParentBranch(node-1,i) == pbranch) {
                     nv++;
-                    varis += '<button class="vari">' + i + '</button> ';
+                    if (i == branch) varis += '<div id="varbua' + i + '"></div>';
+                    else varis += '<div id="varbut' + i + '"></div>';
                 }
             }
         }
-        if (nv <= 1) varis = ''; // ne pas afficher si aucune variante
-        return varis;
+        if (nv > 1) $('#variations').html(varis);
+        else $('#variations').html('');
     };//}}}
-
     
     // création du goban en identifiant les coordonnées
     var CreateGoban = function() {//{{{
@@ -165,6 +165,7 @@ jQuery(document).ready(function($) {
             $('#' + played[1] + ' > div').attr('class',symbol);
         }
         LoadSymbols();
+        Variations();
     };//}}}
 
     // charge les annotations présentes sur le goban
@@ -247,8 +248,6 @@ jQuery(document).ready(function($) {
     // charge les commentaires
     var LoadComments = function() {//{{{
         var text = '<p>';
-        var varis = Variations();
-        if (varis != '') text += 'Variantes: ' + varis + '</p><p>'; // TODO LANG
         if (comments != null && comments[node] != null && comments[node][branch] != null) {
             text += comments[node][branch];
         }
@@ -262,9 +261,7 @@ jQuery(document).ready(function($) {
      * INITIALISATION
      */
 
-    $('#goban').hide();
-    $('#comments').hide();
-    $('#loadlist').hide();
+    $('#goban,#variations,#comments,#loadlist').hide();
     $('[class^="button"]:not(#load)').hide();
     $('#goban,#resizer').disableSelection();
 
@@ -368,8 +365,8 @@ jQuery(document).ready(function($) {
     });//}}}
 
     // changement de branche
-    $('.vari').live('click',function() {//{{{
-        bbranch = $(this).html();
+    $('[id^="varbut"]').live('click',function() {//{{{
+        bbranch = $(this).attr('id').substr(6);
         branch = bbranch;
         SetNodeMax();
         NavState();
@@ -382,13 +379,12 @@ jQuery(document).ready(function($) {
         if (options) {
             LoadComments();
             $('#load,#loadlist').hide();
-            $('[class^="button"]:not(#load)').show();
-            $('#goban').show();
+            $('[class^="button"]:not(#load),#variations').show();
             if (com) $('#comments').show();
             options = false;
         } else {
             LoadInfos();
-            $('[class^="button"]:not(#comment,#options)').hide();
+            $('[class^="button"]:not(#comment,#options),#variations').hide();
             $('#load').show();
             options = true;
         }
@@ -453,7 +449,7 @@ jQuery(document).ready(function($) {
         $('#loadlist').hide();
         $('#load').hide();
         options = false;
-        $('#goban').css('background-image', 'url(images/' + size + '.svg)');
+        $('#goban').css('background', 'url(images/' + size + '.svg)');
 
         if (size != oldsize) {
             $('#goban').hide();
@@ -472,7 +468,7 @@ jQuery(document).ready(function($) {
         $('#goban').fadeIn();
         $('#comment').attr('class','button');
         com ? $('#comments').show() : $('#comments').hide();
-        $('[class^="button"]:not(#load)').show();
+        $('[class^="button"]:not(#load),#variations').show();
     });//}}}
 
 });
