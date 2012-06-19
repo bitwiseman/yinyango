@@ -3,7 +3,28 @@ body {
     color: #000;
     margin: 0;
 }
-#navbar {
+#loadlist {/*{{{*/
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    overflow: auto;
+}
+#loadlist table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+#loadlist td {
+    padding: 20px;
+}
+#loadlist tr:hover {
+    background: #ddbb77;
+    cursor: pointer;
+}/*}}}*/
+#navbar {/*{{{*/
     position: relative;
     margin: auto;
     text-align: center;
@@ -56,29 +77,8 @@ body {
 #options {
     left: 350px;
     background-position: -400px 0px;
-}
-#loadlist {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
-    overflow: auto;
-}
-#loadlist table {
-    border-collapse: collapse;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-}
-#loadlist td {
-    padding: 20px;
-}
-#loadlist tr:hover {
-    background: #ddbb77;
-    cursor: pointer;
-}
-#variations {
+}/*}}}*/
+#variations {/*{{{*/
     text-align: center;
     height: 20px;
 }
@@ -94,8 +94,8 @@ body {
 [id^="varbua"] {
     background: #000;
     cursor: default;
-}
-#comments {
+}/*}}}*/
+#comments {/*{{{*/
     position: absolute;
     right: 5px;
     bottom: 5px;
@@ -110,14 +110,17 @@ body {
 }
 #textarea {
     overflow: auto;
-}
-#goban {
+}/*}}}*/
+#goban {/*{{{*/
     margin: auto;
     border-collapse: collapse;
 }
-#goban td {
+#goban td div {
     text-align: center;
     font-family: serif;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
 }
 .cellb {
     background: url(images/b.svg);
@@ -129,8 +132,8 @@ body {
     background: #ccaa66;
 }
 [class^="sym"] {
-    width: 100%;
     height: 100%;
+    width: 100%;
 }
 .symwcr {
     background: url(images/wcr.svg);
@@ -149,4 +152,4 @@ body {
 }
 .symbtr {
     background: url(images/btr.svg);
-}
+}/*}}}*/

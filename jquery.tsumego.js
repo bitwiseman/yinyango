@@ -52,9 +52,9 @@ jQuery(document).ready(function($) {
              vari ? $('#comments').css('top',gobansize + 70) :
                     $('#comments').css('top',gobansize + 50);
             $('#goban tr').css('height',gobansize / sizeb); // pour firefox
-            $('#goban td').css({
-                fontSize: gobansize / sizeb / 2,
-                height: gobansize / sizeb - 2,
+            $('#goban td').css('height',gobansize / sizeb - 2);
+            $('#goban td div').css({
+                fontSize: gobansize / sizeb / 1.5,
                 width: gobansize / sizeb - 2
             });
         }
@@ -137,14 +137,14 @@ jQuery(document).ready(function($) {
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size) {
                     if (j != -1 && j != size) {
-                        table += '<td>' + letters[j] + '</td>';
+                        table += '<td><div>' + letters[j] + '</div></td>';
                     } else {
                         table += '<td></td>';
                     }
                 }
                 else if (j == -1 || j == size) {
                     if (i != -1 && i != size) {
-                        table += '<td>' + (size - i) + '</td>';
+                        table += '<td><div>' + (size - i) + '</div></td>';
                     } else {
                         table += '<td></td>';
                     }
@@ -165,6 +165,7 @@ jQuery(document).ready(function($) {
         
         // vide le goban de toutes ses pierres et symboles
         $('[class^="cell"],[class^="sym"]').removeAttr('class');
+        $('#goban td[id] div').html('');
 
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','cellb');
@@ -225,16 +226,15 @@ jQuery(document).ready(function($) {
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var label = list[i].split(':');
                     var cell = $('#' + label[0]);
+                    var sym = $('#' + label[0] + ' > div');
                     if (cell.attr('class') != null) {
                         if (cell.attr('class') == 'cellb') {
                             cell.css('color','white');
                         }
-                        // TODO resizegoban avec différente tailles de polices
-                        // selon la longeur du label
-                        cell.append(label[1]);
+                        sym.append(label[1]).attr('title',label[1]);
                     } else {
                         cell.attr('class','celle');
-                        cell.append(label[1]);
+                        sym.append(label[1]).attr('title',label[1]);
                     }
                 }
             }
