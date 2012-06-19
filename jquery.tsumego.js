@@ -43,12 +43,14 @@ jQuery(document).ready(function($) {
         var oldgobansize = gobansize;
         
         if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        com ? heightleft = winh - 70 - comsize :
-              heightleft = winh - 70;
+        com ? heightleft = winh - 50 - comsize :
+              heightleft = winh - 50;
+        if (vari) heightleft = heightleft - 20;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
-            $('#comments').css('top',gobansize + 70);
+             vari ? $('#comments').css('top',gobansize + 70) :
+                    $('#comments').css('top',gobansize + 50);
             $('#goban tr').css('height',gobansize / sizeb); // pour firefox
             $('#goban td').css({
                 fontSize: gobansize / sizeb / 2,
@@ -109,8 +111,19 @@ jQuery(document).ready(function($) {
                 }
             }
         }
-        if (nv > 1) $('#variations').html(varis);
-        else $('#variations').html('');
+        if (nv > 1) {
+            $('#variations').show().html(varis);
+            if (!vari) {
+                vari = true;
+                ResizeGoban();
+            }
+        } else {
+            $('#variations').hide();
+            if (vari) {
+                vari = false;
+                ResizeGoban();
+            }
+        }
     };//}}}
     
     // création du goban en identifiant les coordonnées
@@ -379,8 +392,9 @@ jQuery(document).ready(function($) {
         if (options) {
             LoadComments();
             $('#load,#loadlist').hide();
-            $('[class^="button"]:not(#load),#variations').show();
+            $('[class^="button"]:not(#load)').show();
             if (com) $('#comments').show();
+            if (vari) $('#variations').show();
             options = false;
         } else {
             LoadInfos();
@@ -468,7 +482,7 @@ jQuery(document).ready(function($) {
         $('#goban').fadeIn();
         $('#comment').attr('class','button');
         com ? $('#comments').show() : $('#comments').hide();
-        $('[class^="button"]:not(#load),#variations').show();
+        $('[class^="button"]:not(#load)').show();
     });//}}}
 
 });

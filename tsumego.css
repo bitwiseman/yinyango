@@ -109,8 +109,6 @@ body {
     cursor: n-resize;
 }
 #textarea {
-    padding: 0;
-    border: 0;
     overflow: auto;
 }
 #goban {

@@ -13,7 +13,7 @@ if (isset($_GET['file'])) {
             $conf['db_username'],
             $conf['db_password'],
             $conf['db_name']);
-        $data = $sgf->getData();
+        //$data = $sgf->getData();
 
         // renvoi le déroulement de la partie et la taille du goban encodé en json
         //header('Content-type: application/json');
