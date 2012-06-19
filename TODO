@@ -7,12 +7,8 @@ Objectifs:
 
 Idées en vrac:
 - Traduire les fichiers SGF en données JSON et vice-versa
-- Système de branches simplifié pour les différentes variations:
-    Par exemple afficher les différents coups joués en transparence
-    ou avec des lettres en miniatures
-    Afficher le nombre de variations sur le noeud
-    Afficher/masquer l'arbre
 - différents modes: jeu, démo, édition ...
 - réaranger le class
 - score
 - écrire la base SQL si non existante
+- LIRE COURS OBJETS TABLEAUX

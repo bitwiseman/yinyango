@@ -37,16 +37,15 @@ jQuery(document).ready(function($) {
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function(force) {//{{{
-        var heightleft; // hauteur restante pour le goban
         var winw = $(window).width();
         var winh = $(window).height();
-        var sizeb = parseInt(size) + 2; // ajout des bordures
+        var heightleft = winh - 50; // hauteur restante pour le goban
+        var sizeb = parseInt(size,10) + 2; // ajout des bordures
         var oldgobansize = gobansize;
         
         if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        com ? heightleft = winh - 50 - comsize :
-              heightleft = winh - 50;
-        if (vari) heightleft = heightleft - 20;
+        if (com) heightleft -= comsize;
+        if (vari) heightleft -= 20;
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
@@ -116,13 +115,13 @@ jQuery(document).ready(function($) {
             $('#variations').show().html(varis);
             if (!vari) {
                 vari = true;
-                ResizeGoban();
+                ResizeGoban(false);
             }
         } else {
             $('#variations').hide();
             if (vari) {
                 vari = false;
-                ResizeGoban();
+                ResizeGoban(false);
             }
         }
     };//}}}
@@ -285,7 +284,7 @@ jQuery(document).ready(function($) {
     
     // fenêtre du navigateur redimensionnée
     $(window).resize(function() {
-        ResizeGoban(); 
+        ResizeGoban(false); 
     });
 
     // redimensionne commentaires 
@@ -297,7 +296,7 @@ jQuery(document).ready(function($) {
         var moveHandler = function(e) {
             comsize = Math.max(100, (winh - e.clientY) + h - y); // minimum 100 pixels
             if (comsize > (winh / 2)) { comsize = (winh / 2) }; // max la moitié de la hauteur
-            ResizeGoban();
+            ResizeGoban(false);
         };
         var upHandler = function(e) {
             $('html').unbind('mousemove',moveHandler).unbind('mouseup',upHandler);
@@ -309,6 +308,7 @@ jQuery(document).ready(function($) {
     $('#start').click(function() {//{{{
         if ($('#start').attr('class') == 'button') {
             node = 0;
+            console.log(game);
             if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
             NavState();
             LoadStones();
@@ -375,7 +375,7 @@ jQuery(document).ready(function($) {
     $('#comment').click(function() {//{{{
         com ? com = false : com = true;
         com ? $('#comments').show() : $('#comments').hide();
-        ResizeGoban();
+        ResizeGoban(false);
     });//}}}
 
     // changement de branche
@@ -410,7 +410,7 @@ jQuery(document).ready(function($) {
         // TODO prévoir rafraichissement, limiter les données affichées
         // afficher sur plusieurs pages
         if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
-            $.getJSON('sgf.php', 'sql', function(data) { 
+            $.getJSON('sgf.php',{sql:'0,10'},function(data) { 
                 var table = '<table>';
                 sql = data; 
                 for (var i = 0, ci = sql.length; i < ci; i ++) {
