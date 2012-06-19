@@ -14,6 +14,7 @@ jQuery(document).ready(function($) {
     var com = true; // commentaires
     var comsize = 200; // taille commentaires
     var vari = false; // variantes
+    var load = false;
     var nodemax; // dernier noeud de la branche actuelle
     var options; // affichage des boutons d'options
 
@@ -406,41 +407,52 @@ jQuery(document).ready(function($) {
 
     // bouton pour charger une partie
     $('#load').click(function() {//{{{
-        var table = '<table>';
-        $('#goban,#comments,#options,#comment').hide();
-        // TODO tester si les données sont déjà chargées
-        // prévoir rafraichissement, limiter les données affichées
-        $.getJSON('sgf.php', 'sql', function(data) {
-            sql = data;
-            for (var i = 0, ci = sql.length; i < ci; i ++) {
-                table += '<tr>';
-                table += '<td>' + sql[i]['file'] + '</td>';
-                if (sql[i]['PB'] != null) {
-                    table += '<td>' + sql[i]['PB'] + '</td>';
-                } else {
-                    table += '<td></td>';
+        // TODO prévoir rafraichissement, limiter les données affichées
+        // afficher sur plusieurs pages
+        if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
+            $.getJSON('sgf.php', 'sql', function(data) { 
+                var table = '<table>';
+                sql = data; 
+                for (var i = 0, ci = sql.length; i < ci; i ++) {
+                    table += '<tr><td>' + sql[i]['file'] + '</td>';
+                    if (sql[i]['PB'] != null) {
+                        table += '<td>' + sql[i]['PB'] + '</td>';
+                    } else {
+                        table += '<td></td>';
+                    }
+                    if (sql[i]['PW'] != null) {
+                        table += '<td>' + sql[i]['PW'] + '</td>';
+                    } else {
+                        table += '<td></td>';
+                    }
+                    if (sql[i]['DT'] != null) {
+                        table += '<td>' + sql[i]['DT'] + '</td>';
+                    } else {
+                        table += '<td></td>';
+                    }
+                    table += '</tr>';
                 }
-                if (sql[i]['PW'] != null) {
-                    table += '<td>' + sql[i]['PW'] + '</td>';
-                } else {
-                    table += '<td></td>';
-                }
-                if (sql[i]['DT'] != null) {
-                    table += '<td>' + sql[i]['DT'] + '</td>';
-                } else {
-                    table += '<td></td>';
-                }
-                table += '</tr>';
-            }; 
-            table += '</table>';
-            $('#loadlist').html(table).fadeIn();
-        });
+                table += '</table>';
+                $('#loadlist').html(table);
+            });
+        }
+        if (load) {
+            $('#goban,#options,#comment').show();
+            if (com) $('#comments').show();
+            $('#loadlist').hide();
+        } else {
+            $('#goban,#comments,#options,#comment').hide();
+            $('#loadlist').fadeIn();
+        }
+        load ? load = false : load = true;
     });//}}}
 
     // chargement
     $('#loadlist tr').live('click',function() {//{{{
         var num = $(this).index();
         var oldsize = size;
+
+        load = false;
 
         size = sql[num]['SZ'];
         infos['PB'] = sql[num]['PB'];
