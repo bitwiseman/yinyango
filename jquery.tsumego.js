@@ -35,6 +35,26 @@ jQuery(document).ready(function($) {
         });
     };//}}}
 
+    // insère un symbole SVG dans les éléments sélectionnés
+    $.fn.InsertSymbol = function(symbol,color) {//{{{
+        return this.each(function() {           
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 10">';
+            if (symbol == 'CR') {
+                svg += '<circle cx="5" cy="5" r="2.5" stroke-width="0.7" fill="none"';
+            } else if (symbol == 'SQ') {
+                svg += '<rect x="1.8" y="1.8" width="6.5" height="6.5" stroke-width="0.7" fill="none"';
+            } else if (symbol == 'TR') {
+                svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z" stroke-width="0.7" fill="none"';
+            }
+            if (color == 'w') {
+                svg += ' stroke="#000"/></svg>';
+            } else {
+                svg += ' stroke="#fff"/></svg>';
+            }
+            $(this).html(svg);
+        });
+    };//}}}
+
     // ajuste l'interface en fonction de la fenêtre du navigateur
     var ResizeGoban = function(force) {//{{{
         var winw = $(window).width();
@@ -49,13 +69,17 @@ jQuery(document).ready(function($) {
         var smaller = (heightleft >= winw) ? winw : heightleft;
         gobansize = Math.floor(smaller / sizeb) * sizeb;
         if (gobansize != oldgobansize || force) { // évite du travail inutile
-             vari ? $('#comments').css('top',gobansize + 70) :
-                    $('#comments').css('top',gobansize + 50);
-            $('#goban tr').css('height',gobansize / sizeb); // pour firefox
-            $('#goban td').css('height',gobansize / sizeb - 2);
-            $('#goban td div').css({
-                fontSize: gobansize / sizeb / 1.5,
-                width: gobansize / sizeb - 2
+            vari ? $('#comments').css('top',gobansize + 70) :
+            $('#comments').css('top',gobansize + 50);
+            $('#goban').css({
+                height: gobansize,
+                width: gobansize
+            });
+            $('#goban div').css('height',gobansize / sizeb);
+            $('[class^="cell"]').css({
+                width: gobansize / sizeb,
+                lineHeight: gobansize / sizeb + 'px',
+                fontSize: gobansize / sizeb / 1.5
             });
         }
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
@@ -133,27 +157,26 @@ jQuery(document).ready(function($) {
         $('#goban').html(''); // supprime l'ancien goban
 
         for (var i = -1; i <= size; i++) {
-            table += '<tr>';
+            table += '<div>';
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size) {
                     if (j != -1 && j != size) {
-                        table += '<td><div>' + letters[j] + '</div></td>';
+                        table += '<div class="cell">' + letters[j] + '</div>';
                     } else {
-                        table += '<td></td>';
+                        table += '<div class="cell"></div>';
                     }
                 }
                 else if (j == -1 || j == size) {
                     if (i != -1 && i != size) {
-                        table += '<td><div>' + (size - i) + '</div></td>';
+                        table += '<div class="cell">' + (size - i) + '</div>';
                     } else {
-                        table += '<td></td>';
+                        table += '<div class="cell"></div>';
                     }
                 } else {
-                    table += '<td id="' + coord[j] + coord[i] + 
-                                         '"><div></div></td>';
+                    table += '<div class="cell" id="' + coord[j] + coord[i] + '"></div>';
                 }
             }
-            table += '</tr>';
+            table += '</div>';
         }
         $('#goban').html(table); // écrit le nouveau goban
     };//}}}
@@ -164,8 +187,8 @@ jQuery(document).ready(function($) {
         var white = game[node][branch]['w'].split(',');
         
         // vide le goban de toutes ses pierres et symboles
-        $('[class^="cell"],[class^="sym"]').removeAttr('class');
-        $('#goban td[id] div').html('');
+        $('[class^="cell"]').attr('class','cell');
+        $('#goban div[id]').html('');
 
         for (var b = 0, cb = black.length; b < cb; b++) {
             $('#' + black[b]).attr('class','cellb');
@@ -175,8 +198,7 @@ jQuery(document).ready(function($) {
         }
         if (game[node][branch]['p'] != null) {
             var played = game[node][branch]['p'].split(',');
-            var symbol = (played[0] == 'b') ? 'symwcr' : 'symbcr';
-            $('#' + played[1] + ' > div').attr('class',symbol);
+            $('#' + played[1]).InsertSymbol('CR',played[0]);
         }
         LoadSymbols();
         Variations();
@@ -189,11 +211,10 @@ jQuery(document).ready(function($) {
                 var list = symbols[node][branch]['CR'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
-                    var sym = $('#' + list[i] + ' > div');
                     if (cell.attr('class') == 'cellb') {
-                        sym.attr('class','symwcr');
+                        cell.InsertSymbol('CR','b');
                     } else {
-                        sym.attr('class','symbcr');
+                        cell.InsertSymbol('CR','w');
                     }
                 }
             }
@@ -201,11 +222,10 @@ jQuery(document).ready(function($) {
                 var list = symbols[node][branch]['SQ'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
-                    var sym = $('#' + list[i] + ' > div');
                     if (cell.attr('class') == 'cellb') {
-                        sym.attr('class','symwsq');
+                        cell.InsertSymbol('SQ','b');
                     } else {
-                        sym.attr('class','symbsq');
+                        cell.InsertSymbol('SQ','w');
                     }
                 }
             }
@@ -213,11 +233,10 @@ jQuery(document).ready(function($) {
                 var list = symbols[node][branch]['TR'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
-                    var sym = $('#' + list[i] + ' > div');
                     if (cell.attr('class') == 'cellb') {
-                        sym.attr('class','symwtr');
+                        cell.InsertSymbol('TR','b');
                     } else {
-                        sym.attr('class','symbtr');
+                        cell.InsertSymbol('TR','w');
                     }
                 }
             }
@@ -226,16 +245,12 @@ jQuery(document).ready(function($) {
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var label = list[i].split(':');
                     var cell = $('#' + label[0]);
-                    var sym = $('#' + label[0] + ' > div');
-                    if (cell.attr('class') != null) {
-                        if (cell.attr('class') == 'cellb') {
-                            cell.css('color','white');
-                        }
-                        sym.append(label[1]).attr('title',label[1]);
-                    } else {
+                    if (cell.attr('class') == 'cellb') {
+                        cell.css('color','white');
+                    } else if (cell.attr('class') == 'cell') {
                         cell.attr('class','celle');
-                        sym.append(label[1]).attr('title',label[1]);
                     }
+                    cell.append(label[1]).attr('title',label[1]);
                 }
             }
         }

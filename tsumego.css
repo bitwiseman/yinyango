@@ -112,9 +112,9 @@ body {
 }/*}}}*/
 #goban {/*{{{*/
     margin: auto;
-    border-spacing: 0;
 }
-#goban td div {
+[class^="cell"] {
+    float: left;
     text-align: center;
     font-family: serif;
     overflow: hidden;
@@ -129,26 +129,4 @@ body {
 }
 .celle {
     background: #ccaa66;
-}
-[class^="sym"] {
-    height: 100%;
-    width: 100%;
-}
-.symwcr {
-    background: url(images/wcr.svg);
-}
-.symbcr {
-    background: url(images/bcr.svg);
-}
-.symwsq {
-    background: url(images/wsq.svg);
-}
-.symbsq {
-    background: url(images/bsq.svg);
-}
-.symwtr {
-    background: url(images/wtr.svg);
-}
-.symbtr {
-    background: url(images/btr.svg);
 }/*}}}*/
