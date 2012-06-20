@@ -112,7 +112,7 @@ body {
 }/*}}}*/
 #goban {/*{{{*/
     margin: auto;
-    border-collapse: collapse;
+    border-spacing: 0;
 }
 #goban td div {
     text-align: center;
@@ -120,10 +120,12 @@ body {
     overflow: hidden;
 }
 .cellb {
-    background: url(images/b.svg);
+    background: #000;
+    border-radius: 50%;
 }
 .cellw {
-    background: url(images/w.svg);
+    background: #fff;
+    border-radius: 50%;
 }
 .celle {
     background: #ccaa66;

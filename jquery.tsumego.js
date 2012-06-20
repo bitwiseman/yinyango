@@ -1,10 +1,10 @@
 jQuery(document).ready(function($) {
-    var sql = new Array();
+    var sql= [];
     var size;
-    var infos = new Array();
-    var comments = new Array();
-    var symbols = new Array();
-    var game = new Array();
+    var infos = {};
+    var comments = {};
+    var symbols = {};
+    var game = {};
     var node;
     var branch;
     var bbranch; // branche naviguée
@@ -103,7 +103,7 @@ jQuery(document).ready(function($) {
         var varis = '';
         var pbranch = ParentBranch(node-1,branch);
         for (var i = 0; i < branchs; i++) {
-            if (game[node][i] != null && game[node-1] != null) {
+            if (game[node][i] != null && node > 0) {
                 if (ParentBranch(node-1,i) == pbranch) {
                     nv++;
                     if (i == branch) varis += '<div id="varbua' + i + '"></div>';
@@ -308,7 +308,6 @@ jQuery(document).ready(function($) {
     $('#start').click(function() {//{{{
         if ($('#start').attr('class') == 'button') {
             node = 0;
-            console.log(game);
             if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
             NavState();
             LoadStones();
