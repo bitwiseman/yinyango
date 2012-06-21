@@ -13,6 +13,7 @@ jQuery(document).ready(function($) {
     var gobansize;
     var com = true; // commentaires
     var comsize = 200; // taille commentaires
+    var info = ''; // infos de la partie
     var vari = false; // variantes
     var load = false;
     var nodemax; // dernier noeud de la branche actuelle
@@ -257,20 +258,24 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // charge les infos de la partie dans la zone de commentaires
-    var LoadInfos = function() {//{{{
-        var text = '<p>';
-        // TODO récupérer les textes dans un fichier selon la langue
-        if (infos['PB'] != null) { text += '<em>Noir:</em> ' + infos['PB'] };
-        if (infos['BR'] != null) { text += ' [' + infos['BR'] + ']' };
-        if (infos['PW'] != null) { text += ' <br /><em>Blanc:</em> ' + infos['PW'] };
-        if (infos['WR'] != null) { text += ' [' + infos['WR'] + ']' };
-        if (infos['DT'] != null) { text += ' <br /><em>Date:</em> ' + infos['DT'] };
-        if (infos['PC'] != null) { text += ' <br /><em>Emplacement:</em> ' + infos['PC'] };
-        if (infos['RU'] != null) { text += ' <br /><em>Règles:</em> ' + infos['RU'] };
-        text += '</p>';
-
-        $('#textarea').html(''); // vide la zone commentaires
-        $('#textarea').html(text);
+    var LoadInfos = function(force,show) {//{{{
+        // si vide ou forcé (changement de partie, changement de langue...) 
+        if (info == '' || force) {
+            info = '<p>';
+            if (infos['PB'] != null) { info += '<em>' + lang.black + ':</em> ' + infos['PB'] };
+            if (infos['BR'] != null) { info += ' [' + infos['BR'] + ']' };
+            if (infos['PW'] != null) { info += ' <br /><em>' + lang.white + ':</em> ' + infos['PW'] };
+            if (infos['WR'] != null) { info += ' [' + infos['WR'] + ']' };
+            if (infos['DT'] != null) { info += ' <br /><em>' + lang.date + ':</em> ' + infos['DT'] };
+            if (infos['PC'] != null) { info += ' <br /><em>' + lang.place + ':</em> ' + infos['PC'] };
+            if (infos['RU'] != null) { info += ' <br /><em>' + lang.rules + ':</em> ' + infos['RU'] };
+            info += '</p>';
+        }
+        // affiche si demandé
+        if (show) {
+            $('#textarea').html(''); // vide la zone commentaires
+            $('#textarea').html(info);
+        }
     };//}}}
 
     // charge les commentaires
@@ -285,12 +290,50 @@ jQuery(document).ready(function($) {
         $('#textarea').html(text);
     };//}}}
 
+    // défini la langue
+    var SetLang = function(l) {//{{{
+        var ok;
+        // ajax synchrone pour avoir une réponse à donner
+        $.ajax({
+            async:false,
+            type:'GET',
+            url: 'lang/' + l + '.js',
+            data:null,
+            dataType:'script'})
+        .fail(function() { ok = false; })
+        .done(function() {
+            $('#comment').attr('title',lang.comment);
+            $('#load').attr('title',lang.load);
+            $('#start').attr('title',lang.start);
+            $('#prev').attr('title',lang.prev);
+            $('#fastprev').attr('title',lang.fastprev);
+            $('#next').attr('title',lang.next);
+            $('#fastnext').attr('title',lang.fastnext);
+            $('#end').attr('title',lang.end);
+            $('#options').attr('title',lang.options);
+
+            if (infos != null) LoadInfos(true,true);
+
+            // change l'apparence du bouton pour prendre celle de la langue
+            $('#lang').attr('class','button' + l);
+
+            $('[class^="lang"]').show();
+            $('.lang' + l).hide(); // cache la langue choisie dans le menu
+
+            ok = true;
+        });
+        return ok;
+    };//}}}
+
     /**
      * INITIALISATION
      */
 
+    // langue du navigateur ou langue par défaut
+    if (!SetLang(navigator.language)) SetLang('en');
+
     $('#goban,#variations,#comments,#loadlist').hide();
-    $('[class^="button"]:not(#load)').hide();
+    $('[class^="button"]:not(#load,#lang)').hide();
     $('#goban,#resizer').disableSelection();
 
     /**
@@ -406,17 +449,23 @@ jQuery(document).ready(function($) {
     $('#options').click(function() {//{{{
         if (options) {
             LoadComments();
-            $('#load,#loadlist').hide();
-            $('[class^="button"]:not(#load)').show();
+            $('#load,#lang,#loadlist').hide();
+            $('[class^="button"]:not(#load,#lang)').show();
             if (com) $('#comments').show();
             if (vari) $('#variations').show();
             options = false;
         } else {
-            LoadInfos();
+            LoadInfos(false,true);
             $('[class^="button"]:not(#comment,#options),#variations').hide();
-            $('#load').show();
+            $('#load,#lang').show();
             options = true;
         }
+    });//}}}
+
+    // bouton langues
+    $('[class^="lang"]').click(function() {//{{{
+        var flag = $(this).attr('class').substr(4);
+        SetLang(flag);
     });//}}}
 
     // bouton pour charger une partie
@@ -487,7 +536,7 @@ jQuery(document).ready(function($) {
         SetNodeMax();
 
         $('#loadlist').hide();
-        $('#load').hide();
+        $('#load,#lang').hide();
         options = false;
         $('#goban').css('background', 'url(images/' + size + '.svg)');
 
@@ -501,6 +550,7 @@ jQuery(document).ready(function($) {
         // charge l'état du début de jeu
         LoadStones();
         LoadComments();
+        LoadInfos(true,false);
 
         // affiche l'interface
         ResizeGoban(true); // forcer le redimensionnement
@@ -508,7 +558,7 @@ jQuery(document).ready(function($) {
         $('#goban').fadeIn();
         $('#comment').attr('class','button');
         com ? $('#comments').show() : $('#comments').hide();
-        $('[class^="button"]:not(#load)').show();
+        $('[class^="button"]:not(#load,#lang)').show();
     });//}}}
 
 });

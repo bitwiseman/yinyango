@@ -30,7 +30,7 @@ body {
     width: 400px;
     height: 50px;
 }
-[class^="button"] {
+[class^="button"],[class^="lang"] {
     position: absolute;
     background: url(images/buttons.png);
     width: 50px;
@@ -70,13 +70,39 @@ body {
     background-position: -300px 0px;
 }
 #load {
-    left: 175px;
+    left: 150px;
     background-position: -350px 0px;
 }
 #options {
     left: 350px;
     background-position: -400px 0px;
-}/*}}}*/
+}
+#lang {
+    left: 200px;
+}
+.langen,.buttonen {
+    background-position: -450px 0px;
+}
+.langfr,.buttonfr {
+    background-position: -500px 0px;
+}
+
+#lang ul {
+    display: none;
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    top: 50px;
+    left: 0;
+}
+#lang:hover > ul {
+    display: block;
+}
+#lang li {
+    position: relative;
+}
+/*}}}*/
 #variations {/*{{{*/
     text-align: center;
     height: 20px;
