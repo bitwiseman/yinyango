@@ -304,6 +304,7 @@ jQuery(document).ready(function($) {
         .done(function() {
             $('#comment').attr('title',lang.comment);
             $('#load').attr('title',lang.load);
+            $('#lang').attr('title',lang.language);
             $('#start').attr('title',lang.start);
             $('#prev').attr('title',lang.prev);
             $('#fastprev').attr('title',lang.fastprev);

@@ -1,6 +1,7 @@
 var lang = {
     comment: 'Commentaires',
     load: 'Charger',
+    language: 'Langue',
     start: 'Revenir au début',
     prev: 'Précédent',
     fastprev: 'Retour rapide',

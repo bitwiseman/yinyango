@@ -1,6 +1,7 @@
 var lang = {
     comment: 'Comments',
     load: 'Load',
+    language: 'Language',
     start: 'Back to start',
     prev: 'Previous',
     fastprev: 'Fast rewind',
