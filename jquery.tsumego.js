@@ -188,7 +188,10 @@ jQuery(document).ready(function($) {
         var white = game[node][branch]['w'].split(',');
         
         // vide le goban de toutes ses pierres et symboles
-        $('[class^="cell"]').attr('class','cell');
+        $('[class^="cell"]').attr({
+            class: 'cell',
+            title: ''
+        });
         $('#goban div[id]').html('');
 
         for (var b = 0, cb = black.length; b < cb; b++) {

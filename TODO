@@ -11,3 +11,6 @@ Idées en vrac:
 - réaranger le class
 - score
 - écrire la base SQL si non existante
+- afficher les commentaires précédent le coup actuel avec une référence
+- Refaire algorithme de lecture sgf pour prendre en compte des commentaires avec
+  des caractères spéciaux ( faire une seule lecture si possible )

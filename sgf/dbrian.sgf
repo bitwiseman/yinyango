@@ -1,0 +1,351 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Chinese]SZ[13]HA[4]KM[0.50]TM[300]OT[5x30 byo-yomi]
+PW[DBrian]PB[Hickop]BR[25k]DT[2009-06-15]PC[The KGS Go Server at http://www.gokgs.com/]C[DBrian: hey there
+DBrian: sans problemes
+]RE[W+25.50]
+;B[jd]BL[286.928]C[DBrian: you got 4 handicap stones, you chose where you want them
+Hickop [25k\]: salut
+DBrian: salut =)
+]
+;B[jj]BL[273.008]
+;B[dj]BL[271.972]
+;B[dd]BL[271.042]C[DBrian: handicap 4, règles chinoises
+DBrian: ok =)
+DBrian: Bonne partie
+]
+;W[kf]WL[291.168]
+;B[ke]BL[267.323]
+;W[ie]WL[279.478]
+;B[jf]BL[260.703]
+;W[je]WL[277.322]
+;B[jg]BL[255.388]C[DBrian: plutot que de detailler toute la partie
+DBrian: on va regarder la fin de partie et les séquences de bord
+]
+;W[kd]WL[272.409]
+;B[kg]BL[248.93]
+;W[le]WL[270.55]
+;B[id]BL[241.191]
+;W[hd]WL[268.131]
+;B[he]BL[236.114]
+;W[hc]WL[264.967]
+;B[if]BL[216.569]
+;W[ke]WL[263.199]
+;B[fd]BL[184.64]
+;W[el]WL[250.113]
+;B[fk]BL[174.592]
+;W[ck]WL[245.52]
+;B[dk]BL[167.75]
+;W[dl]WL[242.826]
+;B[cj]BL[153.266]
+;W[bk]WL[240.983]
+;B[bj]BL[150.211]
+;W[bl]WL[239.274]
+;B[gb]BL[121.766]
+;W[ge]WL[223.297]
+;B[hf]BL[118.675]
+;W[gd]WL[222.301]
+;B[fc]BL[95.991]
+;W[hb]WL[213.353]
+;B[ha]BL[79.92]
+;W[ia]WL[207.118]
+;B[ga]BL[33.499]
+;W[jb]WL[205.269]
+;B[ff]BL[23.109]
+;W[lg]WL[200.955]
+;B[lh]BL[16.704]
+;W[fl]WL[196.871]
+;B[gk]BL[11.024]
+;W[gl]WL[195.199]
+(;B[hl]BL[6.922]C[DBrian: a partir d'ici donc
+DBrian: en jouant ici, les ennuis commence
+]
+;W[ek]WL[185.821]
+(;B[fj]BL[30]OB[5]
+;W[ej]WL[183.53]
+;B[ei]BL[30]OB[5]
+;W[fi]WL[167.57]
+(;B[gi]BL[30]OB[5]
+;W[di]WL[150.586]
+;B[fh]BL[30]OB[5]
+;W[ch]WL[149.213]
+;B[dg]BL[30]OB[5]
+;W[cg]WL[144.957]
+;B[dh]BL[30]OB[5]
+;W[ci]WL[143.687]
+;B[cf]BL[30]OB[5]
+;W[bf]WL[141.49]
+;B[be]BL[30]OB[5]TR[be][cf]C[DBrian: bien vu
+DBrian: mais
+DBrian: on appelle  cette forme double hane
+DBrian: elle a pas mal de faiblesses mais
+DBrian: parfois elle marche tres bien pour exploiter les faiblesses adverses
+DBrian: comme ici
+]
+(;W[bg]WL[137.642]C[DBrian: et donc blanc défend
+]
+(;B[de]BL[30]OB[5]C[Hickop [25k\]: je vois
+]
+(;W[hm]WL[132.456]LB[hk:A]C[DBrian: ici je vais jouer noir
+DBrian: et tu vas jouer blanc (me punir)
+DBrian: ok?
+Hickop [25k\]: ok
+DBrian: c'est possible a cause de la coupe en A
+DBrian: cela dit ...
+]
+(;B[im]BL[30]OB[5]C[DBrian: on a vu pourquoi dans la partie mais
+DBrian: noir ne peut pas bloquer ici
+DBrian: tu vois la différence entre ca et
+Hickop [25k\]: donc j2
+Hickop [25k\]: j2
+]
+(;W[il]WL[130.467]
+;B[gm]BL[30]OB[5]C[Hickop [25k\]: h3
+]
+;W[hk]WL[129.273]C[DBrian: ce ko est trop bon pour blanc
+Hickop [25k\]: f1
+DBrian: on va revenir ici
+DBrian: que menace blanc avec h3?
+Hickop [25k\]: h2
+DBrian: oui
+DBrian: pourquoi
+DBrian: donc noir ne peut pas défendre tout de suite
+]
+(;B[ik]BL[30]OB[5]C[Hickop [25k\]: h4
+DBrian: une autre idée ici?
+Hickop [25k\]: k2
+DBrian: il faut lancer le ko ici!
+Hickop [25k\]: ha
+Hickop [25k\]: avec un lance pierre ? ^^
+DBrian: hahaha
+Choup [6k\]: ^^'
+Hickop [25k\]: j4 peut etre ?
+lovejapan [20k\]: ^^''
+DBrian: plus simple que ca
+kuikui: aller courage
+DBrian: noir a une pierre atari ici
+Hickop [25k\]: k1
+DBrian: et comment blanc peut profiter de cette situation maintenant?
+Hickop [25k\]: il prend h2
+]
+(;W[hm]WL[127.099]C[DBrian: noir risque beaucoup plus que blanc
+DBrian: oui
+DBrian: et c'est un ko
+DBrian: noir doit trouver la premiere menace et risque beaucoup plus que blanc dans ce ko
+DBrian: c'est donc un très bon ko pour blanc
+DBrian: ok?
+Hickop [25k\]: j'espère :D
+DBrian: heh
+]
+;B[hj]BL[30]OB[5]
+;W[hl]WL[123.216]
+;B[jl]BL[30]OB[5]
+;W[jm]WL[121.495]
+;B[km]BL[30]OB[5]C[DBrian: alors ici c'est rigolo
+Choup [6k\]: ahah
+Choup [6k\]: en effet =)
+DBrian: la premiere difference avec 
+Hickop [25k\]: je vais la garder au chaud cette partie , ça me servira
+DBrian: oui
+DBrian: les séquences de bord comme ca
+DBrian: on a du faire le tour dans cette partie ;)
+Hickop [25k\]: je dois vous laisser maintenant 
+Hickop [25k\]: un grand merci
+DBrian: okay ;)
+DBrian: merci itou
+]
+(;W[kl]WL[120.391]
+;B[im]BL[30]OB[5]
+;W[mh]WL[116.033]
+;B[li]BL[30]OB[5]
+;W[jm]WL[97.529]
+;B[kh]BL[30]OB[5]
+;W[kk]WL[91.817]
+;B[kj]BL[30]OB[5]
+;W[ae]WL[78.09]
+(;B[bd]BL[30]OB[5]
+;W[ad]WL[76.901]
+;B[ac]BL[30]OB[5]
+;W[af]WL[76.137]
+;B[bc]BL[30]OB[5]
+;W[fe]WL[71.232]
+;B[ee]BL[30]OB[5]
+;W[gf]WL[70.068]
+;B[gg]BL[30]OB[5]
+;W[gc]WL[69.155]
+;B[fb]BL[30]OB[5]
+;W[lk]WL[66.846]
+;B[lj]BL[30]OB[5]
+;W[jk]WL[60.822]
+;B[mi]BL[30]OB[5]
+;W[ij]WL[54.629]
+;B[ii]BL[30]OB[5]
+;W[mg]WL[52.578]
+;B[ik]BL[30]OB[5]
+;W[df]WL[38.256]
+;B[ef]BL[30]OB[5]
+;W[mk]WL[31.902]
+;B[ij]BL[30]OB[5]
+;W[mj]WL[28.578]
+;B[]BL[30]OB[5]
+;W[]WL[28.577]TW[ja][ka][la][ma][ib][kb][lb][mb][ic][jc][kc][lc][mc][id][jd][ld][md][me][lf][mf][ag][ah][bh][ai][bi][aj][bj][cj][dj][ak][dk][al][cl][jl][ll][ml][am][bm][cm][dm][em][fm][gm][im][km][lm][mm]TB[aa][ba][ca][da][ea][fa][ab][bb][cb][db][eb][cc][dc][ec][cd][ed][ce][df][eg][fg][hg][ig][eh][gh][hh][ih][jh][fi][hi][ji][ki][gj]C[DBrian: Merci pour la partie
+DBrian: revue?
+Hickop [25k\]: merci
+Hickop [25k\]: si tu veux bien oui
+])
+(;B[ad]C[DBrian: ici tu avais le droit de bloquer
+DBrian: cela dit
+]))
+(;W[ae]
+;B[ad]C[DBrian: ca
+]
+;W[bd]
+;B[af]
+;W[kl]
+;B[im]C[DBrian: c'est que en bas c'est deja un ko
+DBrian: mais il y a plus drole
+])
+(;AE[gm][hm]C[DBrian: on immagine qu'il n'y est pas les autres pierres
+DBrian: dans ce cas blanc a quand meme le droit de couper mais
+DBrian: c'est un peu compliqué
+DBrian: je te montre juste
+]
+;W[kl]
+;B[im]LB[jk:A]C[DBrian: il ne peut pas jouer la mais
+]
+;W[kk]C[DBrian: ici il menace la coupe
+]
+;B[jk]
+;W[lm]C[DBrian: maintenant il menace un ko
+DBrian: so noir défned
+]
+(;B[jm]
+;W[ml]C[DBrian: blanc est vivant ;)
+Hickop [25k\]: ok
+Choup [6k\]: ..
+])
+(;B[ll]C[DBrian: noir doit donc couper
+]
+;W[jm]C[DBrian: et c'est de nouveau un ko
+])))
+(;W[hj]
+;B[jl]C[DBrian: oops!
+DBrian: noir s'en est sortit
+])
+(;W[jl]
+;B[hj]C[DBrian: oops de nouveau
+])
+(;W[jm]
+;B[jl]))
+(;B[hm]C[DBrian: noir ne défend pas?
+Hickop [25k\]: parcequ'il est témerraire ?
+DBrian: heh
+Choup [6k\]: \\o/
+DBrian: comment blanc puni?
+Choup [6k\]: je suis fan :)
+kuikui: héhé
+Hickop [25k\]: avec k1
+]
+;W[jm]C[lovejapan [20k\]: XD
+DBrian: en effet
+]))
+(;W[ae]
+;B[ad]C[DBrian: ca?
+Hickop [25k\]: non
+]
+;W[bd]
+;B[af]
+;W[il]
+;B[gm]LB[ce:A][hk:B]C[Hickop [25k\]: maintenant oui
+DBrian: la différence c'est que blanc peut jouer en B, mais pas en A
+DBrian: ok
+]))
+(;B[il]C[DBrian: donc ici en effet
+DBrian: il vaut mieux jouer j2
+]))
+(;W[mh]LB[kh:A]C[DBrian: noir a une coupe en A ici aussi
+]
+;B[mi]C[DBrian: comment doit jouer blanc ici?
+Choup [6k\]: ca dépend s'il est téméraire ou non =D
+DBrian: heh
+Hickop [25k\]: oui voilà
+DBrian: disons qu'il est téméraire :p
+Hickop [25k\]: alors il coupe
+]
+(;W[li]
+;B[mg]C[DBrian: ensuite?
+Hickop [25k\]: l6
+]
+;W[kh]
+;B[lf]C[Hickop [25k\]: ha ben non
+DBrian: et ca ne marche pas terrible ici
+DBrian: oui
+])
+(;W[hm]
+;B[im]TR[lf][fl]C[Hickop [25k\]: ok
+DBrian: tu vois la différence?
+Hickop [25k\]: maintenant oui :D
+DBrian: heh
+])))
+(;B[ce]C[DBrian: defendre plus solidement
+DBrian: c'est moins de problemes par la suite
+DBrian: donc hmm
+DBrian: on a vu plusieurs situations
+]))
+(;W[ce]C[DBrian: comment tu réponds ici?
+Hickop [25k\]: d8
+]
+;B[df]
+;W[bd]C[DBrian: ensuite?
+Hickop [25k\]: d9
+DBrian: ici
+DBrian: noir peut capturer 4 pierres blanches
+Hickop [25k\]: b7
+]
+(;B[de]
+;W[ae]C[DBrian: raté
+DBrian: si ca se passe comme ca
+DBrian: c'est mieux que la partie pour blanc
+])
+(;B[bg]C[DBrian: bien
+]
+;W[ae]C[Hickop [25k\]: b5
+]
+;B[bi]C[DBrian: parfait
+])))
+(;B[dh]
+;W[hk]
+;B[gj]
+;W[hj]
+;B[gi]
+;W[hi]
+;B[gh]
+;W[il]C[DBrian: catastrophe aussi
+]))
+(;B[ej]C[DBrian: il aurait mieux vallu défendre
+DBrian: mais meme comme ca
+]
+;W[il]C[DBrian: blanc peut jouer comme ceci
+DBrian: si noir descned
+]
+(;B[hm]
+;W[hk]
+;B[ik]
+;W[hj]LB[fj:A][im:B]C[DBrian: il aura vite deux problemes
+])
+(;B[hk]
+;W[hm]C[DBrian: c'est quand meme mieux que la partie
+]
+;B[jl]
+;W[ik]
+;B[ij]
+;W[im]
+;B[jk])))
+(;B[hk]C[DBrian: dans le coin en bas a gauche
+DBrian: noir échange le coin pour un mur
+DBrian: un mur a vraiment de la valeur si il est fort et sans faiblesse
+DBrian: si blanc veut ramper sur la 2nd ligne
+DBrian: pas de problèmes
+DBrian: ton mur devient de plus en plus fort
+DBrian: ok?
+Hickop [25k\]: ok
+]))

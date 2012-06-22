@@ -1,0 +1,34 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Japanese]SZ[13]KM[0.00]
+PW[Blanc]PB[Noir]DT[2009-06-16]PC[The KGS Go Server at http://www.gokgs.com/]C[Pour cette série, c'est a Noir de jouer et de tuer Blanc. La difficulté est plus ou moins croissante.
+
+Quelques conseils:
+
+- L'idéal quand on travail un tsumego, c'est de ne pas poser les pierres et de se "contenter" de lire, comme en partie.
+- Si après 5 minutes passées sur le même problème la solution n'apparait toujours pas, il vaut mieux passer au suivant et y revenir plus tard.
+- Quand on pense avoir la solution, il est important de bien la vérifier en explorant les diverses réponses possibles.
+
+Bon courage!DBrian: Yop =)
+DBrian: première chose
+DBrian: je t'encourage a sauver ce fichier sur ton disque
+]
+(;AW[al][bl][cl][dl][bm]AB[ak][bk][ck][dk][el][fl]C[#1])
+(;AW[al][bl][cl][dl][bm]AB[ak][bk][ck][dk][ek][fl][gl]C[#2])
+(;AW[al][bl][cl][dl][bm]AB[ak][bk][ck][dk][ek][fk][gl][hl]C[#3])
+(;AW[ak][al][bl][cl][dl][el][fm]AB[bi][fi][aj][dj][bk][ck][fk][fl][hl][dm]C[#4])
+(;AW[ah][bi][bj][bk][al][bl][cl]AB[bg][bh][ai][ci][cj][ck][ek][dl]C[#5])
+(;AW[hj][ij][gk][ik][dl][el][fl][gl][hl][dm]AB[ci][gi][hi][ii][ki][gj][kj][ck][ek][fk][jk][cl][jl][cm]C[#6])
+(;AW[fi][gi][dj][ej][hj][dk][fk][gk][dl][fl][em]AB[ch][fh][gh][hh][di][ei][ii][cj][gj][ij][ck][ik][cl][hl][cm][dm]C[#7])
+(;AW[ak][al][bl][cl][dl][el][fl][gm]AB[bi][aj][bk][ck][dk][ek][fk][gl][hl][fm]C[#8])
+(;AW[gk][hk][el][fl][gl][il][em][hm]AB[gj][hj][ck][ek][fk][ik][jk][dl][jl][ll][gm]C[#9])
+(;AW[ck][al][bl][dl][el][em]AB[bj][cj][dj][bk][ek][fk][fl][fm]C[#10])
+(;AW[ck][dk][bl][dl][cm]AB[bi][di][bj][dj][fj][ek][el][em]C[#11])
+(;AW[fi][gi][ej][fk][gk][hk][fl][hl]AB[eh][fh][gh][di][hi][dj][ij][dk][ik][el][il]C[#12])
+(;AW[aj][bk][ck][dk][al][bl][dl][em]AB[bi][bj][cj][dj][ej][ek][el][gl]C[#13])
+(;AW[fi][fj][hj][ek][gk][hk][el][fl][gl][em]AB[eh][fh][gh][ih][ei][ii][cj][ej][ij][dk][ik][dl][hl][il][dm]C[#14])
+(;AW[bk][ck][bl][dl][bm]AB[di][bj][cj][dk][ek][cl][fl]C[#15])
+(;AW[ek][fk][bl][cl][dl][fl][gl][dm]AB[bj][dj][ej][fj][bk][dk][gk][hk][el][il][hm]C[#16])
+(;AW[eg][gg][hg][dh][fh][hh][di][ei][fi][gi]AB[ge][ie][df][ef][ff][if][cg][ig][ch][ih][ci][ii][bj][dj][ej][fj][gj][hj]C[#17])
+(;AW[mj][ik][jk][lk][hl][il][kl][ll][ml][lm]AB[lh][hj][ij][jj][kj][lj][fk][hk][kk][gl][jm]C[#18])
+(;AW[hk][ik][cl][dl][el][fl][gl][jl][fm]AB[ci][ej][gj][hj][ij][jj][bk][ck][gk][jk][bl][kl]C[#19])
+(;AW[aj][bj][cj][dj][dk][bl][cl][bm][dm]AB[ai][bi][ci][di][ei][ej][ek][al][dl][el]C[#20]))

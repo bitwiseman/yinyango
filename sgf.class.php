@@ -80,7 +80,7 @@ class sgf
         $branch = 0; // branche actuelle
         $node = 0; // noeud actuel
         $mark = 0; // marqueur de branche
-        $nodemark = array(); // tableau des noeuds de marqueurs pour revenir aux branches
+        $nodemark = []; // tableau des noeuds de marqueurs pour revenir aux branches
         $nodedata = ''; // données du noeud
         $branchend = false; // fin de branche
         $start = true; // début de fichier

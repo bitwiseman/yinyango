@@ -1,0 +1,901 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Japanese]SZ[19]KM[6.50]TM[60]OT[5x10 byo-yomi]
+DT[2009-08-05]PC[The KGS Go Server at http://www.gokgs.com/]C[Etudehng [-\]: bonsoir
+Etudehng [-\]: il reste un peu de temps
+Etudehng [-\]: je vais vous montrer une autre sequence utile
+]
+(;AW[rp][pq][qq][rq][or]AB[aa][qn][ro][pp][qp][nq][oq][nr]LB[pr:C][os:A][ps:B]C[Jr4yA [5k\]: oula ya foule
+Jr4yA [5k\]: bonsoir
+Etudehng [-\]: bonsoir
+Etudehng [-\]: ca va venir il faut attendre un peu
+Jr4yA [5k\]: c'est quoi ce soir?
+Elynn [11k\]: 'soir
+Etudehng [-\]: ce sont les tsumegos classiques de coin
+Jr4yA [5k\]: ok
+Seb [1d\]: bonsoir
+Etudehng [-\]: bonsoir
+Seb [1d\]: on doit faire quoi?
+Etudehng [-\]: je vais y venir
+Etudehng [-\]: on va pouvoir commencer
+Hickop [16k\]: bonsoir
+Etudehng [-\]: bonsoir
+Etudehng [-\]: ce soir nousa llons etudier les tsumegos classiques de coin, c'est a dire des situations assez classiques en partie qu'il faut savoir gerer
+Etudehng [-\]: premiere position: blanc de jouer, ou peut on jouer?
+Elynn [11k\]: P1
+Hickop [16k\]: Q1
+Etudehng [-\]: les reponses les plus classiques sont B ou C
+Etudehng [-\]: A doit exister mais il est de toute facon moins interessant et plus dangereux
+Etudehng [-\]: ici
+]
+(;B[ba]C[Etudehng [-\]: on va essayer autre chose
+Etudehng [-\]: quanbd ca^^?
+olag [5k\]: la
+olag [5k\]: r1
+Etudehng [-\]: ok
+Etudehng [-\]: alors
+olag [5k\]: etude on est nul^^
+Etudehng [-\]: ah oui je revendique je ne sais pas tout^^
+Etudehng [-\]: tout le monde a compris pour ces formes?
+KaiHansen [?\]: oui
+Etudehng [-\]: ok
+Etudehng [-\]: essayez de retenir les points clefs
+Etudehng [-\]: et vous les utiliserez en partie
+Etudehng [-\]: ca marche tres bien :)
+Etudehng [-\]: j'en ai escroqué quelques uns deja avec ce que je vous ai montré
+]
+(;W[ps]LB[so:B][ns:A]C[Etudehng [-\]: dans cette position
+Etudehng [-\]: le coin est bel est bien vivant
+Etudehng [-\]: tout le monde connait cette forme?
+Etudehng [-\]: maintenant je vais vous faire un peu travailler
+Etudehng [-\]: on va resumer
+Etudehng [-\]: A sente pour noir
+Etudehng [-\]: B goté
+Etudehng [-\]: a++ :)
+]
+(;B[ns]C[Etudehng [-\]: si noir descend en O1
+Etudehng [-\]: blanc doit t'il rajouter un coup et si oui lequel?
+ifold [-\]: s1 
+Etudehng [-\]: je vous laisse un petit peu reflechir^^
+Hickop [16k\]: pour moi ya assez pour vivre mais je suis peut etre trop optimiste :p
+Etudehng [-\]: hehe
+Etudehng [-\]: donc ce coup noir est bel et bien sente
+olag [5k\]: bon alé dodo bonne nuit a tous
+]
+(;W[rs]C[Etudehng [-\]: voyons S1
+]
+;B[sp]
+;W[sq]
+;B[os]
+;W[pr]C[Etudehng [-\]: on voit bien ici que blanc est vivant n'est ce pas?
+Hickop [16k\]: oui
+])
+(;W[]LB[pr:A]C[Etudehng [-\]: maintenant
+Insights [3d\]: t2 marche ptet
+jSd [8k\]: s14
+jSd [8k\]: s1
+Etudehng [-\]: blanc a passé et a négligé le coup de noir
+Etudehng [-\]: puis je tuer et comment? :)
+jSd [8k\]: s2
+Hickop [16k\]: oui s2
+Insights [3d\]: q2
+jSd [8k\]: oui
+jSd [8k\]: c q2
+Etudehng [-\]: d'autres idées?
+Etudehng [-\]: ok on va les essayer
+olag [5k\]: ah^^
+Hickop [16k\]: ouai j'ai pas compris :p
+Etudehng [-\]: si certains ont pas trop compris cette notion je reviendrais dessus avec eux apres le cours
+olag [5k\]: moi non plu
+Etudehng [-\]: ok on vera a la fin^^
+Etudehng [-\]: ce n'est pas simple j'avoue
+Etudehng [-\]: oui voila c'est le truc
+Etudehng [-\]: si blanc tenuki
+Etudehng [-\]: on joue en A pour tuer
+]
+(;B[rr]C[Etudehng [-\]: S2
+Etudehng [-\]: est mauvais
+Seb [1d\]: pas grave c'était juste une question
+]
+;W[sr]C[Insights [3d\]: si faciel
+]
+(;B[os]C[Seb [1d\]: s1 
+]
+(;W[pr]C[jSd [8k\]: mortffff
+KaiHansen [?\]: ça ma l'air vivant ça
+]
+;B[rs]
+;W[sp]C[jSd [8k\]: je suis un geni
+]
+;B[ss]C[Seb [1d\]: q2 est bizar
+Elynn [11k\]: (sinon j'avais pensé à R1)
+Etudehng [-\]: quel est le statut de blanc?
+Hickop [16k\]: mort
+jSd [8k\]: mannen ko
+Etudehng [-\]: cette position est assez compliquée^^
+KaiHansen [?\]: ko
+Etudehng [-\]: c'est pas tout a fait un ko
+jSd [8k\]: c seki
+Etudehng [-\]: on appelle cela un ko de mille an
+Insights [3d\]: au lieu de q2 s1 plus facile
+Etudehng [-\]: qui ne connait pas le ko de mille an?
+Hickop [16k\]: moi
+KaiHansen [?\]: moi
+Etudehng [-\]: ok
+Etudehng [-\]: alors
+jSd [8k\]: lololololooooopo
+jSd [8k\]: mannen ko
+Etudehng [-\]: dans cette position
+]
+;W[jb]C[Seb [1d\]: p1 
+]
+;B[sq]C[Etudehng [-\]: imaginons que noir prenne le ko
+Etudehng [-\]: blanc va jouer ailleurs
+]
+;W[ic]
+;B[so]
+;W[hd]
+(;B[qs]
+;W[sr]C[Etudehng [-\]: ici
+Hickop [16k\]: et si noir connecte ? c'est seki ?
+])
+(;B[sr]C[Etudehng [-\]: ici?
+Hickop [16k\]: oui
+Etudehng [-\]: a tout moment
+Etudehng [-\]: noir peut choisir de faire seki
+Seb [1d\]: etude je ne comprend pas l'interet de cette position alors que blanc peut vivre localement sans seki
+Etudehng [-\]: mais il peut prendre un gros risque et essayer de tuer
+Etudehng [-\]: a quel moment seb?
+]
+;W[jf]
+;B[qr]C[Etudehng [-\]: oui
+Etudehng [-\]: c'est seki
+Hickop [16k\]: ok
+Etudehng [-\]: c'est le principe du ko de mille an
+]
+;W[qs]
+;B[rr]
+;W[sr]))
+(;W[rs]C[Seb [1d\]: ça passe pas?
+Etudehng [-\]: si effectivement
+]))
+(;B[rs]C[Seb [1d\]: r2 
+Etudehng [-\]: erreur de ma part dans l'ordre des coups
+]
+;W[qr]C[Etudehng [-\]: 1 sec
+Seb [1d\]: oki
+Etudehng [-\]: en realité
+Etudehng [-\]: c'est une question d'ordre des coups
+]
+(;B[os]C[Seb [1d\]: t4 
+]
+;W[sp])
+(;B[sp])))
+(;B[os]
+;W[pr]
+;B[rr]C[Etudehng [-\]: normalement
+Etudehng [-\]: on le joue comme ca
+Seb [1d\]: oki
+Etudehng [-\]: dans cet ordre la sequence montrée marche
+Etudehng [-\]: petite erreur de ma part bien vu :)
+]
+;W[sr]
+;B[rs]
+;W[sp]
+;B[ss]C[Etudehng [-\]: je vais finir sur le ko de mille an rapidement
+]
+;W[je]
+;B[sq]
+;W[if]
+;B[so]
+;W[sr]
+;B[mg]
+;W[lg]
+;B[sq]C[Etudehng [-\]: ici
+Etudehng [-\]: comme vous le voyez c'est une sorte de ko a multiples etapes pour noir
+Etudehng [-\]: mais c'est dangereux car il peut faire seki
+Etudehng [-\]: on apelle cela le ko de mille an
+Etudehng [-\]: c'est une notion bizarre et pas tres facile a comprendre
+])
+(;B[rs]C[Etudehng [-\]: est ce que ce coup tue^^?
+urim03 [7k\]: oui
+]
+;W[rr]C[Hickop [16k\]: au lieu de Q2 je penses
+]
+(;B[pr]C[Etudehng [-\]: quand t2?
+urim03 [7k\]: r1 blanc t1 noir
+]
+(;W[qs]C[jSd [8k\]: t2
+]
+(;B[ss]
+;W[sr]C[urim03 [7k\]: oops...
+Etudehng [-\]: apres :)?
+Hickop [16k\]: T4
+]
+;B[sp]
+;W[os])
+(;B[os]
+;W[ss]C[Hickop [16k\]: vivant 
+Etudehng [-\]: aussi etonnat que cela paraisse blanc est vivant
+urim03 [7k\]: j'ai oublié que la mort des 2 pierres rajoutais une liberté au 2 pierre
+]))
+(;W[qr]))
+(;B[sr]C[urim03 [7k\]: non q2 tue
+]
+;W[qs]
+;B[pr]
+;W[sq]
+;B[os]
+;W[ss]))
+(;B[pr]C[Etudehng [-\]: voyons C
+]
+;W[qr]
+;B[rs]C[Etudehng [-\]: et la c'est dur :)
+Etudehng [-\]: d'autres idées pour sauver le pauvre blanc?
+Etudehng [-\]: et non blanc est bien mort :)
+]
+;W[sp]
+;B[sr]C[Hickop [16k\]: P1
+]
+(;W[rr]
+;B[os]C[Etudehng [-\]: mort
+])
+(;W[os]
+;B[qs]))))
+(;B[so]C[Etudehng [-\]: on va voir celle la aussi
+olag [5k\]: mais revenon en au plus importan si tu veu bien etude, a koi servent les 2 pierres en haut a gauche?
+Etudehng [-\]: hehe
+Etudehng [-\]: je manipule mal kgd alors ca a trainé^^
+Etudehng [-\]: kgs
+olag [5k\]: lol oki oki
+olag [5k\]: et donc la?
+Etudehng [-\]: alors ici
+Etudehng [-\]: blanc est vivant
+olag [5k\]: j'ai une kestion
+Etudehng [-\]: quelqu'un veut essayer de tuer?
+Etudehng [-\]: oui?
+olag [5k\]: pk blanc  pas jouer q1 en r1?
+]))
+(;W[pr]LB[so:B][ns:A]C[Etudehng [-\]: cette forme est aussi vivante
+Etudehng [-\]: A gote
+Etudehng [-\]: B ko
+]
+(;B[ns]C[Etudehng [-\]: si je descend maintenant
+Etudehng [-\]: peut on tuer le blanc?
+Etudehng [-\]: si il tenuki bien sur :)
+olag [5k\]: s2 s1?
+Etudehng [-\]: effectivement ici
+olag [5k\]: -_-"
+Etudehng [-\]: la descente est gote pour noir
+Etudehng [-\]: blanc est encore vivant
+]
+;W[]C[olag [5k\]: s1
+urim03 [7k\]: je pense pas mais faut voir
+olag [5k\]: forme en 36
+Etudehng [-\]: au moins tout ca :)
+KaiHansen [?\]: dur à tuer ces formes là
+olag [5k\]: O_O
+olag [5k\]: j'essai?
+Etudehng [-\]: oui vas y^^
+olag [5k\]: s1
+urim03 [7k\]: p1?
+olag [5k\]: bon ben c vivan
+]
+(;B[rs]C[urim03 [7k\]: s1 r1 s2 p1  comme séquence je vois
+olag [5k\]: r1 bof
+]
+;W[qs]
+(;B[rr]
+;W[sr]
+;B[sp]
+;W[os]C[Etudehng [-\]: marche pas tres bien :/
+olag [5k\]: c vivant la
+])
+(;B[os]
+;W[rr]C[olag [5k\]: c vivan tfacon si s1 tu pa
+]))
+(;B[rr]C[olag [5k\]: r1p1 pluto
+Etudehng [-\]: celui la est tentant
+olag [5k\]: arf
+olag [5k\]: enfin ko
+]
+;W[sr]C[Etudehng [-\]: pas de ko non
+]
+(;B[qs]
+;W[qr]
+;B[rs]
+;W[sp]C[Etudehng [-\]: vivant aussi
+])
+(;B[rs]
+;W[qs]C[olag [5k\]: ah c vivan alor
+Etudehng [-\]: on revient comme avant
+Etudehng [-\]: oui voila
+])))
+(;B[so]C[olag [5k\]: ll oug
+Etudehng [-\]: et ici :)?
+olag [5k\]: lol
+olag [5k\]: sa semble kasi symetrik en fait
+]
+;W[]
+;B[rr]
+;W[sr]C[olag [5k\]: sa me semble moin bien ke o1
+]
+;B[qs]
+(;W[sp]C[Etudehng [-\]: donc blanc n'a pas de choix ici
+olag [5k\]: a bon?
+Etudehng [-\]: il doit jouer T4
+olag [5k\]: meme p1?
+]
+(;B[ss])
+(;B[os]
+;W[ps]
+(;B[ss]C[Etudehng [-\]: on dirait un ko ?
+olag [5k\]: mh
+olag [5k\]: ben si par forme morte tu apel un ko oui tu t'exprime mal
+])
+(;B[rs])))
+(;W[qr]
+;B[rs]
+;W[sp]
+;B[os]C[Etudehng [-\]: dans ce cas
+Etudehng [-\]: mort
+])
+(;W[os]
+;B[sp]C[olag [5k\]: mh
+Etudehng [-\]: tout le monde voit la forme morte?
+olag [5k\]: ko
+KaiHansen [?\]: c'est un ko ça
+Etudehng [-\]: oui c'est ko
+Etudehng [-\]: me suis mal exprimé
+olag [5k\]: sans vouloir te vexer^^
+urim03 [7k\]: ce ko est meilleur pour blanc
+urim03 [7k\]: je veux dire t4
+Etudehng [-\]: ^^ non je voulais dire que la forme chez blanc pourrait etre une forme en 5
+olag [5k\]: tu pense?N
+olag [5k\]: ok
+]
+;W[rs]
+;B[ss]C[Etudehng [-\]: le ko est ici
+olag [5k\]: mdr
+])))
+(;W[qs]C[Etudehng [-\]: euh
+olag [5k\]: c nul?
+Etudehng [-\]: parce que c'est moins bien^^
+olag [5k\]: ok
+olag [5k\]: merci de ta reponse alor^^
+olag [5k\]: et p1 xD
+Etudehng [-\]: comment dire
+Etudehng [-\]: sans parler du statut du groupe
+olag [5k\]: ben la sa vie au moin
+urim03 [7k\]: il perd plusieurs point et reste gote
+Etudehng [-\]: cela fera moins de points
+])
+(;W[os]C[olag [5k\]: ouai jsai pas
+Etudehng [-\]: P1 je ne sais pas si c'est tout a fait vivant
+KaiHansen [?\]: r1?
+Etudehng [-\]: R1 est le point vital oui
+]
+;B[qs]C[olag [5k\]: r1
+olag [5k\]: r2
+urim03 [7k\]: t1 c'est mort...
+olag [5k\]: etude
+]
+;W[qr]
+;B[rs]C[olag [5k\]: s1
+olag [5k\]: s2
+]
+;W[rr]
+;B[ns]C[KaiHansen [?\]: je préfère le seki là pour noir, doit faire la 1° menace sinon
+olag [5k\]: lol pareil pour moi
+]
+;W[pr]
+;B[sp]
+;W[sq]C[urim03 [7k\]: forme en 4 dans le coin
+urim03 [7k\]: mort
+Etudehng [-\]: oui
+Etudehng [-\]: c'est un ko
+Etudehng [-\]: ou un seki on peut choisir
+]
+(;B[ss]C[urim03 [7k\]: mort
+Etudehng [-\]: seki
+olag [5k\]: ,non
+olag [5k\]: mdr
+olag [5k\]: oui
+olag [5k\]: la forme en L dans le coin c mort
+]
+;W[so]
+;B[sn]C[olag [5k\]: et il laisse le seki injouable a blan
+Etudehng [-\]: ah oui urim bien vu
+urim03 [7k\]: merci^^
+olag [5k\]: de rien
+urim03 [7k\]: enfin
+olag [5k\]: nan chut
+Etudehng [-\]: je connais en plus mais ca m'a pas traversé l'esprit la :o
+urim03 [7k\]: plutot merci a fuji de m'avoir appris sa
+olag [5k\]: tu te gave c tou
+Etudehng [-\]: ^^
+]
+;W[sp]C[urim03 [7k\]: mort
+urim03 [7k\]: ccar noir bouche ses menac
+olag [5k\]: vazi fait lke
+urim03 [7k\]: donc noir plus menace
+urim03 [7k\]: t2
+]
+;B[sr]C[urim03 [7k\]: maintenant
+]
+;W[ps]
+;B[rs]
+;W[ss]C[urim03 [7k\]: s1
+urim03 [7k\]: t2
+]
+;B[sr]C[olag [5k\]: mh
+olag [5k\]: oui c vrai
+urim03 [7k\]: et blanc ne peut plus menacer
+olag [5k\]: c compliker mais c mort
+]
+;W[mi]C[urim03 [7k\]: merci de m'avoir ecouter
+KaiHansen [?\]: t2 il le joue à la fin du yose quand il n'y a plus de menaces
+olag [5k\]: oui
+]
+;B[ni]
+;W[ss]C[urim03 [7k\]: ...
+])
+(;B[sr]C[Etudehng [-\]: ou ko
+olag [5k\]: lol
+urim03 [7k\]: car il onntrol le ko
+]
+;W[so]
+(;B[sn]C[KaiHansen [?\]: quoique t1 c'est mort
+olag [5k\]: ta pas compris ce ke uriml di
+]
+;W[ss]C[olag [5k\]: a non
+urim03 [7k\]: tu connais pas sa?
+])
+(;B[ss]
+;W[ps]C[olag [5k\]: ^^
+]
+;B[rs]C[Etudehng [-\]: oui^^
+]
+;W[ss]
+;B[sr]C[Etudehng [-\]: ca reste ko non?
+KaiHansen [?\]: oui
+olag [5k\]: je sai plus pourkoi
+urim03 [7k\]: je peux avoir le control
+urim03 [7k\]: stp
+olag [5k\]: mais javai vu sa kekpar
+KaiHansen [?\]: mais noir peut répondre à toute les menaces
+olag [5k\]: danbs un livre
+]))))
+(;B[]C[KaiHansen [?\]: ben ça dépend du contexte
+]
+(;W[ps]LB[so:B][ns:A]C[KaiHansen [?\]: c'est sur que sans rien autour c'est moche ^^
+Etudehng [-\]: A sente
+Etudehng [-\]: B gote
+])
+(;
+(;W[pr]LB[so:B][ns:A]C[Etudehng [-\]: ici
+Etudehng [-\]: A gote
+Etudehng [-\]: B ko
+Etudehng [-\]: hmm
+Etudehng [-\]: dans quelle situation on l'a eu deja je me souviens plus^^
+]
+;B[ns]
+;W[so])
+(;W[ps]
+(;B[rr]
+;W[sr]
+;B[rs])
+(;B[ns]
+;W[]
+;B[rr]
+;W[sr]
+;B[rs]
+;W[sp]
+;B[os]
+;W[pr]C[KaiHansen [?\]: t'embete pas pour l'ordre des coups, pose le ^^
+]
+;B[ss]C[Etudehng [-\]: alors ici
+Etudehng [-\]: situation particuliere
+Etudehng [-\]: regardons bien
+Etudehng [-\]: donc blanc
+Hickop [16k\]: c'est ça que j'avais pas comoris
+Etudehng [-\]: il veut pas aider le noir
+Hickop [16k\]: la forme en 5
+Etudehng [-\]: il ne jouera jamais r2
+KaiHansen [?\]: t5 peut être une menace?
+Etudehng [-\]: T5 pas vriament une menace
+Etudehng [-\]: car
+Etudehng [-\]: mais je reviens a mes moutons
+Etudehng [-\]: si blanc ne joue pas R2
+]
+(;W[qr]C[Etudehng [-\]: si blanc joue a l'interieur
+]
+;B[sq]C[Etudehng [-\]: c'est un ko n'est ce pas?
+]
+;W[je]
+;B[sr]C[Etudehng [-\]: si noir connecte
+Etudehng [-\]: c'est mort
+Etudehng [-\]: forme en 5 classique
+Etudehng [-\]: ok?
+Hickop [16k\]: ha ok
+])
+(;W[so]
+;B[sn]C[Etudehng [-\]: blanc perd une liberté
+])
+(;W[jd]C[Etudehng [-\]: il joue ailleurs
+Etudehng [-\]: ok?
+Hickop [16k\]: je comprends le terme "mille ans" maintenant 
+Etudehng [-\]: donc peut etre que pour lui c'est mieux de laisser comme ca
+Etudehng [-\]: car 
+Etudehng [-\]: a la fin
+Etudehng [-\]: il peut avoir un seki
+]
+;B[so]C[Etudehng [-\]: noir enferme un peu plus le blanc
+]
+(;W[hd]
+;B[sq]
+;W[fd]
+;B[qr]
+;W[sr]C[Etudehng [-\]: maintenant c'est un ko
+Hickop [16k\]: ho
+Etudehng [-\]: donc je resume
+Etudehng [-\]: blanc a joué 3 coups ailleurs
+Etudehng [-\]: noir
+Etudehng [-\]: a obtenu un ko dans el coin
+Etudehng [-\]: 3 coups ailleurs c'est deja beaucoup
+Etudehng [-\]: et blanc n'a pas encore perdu le coin
+Etudehng [-\]: donc noir doit payer tres cher
+Etudehng [-\]: pour obtenir ce ko
+])
+(;W[ke]C[Etudehng [-\]: c'est le ko de mille an
+Etudehng [-\]: c'est un peu plus clair?
+Hickop [16k\]: oui j'ai compris
+Etudehng [-\]: ce n'est pas facile a comprendre
+Etudehng [-\]: on peut se faire mal a la tete dessus
+Etudehng [-\]:  :)
+Etudehng [-\]: des questions ?
+Hickop [16k\]: merci pour le cours
+Etudehng [-\]: pas de souci :)
+Etudehng [-\]: j'espere que vous aurez appris des choses :)
+Etudehng [-\]: a bientot tout le monde
+]
+;B[sq]
+;W[ig]
+;B[sr]C[Etudehng [-\]: ici c'est seki
+]
+;W[ng]C[Etudehng [-\]: donc obtenir un seki n'est peut etre pas si mal
+Etudehng [-\]: en conclusion
+Hickop [16k\]: ça dépend de ce que joue blanc entre temps
+Etudehng [-\]: blanc ne joue jamais a l'interieur
+Etudehng [-\]: oui tout a fait
+Etudehng [-\]: noir decide
+Etudehng [-\]: soit il prend un tres gros risque sur un ko
+Etudehng [-\]: soi til laisse le seki
+]
+(;B[qr]
+;W[qs]
+;B[rr]
+;W[sr])
+(;B[qs]
+;W[qr]
+;B[sr]
+;W[rs]C[Etudehng [-\]: meme chose
+]))))))))
+(;AW[pq][qq][rq][or]AB[pp][qp][rp][nq][oq][lr][nr]LB[os:A]C[ticticboom [19k?\]: coucou hng 
+Etudehng [-\]: bonsoir
+ticticboom [19k?\]: un pei en retard
+Etudehng [-\]: pas de souci
+Etudehng [-\]: alors ici
+Etudehng [-\]: c'est une situation que l'on peut retrouver parfois lorsque l'on essaye de vivre dans un coin adverse
+Etudehng [-\]: c'est a blanc de jouer
+KaiHansen [?\]: ça peut vivre ce truc là?
+Etudehng [-\]: qu'a t'on envi de jouer?
+Etudehng [-\]: on va voir :)
+Etudehng [-\]: je vous ecoute
+takezo44 [15k\]: R2
+KaiHansen [?\]: oui r2
+Etudehng [-\]: d'autres idées?
+KaiHansen [?\]: ah non meme ça ça marche pas
+Etudehng [-\]: on va voir apres
+jSd [8k\]: s2
+takezo44 [15k\]: Q1
+Etudehng [-\]: ok on va regarder ca
+ticticboom [19k?\]: S1
+jSd [8k\]: la sequence de s2
+Etudehng [-\]: auquel jsd?
+Etudehng [-\]: ici
+]
+;B[]C[Etudehng [-\]: on essaye S1?
+Etudehng [-\]: ah ici?
+Etudehng [-\]: alors ici
+Etudehng [-\]: une chose que l'on a pas testé
+jSd [8k\]: t1
+jSd [8k\]: xd
+Hickop [16k\]: lol
+Etudehng [-\]: ^^
+Etudehng [-\]: ici
+Etudehng [-\]: si dans vos parties
+jSd [8k\]: r1
+Etudehng [-\]: vous arrivez comme ca
+Etudehng [-\]: si vous arrivez comme ca
+KaiHansen [?\]: la forme sans p1 est morte quand même, rassure moi ^^
+Etudehng [-\]: oui sans P1 c'est mort :)
+]
+(;W[qr]C[Etudehng [-\]: commencons ici
+Etudehng [-\]: mais noir doit etre plus malin!
+]
+(;B[os]C[takezo44 [15k\]: ok
+]
+;W[ps]C[KaiHansen [?\]: q1
+Etudehng [-\]: ici
+Etudehng [-\]: on voit que c'est un ko
+]
+;B[ns]
+;W[rs]C[Etudehng [-\]: tout le monde Ok?
+ticticboom [19k?\]: ok
+]
+;B[sr]
+;W[sq]
+;B[pr])
+(;B[rs]C[Etudehng [-\]: un point vital
+ticticboom [19k?\]: faux oeil et attari
+ticticboom [19k?\]: ok
+jSd [8k\]: seki
+ticticboom [19k?\]: ok 
+Etudehng [-\]: donc ici il y a ce point vital
+Etudehng [-\]: qui tue le blanc sans condition
+]
+(;W[ps]C[Etudehng [-\]: si on essaye de faire l'oeil
+]
+;B[ns]
+;W[os]
+;B[qs]C[Etudehng [-\]: c'est mort 
+])
+(;W[ns]
+(;B[ms]
+;W[ps]C[Etudehng [-\]: arnaque de blanc ici
+Etudehng [-\]: c'est ko!
+]
+;B[qs]
+;W[rr]
+;B[os]
+;W[mj]
+;B[lj]
+;W[ns]
+;B[ll]
+;W[ss]
+;B[os]
+;W[sq])
+(;B[ps]C[Etudehng [-\]: donc il faut etre malin^^
+]
+;W[os]
+;B[qs]
+;W[pr]
+;B[sq]
+;W[sr]C[Etudehng [-\]: ok jsd?
+jSd [8k\]: k
+]
+;B[sp]C[Etudehng [-\]: mort
+Etudehng [-\]: arretez moi si vous ne suivez pas^^
+Etudehng [-\]: non c'est mort
+]
+(;W[nh]
+;B[ms]
+;W[rr])
+(;W[rr]
+;B[ms]
+;W[ss]
+;B[qs])))))
+(;W[rr]
+;B[pr]C[Etudehng [-\]: ici maleheuresement
+Etudehng [-\]: blanc est mort
+jSd [8k\]: r2
+]
+(;W[qr]C[jSd [8k\]: t3
+jSd [8k\]: nnpoi
+]
+(;B[os]
+;W[sq]C[jSd [8k\]: c bonc mort
+jSd [8k\]: dsl
+Etudehng [-\]: oui mort gote
+Etudehng [-\]: pas de souci
+Etudehng [-\]: n'hesitez pas en cas de doute a me faire revenir
+]
+;B[qs]C[KaiHansen [?\]: mort gote t3
+])
+(;B[ps]C[jSd [8k\]: q1
+]))
+(;W[qs]))
+(;W[rs]C[ticticboom [19k?\]: oui
+jSd [8k\]: att
+jSd [8k\]: revien
+]
+;B[sr]
+(;W[sq]
+;B[pr]
+;W[qr]
+;B[os])
+(;W[ps]C[ticticboom [19k?\]: ok
+]
+;B[qr]
+(;W[sq]
+;B[pr])
+(;W[rr]
+;B[sq]C[Etudehng [-\]: S1 ne marche pas tout le monde est d'accord?
+])))
+(;W[ps]C[Etudehng [-\]: essayons C
+Etudehng [-\]: ici
+Etudehng [-\]: alors ici
+ticticboom [19k?\]: S2 en 6
+Etudehng [-\]: on peut conclure
+KaiHansen [?\]: en fait j'avais juste oublié d'a qui c'était le tour
+KaiHansen [?\]: je oarlais de r2 après r1...
+Etudehng [-\]: S2 en 6
+jSd [8k\]: t2
+]
+;B[sq]C[jSd [8k\]: fait vivre
+]
+;W[sr]
+;B[rs]C[Etudehng [-\]: blanc peut til vivre?
+jSd [8k\]: oi
+jSd [8k\]: r1
+takezo44 [15k\]: oui
+takezo44 [15k\]: R1
+ticticboom [19k?\]: oui pour voir
+Etudehng [-\]: ici S2?
+takezo44 [15k\]: non
+ticticboom [19k?\]: oui
+ticticboom [19k?\]: ..
+takezo44 [15k\]: R1 
+ticticboom [19k?\]: S2 en 6
+]
+(;W[qs]C[ticticboom [19k?\]: vivre avec deux yeux ou avec seki ?
+Etudehng [-\]: le seki est considéré vivant :)
+ticticboom [19k?\]: ok
+KaiHansen [?\]: j'aime pas noir s1, me semble pas naturel
+ticticboom [19k?\]: si a la place de blanc R1 > S1
+takezo44 [15k\]: non c'est bon
+takezo44 [15k\]: noir obligé de posé en s2
+takezo44 [15k\]: on suit en R1
+takezo44 [15k\]: noir prend en T1
+ticticboom [19k?\]: blanc S2 pardon
+takezo44 [15k\]: et se retrouve mort
+Etudehng [-\]: de retour
+ticticboom [19k?\]: a la place de R1
+Etudehng [-\]: desolé mon net :s
+ticticboom [19k?\]: P1
+KaiHansen [?\]: r2
+Etudehng [-\]: R1
+]
+(;B[rr])
+(;B[ns]C[ticticboom [19k?\]: S2
+Etudehng [-\]: je tue ici
+takezo44 [15k\]: p1
+takezo44 [15k\]: gnark
+Etudehng [-\]: je suis mechant :)
+]
+(;W[rr]
+;B[pr]
+;W[qr]
+;B[os]C[Etudehng [-\]: mort?
+])
+(;W[os]
+;B[qr]
+;W[pr]
+;B[rr])))
+(;W[os]C[Etudehng [-\]: P1 ici?
+])
+(;W[qr]C[Etudehng [-\]: pour r2
+]
+;B[ns]
+;W[os]
+;B[qs])
+(;W[rr]C[Etudehng [-\]: ici?
+ticticboom [19k?\]: oui
+]
+;B[ns]C[takezo44 [15k\]: impossible
+Etudehng [-\]: oui on ne peut pas vivre comme cela effectivmeent
+]
+(;W[qr]
+;B[os]C[ticticboom [19k?\]: ah oui
+])
+(;W[qs]C[Etudehng [-\]: je t'ecoute jsd
+]
+;B[pr]C[jSd [8k\]: jai trouvé$
+]
+;W[os]
+;B[qr])))
+(;W[sr]C[jSd [8k\]: oui
+KaiHansen [?\]: c'est à noir de jouer
+Etudehng [-\]: oui
+Etudehng [-\]: je pense que c'est mort^^
+Etudehng [-\]: quelqu'un veut tuer?
+KaiHansen [?\]: s2
+Etudehng [-\]: qui veut tuer jsd? :)
+KaiHansen [?\]: s1
+KaiHansen [?\]: pardon
+]
+(;B[rr])
+(;B[rs]C[Etudehng [-\]: jsd?
+jSd [8k\]: q2
+Etudehng [-\]: comment vies tu?
+]
+;W[pr]C[KaiHansen [?\]: p1
+]
+;B[os]C[Etudehng [-\]: c'est bien tué^^
+]
+;W[ps]C[Etudehng [-\]: forme en 5
+KaiHansen [?\]: q16
+]
+;B[pd]C[Etudehng [-\]: hehe
+]))
+(;W[os]C[Etudehng [-\]: coup etrange n'est ce pas?
+jSd [8k\]: c pour ca
+jSd [8k\]: ta m2
+Etudehng [-\]: alors ce coup
+KaiHansen [?\]: ben on l'a pas testé car c'était à noir de jouer
+Etudehng [-\]: M2 pas indispensable
+Etudehng [-\]: c'est pour la forme du tsumego
+Etudehng [-\]: alors
+Etudehng [-\]: comment noir peut jouer
+Etudehng [-\]: voila
+Etudehng [-\]: donc ce que je voulais vous montrer
+Etudehng [-\]: c'est ceci
+KaiHansen [?\]: :)
+Etudehng [-\]: P1 est la seule solution ici
+Etudehng [-\]: et c'est un ko
+ticticboom [19k?\]: ok
+Etudehng [-\]: tout le reste est mort^^
+Etudehng [-\]: donc je vais resumer
+ticticboom [19k?\]: A +
+Etudehng [-\]: le cours
+jSd [8k\]: et t1
+jSd [8k\]: xd
+Etudehng [-\]: a+
+Etudehng [-\]: ^^
+Hickop [16k\]: pauvre blanc comment a-t-il pu en arriver là ^^
+Etudehng [-\]: P1 seule solution et c'est un ko
+Etudehng [-\]: voila on va s'arreter la aujourd'hui, les tsumegos c'est fatigant^^
+Etudehng [-\]: je vous conseille de retenir les points clefs
+Etudehng [-\]: cela vous permettra de les retrouver en partie
+Etudehng [-\]: et vous en gagnerez grace a ca^^
+Hickop [16k\]: et le mille ko alors ? :p
+Etudehng [-\]: des questions^^?
+Etudehng [-\]: oui on va revenir dessus^^
+Etudehng [-\]: j'espere que cela vous a plu
+Hickop [16k\]: oui
+KaiHansen [?\]: merci
+Etudehng [-\]: pas de souci
+Etudehng [-\]: revoyons ce ko de mille an
+]
+;B[qs]C[Etudehng [-\]: point vital n'est ce pas?
+Hickop [16k\]: R2
+]
+(;W[qr]
+;B[rs]C[Hickop [16k\]: S2
+Etudehng [-\]: c'est ok?
+]
+;W[rr]
+;B[ns]
+;W[pr]
+;B[sq]
+;W[sr]C[Hickop [16k\]: vivant
+KaiHansen [?\]: non
+Etudehng [-\]: ah non c'est mort :)
+ticticboom [19k?\]: cmort
+ticticboom [19k?\]: alors c quoi
+Etudehng [-\]: hicktop
+ticticboom [19k?\]: ?
+])
+(;W[rs]C[Hickop [16k\]: ok je croyais a seki mais non
+]
+;B[rr]
+;W[sr]
+;B[ss]C[Etudehng [-\]: c'est un ko
+Etudehng [-\]: tout le monde le voit?
+ticticboom [19k?\]: oui
+Hickop [16k\]: oui
+]))
+(;W[qs]
+(;B[rr]
+;W[sr])
+(;B[os]))))
