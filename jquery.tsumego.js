@@ -1,19 +1,19 @@
 jQuery(document).ready(function($) {
     var sql= [];
-    var size;
     var infos = {};
     var comments = {};
     var symbols = {};
     var game = {};
-    var node;
-    var branch;
-    var bbranch; // branche naviguée
+    var size; // taille du goban en intersections
     var branchs; // nombre total de variantes
+    var branch; // branche actuelle
+    var bbranch; // branche naviguée
+    var node; // noeud actuel
     var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
-    var gobansize;
-    var com = true; // commentaires
-    var comsize = 200; // taille commentaires
-    var info = ''; // infos de la partie
+    var gobansize; // taille du goban en pixels
+    var com = true; // commentaires visibles ?
+    var comsize = 200; // hauteur de la zone commentaires en pixels
+    var info = ''; // infos de la partie sous forme html pour aller dans la zone commentaires
     var vari = false; // variantes
     var load = false;
     var nodemax; // dernier noeud de la branche actuelle
@@ -476,21 +476,22 @@ jQuery(document).ready(function($) {
         if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
             $.getJSON('sgf.php',{sql:'0,10'},function(data) { 
                 var table = '<table>';
-                sql = data; 
+                sql = data;
                 for (var i = 0, ci = sql.length; i < ci; i ++) {
+                    var inf = $.parseJSON(sql[i]['infos']);
                     table += '<tr><td>' + sql[i]['file'] + '</td>';
-                    if (sql[i]['PB'] != null) {
-                        table += '<td>' + sql[i]['PB'] + '</td>';
+                    if (inf['PB'] != null) {
+                        table += '<td>' + inf['PB'] + '</td>';
                     } else {
                         table += '<td></td>';
                     }
-                    if (sql[i]['PW'] != null) {
-                        table += '<td>' + sql[i]['PW'] + '</td>';
+                    if (inf['PW'] != null) {
+                        table += '<td>' + inf['PW'] + '</td>';
                     } else {
                         table += '<td></td>';
                     }
-                    if (sql[i]['DT'] != null) {
-                        table += '<td>' + sql[i]['DT'] + '</td>';
+                    if (inf['DT'] != null) {
+                        table += '<td>' + inf['DT'] + '</td>';
                     } else {
                         table += '<td></td>';
                     }
@@ -518,18 +519,13 @@ jQuery(document).ready(function($) {
 
         load = false;
 
-        size = sql[num]['SZ'];
-        infos['PB'] = sql[num]['PB'];
-        infos['BR'] = sql[num]['BR'];
-        infos['PW'] = sql[num]['PW'];
-        infos['WR'] = sql[num]['WR'];
-        infos['DT'] = sql[num]['DT'];
-        infos['PC'] = sql[num]['PC'];
-        infos['RU'] = sql[num]['RU'];
+        infos = $.parseJSON(sql[num]['infos']);
         comments = $.parseJSON(sql[num]['comments']);
         symbols = $.parseJSON(sql[num]['symbols']);
         game = $.parseJSON(sql[num]['game']);
-        branchs = sql[num]['branchs'];
+        size = infos['SZ'];
+        branchs = infos['branchs'];
+
         node = 0;
         branch = 0;
         bbranch = 0;

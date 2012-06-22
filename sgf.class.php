@@ -35,53 +35,29 @@ class sgf
         $vars = $select->fetch();
         $select->closeCursor();
         if (!empty($vars)) {
-            $this->size = $vars['SZ'];
-            $this->infos['PB'] = $vars['PB'];
-            $this->infos['BR'] = $vars['BR'];
-            $this->infos['PW'] = $vars['PW'];
-            $this->infos['WR'] = $vars['WR'];
-            $this->infos['KM'] = $vars['KM'];
-            $this->infos['DT'] = $vars['DT'];
-            $this->infos['PC'] = $vars['PC'];
-            $this->infos['TM'] = $vars['TM'];
-            $this->infos['OT'] = $vars['OT'];
-            $this->infos['RU'] = $vars['RU'];
+            $this->infos = json_decode($vars['infos']);
+            $this->size = $this->infos['SZ'];
+            $this->branchs = $this->infos['branchs'];
             $this->comments = json_decode($vars['comments']);
             $this->symbols = json_decode($vars['symbols']);
-            $this->branchs = $vars['branchs'];
             $this->game = json_decode($vars['game']);
         }
         else {
             $data = $this->SgfToTab($file);
-            $this->size = $data[0][0]['SZ'];
+            $this->infos = $data[0][0];
+            $this->size = $this->infos['SZ'];
             $this->GameTable($data);
-            
-            $jsoncomments = json_encode($this->comments);
-            $jsonsymbols = json_encode($this->symbols);
-            $jsongame = json_encode($this->game);
+            $this->infos['branchs'] = $this->branchs;
 
             $insert = $db->prepare('INSERT INTO sgf(
-                file, SZ, PB, BR, PW, WR, KM, DT, PC,
-                TM, OT, RU, comments, symbols, branchs, game) VALUES(
-                :file, :SZ, :PB, :BR, :PW, :WR, :KM, :DT, :PC,
-                :TM, :OT, :RU, :comments, :symbols, :branchs, :game)');
+                file, infos, comments, symbols, game) VALUES(
+                :file, :infos, :comments, :symbols, :game)');
             $insert->execute(array(
                 'file' => $file,
-                'SZ' => $this->size,
-                'PB' => $this->infos['PB'] = empty($data[0][0]['PB']) ? NULL : $data[0][0]['PB'],
-                'BR' => $this->infos['BR'] = empty($data[0][0]['BR']) ? NULL : $data[0][0]['BR'],
-                'PW' => $this->infos['PW'] = empty($data[0][0]['PW']) ? NULL : $data[0][0]['PW'],
-                'WR' => $this->infos['WR'] = empty($data[0][0]['WR']) ? NULL : $data[0][0]['WR'],
-                'KM' => $this->infos['KM'] = empty($data[0][0]['KM']) ? NULL : $data[0][0]['KM'],
-                'DT' => $this->infos['DT'] = empty($data[0][0]['DT']) ? NULL : $data[0][0]['DT'],
-                'PC' => $this->infos['PC'] = empty($data[0][0]['PC']) ? NULL : $data[0][0]['PC'],
-                'TM' => $this->infos['TM'] = empty($data[0][0]['TM']) ? NULL : $data[0][0]['TM'],
-                'OT' => $this->infos['OT'] = empty($data[0][0]['OT']) ? NULL : $data[0][0]['OT'],
-                'RU' => $this->infos['RU'] = empty($data[0][0]['RU']) ? NULL : $data[0][0]['RU'],
-                'comments' => $jsoncomments,
-                'symbols' => $jsonsymbols,
-                'branchs' => $this->branchs,
-                'game' => $jsongame,
+                'infos' => json_encode($this->infos),
+                'comments' => json_encode($this->comments),
+                'symbols' => json_encode($this->symbols),
+                'game' => json_encode($this->game),
             ));
         }
         $db = null; // ferme la connexion
