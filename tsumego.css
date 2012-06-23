@@ -23,7 +23,8 @@ body {
 #loadlist tr:hover {
     background: #ddbb77;
     cursor: pointer;
-}/*}}}*/
+}
+/*}}}*/
 #navbar {/*{{{*/
     position: relative;
     margin: auto;
@@ -119,7 +120,8 @@ body {
 [id^="varbua"] {
     background: #000;
     cursor: default;
-}/*}}}*/
+}
+/*}}}*/
 #comments {/*{{{*/
     position: absolute;
     right: 5px;
@@ -135,7 +137,8 @@ body {
 }
 #textarea {
     overflow: auto;
-}/*}}}*/
+}
+/*}}}*/
 #goban {/*{{{*/
     margin: auto;
 }
@@ -155,4 +158,5 @@ body {
 }
 .celle {
     background: #ccaa66;
-}/*}}}*/
+}
+/*}}}*/
