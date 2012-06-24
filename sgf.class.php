@@ -29,7 +29,7 @@ class sgf
             die('Erreur : ' . $e->getMessage());
         }
 
-        // récupère les données du fichier ou les enregistre si elles n'existent pas
+        // récupère les données ou les enregistre si elles n'existent pas
         $select = $db->prepare('SELECT * FROM sgf WHERE file=?');
         $select->execute(array($file));
         $vars = $select->fetch();
@@ -80,7 +80,7 @@ class sgf
         $branch = 0; // branche actuelle
         $node = 0; // noeud actuel
         $mark = 0; // marqueur de branche
-        $nodemark = []; // tableau des noeuds de marqueurs pour revenir aux branches
+        $nodemark = []; // tableau des marqueurs
         $nodedata = ''; // données du noeud
         $branchend = false; // fin de branche
         $start = true; // début de fichier
@@ -109,7 +109,8 @@ class sgf
                 }
                 break;
             case ")": // fin de branche
-                if ($branchend) { // si ) supplémentaire retour à la marque précédente
+                // si ) supplémentaire retour à la marque précédente
+                if ($branchend) {
                     $mark--;
                 }
                 if (!$dataw) {
@@ -166,11 +167,11 @@ class sgf
                             $isval = true;
                         }
                         break;
-                    case "\\": // pour prendre en compte les ] dans les commentaires
+                    case "\\": // considère les ] dans les commentaires
                         $space = false;
                         $escape = true;
                         break;
-                    case " ": // pour prendre en compte les [ dans les commentaires
+                    case " ": // considère les [ dans les commentaires
                         $val .= $char;
                         $space = true;
                         break;
@@ -180,7 +181,8 @@ class sgf
                             $val .= $char;
                             $escape = false;
                         } else {
-                            if ($key == '') { // valeur supplémentaire de la clé précédente
+                            // valeur supplémentaire de la clé précédente
+                            if ($key == '') { 
                                 $keys_table[$i][$j][$prevkey] .= ','.$val;
                             } else {
                                 $keys_table[$i][$j][$key] = $val;
@@ -195,7 +197,8 @@ class sgf
                         $space = false;
                         if ($isval) {
                             if ($char == "\n") {
-                                $val .= "<br />"; // retour à la ligne pour affichage html
+                                // retour à la ligne pour affichage html
+                                $val .= "<br />"; 
                             } else {
                                 $val .= $char;
                             }
@@ -271,7 +274,7 @@ class sgf
                 $this->state[$x][$y] = $color; // ajoute le coup joué à l'état
                 $this->TestDeath($color,$x,$y); // test pierres mortes
                 $this->StateToGame($node,$branch); // enregistre le jeu
-                //TODO calculer les pierres mortes et les KO
+                //TODO calculer les KO
                 break;
             }
             $b--;
@@ -307,17 +310,20 @@ class sgf
 
     // convertit l'état du goban sous forme de coordonnées en lettres
     protected function StateToGame($node,$branch) {/*{{{*/
-        $let = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
+        $let = ['a','b','c','d','e','f','g','h','i',
+                'j','k','l','m','n','o','p','q','r','s'];
         for ($x = 0; $x < $this->size; $x++) {
             for ($y = 0; $y < $this->size; $y++) {
                 $coord = $let[$x].$let[$y];
                 if ($this->state[$x][$y] == 'b') {
                     $this->game[$node][$branch]['b'] .=
-                    ($this->game[$node][$branch]['b'] != '') ? ','.$coord : $coord;
+                        ($this->game[$node][$branch]['b'] != '') ?
+                        ','.$coord : $coord;
                 }
                 else if ($this->state[$x][$y] == 'w') {
                     $this->game[$node][$branch]['w'] .=
-                    ($this->game[$node][$branch]['w'] != '') ? ','.$coord : $coord;
+                        ($this->game[$node][$branch]['w'] != '') ?
+                        ','.$coord : $coord;
                 }
             }
         }
@@ -326,13 +332,17 @@ class sgf
     // test des pierres mortes
     protected function TestDeath($color,$x,$y) {/*{{{*/
         $this->deads = [];
-        if ($this->TestLiberties($color,$x-1,$y) == 0) $this->KillStones($color);
+        if ($this->TestLiberties($color,$x-1,$y) == 0)
+            $this->KillStones($color);
         $this->deads = []; // vider les morts d'avant à chaque test
-        if ($this->TestLiberties($color,$x,$y-1) == 0) $this->KillStones($color);
+        if ($this->TestLiberties($color,$x,$y-1) == 0)
+            $this->KillStones($color);
         $this->deads = [];
-        if ($this->TestLiberties($color,$x+1,$y) == 0) $this->KillStones($color);
+        if ($this->TestLiberties($color,$x+1,$y) == 0)
+            $this->KillStones($color);
         $this->deads = [];
-        if ($this->TestLiberties($color,$x,$y+1) == 0) $this->KillStones($color);
+        if ($this->TestLiberties($color,$x,$y+1) == 0)
+            $this->KillStones($color);
     }/*}}}*/
 
     // test les libertés d'une pierre ou un groupe de pierres
@@ -345,7 +355,8 @@ class sgf
             if ($this->state[$x][$y] == $ennemy) {
                 $dead = $x . ',' . $y;
                 for ($i = 0, $ci = count($this->deads); $i < $ci; $i++) {
-                    if ($this->deads[$i] == $dead) return 0; // déjà dans la liste des morts
+                    // déjà dans la liste des morts
+                    if ($this->deads[$i] == $dead) return 0; 
                 }
                 $this->deads[] = $dead;
 
@@ -365,7 +376,8 @@ class sgf
         $this->prison[$color] += $ci; // ajoute prisonniers pour le score
         for ($i = 0; $i < $ci; $i++) {
             $coord = explode(',',$this->deads[$i]);
-            $this->state[$coord[0]][$coord[1]] = ''; // enlève la pierre  morte du goban
+            // enlève la pierre  morte du goban
+            $this->state[$coord[0]][$coord[1]] = '';
         }
     }/*}}}*/
 

@@ -4,23 +4,24 @@ jQuery(document).ready(function($) {
     var comments = {};
     var symbols = {};
     var game = {};
-    var size; // taille du goban en intersections
-    var branchs; // nombre total de variantes
-    var branch; // branche actuelle
-    var bbranch; // branche naviguée
-    var node; // noeud actuel
-    var coord = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s'];
-    var gobansize; // taille du goban en pixels
-    var com = true; // commentaires visibles ?
-    var comsize = 200; // hauteur de la zone commentaires en pixels
-    var info = ''; // infos de la partie sous forme html pour aller dans la zone commentaires
-    var vari = false; // variantes
-    var load = false;
-    var nodemax; // dernier noeud de la branche actuelle
-    var options; // affichage des boutons d'options
+    var size;           // taille du goban en intersections
+    var branchs;        // nombre total de variantes
+    var branch;         // branche actuelle
+    var bbranch;        // branche naviguée
+    var node;           // noeud actuel
+    var coord = ['a','b','c','d','e','f','g','h','i','j',
+                 'k','l','m','n','o','p','q','r','s'];
+    var gobansize;      // taille du goban en pixels
+    var com = true;     // commentaires visibles ?
+    var comsize = 200;  // hauteur de la zone commentaires en pixels
+    var info = '';      // infos de la partie sous forme html
+    var vari = false;   // variantes
+    var load = false;   // afficher la liste des fichiers ?
+    var nodemax;        // dernier noeud de la branche actuelle
+    var options;        // affichage des boutons d'options
 
     // désactive la sélection d'éléments
-    // ref: http://stackoverflow.com/questions/2700000/how-to-disable-text-selection-using-jquery
+    // ref: http://bit.ly/gwL00h
     $.fn.disableSelection = function() {//{{{
         return this.each(function() {           
             $(this).attr('unselectable', 'on')
@@ -39,13 +40,17 @@ jQuery(document).ready(function($) {
     // insère un symbole SVG dans les éléments sélectionnés
     $.fn.InsertSymbol = function(symbol,color) {//{{{
         return this.each(function() {           
-            var svg = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 10">';
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
+                      'version="1.1" viewBox="0 0 10 10">';
             if (symbol == 'CR') {
-                svg += '<circle cx="5" cy="5" r="2.5" stroke-width="0.7" fill="none"';
+                svg += '<circle cx="5" cy="5" r="2.5"' +
+                       'stroke-width="0.7" fill="none"';
             } else if (symbol == 'SQ') {
-                svg += '<rect x="1.8" y="1.8" width="6.5" height="6.5" stroke-width="0.7" fill="none"';
+                svg += '<rect x="1.8" y="1.8" width="6.5"' +
+                       'height="6.5" stroke-width="0.7" fill="none"';
             } else if (symbol == 'TR') {
-                svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z" stroke-width="0.7" fill="none"';
+                svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z"' +
+                       'stroke-width="0.7" fill="none"';
             }
             if (color == 'w') {
                 svg += ' stroke="#000"/></svg>';
@@ -131,7 +136,8 @@ jQuery(document).ready(function($) {
             if (game[node][i] != null && node > 0) {
                 if (ParentBranch(node-1,i) == pbranch) {
                     nv++;
-                    if (i == branch) varis += '<div id="varbua' + i + '"></div>';
+                    if (i == branch) varis += '<div id="varbua' + i +
+                                              '"></div>';
                     else varis += '<div id="varbut' + i + '"></div>';
                 }
             }
@@ -153,7 +159,8 @@ jQuery(document).ready(function($) {
     
     // création du goban en identifiant les coordonnées
     var CreateGoban = function() {//{{{
-        var letters = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        var letters = ['A','B','C','D','E','F','G','H','J',
+                       'K','L','M','N','O','P','Q','R','S','T'];
         var table = '';
         $('#goban').html(''); // supprime l'ancien goban
 
@@ -174,7 +181,8 @@ jQuery(document).ready(function($) {
                         table += '<div class="cell"></div>';
                     }
                 } else {
-                    table += '<div class="cell" id="' + coord[j] + coord[i] + '"></div>';
+                    table += '<div class="cell" id="' + coord[j] + coord[i] +
+                             '"></div>';
                 }
             }
             table += '</div>';
@@ -210,7 +218,8 @@ jQuery(document).ready(function($) {
 
     // charge les annotations présentes sur le goban
     var LoadSymbols = function() {//{{{
-        if (symbols != null && symbols[node] != null && symbols[node][branch] != null) {
+        if (symbols != null && symbols[node] != null &&
+            symbols[node][branch] != null) {
             if (symbols[node][branch]['CR'] != null) {
                 var list = symbols[node][branch]['CR'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
@@ -265,13 +274,27 @@ jQuery(document).ready(function($) {
         // si vide ou forcé (changement de partie, changement de langue...) 
         if (info == '' || force) {
             info = '<p>';
-            if (infos['PB'] != null) { info += '<em>' + lang.black + ':</em> ' + infos['PB'] };
-            if (infos['BR'] != null) { info += ' [' + infos['BR'] + ']' };
-            if (infos['PW'] != null) { info += ' <br /><em>' + lang.white + ':</em> ' + infos['PW'] };
-            if (infos['WR'] != null) { info += ' [' + infos['WR'] + ']' };
-            if (infos['DT'] != null) { info += ' <br /><em>' + lang.date + ':</em> ' + infos['DT'] };
-            if (infos['PC'] != null) { info += ' <br /><em>' + lang.place + ':</em> ' + infos['PC'] };
-            if (infos['RU'] != null) { info += ' <br /><em>' + lang.rules + ':</em> ' + infos['RU'] };
+            if (infos['PB'] != null) {
+                info += '<em>' + lang.black + ':</em> ' + infos['PB'];
+            }
+            if (infos['BR'] != null) {
+                info += ' [' + infos['BR'] + ']';
+            }
+            if (infos['PW'] != null) {
+                info += ' <br /><em>' + lang.white + ':</em> ' + infos['PW'];
+            }
+            if (infos['WR'] != null) {
+                info += ' [' + infos['WR'] + ']';
+            }
+            if (infos['DT'] != null) {
+                info += ' <br /><em>' + lang.date + ':</em> ' + infos['DT'];
+            }
+            if (infos['PC'] != null) {
+                info += ' <br /><em>' + lang.place + ':</em> ' + infos['PC'];
+            }
+            if (infos['RU'] != null) {
+                info += ' <br /><em>' + lang.rules + ':</em> ' + infos['RU'];
+            }
             info += '</p>';
         }
         // affiche si demandé
@@ -284,7 +307,8 @@ jQuery(document).ready(function($) {
     // charge les commentaires
     var LoadComments = function() {//{{{
         var text = '<p>';
-        if (comments != null && comments[node] != null && comments[node][branch] != null) {
+        if (comments != null && comments[node] != null &&
+            comments[node][branch] != null) {
             text += comments[node][branch];
         }
         text += '</p>';
@@ -356,12 +380,16 @@ jQuery(document).ready(function($) {
         var h = comsize; // taille commentaire avant redimensionnement
         var y = winh - e.clientY; // position curseur par rapport au bas
         var moveHandler = function(e) {
-            comsize = Math.max(100, (winh - e.clientY) + h - y); // minimum 100 pixels
-            if (comsize > (winh / 2)) { comsize = (winh / 2) }; // max la moitié de la hauteur
+            // minimum 100 pixels
+            comsize = Math.max(100, (winh - e.clientY) + h - y); 
+            if (comsize > (winh / 2)) {
+                comsize = (winh / 2); // max la moitié de la hauteur
+            }
             ResizeGoban(false);
         };
         var upHandler = function(e) {
-            $('html').unbind('mousemove',moveHandler).unbind('mouseup',upHandler);
+            $('html').unbind('mousemove',moveHandler)
+                     .unbind('mouseup',upHandler);
         };
         $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
     });//}}}
@@ -370,7 +398,9 @@ jQuery(document).ready(function($) {
     $('#start').click(function() {//{{{
         if ($('#start').attr('class') == 'button') {
             node = 0;
-            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            if (game[node][branch] == null) {
+                branch = ParentBranch(node,bbranch);
+            }
             NavState();
             LoadStones();
             LoadComments();
@@ -381,7 +411,9 @@ jQuery(document).ready(function($) {
     $('#fastprev').click(function() {//{{{
         if ($('#fastprev').attr('class') == 'button') {
             node = node - 10 < 0 ? 0 : node - 10;
-            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            if (game[node][branch] == null) {
+                branch = ParentBranch(node,bbranch);
+            }
             NavState();
             LoadStones();
             LoadComments();
@@ -392,7 +424,9 @@ jQuery(document).ready(function($) {
     $('#prev').click(function() {//{{{
         if ($('#prev').attr('class') == 'button') {
             node--;
-            if (game[node][branch] == null) branch = ParentBranch(node,bbranch);
+            if (game[node][branch] == null) {
+                branch = ParentBranch(node,bbranch);
+            }
             NavState();
             LoadStones();
             LoadComments();
