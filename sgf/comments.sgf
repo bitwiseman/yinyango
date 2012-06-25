@@ -4,7 +4,8 @@ PW[Comments]PB[Test]C[C[\]]
 ;B[ee]C[\\;\\)\\(\\[\\\]\\\\ok;]
 ;W[ec]
 (;AE[ec][ee]C[:\\])
-(;AB[eg])
+(;AW[ee][ge]AB[eg])
 (;B[fe])
 (;B[ed]
-;W[fd]))
+;W[fd])
+(;AE[ee]))

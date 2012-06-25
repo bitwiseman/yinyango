@@ -4,20 +4,20 @@
  */
 class sgf
 {
-    private $size;
-    private $infos; // infos de la partie
-    private $comments; // commentaires
-    private $symbols; // annotations sur le goban
-    private $branchs;
-    private $game;
-    private $state; // état du goban
-    private $deads; // pierres potentiellement mortes
+    private $size;      // taille du goban
+    private $infos;     // infos de la partie
+    private $comments;  // commentaires
+    private $symbols;   // annotations sur le goban
+    private $branchs;   // nombre total de branches
+    private $game;      // déroulement de la partie
+    private $state;     // état du goban
+    private $deads;     // pierres potentiellement mortes
     private $prison = Array('b' => 0, 'w' => 0); // prisonniers
 
     // construction des variables
     function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
         // connexion base de données
-        /*try {
+        try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
             $db = new PDO(
                 'mysql:host=' . $hostname . ';dbname=' . $dbname,
@@ -41,14 +41,14 @@ class sgf
             $this->symbols = json_decode($vars['symbols']);
             $this->game = json_decode($vars['game']);
         }
-        else {*/
+        else {
             $data = $this->SgfToTab($file);
-            /*$this->infos = $data[0][0];
+            $this->infos = $data[0][0];
             $this->size = $this->infos['SZ'];
             $this->GameTable($data);
-            $this->infos['branchs'] = $this->branchs;*/
+            $this->infos['branchs'] = $this->branchs;
 
-            /*$insert = $db->prepare('INSERT INTO sgf(
+            $insert = $db->prepare('INSERT INTO sgf(
                 file, infos, comments, symbols, game) VALUES(
                 :file, :infos, :comments, :symbols, :game)');
             $insert->execute(array(
@@ -59,7 +59,7 @@ class sgf
                 'game' => json_encode($this->game),
             ));
         }
-        $db = null; // ferme la connexion*/
+        $db = null; // ferme la connexion
     }/*}}}*/
 
     public function getData() {
@@ -167,7 +167,7 @@ class sgf
         return $tab;
     }/*}}}*/
 
-    //traite le déroulement du jeu et enregistre chaque état dans un tableau
+    // traite le déroulement du jeu et enregistre chaque état dans un tableau
     protected function GameTable($table) {/*{{{*/
 
         for ($i = 0; $i <= $this->branchs; $i++) {
@@ -186,10 +186,13 @@ class sgf
                             $this->PlayMove($j,$i,'w',$value);
                             break;
                         case 'AB': // ajout de pierre(s) noire(s)
-                            $this->game[$j][$i]['b'] = $value;
+                            $this->AddStones($j,$i,'b',$value);
                             break;
                         case 'AW': // ajout de pierre(s) blanche(s)
-                            $this->game[$j][$i]['w'] = $value;
+                            $this->AddStones($j,$i,'w',$value);
+                            break;
+                        case 'AE': // enlève les pierres
+                            $this->RemoveStones($j,$i,$value);
                             break;
                         case 'CR': // ajout symbole cercle
                             $this->symbols[$j][$i]['CR'] = $value;
@@ -214,7 +217,49 @@ class sgf
         }
     }/*}}}*/
 
-    //joue un coup et calcul l'état du goban en fonction de l'état précédent
+    // ajoute des pierres sur le goban
+    protected function AddStones($node,$branch,$color,$coords) {/*{{{*/
+        $b = $branch;
+        $stones = explode(',',$coords);
+        $cs = count($stones);
+
+        while ($b >= 0) { //cherche un état précédent
+            if (isset($this->game[$node-1][$b])) {
+                $this->state = $this->GobanState($node-1,$b);
+                break;
+            }
+            $b--;
+        }
+        for ($i = 0; $i < $cs; $i++) { // ajoute les pierres à l'état
+            $x = ord(substr($stones[$i],0,1)) - 97;
+            $y = ord(substr($stones[$i],1,1)) - 97;
+            $this->state[$x][$y] = $color; 
+        }
+        $this->StateToGame($node,$branch); // enregistre le jeu
+    }/*}}}*/
+
+    // enlève des pierres sur le goban
+    protected function RemoveStones($node,$branch,$coords) {/*{{{*/
+        $b = $branch;
+        $stones = explode(',',$coords);
+        $cs = count($stones);
+
+        while ($b >= 0) { //cherche un état précédent
+            if (isset($this->game[$node-1][$b])) {
+                $this->state = $this->GobanState($node-1,$b);
+                break;
+            }
+            $b--;
+        }
+        for ($i = 0; $i < $cs; $i++) { // ajoute les pierres à l'état
+            $x = ord(substr($stones[$i],0,1)) - 97;
+            $y = ord(substr($stones[$i],1,1)) - 97;
+            $this->state[$x][$y] = ''; 
+        }
+        $this->StateToGame($node,$branch); // enregistre le jeu
+    }/*}}}*/
+
+    // joue un coup et calcul l'état du goban en fonction de l'état précédent
     protected function PlayMove($node,$branch,$color,$coord) {/*{{{*/
         $b = $branch;
 
