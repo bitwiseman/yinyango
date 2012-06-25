@@ -40,8 +40,7 @@ class sgf
             $this->comments = json_decode($vars['comments']);
             $this->symbols = json_decode($vars['symbols']);
             $this->game = json_decode($vars['game']);
-        }
-        else {
+        } else {
             $data = $this->SgfToTab($file);
             $this->infos = $data[0][0];
             $this->size = $this->infos['SZ'];
@@ -312,15 +311,17 @@ class sgf
         for ($x = 0; $x < $this->size; $x++) {
             for ($y = 0; $y < $this->size; $y++) {
                 $coord = $let[$x].$let[$y];
-                if ($this->state[$x][$y] == 'b') {
-                    $this->game[$node][$branch]['b'] .=
-                        ($this->game[$node][$branch]['b'] != '') ?
-                        ','.$coord : $coord;
-                }
-                else if ($this->state[$x][$y] == 'w') {
-                    $this->game[$node][$branch]['w'] .=
-                        ($this->game[$node][$branch]['w'] != '') ?
-                        ','.$coord : $coord;
+                if (isset($this->state[$x][$y])) {
+                    if ($this->state[$x][$y] == 'b') {
+                        $this->game[$node][$branch]['b'] .=
+                            ($this->game[$node][$branch]['b'] != '') ?
+                            ','.$coord : $coord;
+                    }
+                    else if ($this->state[$x][$y] == 'w') {
+                        $this->game[$node][$branch]['w'] .=
+                            ($this->game[$node][$branch]['w'] != '') ?
+                            ','.$coord : $coord;
+                    }
                 }
             }
         }
