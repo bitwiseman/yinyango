@@ -1,7 +1,10 @@
 (;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
 RU[Japanese]SZ[9]KM[0.00]
 PW[Comments]PB[Test]C[C[\]]
-;B[ee]C[C[[;))\]]
+;B[ee]C[\\;\\)\\(\\[\\\]\\\\ok;]
 ;W[ec]
-(;AE[ec][ee]C[C[zizou\]])
-(;AB[eg]))
+(;AE[ec][ee]C[:\\])
+(;AB[eg])
+(;B[fe])
+(;B[ed]
+;W[fd]))

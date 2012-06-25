@@ -30,8 +30,7 @@ if (isset($_GET['sql'])) {
             $conf['db_password'],
             $pdo_options
         );
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         die('Erreur : ' . $e->getMessage());
     }
     // récupère la table par ordre décroissant
