@@ -339,6 +339,8 @@ jQuery(document).ready(function($) {
             $('#fastnext').attr('title',lang.fastnext);
             $('#end').attr('title',lang.end);
             $('#options').attr('title',lang.options);
+            $('#sendsgf').attr('title',lang.sendsgf);
+            $('#downsgf').attr('title',lang.downsgf);
 
             if (infos != null) LoadInfos(true,true);
 
@@ -361,7 +363,7 @@ jQuery(document).ready(function($) {
     if (!SetLang(navigator.language)) SetLang('en');
 
     $('#goban,#variations,#comments,#loadlist').hide();
-    $('[class^="button"]:not(#load,#lang)').hide();
+    $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').hide();
     $('#goban,#resizer').disableSelection();
 
     /**
@@ -488,14 +490,14 @@ jQuery(document).ready(function($) {
         if (options) {
             LoadComments();
             $('#load,#lang,#loadlist').hide();
-            $('[class^="button"]:not(#load,#lang)').show();
+            $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').show();
             if (com) $('#comments').show();
             if (vari) $('#variations').show();
             options = false;
         } else {
             LoadInfos(false,true);
             $('[class^="button"]:not(#comment,#options),#variations').hide();
-            $('#load,#lang').show();
+            $('#load,#lang,#sendsgf,#downsgf').show();
             options = true;
         }
     });//}}}
@@ -570,7 +572,7 @@ jQuery(document).ready(function($) {
         SetNodeMax();
 
         $('#loadlist').hide();
-        $('#load,#lang').hide();
+        $('#load,#lang,#sendsgf,#downsgf').hide();
         options = false;
         $('#goban').css('background', 'url(images/' + size + '.svg)');
 
@@ -592,7 +594,7 @@ jQuery(document).ready(function($) {
         $('#goban').fadeIn();
         $('#comment').attr('class','button');
         com ? $('#comments').show() : $('#comments').hide();
-        $('[class^="button"]:not(#load,#lang)').show();
+        $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').show();
     });//}}}
 
 });

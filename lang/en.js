@@ -9,6 +9,8 @@ var lang = {
     fastnext: 'Fast forward',
     end: 'Go to end',
     options: 'Options menu',
+    sendsgf: 'Send SGF file',
+    downsgf: 'Download with SGF format',
 
     black: 'Black',
     white: 'White',

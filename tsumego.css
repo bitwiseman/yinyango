@@ -71,15 +71,23 @@ body {
     background-position: -300px 0px;
 }
 #load {
-    left: 150px;
+    left: 100px;
     background-position: -350px 0px;
 }
 #options {
     left: 350px;
     background-position: -400px 0px;
 }
-#lang {
+#sendsgf {
     left: 200px;
+    background-position: -450px 0px;
+}
+#downsgf {
+    left: 250px;
+    background-position: -500px 0px;
+}
+#lang {
+    left: 150px;
 }
 .langen,.buttonen {
     background-position: -550px 0px;
