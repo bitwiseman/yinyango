@@ -270,7 +270,7 @@ class sgf
                 $this->state[$x][$y] = $color; // ajoute le coup joué à l'état
                 $this->TestDeath($color,$x,$y); // test pierres mortes
                 $this->StateToGame($node,$branch); // enregistre le jeu
-                //TODO calculer les KO
+                // TODO calculer les KO
                 break;
             }
             $b--;
