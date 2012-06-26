@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
     var coord = ['a','b','c','d','e','f','g','h','i','j',
                  'k','l','m','n','o','p','q','r','s'];
     var gobansize;      // taille du goban en pixels
-    var com = true;     // commentaires visibles ?
+    var com = false;    // commentaires visibles ?
     var comsize = 200;  // hauteur de la zone commentaires en pixels
     var info = '';      // infos de la partie sous forme html
     var vari = false;   // variantes
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
         NavState();
         $('#goban').fadeIn();
         com ? $('#comments').show() : $('#comments').hide();
-        $('#navbuttons,#comment,#options').show();
+        $('#navbuttons').show();
     };//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
@@ -587,6 +587,7 @@ jQuery(document).ready(function($) {
     // chargement
     $('#loadlist tr').live('click',function() {//{{{
         var num = $(this).index();
+        $('#comment,#options').show();
         LoadGame(num); 
     });//}}}
 
@@ -598,7 +599,7 @@ jQuery(document).ready(function($) {
     if (!SetLang(navigator.language)) SetLang('en');
 
     $('#variations,#loadlist').hide();
-    $('#navbuttons').hide();
+    $('#navbuttons,#comment,#options').hide();
     $('#goban,#resizer').disableSelection();
     
     // charge le goban d'intro
