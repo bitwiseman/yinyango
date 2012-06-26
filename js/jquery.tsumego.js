@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
     var vari = false;   // variantes
     var load = false;   // afficher la liste des fichiers ?
     var nodemax;        // dernier noeud de la branche actuelle
-    var options;        // affichage des boutons d'options
+    var options = true; // affichage des boutons d'options
 
     // désactive la sélection d'éléments
     // ref: http://bit.ly/gwL00h
@@ -59,6 +59,50 @@ jQuery(document).ready(function($) {
             }
             $(this).html(svg);
         });
+    };//}}}
+
+    // charge une partie de la liste SQL
+    var LoadGame = function(num) {//{{{
+        var oldsize = size;
+
+        load = false;
+
+        infos = $.parseJSON(sql[num]['infos']);
+        comments = $.parseJSON(sql[num]['comments']);
+        symbols = $.parseJSON(sql[num]['symbols']);
+        game = $.parseJSON(sql[num]['game']);
+        size = infos['SZ'];
+        branchs = infos['branchs'];
+
+        node = 0;
+        branch = 0;
+        bbranch = 0;
+
+        SetNodeMax();
+
+        $('#loadlist').hide();
+        $('#optbuttons').hide();
+        options = false;
+        $('#goban').css('background', 'url(images/' + size + '.svg)');
+
+        if (size != oldsize) {
+            $('#goban').hide();
+            CreateGoban(); 
+        }
+
+        // TODO affiche/masque curseur en fonction du mode
+
+        // charge l'état du début de jeu
+        LoadStones();
+        LoadComments();
+        LoadInfos(true,false);
+
+        // affiche l'interface
+        ResizeGoban(true); // forcer le redimensionnement
+        NavState();
+        $('#goban').fadeIn();
+        com ? $('#comments').show() : $('#comments').hide();
+        $('#navbuttons,#comment,#options').show();
     };//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
@@ -354,18 +398,7 @@ jQuery(document).ready(function($) {
         });
         return ok;
     };//}}}
-
-    /**
-     * INITIALISATION
-     */
-
-    // langue du navigateur ou langue par défaut
-    if (!SetLang(navigator.language)) SetLang('en');
-
-    $('#goban,#variations,#comments,#loadlist').hide();
-    $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').hide();
-    $('#goban,#resizer').disableSelection();
-
+    
     /**
      * EVENEMENTS
      */
@@ -489,15 +522,15 @@ jQuery(document).ready(function($) {
     $('#options').click(function() {//{{{
         if (options) {
             LoadComments();
-            $('#load,#lang,#loadlist').hide();
-            $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').show();
+            $('#optbuttons').hide();
+            $('#navbuttons').show();
             if (com) $('#comments').show();
             if (vari) $('#variations').show();
             options = false;
         } else {
             LoadInfos(false,true);
-            $('[class^="button"]:not(#comment,#options),#variations').hide();
-            $('#load,#lang,#sendsgf,#downsgf').show();
+            $('#navbuttons,#variations').hide();
+            $('#optbuttons').show();
             options = true;
         }
     });//}}}
@@ -513,7 +546,7 @@ jQuery(document).ready(function($) {
         // TODO prévoir rafraichissement, limiter les données affichées
         // afficher sur plusieurs pages
         if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
-            $.getJSON('sgf.php',{sql:'0,10'},function(data) { 
+            $.getJSON('sgf.php',{sql:'1'},function(data) { 
                 var table = '<table>';
                 sql = data;
                 for (var i = 0, ci = sql.length; i < ci; i ++) {
@@ -541,11 +574,11 @@ jQuery(document).ready(function($) {
             });
         }
         if (load) {
-            $('#goban,#options,#comment').show();
+            $('#goban,#comment,#options').show();
             if (com) $('#comments').show();
             $('#loadlist').hide();
         } else {
-            $('#goban,#comments,#options,#comment').hide();
+            $('#goban,#comments,#comment,#options').hide();
             $('#loadlist').fadeIn();
         }
         load ? load = false : load = true;
@@ -554,47 +587,28 @@ jQuery(document).ready(function($) {
     // chargement
     $('#loadlist tr').live('click',function() {//{{{
         var num = $(this).index();
-        var oldsize = size;
-
-        load = false;
-
-        infos = $.parseJSON(sql[num]['infos']);
-        comments = $.parseJSON(sql[num]['comments']);
-        symbols = $.parseJSON(sql[num]['symbols']);
-        game = $.parseJSON(sql[num]['game']);
-        size = infos['SZ'];
-        branchs = infos['branchs'];
-
-        node = 0;
-        branch = 0;
-        bbranch = 0;
-
-        SetNodeMax();
-
-        $('#loadlist').hide();
-        $('#load,#lang,#sendsgf,#downsgf').hide();
-        options = false;
-        $('#goban').css('background', 'url(images/' + size + '.svg)');
-
-        if (size != oldsize) {
-            $('#goban').hide();
-            CreateGoban(); 
-        }
-
-        // TODO affiche/masque curseur en fonction du mode
-
-        // charge l'état du début de jeu
-        LoadStones();
-        LoadComments();
-        LoadInfos(true,false);
-
-        // affiche l'interface
-        ResizeGoban(true); // forcer le redimensionnement
-        NavState();
-        $('#goban').fadeIn();
-        $('#comment').attr('class','button');
-        com ? $('#comments').show() : $('#comments').hide();
-        $('[class^="button"]:not(#load,#lang,#sendsgf,#downsgf)').show();
+        LoadGame(num); 
     });//}}}
+
+    /**
+     * INITIALISATION
+     */
+
+    // langue du navigateur ou langue par défaut
+    if (!SetLang(navigator.language)) SetLang('en');
+
+    $('#variations,#loadlist').hide();
+    $('#navbuttons').hide();
+    $('#goban,#resizer').disableSelection();
+    
+    // charge le goban d'intro
+    $.getJSON('sgf.php',{sql:'-1'},function(data) {
+        sql = data;
+        LoadGame(0);
+        options = true;
+        $('#navbuttons').hide();
+        $('#optbuttons').show();
+        sql = [];
+    });
 
 });
