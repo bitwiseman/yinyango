@@ -20,7 +20,6 @@
                     </ul>
                 </div>
                 <div class="button" id="sendsgf"></div>
-                <input id="sendinput" type="file"></input>
                 <div class="button" id="downsgf"></div>
             </div>
             <div id="navbuttons">
@@ -39,6 +38,12 @@
             <div id="resizer"></div>
             <div id="textarea"></div>
         </div>
+        <form id="sendinput" target="sendtarget"
+              enctype="multipart/form-data" action="sgf.php" method="POST">
+            <input type="file" name="sgf"></input>
+            <input type="submit"></input>
+            <iframe name="sendtarget" src=""></iframe>
+        </form>
         <script src="js/jquery.tsumego.js"></script>
     </body>
 </html>

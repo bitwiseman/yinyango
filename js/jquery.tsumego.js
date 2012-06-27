@@ -536,7 +536,7 @@ jQuery(document).ready(function($) {
         // TODO prévoir rafraichissement, limiter les données affichées
         // afficher sur plusieurs pages
         if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
-            $.getJSON('sgf.php',{sql:'1'},function(data) { 
+            $.getJSON('sgf.php',{sql:'0'},function(data) { 
                 var table = '<table>';
                 sql = data;
                 for (var i = 0, ci = sql.length; i < ci; i ++) {
@@ -583,12 +583,12 @@ jQuery(document).ready(function($) {
 
     // envoi de fichier SGF
     $('#sendsgf').click(function() {//{{{
-        $('#sendinput').focus().trigger('click');
+        $('#sendinput input[type="file"]').trigger('click');
     });//}}}
 
     // fichier à envoyer
-    $('#sendinput').change(function(e){//{{{
-        console.log($(this).val());
+    $('#sendinput input[type="file"]').change(function() {//{{{
+        $('#sendinput').submit();
     });//}}}
 
     /**
@@ -606,7 +606,7 @@ jQuery(document).ready(function($) {
     }
     langsup ? SetLang(navlang) : SetLang('en');
 
-    $('#variations,#loadlist').hide();
+    $('#variations,#loadlist,#sendinput').hide();
     $('#navbuttons,#comment,#options').hide();
     $('#goban,#resizer').disableSelection();
     

@@ -32,26 +32,32 @@ if (isset($_GET['createtable'])) {/*{{{*/
     $db = null; // ferme la connexion
 
 }/*}}}*/
-// TODO ajout de fichier SGF
-if (isset($_GET['file'])) {/*{{{*/
-    $file = $_GET['file'];
-    //tester que le fichier existe
-    if (file_exists($file)) {
-        $sgf = new sgf(
-            $file,
-            $conf['db_hostname'],
-            $conf['db_username'],
-            $conf['db_password'],
-            $conf['db_name']
-        );
+// envoi de fichier SGF
+if (isset($_FILES['sgf']['name'])) {/*{{{*/
+
+    $file = 'sgf/'.$_FILES['sgf']['name'];
+
+    // TODO test la validité du fichier
+    // test si le fichier existe déjà
+    if (!file_exists($file)) {
+        move_uploaded_file($_FILES['sgf']['tmp_name'],$file);
     }
+    // enregistre le fichier dans la base de données
+    $sgf = new sgf(
+        $file,
+        $conf['db_hostname'],
+        $conf['db_username'],
+        $conf['db_password'],
+        $conf['db_name']
+    );
+
 }/*}}}*/
 // récupère la table SQL
 if (isset($_GET['sql'])) {/*{{{*/
 
     $lim = intval($_GET['sql']);
 
-    if ($lim > 0 || $lim == -1) {
+    if ($lim >= 0 || $lim == -1) {
         // connexion base de données
         try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
