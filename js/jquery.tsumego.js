@@ -19,6 +19,7 @@ jQuery(document).ready(function($) {
     var load = false;   // afficher la liste des fichiers ?
     var nodemax;        // dernier noeud de la branche actuelle
     var options = true; // affichage des boutons d'options
+    var langs = ['en','fr'];
 
     // désactive la sélection d'éléments
     // ref: http://bit.ly/gwL00h
@@ -597,8 +598,13 @@ jQuery(document).ready(function($) {
     // TODO récupère les paramètres de l'utilisateur
 
     // langue du navigateur ou langue par défaut
-    SetLang('en');
-    SetLang(navigator.language);
+    var navlang = navigator.language.substr(0,2);
+    var langsup = false; // langue supportée ?
+
+    for (var i = 0, ci = langs.length; i < ci; i++) {
+        if (langs[i] == navlang) langsup = true;
+    }
+    langsup ? SetLang(navlang) : SetLang('en');
 
     $('#variations,#loadlist').hide();
     $('#navbuttons,#comment,#options').hide();
