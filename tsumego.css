@@ -82,10 +82,6 @@ body {
     left: 200px;
     background-position: -450px 0px;
 }
-#sendinput {
-    position: absolute;
-    visibility: hidden;
-}
 #downsgf {
     left: 250px;
     background-position: -500px 0px;
