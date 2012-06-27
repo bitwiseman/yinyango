@@ -363,16 +363,8 @@ jQuery(document).ready(function($) {
 
     // défini la langue
     var SetLang = function(l) {//{{{
-        var ok;
-        // ajax synchrone pour avoir une réponse à donner
-        $.ajax({
-            async:false,
-            type:'GET',
-            url: 'lang/' + l + '.js',
-            data:null,
-            dataType:'script'})
-        .fail(function() { ok = false; })
-        .done(function() {
+        // récupère le script de la langue et traduit les éléments
+        $.getScript('lang/' + l + '.js',function() {
             $('#comment').attr('title',lang.comment);
             $('#load').attr('title',lang.load);
             $('#lang').attr('title',lang.language);
@@ -393,10 +385,7 @@ jQuery(document).ready(function($) {
 
             $('[class^="lang"]').show();
             $('.lang' + l).hide(); // cache la langue choisie dans le menu
-
-            ok = true;
         });
-        return ok;
     };//}}}
     
     /**
@@ -591,12 +580,25 @@ jQuery(document).ready(function($) {
         LoadGame(num); 
     });//}}}
 
+    // envoi de fichier SGF
+    $('#sendsgf').click(function() {//{{{
+        $('#sendinput').focus().trigger('click');
+    });//}}}
+
+    // fichier à envoyer
+    $('#sendinput').change(function(e){//{{{
+        console.log($(this).val());
+    });//}}}
+
     /**
      * INITIALISATION
      */
 
+    // TODO récupère les paramètres de l'utilisateur
+
     // langue du navigateur ou langue par défaut
-    if (!SetLang(navigator.language)) SetLang('en');
+    SetLang('en');
+    SetLang(navigator.language);
 
     $('#variations,#loadlist').hide();
     $('#navbuttons,#comment,#options').hide();
