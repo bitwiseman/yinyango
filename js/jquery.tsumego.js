@@ -606,7 +606,7 @@ jQuery(document).ready(function($) {
     }
     langsup ? SetLang(navlang) : SetLang('en');
 
-    $('#variations,#loadlist,#sendinput').hide();
+    $('#variations,#loadlist').hide();
     $('#navbuttons,#comment,#options').hide();
     $('#goban,#resizer').disableSelection();
     

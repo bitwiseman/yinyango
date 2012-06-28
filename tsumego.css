@@ -82,6 +82,9 @@ body {
     left: 200px;
     background-position: -450px 0px;
 }
+#sendinput {
+    display: none;
+}
 #downsgf {
     left: 250px;
     background-position: -500px 0px;
@@ -95,7 +98,6 @@ body {
 .langfr,.buttonfr {
     background-position: -600px 0px;
 }
-
 #lang ul {
     display: none;
     position: absolute;
