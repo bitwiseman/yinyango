@@ -37,20 +37,24 @@ if (isset($_FILES['sgf']['name'])) {/*{{{*/
 
     $file = 'sgf/'.$_FILES['sgf']['name'];
 
-    // TODO test la validité du fichier
-    // test si le fichier existe déjà
-    if (!file_exists($file)) {
-        move_uploaded_file($_FILES['sgf']['tmp_name'],$file);
-    }
-    // enregistre le fichier dans la base de données
-    $sgf = new sgf(
-        $file,
-        $conf['db_hostname'],
-        $conf['db_username'],
-        $conf['db_password'],
-        $conf['db_name']
-    );
+    // vérifie le fichier envoyé avec SGFC
+    $sgfc = rtrim(shell_exec('bin/sgfc ' . $_FILES['sgf']['tmp_name']));
+    $test = substr($sgfc,-2); // 'OK' si valide
 
+    if ($test == 'OK') {
+        // test si le fichier existe déjà
+        if (!file_exists($file)) {
+            move_uploaded_file($_FILES['sgf']['tmp_name'],$file);
+        }
+        // enregistre le fichier dans la base de données
+        $sgf = new sgf(
+            $file,
+            $conf['db_hostname'],
+            $conf['db_username'],
+            $conf['db_password'],
+            $conf['db_name']
+        );
+    }
 }/*}}}*/
 // récupère la table SQL
 if (isset($_GET['sql'])) {/*{{{*/
