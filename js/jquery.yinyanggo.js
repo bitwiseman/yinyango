@@ -619,10 +619,14 @@ jQuery(document).ready(function ($) {
         if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
             $.getJSON('sgf.php',{sql:'0'},function (data) { 
                 var table = '<table>';
+
                 sql = data;
+
                 for (var i = 0, ci = sql.length; i < ci; i ++) {
                     var inf = $.parseJSON(sql[i]['infos']);
+
                     table += '<tr><td>' + sql[i]['file'] + '</td>';
+
                     if (inf['PB'] != null) {
                         table += '<td>' + inf['PB'] + '</td>';
                     } else {
@@ -638,9 +642,12 @@ jQuery(document).ready(function ($) {
                     } else {
                         table += '<td></td>';
                     }
+
                     table += '</tr>';
                 }
+
                 table += '</table>';
+
                 $('#loadlist').html(table);
             });
         }
@@ -658,7 +665,9 @@ jQuery(document).ready(function ($) {
     // chargement
     $('#loadlist tr').live('click',function () {//{{{
         var num = $(this).index();
+
         $('#comment,#options').show();
+
         LoadGame(num); 
     });//}}}
 
