@@ -20,10 +20,14 @@ jQuery(document).ready(function ($) {
     var nodemax;                // dernier noeud de la branche actuelle
     var options = true;         // affichage des boutons d'options
 
+    /*
+     * PLUGINS JQUERY
+     */
+
     // désactive la sélection d'éléments
     // ref: http://bit.ly/gwL00h
     $.fn.disableSelection = function () {//{{{
-        return this.each(function() {           
+        return this.each(function () {           
             $(this).attr('unselectable', 'on')
             .css({
                 '-moz-user-select':'none',
@@ -31,15 +35,17 @@ jQuery(document).ready(function ($) {
                 'user-select':'none',
                 '-ms-user-select':'none'
             })
-            .each(function() {
-                this.onselectstart = function() { return false; };
+            .each(function () {
+                this.onselectstart = function () {
+                    return false;
+                };
             });
         });
     };//}}}
 
     // insère un symbole SVG dans les éléments sélectionnés
     $.fn.InsertSymbol = function (symbol,color) {//{{{
-        return this.each(function() {           
+        return this.each(function () {           
             var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
                       'version="1.1" viewBox="0 0 10 10">';
             if (symbol == 'CR') {
@@ -61,8 +67,12 @@ jQuery(document).ready(function ($) {
         });
     };//}}}
 
+    /*
+     * FONCTIONS
+     */
+
     // charge une partie de la liste SQL
-    var LoadGame = function (num) {//{{{
+    function LoadGame(num) {//{{{
         var oldsize = size;
 
         load = false;
@@ -101,26 +111,48 @@ jQuery(document).ready(function ($) {
         ResizeGoban(true); // forcer le redimensionnement
         NavState();
         $('#goban').fadeIn();
-        com ? $('#comments').show() : $('#comments').hide();
         $('#navbuttons').show();
-    };//}}}
+        if (com) {
+            $('#comments').show();
+        }
+    }//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
-    var ResizeGoban = function (force) {//{{{
-        var winw = $(window).width();
-        var winh = $(window).height();
-        var heightleft = winh - 50; // hauteur restante pour le goban
-        var sizeb = parseInt(size,10) + 2; // ajout des bordures
+    function ResizeGoban(force) {//{{{
+        var winw = $(window).width();       // largeur fenêtre
+        var winh = $(window).height();      // hauteur fenêtre
+        var heightleft = winh - 50;         // hauteur restante pour le goban
+        var sizeb = parseInt(size,10) + 2;  // ajout des bordures
         var oldgobansize = gobansize;
+        var smaller;
         
-        if (comsize > (winh / 2)) { comsize = (winh / 2) };
-        if (com) heightleft -= comsize;
-        if (vari) heightleft -= 20;
-        var smaller = (heightleft >= winw) ? winw : heightleft;
+        if (comsize > (winh / 2)) {
+            comsize = (winh / 2);
+        }
+        if (com) {
+            heightleft -= comsize;
+        }
+        if (vari) {
+            heightleft -= 20;
+        }
+        if (winw < heightleft) {
+            smaller = winw;
+        } else {
+            smaller = heightleft;
+        }
+
+        // calcul la taille en pixels du goban pour être un multiple de
+        // sa taille en intersections (avec les bordures).
+        // Cela évite un affichage baveux du SVG
         gobansize = Math.floor(smaller / sizeb) * sizeb;
-        if (gobansize != oldgobansize || force) { // évite du travail inutile
-            vari ? $('#comments').css('top',gobansize + 70) :
-            $('#comments').css('top',gobansize + 50);
+
+        // redessine le goban si la taille a changé ou si forcé
+        if (gobansize != oldgobansize || force) {
+            if (vari) {
+                $('#comments').css('top',gobansize + 70);
+            } else {
+                $('#comments').css('top',gobansize + 50);
+            }
             $('#goban').css({
                 height: gobansize,
                 width: gobansize
@@ -132,36 +164,45 @@ jQuery(document).ready(function ($) {
                 fontSize: gobansize / sizeb / 1.5
             });
         }
+        
+        // redessine la zone de texte
         $('#textarea').css('height',$('#comments').outerHeight() - 6);
-    };//}}}
+    }//}}}
 
     // active/désactive les boutons de navigation
-    var NavState = function () {//{{{
+    function NavState() {//{{{
         $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
-        if (node == 0) $('[id$="prev"],#start').attr('class','buttond');
-        if (node == nodemax) $('[id$="next"],#end').attr('class','buttond');
-    };//}}}
+        if (node == 0) {
+            $('[id$="prev"],#start').attr('class','buttond');
+        }
+        if (node == nodemax) {
+            $('[id$="next"],#end').attr('class','buttond');
+        }
+    }//}}}
 
     // défini le dernier noeud de la branche actuelle
-    var SetNodeMax = function () {//{{{
+    function SetNodeMax() {//{{{
         nodemax = node;
         while (game[nodemax+1] != null && game[nodemax+1][branch] != null) {
             nodemax++;
         }
-    };//}}}
+    }//}}}
 
     // retourne la branche parent d'une branche
-    var ParentBranch = function (n,b) {//{{{
+    function ParentBranch(n,b) {//{{{
         for (var i = b; i >= 0; i--) {
-            if (game[n] != null && game[n][i] != null) return i;   
+            if (game[n] != null && game[n][i] != null) {
+                return i;
+            }
         }
         return 0;
-    };//}}}
+    }//}}}
 
     // cherche la branche à afficher en fonction de la branche naviguée
-    var GetBranch = function () {//{{{
-        if (game[node][bbranch] != null) branch = bbranch;
-        else {
+    function GetBranch() {//{{{
+        if (game[node][bbranch] != null) {
+            branch = bbranch;
+        } else {
             for (var i = branch+1; i < bbranch; i ++) {
                 if (game[node][i] != null) {
                     branch = i;
@@ -169,20 +210,23 @@ jQuery(document).ready(function ($) {
                 }
             }
         }
-    };//}}}
+    }//}}}
 
     // variantes
-    var Variations = function () {//{{{
+    function Variations() {//{{{
         var nv = 0; // nombre de variantes
         var varis = '';
         var pbranch = ParentBranch(node-1,branch);
+
         for (var i = 0; i < branchs; i++) {
             if (game[node][i] != null && node > 0) {
                 if (ParentBranch(node-1,i) == pbranch) {
                     nv++;
-                    if (i == branch) varis += '<div id="varbua' + i +
-                                              '"></div>';
-                    else varis += '<div id="varbut' + i + '"></div>';
+                    if (i == branch) {
+                        varis += '<div id="varbua' + i + '"></div>';
+                    } else {
+                        varis += '<div id="varbut' + i + '"></div>';
+                    }
                 }
             }
         }
@@ -199,69 +243,73 @@ jQuery(document).ready(function ($) {
                 ResizeGoban(false);
             }
         }
-    };//}}}
+    }//}}}
     
     // création du goban en identifiant les coordonnées
-    var CreateGoban = function () {//{{{
+    function CreateGoban() {//{{{
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
         var table = '';
+
         $('#goban').html(''); // supprime l'ancien goban
 
         for (var i = -1; i <= size; i++) {
             table += '<div>';
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size) {
-                    if (j != -1 && j != size) {
+                    if (j != -1 && j != size) { // bords gauche et droit
                         table += '<div class="cell">' + letters[j] + '</div>';
-                    } else {
+                    } else { // coin
                         table += '<div class="cell"></div>';
                     }
-                }
-                else if (j == -1 || j == size) {
-                    if (i != -1 && i != size) {
+                } else if (j == -1 || j == size) {
+                    if (i != -1 && i != size) { // bords haut et bas
                         table += '<div class="cell">' + (size - i) + '</div>';
-                    } else {
+                    } else { // coin
                         table += '<div class="cell"></div>';
                     }
-                } else {
+                } else { // intersection
                     table += '<div class="cell" id="' + coord[j] + coord[i] +
                              '"></div>';
                 }
             }
             table += '</div>';
         }
+
         $('#goban').html(table); // écrit le nouveau goban
-    };//}}}
+    }//}}}
 
     // charge les pierres de l'état actuel
-    var LoadStones = function () {//{{{
-        var black = game[node][branch]['b'].split(',');
-        var white = game[node][branch]['w'].split(',');
+    function LoadStones() {//{{{
+        var blackstones = game[node][branch]['b'].split(',');
+        var whitestones = game[node][branch]['w'].split(',');
         
         // vide le goban de toutes ses pierres et symboles
-        $('[class^="cell"]').attr({
+        $('#goban div[id]').html('').attr({
             class: 'cell',
             title: ''
         });
-        $('#goban div[id]').html('');
+        
+        // dessine les pierres de l'état actuel
+        for (var b = 0, cb = blackstones.length; b < cb; b++) {
+            $('#' + blackstones[b]).attr('class','cellb');
+        }
+        for (var w = 0, cw = whitestones.length; w < cw; w++) {
+            $('#' + whitestones[w]).attr('class','cellw');
+        }
 
-        for (var b = 0, cb = black.length; b < cb; b++) {
-            $('#' + black[b]).attr('class','cellb');
-        }
-        for (var w = 0, cw = white.length; w < cw; w++) {
-            $('#' + white[w]).attr('class','cellw');
-        }
+        // ajoute un symbol pour indiquer la dernière pierre jouée
         if (game[node][branch]['p'] != null) {
-            var played = game[node][branch]['p'].split(',');
-            $('#' + played[1]).InsertSymbol('CR',played[0]);
+            var playedstone = game[node][branch]['p'].split(',');
+            $('#' + playedstone[1]).InsertSymbol('CR',playedstone[0]);
         }
+
         LoadSymbols();
         Variations();
-    };//}}}
+    }//}}}
 
     // charge les annotations présentes sur le goban
-    var LoadSymbols = function () {//{{{
+    function LoadSymbols() {//{{{
         if (symbols != null && symbols[node] != null &&
             symbols[node][branch] != null) {
             if (symbols[node][branch]['CR'] != null) {
@@ -311,10 +359,10 @@ jQuery(document).ready(function ($) {
                 }
             }
         }
-    };//}}}
+    }//}}}
 
     // charge les infos de la partie dans la zone de commentaires
-    var LoadInfos = function (force,show) {//{{{
+    function LoadInfos(force,show) {//{{{
         // si vide ou forcé (changement de partie, changement de langue...) 
         if (info == '' || force) {
             info = '<p>';
@@ -341,35 +389,42 @@ jQuery(document).ready(function ($) {
             }
             info += '</p>';
         }
+
         // affiche si demandé
         if (show) {
-            $('#textarea').html(''); // vide la zone commentaires
+            $('#textarea').html('');
             $('#textarea').html(info);
         }
-    };//}}}
+    }//}}}
 
     // charge les commentaires
-    var LoadComments = function () {//{{{
+    function LoadComments() {//{{{
         var text = '<p>';
+
         if (comments != null && comments[node] != null &&
             comments[node][branch] != null) {
             text += comments[node][branch];
         }
+
         text += '</p>';
 
-        $('#textarea').html(''); // vide la zone commentaires
+        $('#textarea').html('');
         $('#textarea').html(text);
-    };//}}}
+    }//}}}
 
     // défini la langue
-    var SetLang = function (language) {//{{{
-        var langs = ['en','fr'];    // langues supportées
-        var langsup = false;        // langue supportée ?
+    function SetLang(language) {//{{{
+        var langs = ['en','fr']; // langues supportées
+        var langsup = false;
 
         for (var i = 0, ci = langs.length; i < ci; i++) {
-            if (langs[i] == language) langsup = true;
+            if (langs[i] == language) {
+                langsup = true;
+            }
         }
-        if (!langsup) language = 'en'; // langue par défaut
+        if (!langsup) {
+            language = 'en'; // langue par défaut
+        }
 
         // récupère le script de la langue et traduit les éléments
         $.getScript('lang/' + language + '.js',function () {
@@ -386,16 +441,18 @@ jQuery(document).ready(function ($) {
             $('#sendsgf').attr('title',lang.sendsgf);
             $('#downsgf').attr('title',lang.downsgf);
 
-            if (infos != null) LoadInfos(true,true);
+            if (infos != null) {
+                LoadInfos(true,true);
+            }
 
             // change l'apparence du bouton pour prendre celle de la langue
             $('#lang').attr('class','button' + language);
             $('[class^="lang"]').show();
             $('.lang' + language).hide();
         });
-    };//}}}
+    }//}}}
     
-    /**
+    /*
      * EVENEMENTS
      */
     
@@ -422,6 +479,7 @@ jQuery(document).ready(function ($) {
             $('html').unbind('mousemove',moveHandler)
                      .unbind('mouseup',upHandler);
         };
+
         $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
     });//}}}
 
@@ -441,7 +499,11 @@ jQuery(document).ready(function ($) {
     // bouton retour rapide
     $('#fastprev').click(function () {//{{{
         if ($('#fastprev').attr('class') == 'button') {
-            node = node - 10 < 0 ? 0 : node - 10;
+            if (node - 10 < 0) {
+                node = 0;
+            } else {
+                node -= 10;
+            }
             if (game[node][branch] == null) {
                 branch = ParentBranch(node,bbranch);
             }
@@ -478,7 +540,11 @@ jQuery(document).ready(function ($) {
     // bouton avance rapide
     $('#fastnext').click(function () {//{{{
         if ($('#fastnext').attr('class') == 'button') {
-            node = node + 10 > nodemax ? nodemax : node + 10;
+            if (node + 10 > nodemax) {
+                node = nodemax;
+            } else {
+                node += 10;
+            }
             GetBranch();
             NavState();
             LoadStones();
@@ -499,8 +565,14 @@ jQuery(document).ready(function ($) {
 
     // bouton commentaires
     $('#comment').click(function () {//{{{
-        com ? com = false : com = true;
-        com ? $('#comments').show() : $('#comments').hide();
+        if (com) {
+            $('#comments').hide();
+            com = false;
+        } else {
+            $('#comments').show();
+            com = true;
+        }
+
         ResizeGoban(false);
     });//}}}
 
@@ -508,6 +580,7 @@ jQuery(document).ready(function ($) {
     $('[id^="varbut"]').live('click',function () {//{{{
         bbranch = $(this).attr('id').substr(6);
         branch = bbranch;
+
         SetNodeMax();
         NavState();
         LoadStones();
@@ -520,8 +593,9 @@ jQuery(document).ready(function ($) {
             LoadComments();
             $('#optbuttons').hide();
             $('#navbuttons').show();
-            if (com) $('#comments').show();
-            if (vari) $('#variations').show();
+            if (vari) {
+                $('#variations').show();
+            }
             options = false;
         } else {
             LoadInfos(false,true);
@@ -534,6 +608,7 @@ jQuery(document).ready(function ($) {
     // bouton langues
     $('[class^="lang"]').click(function () {//{{{
         var flag = $(this).attr('class').substr(4);
+
         SetLang(flag);
     });//}}}
 
@@ -608,7 +683,7 @@ jQuery(document).ready(function ($) {
 
     SetLang(navlang);
 
-    $('#variations,#loadlist').hide();
+    $('#variations,#loadlist,#comments').hide();
     $('#navbuttons,#comment,#options').hide();
     $('#goban,#resizer').disableSelection();
     
