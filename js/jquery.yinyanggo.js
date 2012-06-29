@@ -76,6 +76,7 @@ jQuery(document).ready(function ($) {
         var oldsize = size;
 
         load = false;
+        options = false;
 
         infos = $.parseJSON(sql[num]['infos']);
         comments = $.parseJSON(sql[num]['comments']);
@@ -92,7 +93,6 @@ jQuery(document).ready(function ($) {
 
         $('#loadlist').hide();
         $('#optbuttons').hide();
-        options = false;
         $('#goban').css('background', 'url(images/' + size + '.svg)');
 
         if (size != oldsize) {
@@ -254,7 +254,9 @@ jQuery(document).ready(function ($) {
         $('#goban').html(''); // supprime l'ancien goban
 
         for (var i = -1; i <= size; i++) {
+
             table += '<div>';
+
             for (var j = -1; j <= size; j++) {
                 if (i == -1 || i == size) {
                     if (j != -1 && j != size) { // bords gauche et droit
@@ -273,6 +275,7 @@ jQuery(document).ready(function ($) {
                              '"></div>';
                 }
             }
+
             table += '</div>';
         }
 
@@ -355,7 +358,7 @@ jQuery(document).ready(function ($) {
                     } else if (cell.attr('class') == 'cell') {
                         cell.attr('class','celle');
                     }
-                    cell.append(label[1]).attr('title',label[1]);
+                    cell.html(label[1]).attr('title',label[1]);
                 }
             }
         }
@@ -457,9 +460,9 @@ jQuery(document).ready(function ($) {
      */
     
     // fenêtre du navigateur redimensionnée
-    $(window).resize(function () {
+    $(window).resize(function () {//{{{
         ResizeGoban(false); 
-    });
+    });//}}}
 
     // redimensionne commentaires 
     // ref: http://www.jquery.info/spip.php?article44
@@ -653,13 +656,16 @@ jQuery(document).ready(function ($) {
         }
         if (load) {
             $('#goban,#comment,#options').show();
-            if (com) $('#comments').show();
+            if (com) {
+                $('#comments').show();
+            }
             $('#loadlist').hide();
+            load = false;
         } else {
             $('#goban,#comments,#comment,#options').hide();
             $('#loadlist').fadeIn();
+            load = true;
         }
-        load ? load = false : load = true;
     });//}}}
 
     // chargement
@@ -681,7 +687,7 @@ jQuery(document).ready(function ($) {
         $('#sendinput').submit();
     });//}}}
 
-    /**
+    /*
      * INITIALISATION
      */
 

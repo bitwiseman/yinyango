@@ -4,6 +4,7 @@
         <title id="title">Test</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/test.css" />
+        <script src="js/jquery.1.7.2.js"></script>
     </head>
     <body>
         <div id="loadlist">
@@ -34,5 +35,20 @@
                 </tr>
             </table>
         </div>
+        <script>
+            console.time('no cache');  
+            for (var i=0; i<1000; i++) {  
+                $('#loadlist').append (i);  
+            }  
+            console.timeEnd('no cache'); 
+
+            console.time('cache');  
+            var item = $('#loadlist');  
+
+            for (var i=0; i<1000; i++) {  
+                item.append (i);  
+            }  
+            console.timeEnd('cache');
+        </script>
     </body>
 </html>
