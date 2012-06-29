@@ -1,25 +1,24 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
     var sql= [];
     var infos = {};
     var comments = {};
     var symbols = {};
     var game = {};
-    var size;           // taille du goban en intersections
-    var branchs;        // nombre total de variantes
-    var branch;         // branche actuelle
-    var bbranch;        // branche naviguée
-    var node;           // noeud actuel
+    var size;                   // taille du goban en intersections
+    var branchs;                // nombre total de variantes
+    var branch;                 // branche actuelle
+    var bbranch;                // branche naviguée
+    var node;                   // noeud actuel
     var coord = ['a','b','c','d','e','f','g','h','i','j',
                  'k','l','m','n','o','p','q','r','s'];
-    var gobansize;      // taille du goban en pixels
-    var com = false;    // commentaires visibles ?
-    var comsize = 200;  // hauteur de la zone commentaires en pixels
-    var info = '';      // infos de la partie sous forme html
-    var vari = false;   // variantes
-    var load = false;   // afficher la liste des fichiers ?
-    var nodemax;        // dernier noeud de la branche actuelle
-    var options = true; // affichage des boutons d'options
-    var langs = ['en','fr'];
+    var gobansize;              // taille du goban en pixels
+    var com = false;            // commentaires visibles ?
+    var comsize = 200;          // hauteur de la zone commentaires en pixels
+    var info = '';              // infos de la partie sous forme html
+    var vari = false;           // variantes
+    var load = false;           // afficher la liste des fichiers ?
+    var nodemax;                // dernier noeud de la branche actuelle
+    var options = true;         // affichage des boutons d'options
 
     // désactive la sélection d'éléments
     // ref: http://bit.ly/gwL00h
@@ -363,9 +362,17 @@ jQuery(document).ready(function($) {
     };//}}}
 
     // défini la langue
-    var SetLang = function (l) {//{{{
+    var SetLang = function (language) {//{{{
+        var langs = ['en','fr'];    // langues supportées
+        var langsup = false;        // langue supportée ?
+
+        for (var i = 0, ci = langs.length; i < ci; i++) {
+            if (langs[i] == language) langsup = true;
+        }
+        if (!langsup) language = 'en'; // langue par défaut
+
         // récupère le script de la langue et traduit les éléments
-        $.getScript('lang/' + l + '.js',function() {
+        $.getScript('lang/' + language + '.js',function () {
             $('#comment').attr('title',lang.comment);
             $('#load').attr('title',lang.load);
             $('#lang').attr('title',lang.language);
@@ -382,10 +389,9 @@ jQuery(document).ready(function($) {
             if (infos != null) LoadInfos(true,true);
 
             // change l'apparence du bouton pour prendre celle de la langue
-            $('#lang').attr('class','button' + l);
-
+            $('#lang').attr('class','button' + language);
             $('[class^="lang"]').show();
-            $('.lang' + l).hide(); // cache la langue choisie dans le menu
+            $('.lang' + language).hide();
         });
     };//}}}
     
@@ -599,12 +605,8 @@ jQuery(document).ready(function($) {
 
     // langue du navigateur ou langue par défaut
     var navlang = navigator.language.substr(0,2);
-    var langsup = false; // langue supportée ?
 
-    for (var i = 0, ci = langs.length; i < ci; i++) {
-        if (langs[i] == navlang) langsup = true;
-    }
-    langsup ? SetLang(navlang) : SetLang('en');
+    SetLang(navlang);
 
     $('#variations,#loadlist').hide();
     $('#navbuttons,#comment,#options').hide();
