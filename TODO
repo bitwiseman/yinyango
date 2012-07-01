@@ -14,3 +14,34 @@ Idées en vrac:
 - afficher les commentaires précédent le coup actuel avec une référence
 - simplifier class
 - charger la dernière partie de l'utilisateur
+
+- réorganiser le js avec objets, propriétés, méthodes
+- créer des fonctions liées aux événements (jQuery bind)
+  ex: $('#prev').bind('click', event.button.navigate(-1))
+      $('#fastprev).bind('click', event.button.navigate(-10))
+      $('#start).bind('click', event.button.navigate('start')) ...
+
+    unbind pour désactiver les boutons
+
+- faire initialisation des données avant document.ready et
+  affichage quand document.ready et données initialisées
+
+Organigramme:
+
+Données
+    propriétés: size, branchs, branch, bbranch, node, nodemax,
+                sql, infos, comments, symbols, game
+    méthodes: setNodemax, parentBranch, getBranch, 
+
+Affichage
+    propriétés: gobansize, com, comsize, info, vari, load, options
+    méthodes: resizeGoban, navState, variations, createGoban, loadStones,
+              loadSymbols, loadInfos, loadComments, setLang 
+
+Evénements
+    propriétés:
+    méthodes: loadGame, windowResize, 
+        boutons: prev, next, lang, load, list, send, ...
+
+Initialisation
+    faire les binds
