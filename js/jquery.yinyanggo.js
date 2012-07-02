@@ -1,24 +1,199 @@
+yygo = window.yygo || {};
+
+// données
+yygo.data = {//{{{
+
+    // propriétés
+
+    gameslist:      [],
+
+    comments:       {},
+    game:           {},
+    infos:          {},
+    symbols:        {},
+
+    branchs:        0,
+    size:           0,
+
+    currentbranch:  0,
+    currentnode:    0,
+    lastbranch:     0,
+    lastnode:       0,
+
+    // méthodes
+
+    // défini la branche actuelle en fonction de la dernière branche
+    setCurrentBranch: function () {//{{{
+        if (this.game[this.currentnode][this.lastbranch] != null) {
+            this.currentbranch = this.lastbranch;
+        } else {
+            for (var i = this.currentbranch+1; i < this.lastbranch; i ++) {
+                if (this.game[this.currentnode][i] != null) {
+                    this.currentbranch = i;
+                    break;
+                }
+            }
+        }
+    }//}}}
+
+    // défini le dernier noeud de la branche actuelle
+    setLastNode: function () {//{{{
+        this.lastnode = this.currentnode;
+        while (this.game[this.lastnode+1] != null &&
+               this.game[this.lastnode+1][this.currentbranch] != null) {
+            this.lastnode++;
+        }
+    },//}}}
+
+    // charge les données de la partie de la liste
+    loadDataFromList: function (number) {//{{{
+        this.infos = $.parseJSON(this.gameslist[number]['infos']);
+        this.comments = $.parseJSON(this.gameslist[number]['comments']);
+        this.symbols = $.parseJSON(this.gameslist[number]['symbols']);
+        this.game = $.parseJSON(this.gameslist[number]['game']);
+
+        this.size = this.infos['SZ'];
+        this.branchs = this.infos['branchs'];
+
+        this.currentnode = 0;
+        this.currentbranch = 0;
+        this.lastbranch = 0;
+
+        this.setLastNode();
+    },//}}}
+
+    // retourne la branche parent d'une branche
+    parentBranch: function (node, branch) {//{{{
+        for (var i = branch; i >= 0; i--) {
+            if (this.game[node] != null && this.game[node][i] != null) {
+                return i;
+            }
+        }
+        return 0;
+    },//}}}
+
+
+};//}}}
+
+// affichage
+yygo.view = {//{{{
+
+    // propriétés
+
+    htmlborders:    '',
+    htmlgoban:      '',
+    htmlinfos:      '',
+
+    showborders:    true,
+    showcomments:   false,
+    showlist:       false,
+    showoptions:    false,
+    showvariations: false,
+
+    sizecomments:   200,
+    sizegoban:      0,
+
+    // méthodes
+
+    // création du code HTML des bordures du goban
+    createBordersHtml: function () {
+        var letters = ['A','B','C','D','E','F','G','H','J',
+                       'K','L','M','N','O','P','Q','R','S','T'];
+        var size = yygo.data.size;
+
+    },
+
+    // création du code HTML du goban
+    createGobanHtml: function () {//{{{
+        var size = yygo.data.size;
+
+        this.htmlgoban = '';
+
+        for (var i = -1; i <= size; i++) {
+
+            table += '<div>';
+
+            for (var j = -1; j <= size; j++) {
+                if (i == -1 || i == size) {
+                    if (j != -1 && j != size) { // bords gauche et droit
+                        table += '<div class="cell">' + letters[j] + '</div>';
+                    } else { // coin
+                        table += '<div class="cell"></div>';
+                    }
+                } else if (j == -1 || j == size) {
+                    if (i != -1 && i != size) { // bords haut et bas
+                        table += '<div class="cell">' + (size - i) + '</div>';
+                    } else { // coin
+                        table += '<div class="cell"></div>';
+                    }
+                } else { // intersection
+                    table += '<div class="cell" id="' + coord[j] + coord[i] +
+                             '"></div>';
+                }
+            }
+
+            table += '</div>';
+        }
+
+        $('#goban').html(table); // écrit le nouveau goban
+    },//}}}
+
+};//}}}
+
+// événements
+yygo.events = {//{{{
+
+    // propriétés
+
+    // méthodes
+
+    // charge une partie de la liste
+    loadGameFromList: function (number) {//{{{
+
+        var oldsize = yygo.data.size;
+
+        // TODO sépare le chargement des données et l'affichage
+
+        yygo.data.loadDataFromList(number);
+
+        yygo.view.createGobanHtml();
+
+        yygo.view.load = false;
+        yygo.view.options = false;
+        // TODO appeler une méthode affichage
+        $('#loadlist,#optbuttons').hide();
+        $('#goban').css('background', 'url(images/' + yygo.data.size + '.svg)');
+
+        if (yygo.data.size != oldsize) { // TODO redessiner bordures si
+                                         // taille diffère
+            $('#goban').hide();
+            yygo.view.createGoban(); 
+        }
+
+        // TODO affiche/masque curseur en fonction du mode
+
+        // charge l'état du début de jeu
+        yygo.view.loadStones();
+        yygo.view.loadComments();
+        yygo.view.loadInfos(true,false);
+
+        // affiche l'interface
+        yygo.view.resizeGoban(true); // forcer le redimensionnement
+        yygo.view.navState();
+        // TODO appeler une méthode affichage
+        $('#goban').fadeIn();
+        $('#navbuttons').show();
+        if (com) {
+            $('#comments').show();
+        }
+    },//}}}
+
+
+};//}}}
+
 jQuery(document).ready(function ($) {
-    var sql= [];
-    var infos = {};
-    var comments = {};
-    var symbols = {};
-    var game = {};
-    var size;                   // taille du goban en intersections
-    var branchs;                // nombre total de variantes
-    var branch;                 // branche actuelle
-    var bbranch;                // branche naviguée
-    var node;                   // noeud actuel
     var coord = ['a','b','c','d','e','f','g','h','i','j',
                  'k','l','m','n','o','p','q','r','s'];
-    var gobansize;              // taille du goban en pixels
-    var com = false;            // commentaires visibles ?
-    var comsize = 200;          // hauteur de la zone commentaires en pixels
-    var info = '';              // infos de la partie sous forme html
-    var vari = false;           // variantes
-    var load = false;           // afficher la liste des fichiers ?
-    var nodemax;                // dernier noeud de la branche actuelle
-    var options = true;         // affichage des boutons d'options
 
     /*
      * PLUGINS JQUERY
@@ -71,53 +246,7 @@ jQuery(document).ready(function ($) {
      * FONCTIONS
      */
 
-    // charge une partie de la liste SQL
-    function LoadGame(num) {//{{{
-        var oldsize = size;
-
-        load = false;
-        options = false;
-
-        infos = $.parseJSON(sql[num]['infos']);
-        comments = $.parseJSON(sql[num]['comments']);
-        symbols = $.parseJSON(sql[num]['symbols']);
-        game = $.parseJSON(sql[num]['game']);
-        size = infos['SZ'];
-        branchs = infos['branchs'];
-
-        node = 0;
-        branch = 0;
-        bbranch = 0;
-
-        SetNodeMax();
-
-        $('#loadlist').hide();
-        $('#optbuttons').hide();
-        $('#goban').css('background', 'url(images/' + size + '.svg)');
-
-        if (size != oldsize) {
-            $('#goban').hide();
-            CreateGoban(); 
-        }
-
-        // TODO affiche/masque curseur en fonction du mode
-
-        // charge l'état du début de jeu
-        LoadStones();
-        LoadComments();
-        LoadInfos(true,false);
-
-        // affiche l'interface
-        ResizeGoban(true); // forcer le redimensionnement
-        NavState();
-        $('#goban').fadeIn();
-        $('#navbuttons').show();
-        if (com) {
-            $('#comments').show();
-        }
-    }//}}}
-
-    // ajuste l'interface en fonction de la fenêtre du navigateur
+        // ajuste l'interface en fonction de la fenêtre du navigateur
     function ResizeGoban(force) {//{{{
         var winw = $(window).width();       // largeur fenêtre
         var winh = $(window).height();      // hauteur fenêtre
@@ -172,57 +301,27 @@ jQuery(document).ready(function ($) {
     // active/désactive les boutons de navigation
     function NavState() {//{{{
         $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
-        if (node == 0) {
+        if (currentnode == 0) {
             $('[id$="prev"],#start').attr('class','buttond');
         }
-        if (node == nodemax) {
+        if (currentnode == lastnode) {
             $('[id$="next"],#end').attr('class','buttond');
         }
     }//}}}
 
-    // défini le dernier noeud de la branche actuelle
-    function SetNodeMax() {//{{{
-        nodemax = node;
-        while (game[nodemax+1] != null && game[nodemax+1][branch] != null) {
-            nodemax++;
-        }
-    }//}}}
-
-    // retourne la branche parent d'une branche
-    function ParentBranch(n,b) {//{{{
-        for (var i = b; i >= 0; i--) {
-            if (game[n] != null && game[n][i] != null) {
-                return i;
-            }
-        }
-        return 0;
-    }//}}}
-
-    // cherche la branche à afficher en fonction de la branche naviguée
-    function GetBranch() {//{{{
-        if (game[node][bbranch] != null) {
-            branch = bbranch;
-        } else {
-            for (var i = branch+1; i < bbranch; i ++) {
-                if (game[node][i] != null) {
-                    branch = i;
-                    break;
-                }
-            }
-        }
-    }//}}}
-
+    
+    
     // variantes
     function Variations() {//{{{
         var nv = 0; // nombre de variantes
         var varis = '';
-        var pbranch = ParentBranch(node-1,branch);
+        var pbranch = ParentBranch(currentnode-1,currentbranch);
 
         for (var i = 0; i < branchs; i++) {
-            if (game[node][i] != null && node > 0) {
-                if (ParentBranch(node-1,i) == pbranch) {
+            if (game[currentnode][i] != null && currentnode > 0) {
+                if (ParentBranch(currentnode-1,i) == pbranch) {
                     nv++;
-                    if (i == branch) {
+                    if (i == currentbranch) {
                         varis += '<div id="varbua' + i + '"></div>';
                     } else {
                         varis += '<div id="varbut' + i + '"></div>';
@@ -245,47 +344,11 @@ jQuery(document).ready(function ($) {
         }
     }//}}}
     
-    // création du goban en identifiant les coordonnées
-    function CreateGoban() {//{{{
-        var letters = ['A','B','C','D','E','F','G','H','J',
-                       'K','L','M','N','O','P','Q','R','S','T'];
-        var table = '';
-
-        $('#goban').html(''); // supprime l'ancien goban
-
-        for (var i = -1; i <= size; i++) {
-
-            table += '<div>';
-
-            for (var j = -1; j <= size; j++) {
-                if (i == -1 || i == size) {
-                    if (j != -1 && j != size) { // bords gauche et droit
-                        table += '<div class="cell">' + letters[j] + '</div>';
-                    } else { // coin
-                        table += '<div class="cell"></div>';
-                    }
-                } else if (j == -1 || j == size) {
-                    if (i != -1 && i != size) { // bords haut et bas
-                        table += '<div class="cell">' + (size - i) + '</div>';
-                    } else { // coin
-                        table += '<div class="cell"></div>';
-                    }
-                } else { // intersection
-                    table += '<div class="cell" id="' + coord[j] + coord[i] +
-                             '"></div>';
-                }
-            }
-
-            table += '</div>';
-        }
-
-        $('#goban').html(table); // écrit le nouveau goban
-    }//}}}
-
+    
     // charge les pierres de l'état actuel
     function LoadStones() {//{{{
-        var blackstones = game[node][branch]['b'].split(',');
-        var whitestones = game[node][branch]['w'].split(',');
+        var blackstones = game[currentnode][currentbranch]['b'].split(',');
+        var whitestones = game[currentnode][currentbranch]['w'].split(',');
         
         // vide le goban de toutes ses pierres et symboles
         $('#goban div[id]').html('').attr({
@@ -302,8 +365,8 @@ jQuery(document).ready(function ($) {
         }
 
         // ajoute un symbol pour indiquer la dernière pierre jouée
-        if (game[node][branch]['p'] != null) {
-            var playedstone = game[node][branch]['p'].split(',');
+        if (game[currentnode][currentbranch]['p'] != null) {
+            var playedstone = game[currentnode][currentbranch]['p'].split(',');
             $('#' + playedstone[1]).InsertSymbol('CR',playedstone[0]);
         }
 
@@ -313,10 +376,10 @@ jQuery(document).ready(function ($) {
 
     // charge les annotations présentes sur le goban
     function LoadSymbols() {//{{{
-        if (symbols != null && symbols[node] != null &&
-            symbols[node][branch] != null) {
-            if (symbols[node][branch]['CR'] != null) {
-                var list = symbols[node][branch]['CR'].split(','); 
+        if (symbols != null && symbols[currentnode] != null &&
+            symbols[currentnode][currentbranch] != null) {
+            if (symbols[currentnode][currentbranch]['CR'] != null) {
+                var list = symbols[currentnode][currentbranch]['CR'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
                     if (cell.attr('class') == 'cellb') {
@@ -326,8 +389,8 @@ jQuery(document).ready(function ($) {
                     }
                 }
             }
-            if (symbols[node][branch]['SQ'] != null) {
-                var list = symbols[node][branch]['SQ'].split(','); 
+            if (symbols[currentnode][currentbranch]['SQ'] != null) {
+                var list = symbols[currentnode][currentbranch]['SQ'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
                     if (cell.attr('class') == 'cellb') {
@@ -337,8 +400,8 @@ jQuery(document).ready(function ($) {
                     }
                 }
             }
-            if (symbols[node][branch]['TR'] != null) {
-                var list = symbols[node][branch]['TR'].split(','); 
+            if (symbols[currentnode][currentbranch]['TR'] != null) {
+                var list = symbols[currentnode][currentbranch]['TR'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var cell = $('#' + list[i]);
                     if (cell.attr('class') == 'cellb') {
@@ -348,8 +411,8 @@ jQuery(document).ready(function ($) {
                     }
                 }
             }
-            if (symbols[node][branch]['LB'] != null) {
-                var list = symbols[node][branch]['LB'].split(','); 
+            if (symbols[currentnode][currentbranch]['LB'] != null) {
+                var list = symbols[currentnode][currentbranch]['LB'].split(','); 
                 for (var i = 0, ci = list.length; i < ci; i++) {
                     var label = list[i].split(':');
                     var cell = $('#' + label[0]);
@@ -404,9 +467,9 @@ jQuery(document).ready(function ($) {
     function LoadComments() {//{{{
         var text = '<p>';
 
-        if (comments != null && comments[node] != null &&
-            comments[node][branch] != null) {
-            text += comments[node][branch];
+        if (comments != null && comments[currentnode] != null &&
+            comments[currentnode][currentbranch] != null) {
+            text += comments[currentnode][currentbranch];
         }
 
         text += '</p>';
@@ -489,9 +552,9 @@ jQuery(document).ready(function ($) {
     // bouton début
     $('#start').click(function () {//{{{
         if ($('#start').attr('class') == 'button') {
-            node = 0;
-            if (game[node][branch] == null) {
-                branch = ParentBranch(node,bbranch);
+            currentnode = 0;
+            if (game[currentnode][currentbranch] == null) {
+                currentbranch = ParentBranch(currentnode,lastbranch);
             }
             NavState();
             LoadStones();
@@ -502,13 +565,13 @@ jQuery(document).ready(function ($) {
     // bouton retour rapide
     $('#fastprev').click(function () {//{{{
         if ($('#fastprev').attr('class') == 'button') {
-            if (node - 10 < 0) {
-                node = 0;
+            if (currentnode - 10 < 0) {
+                currentnode = 0;
             } else {
-                node -= 10;
+                currentnode -= 10;
             }
-            if (game[node][branch] == null) {
-                branch = ParentBranch(node,bbranch);
+            if (game[currentnode][currentbranch] == null) {
+                currentbranch = ParentBranch(currentnode,lastbranch);
             }
             NavState();
             LoadStones();
@@ -519,9 +582,9 @@ jQuery(document).ready(function ($) {
     // bouton précédent
     $('#prev').click(function () {//{{{
         if ($('#prev').attr('class') == 'button') {
-            node--;
-            if (game[node][branch] == null) {
-                branch = ParentBranch(node,bbranch);
+            currentnode--;
+            if (game[currentnode][currentbranch] == null) {
+                currentbranch = ParentBranch(currentnode,lastbranch);
             }
             NavState();
             LoadStones();
@@ -532,8 +595,8 @@ jQuery(document).ready(function ($) {
     // bouton suivant
     $('#next').click(function () {//{{{
         if ($('#next').attr('class') == 'button') {
-            node++;
-            GetBranch();
+            currentnode++;
+            setCurrentBranch();
             NavState();
             LoadStones();
             LoadComments();
@@ -543,12 +606,12 @@ jQuery(document).ready(function ($) {
     // bouton avance rapide
     $('#fastnext').click(function () {//{{{
         if ($('#fastnext').attr('class') == 'button') {
-            if (node + 10 > nodemax) {
-                node = nodemax;
+            if (currentnode + 10 > lastnode) {
+                currentnode = lastnode;
             } else {
-                node += 10;
+                currentnode += 10;
             }
-            GetBranch();
+            setCurrentBranch();
             NavState();
             LoadStones();
             LoadComments();
@@ -558,8 +621,8 @@ jQuery(document).ready(function ($) {
     // bouton fin
     $('#end').click(function () {//{{{
         if ($('#end').attr('class') == 'button') {
-            node = nodemax;
-            GetBranch();
+            currentnode = lastnode;
+            setCurrentBranch();
             NavState();
             LoadStones();
             LoadComments();
@@ -581,10 +644,10 @@ jQuery(document).ready(function ($) {
 
     // changement de branche
     $('[id^="varbut"]').live('click',function () {//{{{
-        bbranch = $(this).attr('id').substr(6);
-        branch = bbranch;
+        lastbranch = $(this).attr('id').substr(6);
+        currentbranch = lastbranch;
 
-        SetNodeMax();
+        setLastNode();
         NavState();
         LoadStones();
         LoadComments();
