@@ -191,6 +191,7 @@ body {
     cursor: n-resize;
 }
 #comments,#infos {
+    padding-top: 6px;
     overflow: auto;
 }
 /*}}}*/

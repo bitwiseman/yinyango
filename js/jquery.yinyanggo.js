@@ -106,6 +106,7 @@ yygo.view = {//{{{
     htmlcomments:   '',
     htmlgoban:      '',
     htmlinfos:      '',
+    htmlvariations: '',
 
     showborders:    true,
     showlist:       false,
@@ -113,6 +114,9 @@ yygo.view = {//{{{
     showtextzone:   false,
     showvariations: false,
 
+    redrawgoban:    false,
+
+    sizeborders:    0,
     sizecell:       0,
     sizetextzone:   200,
     sizegoban:      0,
@@ -264,8 +268,45 @@ yygo.view = {//{{{
         $('.lang' + lang).hide();
     },//}}}
 
+    // dessine l'interface
+    drawInterface: function () {//{{{
+        if (this.showvariations) {
+            $('#variations').show();
+        } else {
+            $('#variations').hide();
+        }
+
+        if (this.showtextzone) {
+            $('#textzone').show();
+        } else {
+            $('#textzone').hide();
+        }
+
+        if (this.redrawgoban) {
+            if (this.showvariations) {
+                $('#textzone').css('top', this.sizegoban + 70);
+            } else {
+                $('#textzone').css('top', this.sizegoban + 50);
+            }
+            $('#borders').css({
+                height: this.sizeborders,
+                width: this.sizeborders
+            });
+            $('#goban').css({
+                height: this.sizegoban,
+                width: this.sizegoban
+            });
+            $('#goban div,#borders div').css('height', this.sizecell);
+            $('[class^="cell"],#borders div').css({
+                width: this.sizecell,
+                lineHeight: this.sizecell + 'px',
+                fontSize: this.sizecell / 1.5
+            });
+        }
+    },//}}}
+
     // ajuste l'interface en fonction de la fenêtre du navigateur
-    resizeInterface: function (force) {//{{{
+    resizeInterface: function () {//{{{
         var size = yygo.data.size;
         var winw = $(window).width();
         var winh = $(window).height();    
@@ -289,7 +330,7 @@ yygo.view = {//{{{
         }
 
         // calcul la taille en pixels du goban pour être un multiple de
-        // sa taille en intersections. cela évite un affichage baveux du SVG
+        // sa taille en intersections, cela évite un affichage baveux du SVG
         if (this.showborders) { // ajouter les bordures si affichées
             this.sizecell = Math.floor(smaller / (size + 2));
             this.sizeborders = this.sizecell * (size + 2);
@@ -300,29 +341,55 @@ yygo.view = {//{{{
             this.sizegoban =  this.sizecell * size;
         }
 
-
-        // redessine le goban si la taille a changé ou si forcé
-        if (this.sizegoban != oldsizegoban || force) {
-            if (vari) {
-                $('#textzone').css('top', sizegoban + 70);
-            } else {
-                $('#textzone').css('top', sizegoban + 50);
-            }
-            $('#goban').css({
-                height: sizegoban,
-                width: sizegoban
-            });
-            $('#goban div').css('height', sizegoban / sizeb);
-            $('[class^="cell"]').css({
-                width: sizegoban / sizeb,
-                lineHeight: sizegoban / sizeb + 'px',
-                fontSize: sizegoban / sizeb / 1.5
-            });
+        // redessine le goban si la taille a changé
+        if (this.sizegoban != oldsizegoban) {
+            this.redrawgoban = true;
         }
-        
-        // redessine la zone de texte
-        $('#comments,#infos').css('height', $('#textzone').outerHeight() - 6);
-    }//}}}
+
+        this.drawInterface(); 
+
+        this.redrawgoban = false;
+    },//}}}
+
+    // création du code HTML des variantes
+    createVariationsHtml: function () {//{{{
+        var game = yygo.data.game;
+        var curbranch = yygo.data.currentbranch;
+        var curnode = yygo.data.currentnode;
+        var branchs = yygo.data.branchs;
+        var pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
+        var variations = 0;
+        var html = '';
+        var i;
+
+        for (i = 0; i < branchs; i++) {
+            if (game[curnode][i] != null && curnode > 0) {
+                if (yygo.data.getParentBranch(curnode - 1, i) == pbranch) {
+                    variations++;
+                    if (i == curbranch) {
+                        html += '<div id="varbua' + i + '"></div>';
+                    } else {
+                        html += '<div id="varbut' + i + '"></div>';
+                    }
+                }
+            }
+        }
+
+        this.htmlvariations = html;
+
+        if (variations > 1) {
+            if (!this.showvariations) {
+                this.showvariations = true;
+                this.insertVariations();
+                this.resizeInterface();
+            }
+        } else {
+            if (this.showvariations) {
+                this.showvariations = false;
+                this.resizeInterface();
+            }
+        }
+    },//}}}
 
     // création du code HTML des bordures du goban
     createBordersHtml: function () {//{{{
@@ -431,6 +498,12 @@ yygo.view = {//{{{
         this.htmlinfos = html;
 
         this.insertInfos();
+    },//}}}
+
+    // insère le code HTML des variantes
+    insertVariations: function () {//{{{
+        $('#variations').empty();
+        $('#variations').html(this.htmlvariations);
     },//}}}
 
     // insère le code HTML des bordures du goban
@@ -564,39 +637,7 @@ jQuery(document).ready(function ($) {
 
     
     
-    // variantes
-    function Variations() {//{{{
-        var nv = 0; // nombre de variantes
-        var varis = '';
-        var pbranch = getParentBranch(currentnode-1,currentbranch);
-
-        for (var i = 0; i < branchs; i++) {
-            if (game[currentnode][i] != null && currentnode > 0) {
-                if (getParentBranch(currentnode-1,i) == pbranch) {
-                    nv++;
-                    if (i == currentbranch) {
-                        varis += '<div id="varbua' + i + '"></div>';
-                    } else {
-                        varis += '<div id="varbut' + i + '"></div>';
-                    }
-                }
-            }
-        }
-        if (nv > 1) {
-            $('#variations').show().html(varis);
-            if (!vari) {
-                vari = true;
-                ResizeGoban(false);
-            }
-        } else {
-            $('#variations').hide();
-            if (vari) {
-                vari = false;
-                ResizeGoban(false);
-            }
-        }
-    }//}}}
-    
+        
     
     
     
