@@ -83,7 +83,7 @@ yygo.data = {//{{{
         this.symbols = $.parseJSON(this.gameslist[number]['symbols']);
         this.game = $.parseJSON(this.gameslist[number]['game']);
 
-        this.size = this.infos['SZ'];
+        this.size = parseInt(this.infos['SZ'], 10);
         this.branchs = this.infos['branchs'];
 
         this.currentnode = 0;
@@ -113,7 +113,8 @@ yygo.view = {//{{{
     showtextzone:   false,
     showvariations: false,
 
-    sizecomments:   200,
+    sizecell:       0,
+    sizetextzone:   200,
     sizegoban:      0,
 
     // méthodes
@@ -262,6 +263,66 @@ yygo.view = {//{{{
         $('[class^="lang"]').show();
         $('.lang' + lang).hide();
     },//}}}
+
+    // ajuste l'interface en fonction de la fenêtre du navigateur
+    resizeInterface: function (force) {//{{{
+        var size = yygo.data.size;
+        var winw = $(window).width();
+        var winh = $(window).height();    
+        var heightleft = winh - 50;
+        var oldsizegoban = this.sizegoban;
+        var smaller;
+        
+        if (this.sizetextzone > winh / 2) {
+            this.sizetextzone = winh / 2;
+        }
+        if (this.showtextzone) {
+            heightleft -= this.sizetextzone;
+        }
+        if (this.showvariations) {
+            heightleft -= 20;
+        }
+        if (winw < heightleft) {
+            smaller = winw;
+        } else {
+            smaller = heightleft;
+        }
+
+        // calcul la taille en pixels du goban pour être un multiple de
+        // sa taille en intersections. cela évite un affichage baveux du SVG
+        if (this.showborders) { // ajouter les bordures si affichées
+            this.sizecell = Math.floor(smaller / (size + 2));
+            this.sizeborders = this.sizecell * (size + 2);
+            this.sizegoban =  this.sizecell * size;
+        } else {
+            this.sizecell = Math.floor(smaller / size);
+            this.sizeborders = this.sizecell * (size + 2);
+            this.sizegoban =  this.sizecell * size;
+        }
+
+
+        // redessine le goban si la taille a changé ou si forcé
+        if (this.sizegoban != oldsizegoban || force) {
+            if (vari) {
+                $('#textzone').css('top', sizegoban + 70);
+            } else {
+                $('#textzone').css('top', sizegoban + 50);
+            }
+            $('#goban').css({
+                height: sizegoban,
+                width: sizegoban
+            });
+            $('#goban div').css('height', sizegoban / sizeb);
+            $('[class^="cell"]').css({
+                width: sizegoban / sizeb,
+                lineHeight: sizegoban / sizeb + 'px',
+                fontSize: sizegoban / sizeb / 1.5
+            });
+        }
+        
+        // redessine la zone de texte
+        $('#comments,#infos').css('height', $('#textzone').outerHeight() - 6);
+    }//}}}
 
     // création du code HTML des bordures du goban
     createBordersHtml: function () {//{{{
@@ -489,58 +550,7 @@ jQuery(document).ready(function ($) {
      * FONCTIONS
      */
 
-        // ajuste l'interface en fonction de la fenêtre du navigateur
-    function ResizeGoban(force) {//{{{
-        var winw = $(window).width();       // largeur fenêtre
-        var winh = $(window).height();      // hauteur fenêtre
-        var heightleft = winh - 50;         // hauteur restante pour le goban
-        var sizeb = parseInt(size,10) + 2;  // ajout des bordures
-        var oldgobansize = gobansize;
-        var smaller;
         
-        if (comsize > (winh / 2)) {
-            comsize = (winh / 2);
-        }
-        if (com) {
-            heightleft -= comsize;
-        }
-        if (vari) {
-            heightleft -= 20;
-        }
-        if (winw < heightleft) {
-            smaller = winw;
-        } else {
-            smaller = heightleft;
-        }
-
-        // calcul la taille en pixels du goban pour être un multiple de
-        // sa taille en intersections (avec les bordures).
-        // Cela évite un affichage baveux du SVG
-        gobansize = Math.floor(smaller / sizeb) * sizeb;
-
-        // redessine le goban si la taille a changé ou si forcé
-        if (gobansize != oldgobansize || force) {
-            if (vari) {
-                $('#textzone').css('top',gobansize + 70);
-            } else {
-                $('#textzone').css('top',gobansize + 50);
-            }
-            $('#goban').css({
-                height: gobansize,
-                width: gobansize
-            });
-            $('#goban div').css('height',gobansize / sizeb);
-            $('[class^="cell"]').css({
-                width: gobansize / sizeb,
-                lineHeight: gobansize / sizeb + 'px',
-                fontSize: gobansize / sizeb / 1.5
-            });
-        }
-        
-        // redessine la zone de texte
-        $('#comments,#infos').css('height',$('#textzone').outerHeight() - 6);
-    }//}}}
-
     // active/désactive les boutons de navigation
     function NavState() {//{{{
         $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
@@ -606,13 +616,13 @@ jQuery(document).ready(function ($) {
     // ref: http://www.jquery.info/spip.php?article44
     $('#resizer').mousedown(function (e) {//{{{
         var winh = $(window).height();
-        var h = comsize; // taille commentaire avant redimensionnement
+        var h = sizetextzone; // taille commentaire avant redimensionnement
         var y = winh - e.clientY; // position curseur par rapport au bas
         var moveHandler = function (e) {
             // minimum 100 pixels
-            comsize = Math.max(100, (winh - e.clientY) + h - y); 
-            if (comsize > (winh / 2)) {
-                comsize = (winh / 2); // max la moitié de la hauteur
+            sizetextzone = Math.max(100, (winh - e.clientY) + h - y); 
+            if (sizetextzone > (winh / 2)) {
+                sizetextzone = (winh / 2); // max la moitié de la hauteur
             }
             ResizeGoban(false);
         };
