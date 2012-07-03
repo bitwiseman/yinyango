@@ -132,21 +132,28 @@ body {
     cursor: default;
 }
 /*}}}*/
-#comments {/*{{{*/
+#borders {/*{{{*/
+    position: relative;
+}
+#bordertop {
+    display: inline-block;
     position: absolute;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
-}
-#resizer {
-    background: #000;
-    width: 100px;
-    height: 6px;
+    top: 0;
     margin: auto;
-    cursor: n-resize;
 }
-#textzone {
-    overflow: auto;
+#borderright {
+    position: absolute;
+    right: 0;
+}
+#borderbottom {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    margin: auto;
+}
+#borderleft {
+    position: absolute;
+    left: 0;
 }
 /*}}}*/
 #goban {/*{{{*/
@@ -168,5 +175,22 @@ body {
 }
 .celle {
     background: #ccaa66;
+}
+/*}}}*/
+#textzone {/*{{{*/
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+}
+#resizer {
+    background: #000;
+    width: 100px;
+    height: 6px;
+    margin: auto;
+    cursor: n-resize;
+}
+#comments,#infos {
+    overflow: auto;
 }
 /*}}}*/
