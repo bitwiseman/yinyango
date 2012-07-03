@@ -6,6 +6,7 @@ yygo.data = {//{{{
     // propriétés
 
     gameslist:      [],
+    langs:          ['en','fr'],
 
     comments:       {},
     game:           {},
@@ -13,6 +14,7 @@ yygo.data = {//{{{
     symbols:        {},
 
     branchs:        0,
+    lang:           'en',
     size:           0,
 
     currentbranch:  0,
@@ -43,6 +45,40 @@ yygo.data = {//{{{
                this.game[this.lastnode+1][this.currentbranch] != null) {
             this.lastnode++;
         }
+    },//}}}
+
+    // défini la langue
+    setLang: function (lang) {//{{{
+        for (var i = 0, ci = this.langs.length; i < ci; i++) {
+            if (this.langs[i] == lang) {
+                this.lang = lang;
+            }
+        }
+
+        // récupère le script de la langue et traduit les éléments
+        $.getScript('lang/' + this.lang + '.js', function () {
+            $('#comment').attr('title', this.locale.comment);
+            $('#load').attr('title', this.locale.load);
+            $('#lang').attr('title', this.locale.language);
+            $('#start').attr('title', this.locale.start);
+            $('#prev').attr('title', this.locale.prev);
+            $('#fastprev').attr('title', this.locale.fastprev);
+            $('#next').attr('title', this.locale.next);
+            $('#fastnext').attr('title', this.locale.fastnext);
+            $('#end').attr('title', this.locale.end);
+            $('#options').attr('title', this.locale.options);
+            $('#sendsgf').attr('title', this.locale.sendsgf);
+            $('#downsgf').attr('title', this.locale.downsgf);
+
+            if (this.infos != null) {
+                yygo.view.createInfosHtml(true, true);
+            }
+
+            // change l'apparence du bouton pour prendre celle de la langue
+            $('#lang').attr('class', 'button' + this.lang);
+            $('[class^="lang"]').show();
+            $('.lang' + this.lang).hide();
+        });
     },//}}}
 
     // charge les données de la partie de la liste
@@ -81,11 +117,13 @@ yygo.view = {//{{{
     // propriétés
 
     htmlborders:    '',
+    htmlcomments:   '',
     htmlgoban:      '',
     htmlinfos:      '',
 
     showborders:    true,
     showcomments:   false,
+    showinfos:      false,
     showlist:       false,
     showoptions:    false,
     showvariations: false,
@@ -95,7 +133,7 @@ yygo.view = {//{{{
 
     // méthodes
 
-    // création du code HTML des bordures du goban
+    // TODO création du code HTML des bordures du goban
     createBordersHtml: function () {
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
@@ -103,7 +141,7 @@ yygo.view = {//{{{
 
     },
 
-    // création du code HTML du goban
+    // TODO création du code HTML du goban
     createGobanHtml: function () {//{{{
         var size = yygo.data.size;
 
@@ -135,10 +173,94 @@ yygo.view = {//{{{
             table += '</div>';
         }
 
-        $('#goban').html(table); // écrit le nouveau goban
+    },//}}}
+
+    // création du code HTML des commentaires de l'état actuel
+    createCommentsHtml: function () {//{{{
+        var commments = yygo.data.comments;
+        var currentnode = yygo.data.currentnode;
+        var currentbranch = yygo.data.currentbranch;
+
+        this.htmlcomments = '<p>';
+
+        if (comments != null && comments[currentnode] != null &&
+            comments[currentnode][currentbranch] != null) {
+            this.htmlcomments += comments[currentnode][currentbranch];
+        }
+
+        this.htmlcomments += '</p>';
+
+        // insère le code HTML si nécessaire
+        if (this.showcomments) {
+            this.insertComments();
+        }
+    },//}}}
+
+    // création du code HTML des infos de la partie
+    createInfosHtml: function (force) {//{{{
+        var infos = yygo.data.infos;
+        var locale = yygo.data.locale;
+
+        // si vide ou forcé (changement de partie, changement de langue) 
+        if (this.htmlinfos == '' || force) {
+            this.htmlinfos = '<p>';
+            if (infos['PB'] != null) {
+                this.htmlinfos += '<em>' + locale.black +
+                                  ':</em> ' + infos['PB'];
+            }
+            if (infos['BR'] != null) {
+                this.htmlinfos += ' [' + infos['BR'] + ']';
+            }
+            if (infos['PW'] != null) {
+                this.htmlinfos += ' <br /><em>' + locale.white +
+                                  ':</em> ' + infos['PW'];
+            }
+            if (infos['WR'] != null) {
+                this.htmlinfos += ' [' + infos['WR'] + ']';
+            }
+            if (infos['DT'] != null) {
+                this.htmlinfos += ' <br /><em>' + locale.date +
+                                  ':</em> ' + infos['DT'];
+            }
+            if (infos['PC'] != null) {
+                this.htmlinfos += ' <br /><em>' + locale.place +
+                                  ':</em> ' + infos['PC'];
+            }
+            if (infos['RU'] != null) {
+                this.htmlinfos += ' <br /><em>' + locale.rules +
+                                  ':</em> ' + infos['RU'];
+            }
+            this.htmlinfos += '</p>';
+        }
+
+        // insère le code HTML si nécessaire
+        if (this.showinfos) {
+            this.insertInfos();
+        }
+    },//}}}
+
+    // insère le code HTML du goban
+    insertGoban: function () {//{{{
+        $('#goban').empty();
+        $('#goban').html(this.htmlgoban);
+    },//}}}
+
+    // insère le code HTML des commentaires
+    insertComments: function () {//{{{
+        $('#textzone').empty();
+        $('#textzone').html(this.htmlcomments);
+    },//}}}
+
+    // insère le code HTML des infos de la partie dans la zone commentaires
+    insertInfos: function () {//{{{
+        $('#textzone').empty();
+        $('#textzone').html(this.htmlinfos);
     },//}}}
 
 };//}}}
+
+
+    
 
 // événements
 yygo.events = {//{{{
@@ -295,7 +417,7 @@ jQuery(document).ready(function ($) {
         }
         
         // redessine la zone de texte
-        $('#textarea').css('height',$('#comments').outerHeight() - 6);
+        $('#textzone').css('height',$('#comments').outerHeight() - 6);
     }//}}}
 
     // active/désactive les boutons de navigation
@@ -427,97 +549,9 @@ jQuery(document).ready(function ($) {
         }
     }//}}}
 
-    // charge les infos de la partie dans la zone de commentaires
-    function LoadInfos(force,show) {//{{{
-        // si vide ou forcé (changement de partie, changement de langue...) 
-        if (info == '' || force) {
-            info = '<p>';
-            if (infos['PB'] != null) {
-                info += '<em>' + lang.black + ':</em> ' + infos['PB'];
-            }
-            if (infos['BR'] != null) {
-                info += ' [' + infos['BR'] + ']';
-            }
-            if (infos['PW'] != null) {
-                info += ' <br /><em>' + lang.white + ':</em> ' + infos['PW'];
-            }
-            if (infos['WR'] != null) {
-                info += ' [' + infos['WR'] + ']';
-            }
-            if (infos['DT'] != null) {
-                info += ' <br /><em>' + lang.date + ':</em> ' + infos['DT'];
-            }
-            if (infos['PC'] != null) {
-                info += ' <br /><em>' + lang.place + ':</em> ' + infos['PC'];
-            }
-            if (infos['RU'] != null) {
-                info += ' <br /><em>' + lang.rules + ':</em> ' + infos['RU'];
-            }
-            info += '</p>';
-        }
-
-        // affiche si demandé
-        if (show) {
-            $('#textarea').html('');
-            $('#textarea').html(info);
-        }
-    }//}}}
-
-    // charge les commentaires
-    function LoadComments() {//{{{
-        var text = '<p>';
-
-        if (comments != null && comments[currentnode] != null &&
-            comments[currentnode][currentbranch] != null) {
-            text += comments[currentnode][currentbranch];
-        }
-
-        text += '</p>';
-
-        $('#textarea').html('');
-        $('#textarea').html(text);
-    }//}}}
-
-    // défini la langue
-    function SetLang(language) {//{{{
-        var langs = ['en','fr']; // langues supportées
-        var langsup = false;
-
-        for (var i = 0, ci = langs.length; i < ci; i++) {
-            if (langs[i] == language) {
-                langsup = true;
-            }
-        }
-        if (!langsup) {
-            language = 'en'; // langue par défaut
-        }
-
-        // récupère le script de la langue et traduit les éléments
-        $.getScript('lang/' + language + '.js',function () {
-            $('#comment').attr('title',lang.comment);
-            $('#load').attr('title',lang.load);
-            $('#lang').attr('title',lang.language);
-            $('#start').attr('title',lang.start);
-            $('#prev').attr('title',lang.prev);
-            $('#fastprev').attr('title',lang.fastprev);
-            $('#next').attr('title',lang.next);
-            $('#fastnext').attr('title',lang.fastnext);
-            $('#end').attr('title',lang.end);
-            $('#options').attr('title',lang.options);
-            $('#sendsgf').attr('title',lang.sendsgf);
-            $('#downsgf').attr('title',lang.downsgf);
-
-            if (infos != null) {
-                LoadInfos(true,true);
-            }
-
-            // change l'apparence du bouton pour prendre celle de la langue
-            $('#lang').attr('class','button' + language);
-            $('[class^="lang"]').show();
-            $('.lang' + language).hide();
-        });
-    }//}}}
     
+    
+        
     /*
      * EVENEMENTS
      */

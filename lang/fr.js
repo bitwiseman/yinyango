@@ -1,4 +1,4 @@
-var lang = {
+yygo.data.locale = {
     comment: 'Commentaires',
     load: 'Charger',
     language: 'Langue',

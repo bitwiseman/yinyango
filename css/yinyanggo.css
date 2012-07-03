@@ -145,7 +145,7 @@ body {
     margin: auto;
     cursor: n-resize;
 }
-#textarea {
+#textzone {
     overflow: auto;
 }
 /*}}}*/
