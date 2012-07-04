@@ -1,4 +1,5 @@
-yygo = window.yygo || {};
+//yygo = window.yygo || {};
+yygo = {};
 
 yygo.data = {//{{{
 
@@ -89,6 +90,7 @@ yygo.view = {//{{{
     htmlcomments:   '',
     htmlgoban:      '',
     htmlinfos:      '',
+    htmllist:       '',
     htmlvariations: '',
 
     showborders:    true,
@@ -259,50 +261,9 @@ yygo.view = {//{{{
         }
     },//}}}
 
-    // construction
+    // construction code html
 
     makeBorders: function () {//{{{
-        this.createBordersHtml();
-        this.insertBorders();
-    },//}}}
-
-    makeGoban: function () {//{{{
-        this.createGobanHtml();
-        this.insertGoban();
-        this.setGobanSize();
-    },//}}}
-
-    makeTextzone: function () {//{{{
-        if (yygo.data.infos != null) {
-            this.createInfosHtml();
-            this.inserInfos();
-        }
-        if (yygo.data.comments != null) {
-            this.createCommentsHtml();
-            this.insertComments();
-        }
-    },//}}}
-
-    makeVariations: function () {//{{{
-        this.createVariationsHtml();
-
-        if (this.htmlvariations != '') { // il y a des variantes
-            // afficher la barre de variantes si masquée
-            if (!this.showvariations) {
-                this.showvariations = true;
-                this.insertVariations();
-            }
-        } else { // pas de variantes
-            // masquer la barre de variantes si affichée
-            if (this.showvariations) {
-                this.showvariations = false;
-            }
-        }
-    },//}}}
-
-     // code html
-
-    createBordersHtml: function () {//{{{
         var size = yygo.data.size;
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
@@ -312,10 +273,10 @@ yygo.view = {//{{{
         var htmlleft = '<div id="borderleft">';
 
         for (var i = 0; i < size; i++) {
-            htmltop += '<div>' + letters[i] + '</div>';
-            htmlright += '<div>' + (size - i) + '</div>';
-            htmlbottom += '<div>' + letters[i] + '</div>';
-            htmlleft += '<div>' + (size - i) + '</div>';
+            htmltop += '<div class="cb">' + letters[i] + '</div>';
+            htmlright += '<div class="cb">' + (size - i) + '</div>';
+            htmlbottom += '<div class="cb">' + letters[i] + '</div>';
+            htmlleft += '<div class="cb">' + (size - i) + '</div>';
         }
 
         htmltop += '</div>';
@@ -324,10 +285,12 @@ yygo.view = {//{{{
         htmlleft += '</div>';
 
         this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft;
+
+        $('#borders').html(this.htmlborders);
     },//}}}
 
-    createCommentsHtml: function () {//{{{
-        var commments = yygo.data.comments;
+    makeComments: function () {//{{{
+        var comments = yygo.data.comments;
         var curnode = yygo.data.currentnode;
         var curbranch = yygo.data.currentbranch;
         var html = '';
@@ -340,9 +303,11 @@ yygo.view = {//{{{
         }
 
         this.htmlcomments = html;
+
+        $('#comments').html(this.htmlcomments);
     },//}}}
 
-    createGobanHtml: function () {//{{{
+    makeGoban: function () {//{{{
         var size = yygo.data.size;
         var cell = '';
         var coord = ['a','b','c','d','e','f','g','h','i','j',
@@ -355,20 +320,60 @@ yygo.view = {//{{{
             html += '<div>'; // début de ligne
             for (j = 0; j < size; j++) {
                 cell = coord[j] + coord[i];
-                table += '<div class="cell'; // début de cellule
+                html += '<div class="cell'; // début de cellule
                 color = this.getCellColor(cell)
-                table += color;
-                table += '" id="' + cell + '"';
-                table += this.getCellSymbol(cell, color);
-                table += '</div>'; // fin de cellule
+                html += color;
+                html += '" id="' + cell + '"';
+                html += this.getCellSymbol(cell, color);
+                html += '</div>'; // fin de cellule
             }
             html += '</div>'; // fin de ligne
         }
 
         this.htmlgoban = html;
+
+        $('#goban').html(this.htmlgoban);
     },//}}}
 
-    createInfosHtml: function () {//{{{
+    makeGamesList: function () {//{{{
+        var gameslist = yygo.data.gameslist;
+        var html = '<table>';
+        var infos = {};
+        var ci = gameslist.length;
+        var i;
+
+        for (i = 0; i < ci; i ++) {
+            infos = $.parseJSON(gameslist[i]['infos']);
+
+            html += '<tr><td>' + gameslist[i]['file'] + '</td>';
+
+            if (infos['PB'] != null) {
+                html += '<td>' + infos['PB'] + '</td>';
+            } else {
+                html += '<td></td>';
+            }
+            if (infos['PW'] != null) {
+                html += '<td>' + infos['PW'] + '</td>';
+            } else {
+                html += '<td></td>';
+            }
+            if (infos['DT'] != null) {
+                html += '<td>' + infos['DT'] + '</td>';
+            } else {
+                html += '<td></td>';
+            }
+
+            html += '</tr>';
+        }
+
+        html += '</table>';
+
+        this.htmllist = html;
+
+        $('#loadlist').html(this.htmllist);
+    },//}}}
+
+    makeInfos: function () {//{{{
         var infos = yygo.data.infos;
         var locale = yygo.data.locale;
         var html = '<p>';
@@ -398,9 +403,20 @@ yygo.view = {//{{{
         html += '</p>';
 
         this.htmlinfos = html;
+
+        $('#infos').html(this.htmlinfos);
     },//}}}
 
-    createVariationsHtml: function () {//{{{
+    makeTextzone: function () {//{{{
+        if (yygo.data.infos != null) {
+            this.createInfosHtml();
+        }
+        if (yygo.data.comments != null) {
+            this.createCommentsHtml();
+        }
+    },//}}}
+
+    makeVariations: function () {//{{{
         var game = yygo.data.game;
         var curbranch = yygo.data.currentbranch;
         var curnode = yygo.data.currentnode;
@@ -428,31 +444,19 @@ yygo.view = {//{{{
         }
 
         this.htmlvariations = html;
-    },//}}}
 
-    insertBorders: function () {//{{{
-        $('#borders').empty();
-        $('#borders').html(this.htmlborders);
-    },//}}}
-
-    insertComments: function () {//{{{
-        $('#comments').empty();
-        $('#comments').html(this.htmlcomments);
-    },//}}}
-
-    insertGoban: function () {//{{{
-        $('#goban').empty();
-        $('#goban').html(this.htmlgoban);
-    },//}}}
-
-    insertInfos: function () {//{{{
-        $('#infos').empty();
-        $('#infos').html(this.htmlinfos);
-    },//}}}
-
-    insertVariations: function () {//{{{
-        $('#variations').empty();
-        $('#variations').html(this.htmlvariations);
+        if (this.htmlvariations != '') { // il y a des variantes
+            // afficher la barre de variantes si masquée
+            if (!this.showvariations) {
+                this.showvariations = true;
+                $('#variations').html(this.htmlvariations);
+            }
+        } else { // pas de variantes
+            // masquer la barre de variantes si affichée
+            if (this.showvariations) {
+                this.showvariations = false;
+            }
+        }
     },//}}}
 
     // affichage
@@ -481,7 +485,7 @@ yygo.view = {//{{{
         $('#downsgf').attr('title', locale.downsgf);
 
         if (yygo.data.infos != null) {
-            this.createInfosHtml(); // réécris le code HTML des infos
+            this.makeInfos(); // réécris le code HTML des infos
         }
 
         // change l'apparence du bouton pour prendre celle de la langue
@@ -493,9 +497,9 @@ yygo.view = {//{{{
     changeScreen: function () {//{{{
         var mode = yygo.events.mode;
         var screen = yygo.events.screen;
-        var all = '[id$="buttons"],#variations,#goban,' +
+        var all = '[id$="buttons"],#variations,#borders,#goban,' +
                   '#textzone,#comments,#infos,#loadlist';
-        var replay = '#navbuttons,#utibuttons,#variations,' +
+        var replay = '#navbuttons,#utibuttons,#variations,#borders,' +
                      '#goban,#textzone,#comments';
         var options = '#optbuttons,#utibuttons,#textzone,#infos';
         var list = '#optbuttons,#loadlist';
@@ -506,31 +510,52 @@ yygo.view = {//{{{
             if (mode == 'replay') {
                 $(replay).show();
                 this.toggleNavButtons();
+                this.toggleVariations();
+                this.toggleTextzone();
             }
             // TODO autres modes
         } else if (screen == 'options') {
             $(options).show();
+            this.toggleTextzone();
         } else if (screen == 'list' || screen == 'intro') {
             $(list).show();
         }
     },//}}}
 
     drawGoban: function () {//{{{
+        var winw = $(window).width();
+        var gobanright = winw / 2 - this.sizegoban / 2; // centrer goban
+        var gobantop = 50;
+
+        console.log(winw + ',' + gobanright);
+
         if (this.showvariations) {
-            $('#textzone').css('top', this.sizegoban + 70);
+            gobantop += 20;
+        }
+        if (this.showborders) {
+            gobantop += this.sizecell;
+            $('#textzone').css('top', this.sizeborders + 50);
         } else {
             $('#textzone').css('top', this.sizegoban + 50);
         }
+
+
         $('#borders').css({
             height: this.sizeborders,
             width: this.sizeborders
         });
+        
+
         $('#goban').css({
+            top: gobantop,
+            right: gobanright,
             height: this.sizegoban,
             width: this.sizegoban
         });
-        $('#goban div,#borders div').css('height', this.sizecell);
-        $('[class^="cell"],#borders div').css({
+        $('#bordertop,#borderbottom').css('right', this.sizecell);
+        $('#borderright,#borderleft').css('top', this.sizecell);
+        $('#goban div,.cb').css('height', this.sizecell);
+        $('[class^="cell"],.cb').css({
             width: this.sizecell,
             lineHeight: this.sizecell + 'px',
             fontSize: this.sizecell / 1.5
@@ -596,13 +621,9 @@ yygo.events = {//{{{
     // propriétés
 
     mode:           'replay',
-    screen:         'intro',
+    screen:         'options',
 
     // méthodes
-
-    changeLang: function () {
-
-    },
 
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
@@ -616,7 +637,8 @@ yygo.events = {//{{{
 
         yygo.view.makeGoban();
         yygo.view.makeVariations();
-        yygo.view.makeTextzone();
+        yygo.view.makeInfos();
+        yygo.view.makeComments();
 
         this.mode = 'replay';
         this.screen = 'goban';
@@ -627,22 +649,122 @@ yygo.events = {//{{{
         yygo.view.toggleGoban();
         yygo.view.toggleVariations();
         yygo.view.toggleTextzone();
+
+        yygo.view.setGobanSize();
     },//}}}
 
-    makeBinds: function () {
-        $(window).bind('resize', yygo.view.setGobanSize());
-        $('#resizer').bind('mousedown', this.resizeTextzone(e));
+    makeBinds: function () {//{{{
+        $(window).bind('resize', function () {
+            yygo.view.setGobanSize()
+        });
+        $('#resizer').bind('mousedown', function (e) {
+            // ref: http://bit.ly/gwL00h
+            var winh = $(window).height();
+            var sizebefore = yygo.view.sizetextzone;
+            var cursory = winh - e.clientY;
+            var moveHandler = function (e) {
+                var sizeafter;
+
+                sizeafter = Math.max(100, winh - e.clientY + sizebefore - cursory); 
+                if (sizeafter > winh / 2) {
+                    sizeafter = winh / 2;
+                }
+                yygo.view.sizetextzone = sizeafter;
+                yygo.view.setGobanSize();
+            };
+            var upHandler = function (e) {
+                $('html').unbind('mousemove', moveHandler)
+                .unbind('mouseup', upHandler);
+            };
+
+            $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
+        });
 
         // boutons de navigation
         this.makeNavBinds();
 
-        $('#comment').bind('click', yygo.view.toggleTextzone());
-        $('#options').bind('click', this.toggleOptions()); 
-        $('[class^="lang"]').bind('click', this.changeLang());
+        // bouton textzone
+        $('#comment').bind('click', function () {
+            if (yygo.view.showtextzone) {
+                yygo.view.showtextzone = false;
+                yygo.view.toggleTextzone();
+            } else {
+                yygo.view.showtextzone = true;
+                yygo.view.toggleTextzone();
+            }
+        });
+        // bouton options
+        $('#options').bind('click', function () {
+            if (yygo.events.screen == 'goban') {
+                yygo.events.screen = 'options';
+                yygo.view.changeScreen();
+            } else {
+                yygo.events.screen = 'goban';
+                yygo.view.changeScreen();
+            }
+        });
+        // bouton de chargement liste
+        $('#load').bind('click', function () {
+            var htmllist = yygo.view.htmllist;
 
+
+            // TODO prévoir rafraichissement, limiter les données affichées
+            // afficher sur plusieurs pages
+
+            if (htmllist == '') { // récupère la liste si non chargée
+                $.getJSON('sgf.php', {list:'0'}, function (data) { 
+                    yygo.data.gameslist = data;
+                    yygo.view.makeGamesList();
+                });
+            }
+
+            if (yygo.events.screen == 'options') {
+                yygo.events.screen = 'list';
+                yygo.view.changeScreen();
+            } else {
+                yygo.events.screen = 'options';
+                yygo.view.changeScreen();
+            }
+        });
+        // bouton langues
+        $('[class^="lang"]').bind('click', function () {
+            var lang = $(this).attr('class').substr(4);
+
+            yygo.data.setLang(lang);
+        });
+        // bouton envoi de fichier SGF
+        $('#sendsgf').bind('click', function () {
+            $('#sendinput input[type="file"]').trigger('click');
+        });
         // boutons de variantes
-        $('[id^="varbut"]').live('click', this.navigateBranch());
-    },
+        $('[id^="varbut"]').live('click', function () {
+            var branch = $(this).attr('id').substr(6);
+
+            yygo.data.currentbranch = branch;
+            yygo.data.lastbranch = branch;
+
+            yygo.data.setLastNode();
+
+            this.makeNavBinds();
+            yygo.view.toggleNavButtons();
+
+            yygo.view.makeVariations();
+            yygo.view.makeGoban();
+            yygo.view.makeComments();
+
+            yygo.view.toggleVariations();
+        });
+        // ligne de la liste de chargement
+        $('#loadlist tr').live('click',function () {
+            var number = $(this).index();
+
+            yygo.events.loadGameFromList(number); 
+        });
+        // fichier à envoyer
+        $('#sendinput input[type="file"]').bind('change', function () {
+            $('#sendinput').submit();
+        });
+    },//}}}
 
     makeNavBinds: function () {//{{{
         var curnode = yygo.data.currentnode;
@@ -660,20 +782,6 @@ yygo.events = {//{{{
             $('#fastnext').bind('click', navigateNode(10));
             $('#end').bind('click', navigateNode(999999));
         }
-    },//}}}
-
-    navigateBranch: function () {//{{{
-        var branch = $(this).attr('id').substr(6);
-
-        yygo.data.currentbranch = branch;
-        yygo.data.lastbranch = branch;
-
-        yygo.data.setLastNode();
-        this.makeNavBinds();
-        yygo.view.toggleNavButtons();
-        yygo.view.makeVariations();
-        yygo.view.makeGoban();
-        yygo.view.makeComments();
     },//}}}
 
     navigateNode: function (move) {//{{{
@@ -711,44 +819,15 @@ yygo.events = {//{{{
 
         yygo.data.currentbranch = curbranch;
         yygo.data.currentnode = curnode;
+
         this.makeNavBinds();
         yygo.view.toggleNavButtons();
+
         yygo.view.makeVariations();
         yygo.view.makeGoban();
         yygo.view.makeComments();
-    },//}}}
 
-    resizeTextzone: function (e) {//{{{
-        // ref: http://bit.ly/gwL00h
-        var winh = $(window).height();
-        var sizebefore = yygo.view.sizetextzone;
-        var cursory = winh - e.clientY;
-        var moveHandler = function (e) {
-            var sizeafter;
-
-            sizeafter = Math.max(100, winh - e.clientY + sizebefore - cursory); 
-            if (sizeafter > winh / 2) {
-                sizeafter = winh / 2;
-            }
-            yygo.view.sizetextzone = sizeafter;
-            yygo.view.setGobanSize();
-        };
-        var upHandler = function (e) {
-            $('html').unbind('mousemove', moveHandler)
-                     .unbind('mouseup', upHandler);
-        };
-
-        $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
-    },//}}}
-
-    toggleOptions: function () {//{{{
-        if (this.screen == 'goban') {
-            this.screen == 'options';
-            yygo.view.changeScreen();
-        } else {
-            this.screen = 'goban';
-            yygo.view.changeScreen();
-        }
+        yygo.view.toggleVariations();
     },//}}}
 
 };//}}}
@@ -778,89 +857,6 @@ jQuery(document).ready(function ($) {
     };//}}}
 
     /*
-     * EVENEMENTS
-     */
-    
-    // bouton langues
-    $('[class^="lang"]').click(function () {//{{{
-        var flag = $(this).attr('class').substr(4);
-
-        SetLang(flag);
-    });//}}}
-
-    // bouton pour charger une partie
-    $('#load').click(function () {//{{{
-        // TODO prévoir rafraichissement, limiter les données affichées
-        // afficher sur plusieurs pages
-        if (!load && sql.length == 0) { // ajax et requête SQL si non chargé
-            $.getJSON('sgf.php',{sql:'0'},function (data) { 
-                var table = '<table>';
-
-                sql = data;
-
-                for (var i = 0, ci = sql.length; i < ci; i ++) {
-                    var inf = $.parseJSON(sql[i]['infos']);
-
-                    table += '<tr><td>' + sql[i]['file'] + '</td>';
-
-                    if (inf['PB'] != null) {
-                        table += '<td>' + inf['PB'] + '</td>';
-                    } else {
-                        table += '<td></td>';
-                    }
-                    if (inf['PW'] != null) {
-                        table += '<td>' + inf['PW'] + '</td>';
-                    } else {
-                        table += '<td></td>';
-                    }
-                    if (inf['DT'] != null) {
-                        table += '<td>' + inf['DT'] + '</td>';
-                    } else {
-                        table += '<td></td>';
-                    }
-
-                    table += '</tr>';
-                }
-
-                table += '</table>';
-
-                $('#loadlist').html(table);
-            });
-        }
-        if (load) {
-            $('#goban,#comment,#options').show();
-            if (com) {
-                $('#textzone').show();
-            }
-            $('#loadlist').hide();
-            load = false;
-        } else {
-            $('#goban,#textzone,#comment,#options').hide();
-            $('#loadlist').fadeIn();
-            load = true;
-        }
-    });//}}}
-
-    // chargement
-    $('#loadlist tr').live('click',function () {//{{{
-        var num = $(this).index();
-
-        $('#comment,#options').show();
-
-        LoadGame(num); 
-    });//}}}
-
-    // envoi de fichier SGF
-    $('#sendsgf').click(function () {//{{{
-        $('#sendinput input[type="file"]').trigger('click');
-    });//}}}
-
-    // fichier à envoyer
-    $('#sendinput input[type="file"]').change(function () {//{{{
-        $('#sendinput').submit();
-    });//}}}
-
-    /*
      * INITIALISATION
      */
 
@@ -871,18 +867,19 @@ jQuery(document).ready(function ($) {
 
     yygo.data.setLang(navlang);
 
-    $('#variations,#loadlist,#textzone').hide();
-    $('#navbuttons,#comment,#options').hide();
-    $('#goban,#resizer').disableSelection();
-    
+    yygo.events.makeBinds();
+
+    yygo.view.changeScreen();
+    $('#borders,#goban,#resizer').disableSelection();
+
     // charge le goban d'intro
-    $.getJSON('sgf.php',{sql:'-1'},function (data) {
-        sql = data;
-        LoadGame(0);
-        options = true;
-        $('#navbuttons').hide();
-        $('#optbuttons').show();
-        sql = [];
-    });
+    /*$.getJSON('sgf.php',{list:'-1'},function (data) {
+        yygo.data.gameslist = data;
+        yygo.events.loadGameFromList(0);
+
+        yygo.view.changeScreen();
+
+        yygo.data.gameslist = [];
+    });*/
 
 });

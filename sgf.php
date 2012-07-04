@@ -57,9 +57,9 @@ if (isset($_FILES['sgf']['name'])) {/*{{{*/
     }
 }/*}}}*/
 // récupère la table SQL
-if (isset($_GET['sql'])) {/*{{{*/
+if (isset($_GET['list'])) {/*{{{*/
 
-    $lim = intval($_GET['sql']);
+    $lim = intval($_GET['list']);
 
     if ($lim >= 0 || $lim == -1) {
         // connexion base de données

@@ -133,30 +133,43 @@ body {
 }
 /*}}}*/
 #borders {/*{{{*/
+    background: #00ff00;
     position: relative;
-}
-#bordertop {
-    display: inline-block;
-    position: absolute;
-    top: 0;
     margin: auto;
 }
+#bordertop {
+    background: #ff0000;
+    position: absolute;
+    top: 0;
+}
 #borderright {
+    background: #ff0000;
     position: absolute;
     right: 0;
 }
 #borderbottom {
-    display: inline-block;
+    background: #ff0000;
     position: absolute;
     bottom: 0;
-    margin: auto;
 }
 #borderleft {
+    background: #ff0000;
     position: absolute;
     left: 0;
 }
+#bordertop div {
+    float: left;
+}
+#borderbottom div {
+    float: left;
+}
+.cb {
+    font-family: serif;
+    text-align: center;
+}
 /*}}}*/
 #goban {/*{{{*/
+    position: absolute;
     margin: auto;
 }
 [class^="cell"] {
