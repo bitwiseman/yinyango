@@ -14,7 +14,6 @@ yygo.data = {//{{{
     symbols:        {},
 
     lang:           'en',
-    mode:           'replay',
 
     branchs:        0,
     size:           0,
@@ -26,7 +25,17 @@ yygo.data = {//{{{
 
     // méthodes
 
-    // défini la branche actuelle en fonction de la dernière branche
+    // manipulations de variables
+
+    getParentBranch: function (node, branch) {//{{{
+        for (var i = branch; i >= 0; i--) {
+            if (this.game[node] != null && this.game[node][i] != null) {
+                return i;
+            }
+        }
+        return 0;
+    },//}}}
+
     setCurrentBranch: function () {//{{{
         if (this.game[this.currentnode][this.lastbranch] != null) {
             this.currentbranch = this.lastbranch;
@@ -40,7 +49,6 @@ yygo.data = {//{{{
         }
     }//}}}
 
-    // défini le dernier noeud de la branche actuelle
     setLastNode: function () {//{{{
         this.lastnode = this.currentnode;
         while (this.game[this.lastnode+1] != null &&
@@ -49,17 +57,6 @@ yygo.data = {//{{{
         }
     },//}}}
 
-    // retourne la branche parent d'une branche
-    getParentBranch: function (node, branch) {//{{{
-        for (var i = branch; i >= 0; i--) {
-            if (this.game[node] != null && this.game[node][i] != null) {
-                return i;
-            }
-        }
-        return 0;
-    },//}}}
-
-    // défini la langue
     setLang: function (lang) {//{{{
         var ci = this.langs.length;
         var i;
@@ -76,7 +73,8 @@ yygo.data = {//{{{
         });
     },//}}}
 
-    // charge les données de la partie de la liste
+    // initialisations
+
     loadDataFromList: function (number) {//{{{
         this.infos = $.parseJSON(this.gameslist[number]['infos']);
         this.comments = $.parseJSON(this.gameslist[number]['comments']);
@@ -92,8 +90,6 @@ yygo.data = {//{{{
 
         this.setLastNode();
     },//}}}
-
-    
 
 };//}}}
 
@@ -114,8 +110,6 @@ yygo.view = {//{{{
     showtextzone:   false,
     showvariations: false,
 
-    redrawgoban:    false,
-
     sizeborders:    0,
     sizecell:       0,
     sizetextzone:   200,
@@ -123,7 +117,8 @@ yygo.view = {//{{{
 
     // méthodes
 
-    // retourne la couleur de pierre de la cellule
+    // manipulations de variables
+
     getCellColor: function (cell) {//{{{
         var game = yygo.data.game;
         var curbranch = yygo.data.currentbranch;
@@ -148,7 +143,6 @@ yygo.view = {//{{{
         return ''; // pas de pierre
     },//}}}
 
-    // retourne le symbol présent dans la cellule
     getCellSymbol: function (cell, color) {//{{{
         var curbranch = yygo.data.currentbranch;
         var curnode = yygo.data.currentnode;
@@ -214,7 +208,6 @@ yygo.view = {//{{{
         return ''; // pas de symbole
     },//}}}
 
-    // retourne un symbole SVG
     getSymbolSvg: function (symbol, color) {//{{{
         var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
             'version="1.1" viewBox="0 0 10 10">';
@@ -239,74 +232,7 @@ yygo.view = {//{{{
         return svg;
     },//}}}
 
-    // modifie les éléments impactés par un changement de langue
-    changeLang: function () {//{{{
-        var locale = yygo.data.locale;
-        var lang = yygo.data.lang;
-
-        // étiquettes des boutons
-        $('#comment').attr('title', locale.comment);
-        $('#load').attr('title', locale.load);
-        $('#lang').attr('title', locale.language);
-        $('#start').attr('title', locale.start);
-        $('#prev').attr('title', locale.prev);
-        $('#fastprev').attr('title', locale.fastprev);
-        $('#next').attr('title', locale.next);
-        $('#fastnext').attr('title', locale.fastnext);
-        $('#end').attr('title', locale.end);
-        $('#options').attr('title', locale.options);
-        $('#sendsgf').attr('title', locale.sendsgf);
-        $('#downsgf').attr('title', locale.downsgf);
-
-        if (yygo.data.infos != null) {
-            this.createInfosHtml(); // réécris le code HTML des infos
-        }
-
-        // change l'apparence du bouton pour prendre celle de la langue
-        $('#lang').attr('class', 'button' + lang);
-        $('[class^="lang"]').show();
-        $('.lang' + lang).hide();
-    },//}}}
-
-    // dessine l'interface
-    drawInterface: function () {//{{{
-        if (this.showvariations) {
-            $('#variations').show();
-        } else {
-            $('#variations').hide();
-        }
-
-        if (this.showtextzone) {
-            $('#textzone').show();
-        } else {
-            $('#textzone').hide();
-        }
-
-        if (this.redrawgoban) {
-            if (this.showvariations) {
-                $('#textzone').css('top', this.sizegoban + 70);
-            } else {
-                $('#textzone').css('top', this.sizegoban + 50);
-            }
-            $('#borders').css({
-                height: this.sizeborders,
-                width: this.sizeborders
-            });
-            $('#goban').css({
-                height: this.sizegoban,
-                width: this.sizegoban
-            });
-            $('#goban div,#borders div').css('height', this.sizecell);
-            $('[class^="cell"],#borders div').css({
-                width: this.sizecell,
-                lineHeight: this.sizecell + 'px',
-                fontSize: this.sizecell / 1.5
-            });
-        }
-    },//}}}
-
-    // ajuste l'interface en fonction de la fenêtre du navigateur
-    resizeInterface: function () {//{{{
+    setGobanSize: function () {//{{{
         var size = yygo.data.size;
         var winw = $(window).width();
         var winh = $(window).height();    
@@ -343,55 +269,53 @@ yygo.view = {//{{{
 
         // redessine le goban si la taille a changé
         if (this.sizegoban != oldsizegoban) {
-            this.redrawgoban = true;
+            this.drawGoban(); 
         }
-
-        this.drawInterface(); 
-
-        this.redrawgoban = false;
     },//}}}
 
-    // création du code HTML des variantes
-    createVariationsHtml: function () {//{{{
-        var game = yygo.data.game;
-        var curbranch = yygo.data.currentbranch;
-        var curnode = yygo.data.currentnode;
-        var branchs = yygo.data.branchs;
-        var pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
-        var variations = 0;
-        var html = '';
-        var i;
+    // construction
 
-        for (i = 0; i < branchs; i++) {
-            if (game[curnode][i] != null && curnode > 0) {
-                if (yygo.data.getParentBranch(curnode - 1, i) == pbranch) {
-                    variations++;
-                    if (i == curbranch) {
-                        html += '<div id="varbua' + i + '"></div>';
-                    } else {
-                        html += '<div id="varbut' + i + '"></div>';
-                    }
-                }
-            }
-        }
+    makeBorders: function () {//{{{
+        this.createBordersHtml();
+        this.insertBorders();
+        this.toggleBorders();
+    },//}}}
 
-        this.htmlvariations = html;
+    makeGoban: function () {//{{{
+        this.createGobanHtml();
+        this.insertGoban();
+        this.setGobanSize();
+    },//}}}
 
-        if (variations > 1) {
+    makeTextzone: function () {//{{{
+        this.createCommentsHtml();
+        this.createInfosHtml();
+        this.insertComments();
+        this.inserInfos();
+        this.toggleTextzone();
+    },//}}}
+
+    makeVariations: function () {//{{{
+        this.createVariationsHtml();
+
+        if (this.htmlvariations != '') { // il y a des variantes
+            // afficher la barre de variantes si masquée
             if (!this.showvariations) {
                 this.showvariations = true;
                 this.insertVariations();
-                this.resizeInterface();
+                this.toggleVariations();
             }
-        } else {
+        } else { // pas de variantes
+            // masquer la barre de variantes si affichée
             if (this.showvariations) {
                 this.showvariations = false;
-                this.resizeInterface();
+                this.toggleVariations();
             }
         }
     },//}}}
 
-    // création du code HTML des bordures du goban
+     // code html
+
     createBordersHtml: function () {//{{{
         var size = yygo.data.size;
         var letters = ['A','B','C','D','E','F','G','H','J',
@@ -414,11 +338,24 @@ yygo.view = {//{{{
         htmlleft += '</div>';
 
         this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft;
-
-        this.insertBorders();
     },//}}}
 
-    // création du code HTML du goban
+    createCommentsHtml: function () {//{{{
+        var commments = yygo.data.comments;
+        var curnode = yygo.data.currentnode;
+        var curbranch = yygo.data.currentbranch;
+        var html = '';
+
+        if (comments != null && comments[curnode] != null &&
+            comments[curnode][curbranch] != null) {
+            html = '<p>';
+            html += comments[curnode][curbranch];
+            html += '</p>';
+        }
+
+        this.htmlcomments = html;
+    },//}}}
+
     createGobanHtml: function () {//{{{
         var size = yygo.data.size;
         var cell = '';
@@ -443,29 +380,8 @@ yygo.view = {//{{{
         }
 
         this.htmlgoban = html;
-
-        this.insertGoban();
     },//}}}
 
-    // création du code HTML des commentaires de l'état actuel
-    createCommentsHtml: function () {//{{{
-        var commments = yygo.data.comments;
-        var currentnode = yygo.data.currentnode;
-        var currentbranch = yygo.data.currentbranch;
-
-        this.htmlcomments = '<p>';
-
-        if (comments != null && comments[currentnode] != null &&
-            comments[currentnode][currentbranch] != null) {
-            this.htmlcomments += comments[currentnode][currentbranch];
-        }
-
-        this.htmlcomments += '</p>';
-
-        this.insertComments();
-    },//}}}
-
-    // création du code HTML des infos de la partie
     createInfosHtml: function () {//{{{
         var infos = yygo.data.infos;
         var locale = yygo.data.locale;
@@ -496,53 +412,157 @@ yygo.view = {//{{{
         html += '</p>';
 
         this.htmlinfos = html;
-
-        this.insertInfos();
     },//}}}
 
-    // insère le code HTML des variantes
-    insertVariations: function () {//{{{
-        $('#variations').empty();
-        $('#variations').html(this.htmlvariations);
+    createVariationsHtml: function () {//{{{
+        var game = yygo.data.game;
+        var curbranch = yygo.data.currentbranch;
+        var curnode = yygo.data.currentnode;
+        var branchs = yygo.data.branchs;
+        var pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
+        var variations = 0;
+        var html = '';
+        var i;
+
+        for (i = 0; i < branchs; i++) {
+            if (game[curnode][i] != null && curnode > 0) {
+                if (yygo.data.getParentBranch(curnode - 1, i) == pbranch) {
+                    variations++;
+                    if (i == curbranch) { // variante actuelle
+                        html += '<div id="varbua' + i + '"></div>';
+                    } else { // autre variante
+                        html += '<div id="varbut' + i + '"></div>';
+                    }
+                }
+            }
+        }
+
+        if (variations <= 1) { // pas de variantes, effacer le code HTML
+            html = '';
+        }
+
+        this.htmlvariations = html;
     },//}}}
 
-    // insère le code HTML des bordures du goban
     insertBorders: function () {//{{{
         $('#borders').empty();
         $('#borders').html(this.htmlborders);
     },//}}}
 
-    // insère le code HTML du goban
-    insertGoban: function () {//{{{
-        $('#goban').empty();
-        $('#goban').html(this.htmlgoban);
-    },//}}}
-
-    // insère le code HTML des commentaires
     insertComments: function () {//{{{
         $('#comments').empty();
         $('#comments').html(this.htmlcomments);
     },//}}}
 
-    // insère le code HTML des infos de la partie dans la zone commentaires
+    insertGoban: function () {//{{{
+        $('#goban').empty();
+        $('#goban').html(this.htmlgoban);
+    },//}}}
+
     insertInfos: function () {//{{{
         $('#infos').empty();
         $('#infos').html(this.htmlinfos);
     },//}}}
 
+    insertVariations: function () {//{{{
+        $('#variations').empty();
+        $('#variations').html(this.htmlvariations);
+    },//}}}
+
+    // affichage
+
+    changeLang: function () {//{{{
+        var locale = yygo.data.locale;
+        var lang = yygo.data.lang;
+
+        // étiquettes des boutons
+        $('#comment').attr('title', locale.comment);
+        $('#load').attr('title', locale.load);
+        $('#lang').attr('title', locale.language);
+        $('#start').attr('title', locale.start);
+        $('#prev').attr('title', locale.prev);
+        $('#fastprev').attr('title', locale.fastprev);
+        $('#next').attr('title', locale.next);
+        $('#fastnext').attr('title', locale.fastnext);
+        $('#end').attr('title', locale.end);
+        $('#options').attr('title', locale.options);
+        $('#sendsgf').attr('title', locale.sendsgf);
+        $('#downsgf').attr('title', locale.downsgf);
+
+        if (yygo.data.infos != null) {
+            this.createInfosHtml(); // réécris le code HTML des infos
+        }
+
+        // change l'apparence du bouton pour prendre celle de la langue
+        $('#lang').attr('class', 'button' + lang);
+        $('[class^="lang"]').show();
+        $('.lang' + lang).hide();
+    },//}}}
+
+    drawGoban: function () {//{{{
+        if (this.showvariations) {
+            $('#textzone').css('top', this.sizegoban + 70);
+        } else {
+            $('#textzone').css('top', this.sizegoban + 50);
+        }
+        $('#borders').css({
+            height: this.sizeborders,
+            width: this.sizeborders
+        });
+        $('#goban').css({
+            height: this.sizegoban,
+            width: this.sizegoban
+        });
+        $('#goban div,#borders div').css('height', this.sizecell);
+        $('[class^="cell"],#borders div').css({
+            width: this.sizecell,
+            lineHeight: this.sizecell + 'px',
+            fontSize: this.sizecell / 1.5
+        });
+    },//}}}
+
+    toggleBorders: function () {//{{{
+        if (this.showborders) {
+            $('#borders').show();
+            this.setGobanSize();
+        } else {
+            $('#borders').hide();
+            this.setGobanSize();
+        }
+    },//}}}
+
+    toggleTextzone: function () {//{{{
+        if (this.showtextzone) {
+            $('#textzone').show();
+            this.setGobanSize();
+        } else {
+            $('#textzone').hide();
+            this.setGobanSize();
+        }
+    },//}}}
+
+    toggleVariations: function () {//{{{
+        if (this.showvariations) {
+            $('#variations').show();
+            this.setGobanSize();
+        } else {
+            $('#variations').hide();
+            this.setGobanSize();
+        }
+    },//}}}
+ 
 };//}}}
-
-
-    
 
 // événements
 yygo.events = {//{{{
 
     // propriétés
 
+    mode:           'replay',
+    screen:         'intro',
+
     // méthodes
 
-    // charge une partie de la liste
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
 
@@ -580,7 +600,7 @@ yygo.events = {//{{{
         
 
         // affiche l'interface
-        yygo.view.resizeGoban(true); // forcer le redimensionnement
+        yygo.view.setGobanSize(true); // forcer le redimensionnement
         yygo.view.navState();
         // TODO appeler une méthode affichage
         $('#goban').fadeIn();
@@ -589,7 +609,6 @@ yygo.events = {//{{{
             $('#textzone').show();
         }
     },//}}}
-
 
 };//}}}
 
