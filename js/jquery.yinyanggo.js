@@ -1,6 +1,5 @@
 yygo = window.yygo || {};
 
-// données
 yygo.data = {//{{{
 
     // propriétés
@@ -28,26 +27,15 @@ yygo.data = {//{{{
     // manipulations de variables
 
     getParentBranch: function (node, branch) {//{{{
-        for (var i = branch; i >= 0; i--) {
+        var i;
+
+        for (i = branch; i >= 0; i--) {
             if (this.game[node] != null && this.game[node][i] != null) {
                 return i;
             }
         }
         return 0;
     },//}}}
-
-    setCurrentBranch: function () {//{{{
-        if (this.game[this.currentnode][this.lastbranch] != null) {
-            this.currentbranch = this.lastbranch;
-        } else {
-            for (var i = this.currentbranch+1; i < this.lastbranch; i ++) {
-                if (this.game[this.currentnode][i] != null) {
-                    this.currentbranch = i;
-                    break;
-                }
-            }
-        }
-    }//}}}
 
     setLastNode: function () {//{{{
         this.lastnode = this.currentnode;
@@ -93,7 +81,6 @@ yygo.data = {//{{{
 
 };//}}}
 
-// affichage
 yygo.view = {//{{{
 
     // propriétés
@@ -105,8 +92,7 @@ yygo.view = {//{{{
     htmlvariations: '',
 
     showborders:    true,
-    showlist:       false,
-    showoptions:    false,
+    showgoban:      true,
     showtextzone:   false,
     showvariations: false,
 
@@ -278,7 +264,6 @@ yygo.view = {//{{{
     makeBorders: function () {//{{{
         this.createBordersHtml();
         this.insertBorders();
-        this.toggleBorders();
     },//}}}
 
     makeGoban: function () {//{{{
@@ -288,11 +273,14 @@ yygo.view = {//{{{
     },//}}}
 
     makeTextzone: function () {//{{{
-        this.createCommentsHtml();
-        this.createInfosHtml();
-        this.insertComments();
-        this.inserInfos();
-        this.toggleTextzone();
+        if (yygo.data.infos != null) {
+            this.createInfosHtml();
+            this.inserInfos();
+        }
+        if (yygo.data.comments != null) {
+            this.createCommentsHtml();
+            this.insertComments();
+        }
     },//}}}
 
     makeVariations: function () {//{{{
@@ -303,13 +291,11 @@ yygo.view = {//{{{
             if (!this.showvariations) {
                 this.showvariations = true;
                 this.insertVariations();
-                this.toggleVariations();
             }
         } else { // pas de variantes
             // masquer la barre de variantes si affichée
             if (this.showvariations) {
                 this.showvariations = false;
-                this.toggleVariations();
             }
         }
     },//}}}
@@ -471,6 +457,11 @@ yygo.view = {//{{{
 
     // affichage
 
+    changeGobanImage: function () {//{{{
+        $('#goban').css('background',
+                        'url(images/' + yygo.data.size + '.svg)');
+    },//}}}
+
     changeLang: function () {//{{{
         var locale = yygo.data.locale;
         var lang = yygo.data.lang;
@@ -497,6 +488,31 @@ yygo.view = {//{{{
         $('#lang').attr('class', 'button' + lang);
         $('[class^="lang"]').show();
         $('.lang' + lang).hide();
+    },//}}}
+
+    changeScreen: function () {//{{{
+        var mode = yygo.events.mode;
+        var screen = yygo.events.screen;
+        var all = '[id$="buttons"],#variations,#goban,' +
+                  '#textzone,#comments,#infos,#loadlist';
+        var replay = '#navbuttons,#utibuttons,#variations,' +
+                     '#goban,#textzone,#comments';
+        var options = '#optbuttons,#utibuttons,#textzone,#infos';
+        var list = '#optbuttons,#loadlist';
+
+        $(all).hide();
+
+        if (screen == 'goban') {
+            if (mode == 'replay') {
+                $(replay).show();
+                this.toggleNavButtons();
+            }
+            // TODO autres modes
+        } else if (screen == 'options') {
+            $(options).show();
+        } else if (screen == 'list' || screen == 'intro') {
+            $(list).show();
+        }
     },//}}}
 
     drawGoban: function () {//{{{
@@ -531,6 +547,28 @@ yygo.view = {//{{{
         }
     },//}}}
 
+    toggleGoban: function () {//{{{
+        if (this.showgoban) {
+            $('#goban').show();
+        } else {
+            $('#goban').hide();
+        }
+    },//}}}
+
+    toggleNavButtons: function () {//{{{
+        var curnode = yygo.data.currentnode;
+        var lastnode = yygo.data.lastnode;
+
+        $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
+
+        if (curnode == 0) {
+            $('[id$="prev"],#start').attr('class','buttond');
+        }
+        if (curnode == lastnode) {
+            $('[id$="next"],#end').attr('class','buttond');
+        }
+    },//}}}
+
     toggleTextzone: function () {//{{{
         if (this.showtextzone) {
             $('#textzone').show();
@@ -553,7 +591,6 @@ yygo.view = {//{{{
  
 };//}}}
 
-// événements
 yygo.events = {//{{{
 
     // propriétés
@@ -563,50 +600,154 @@ yygo.events = {//{{{
 
     // méthodes
 
+    changeLang: function () {
+
+    },
+
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
 
-        // TODO sépare le chargement des données et l'affichage
-
         yygo.data.loadDataFromList(number);
 
-        // recré les bordures si la taille du goban diffère du précédent
         if (yygo.data.size != oldsize) {
-            yygo.view.createBordersHtml();
+            yygo.view.makeBorders();
+            yygo.view.changeGobanImage();
         }
 
-        yygo.view.createGobanHtml();
+        yygo.view.makeGoban();
+        yygo.view.makeVariations();
+        yygo.view.makeTextzone();
 
-        if (yygo.data.infos != null) {
-            yygo.view.createInfosHtml();
+        this.mode = 'replay';
+        this.screen = 'goban';
+    
+        yygo.view.changeScreen();
+
+        yygo.view.toggleBorders();
+        yygo.view.toggleGoban();
+        yygo.view.toggleVariations();
+        yygo.view.toggleTextzone();
+    },//}}}
+
+    makeBinds: function () {
+        $(window).bind('resize', yygo.view.setGobanSize());
+        $('#resizer').bind('mousedown', this.resizeTextzone(e));
+
+        // boutons de navigation
+        this.makeNavBinds();
+
+        $('#comment').bind('click', yygo.view.toggleTextzone());
+        $('#options').bind('click', this.toggleOptions()); 
+        $('[class^="lang"]').bind('click', this.changeLang());
+
+        // boutons de variantes
+        $('[id^="varbut"]').live('click', this.navigateBranch());
+    },
+
+    makeNavBinds: function () {//{{{
+        var curnode = yygo.data.currentnode;
+        var lastnode = yygo.data.lastnode;
+
+        $('#start,[id$="prev"],[id$="next"],#end').unbind();
+
+        if (curnode > 0) {
+            $('#start').bind('click', navigateNode(-999999));
+            $('#fastprev').bind('click', navigateNode(-10));
+            $('#prev').bind('click', navigateNode(-1));
+        }
+        if (curnode < lastnode) {
+            $('#next').bind('click', navigateNode(1));
+            $('#fastnext').bind('click', navigateNode(10));
+            $('#end').bind('click', navigateNode(999999));
+        }
+    },//}}}
+
+    navigateBranch: function () {//{{{
+        var branch = $(this).attr('id').substr(6);
+
+        yygo.data.currentbranch = branch;
+        yygo.data.lastbranch = branch;
+
+        yygo.data.setLastNode();
+        this.makeNavBinds();
+        yygo.view.toggleNavButtons();
+        yygo.view.makeVariations();
+        yygo.view.makeGoban();
+        yygo.view.makeComments();
+    },//}}}
+
+    navigateNode: function (move) {//{{{
+        var game = yygo.data.game;
+        var curbranch = yygo.data.currentbranch;
+        var curnode = yygo.data.currentnode;
+        var lastnode = yygo.data.lastnode;
+        var i;
+
+        // défini le nouveau noeud actuel
+        if (curnode + move < 0) {
+            curnode = 0;
+        } else if (curnode + move > lastnode) {
+            curnode = lastnode;
+        } else {
+            curnode = curnode + move;
         }
 
-        if (yygo.data.comments != null) {
-            yygo.view.createCommentsHtml();
+        // défini la nouvelle branche actuelle
+        if (move < 0 && game[curnode][curbranch] == null) {
+            curbranch = yygo.data.getParentBranch(curnode, lastbranch);
+        } else if (move > 0) {
+            if (game[curnode][lastbranch] != null) { // dernière branche
+                curbranch = lastbranch;
+            } else {
+                // cherche la première branche entre l'actuelle et la dernière
+                for (i = curbranch + 1; i < lastbranch; i++) {
+                    if (game[curnode][i] != null) {
+                        curbranch = i;
+                        break;
+                    }
+                }
+            }
         }
 
-        yygo.view.showload = false;
-        yygo.view.showoptions = false;
-        // TODO appeler une méthode affichage
-        $('#loadlist,#optbuttons').hide();
-        $('#goban').css('background', 'url(images/' + yygo.data.size + '.svg)');
+        yygo.data.currentbranch = curbranch;
+        yygo.data.currentnode = curnode;
+        this.makeNavBinds();
+        yygo.view.toggleNavButtons();
+        yygo.view.makeVariations();
+        yygo.view.makeGoban();
+        yygo.view.makeComments();
+    },//}}}
 
-        
-        // TODO affiche/masque curseur en fonction du mode
+    resizeTextzone: function (e) {//{{{
+        // ref: http://bit.ly/gwL00h
+        var winh = $(window).height();
+        var sizebefore = yygo.view.sizetextzone;
+        var cursory = winh - e.clientY;
+        var moveHandler = function (e) {
+            var sizeafter;
 
-        // charge l'état du début de jeu
-        yygo.view.loadStones();
-        
-        
+            sizeafter = Math.max(100, winh - e.clientY + sizebefore - cursory); 
+            if (sizeafter > winh / 2) {
+                sizeafter = winh / 2;
+            }
+            yygo.view.sizetextzone = sizeafter;
+            yygo.view.setGobanSize();
+        };
+        var upHandler = function (e) {
+            $('html').unbind('mousemove', moveHandler)
+                     .unbind('mouseup', upHandler);
+        };
 
-        // affiche l'interface
-        yygo.view.setGobanSize(true); // forcer le redimensionnement
-        yygo.view.navState();
-        // TODO appeler une méthode affichage
-        $('#goban').fadeIn();
-        $('#navbuttons').show();
-        if (com) {
-            $('#textzone').show();
+        $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
+    },//}}}
+
+    toggleOptions: function () {//{{{
+        if (this.screen == 'goban') {
+            this.screen == 'options';
+            yygo.view.changeScreen();
+        } else {
+            this.screen = 'goban';
+            yygo.view.changeScreen();
         }
     },//}}}
 
@@ -619,7 +760,6 @@ jQuery(document).ready(function ($) {
      */
 
     // désactive la sélection d'éléments
-    // ref: http://bit.ly/gwL00h
     $.fn.disableSelection = function () {//{{{
         return this.each(function () {           
             $(this).attr('unselectable', 'on')
@@ -637,185 +777,10 @@ jQuery(document).ready(function ($) {
         });
     };//}}}
 
-    
-    /*
-     * FONCTIONS
-     */
-
-        
-    // active/désactive les boutons de navigation
-    function NavState() {//{{{
-        $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
-        if (currentnode == 0) {
-            $('[id$="prev"],#start').attr('class','buttond');
-        }
-        if (currentnode == lastnode) {
-            $('[id$="next"],#end').attr('class','buttond');
-        }
-    }//}}}
-
-    
-    
-        
-    
-    
-    
-    
-    
-        
     /*
      * EVENEMENTS
      */
     
-    // fenêtre du navigateur redimensionnée
-    $(window).resize(function () {//{{{
-        ResizeGoban(false); 
-    });//}}}
-
-    // redimensionne commentaires 
-    // ref: http://www.jquery.info/spip.php?article44
-    $('#resizer').mousedown(function (e) {//{{{
-        var winh = $(window).height();
-        var h = sizetextzone; // taille commentaire avant redimensionnement
-        var y = winh - e.clientY; // position curseur par rapport au bas
-        var moveHandler = function (e) {
-            // minimum 100 pixels
-            sizetextzone = Math.max(100, (winh - e.clientY) + h - y); 
-            if (sizetextzone > (winh / 2)) {
-                sizetextzone = (winh / 2); // max la moitié de la hauteur
-            }
-            ResizeGoban(false);
-        };
-        var upHandler = function (e) {
-            $('html').unbind('mousemove',moveHandler)
-                     .unbind('mouseup',upHandler);
-        };
-
-        $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
-    });//}}}
-
-    // bouton début
-    $('#start').click(function () {//{{{
-        if ($('#start').attr('class') == 'button') {
-            currentnode = 0;
-            if (game[currentnode][currentbranch] == null) {
-                currentbranch = getParentBranch(currentnode,lastbranch);
-            }
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton retour rapide
-    $('#fastprev').click(function () {//{{{
-        if ($('#fastprev').attr('class') == 'button') {
-            if (currentnode - 10 < 0) {
-                currentnode = 0;
-            } else {
-                currentnode -= 10;
-            }
-            if (game[currentnode][currentbranch] == null) {
-                currentbranch = getParentBranch(currentnode,lastbranch);
-            }
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton précédent
-    $('#prev').click(function () {//{{{
-        if ($('#prev').attr('class') == 'button') {
-            currentnode--;
-            if (game[currentnode][currentbranch] == null) {
-                currentbranch = getParentBranch(currentnode,lastbranch);
-            }
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton suivant
-    $('#next').click(function () {//{{{
-        if ($('#next').attr('class') == 'button') {
-            currentnode++;
-            setCurrentBranch();
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton avance rapide
-    $('#fastnext').click(function () {//{{{
-        if ($('#fastnext').attr('class') == 'button') {
-            if (currentnode + 10 > lastnode) {
-                currentnode = lastnode;
-            } else {
-                currentnode += 10;
-            }
-            setCurrentBranch();
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton fin
-    $('#end').click(function () {//{{{
-        if ($('#end').attr('class') == 'button') {
-            currentnode = lastnode;
-            setCurrentBranch();
-            NavState();
-            LoadStones();
-            LoadComments();
-        }
-    });//}}}
-
-    // bouton commentaires
-    $('#comment').click(function () {//{{{
-        if (com) {
-            $('#textzone').hide();
-            com = false;
-        } else {
-            $('#textzone').show();
-            com = true;
-        }
-
-        ResizeGoban(false);
-    });//}}}
-
-    // changement de branche
-    $('[id^="varbut"]').live('click',function () {//{{{
-        lastbranch = $(this).attr('id').substr(6);
-        currentbranch = lastbranch;
-
-        setLastNode();
-        NavState();
-        LoadStones();
-        LoadComments();
-    });//}}}
-
-    // bouton options
-    $('#options').click(function () {//{{{
-        if (options) {
-            LoadComments();
-            $('#optbuttons').hide();
-            $('#navbuttons').show();
-            if (vari) {
-                $('#variations').show();
-            }
-            options = false;
-        } else {
-            LoadInfos(false,true);
-            $('#navbuttons,#variations').hide();
-            $('#optbuttons').show();
-            options = true;
-        }
-    });//}}}
-
     // bouton langues
     $('[class^="lang"]').click(function () {//{{{
         var flag = $(this).attr('class').substr(4);
