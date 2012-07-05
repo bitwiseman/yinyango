@@ -25,8 +25,6 @@ yygo.data = {//{{{
 
     // méthodes
 
-    // manipulations de variables
-
     getParentBranch: function (node, branch) {//{{{
         var i;
 
@@ -36,6 +34,22 @@ yygo.data = {//{{{
             }
         }
         return 0;
+    },//}}}
+
+    loadDataFromList: function (number) {//{{{
+        this.infos = $.parseJSON(this.gameslist[number]['infos']);
+        this.comments = $.parseJSON(this.gameslist[number]['comments']);
+        this.symbols = $.parseJSON(this.gameslist[number]['symbols']);
+        this.game = $.parseJSON(this.gameslist[number]['game']);
+
+        this.size = parseInt(this.infos['SZ'], 10);
+        this.branchs = this.infos['branchs'];
+
+        this.currentnode = 0;
+        this.currentbranch = 0;
+        this.lastbranch = 0;
+
+        this.setLastNode();
     },//}}}
 
     setLastNode: function () {//{{{
@@ -62,24 +76,6 @@ yygo.data = {//{{{
         });
     },//}}}
 
-    // initialisations
-
-    loadDataFromList: function (number) {//{{{
-        this.infos = $.parseJSON(this.gameslist[number]['infos']);
-        this.comments = $.parseJSON(this.gameslist[number]['comments']);
-        this.symbols = $.parseJSON(this.gameslist[number]['symbols']);
-        this.game = $.parseJSON(this.gameslist[number]['game']);
-
-        this.size = parseInt(this.infos['SZ'], 10);
-        this.branchs = this.infos['branchs'];
-
-        this.currentnode = 0;
-        this.currentbranch = 0;
-        this.lastbranch = 0;
-
-        this.setLastNode();
-    },//}}}
-
 };//}}}
 
 yygo.view = {//{{{
@@ -94,199 +90,14 @@ yygo.view = {//{{{
     htmlvariations: '',
 
     showborders:    true,
-    showgoban:      true,
     showtextzone:   false,
     showvariations: false,
 
-    sizeborders:    0,
     sizecell:       0,
     sizetextzone:   200,
     sizegoban:      0,
 
     // méthodes
-
-    // manipulations de variables
-
-    emptyGoban: function () {//{{{
-        var oldb = document.getElementsByClassName('cellb');
-        var oldw = document.getElementsByClassName('cellw');
-        var olds = document.getElementsByTagName('svg');
-        var cob = oldb.length;
-        var cow = oldw.length;
-        var cos = olds.length;
-        var ob, ow, os;
-
-        // enlever les anciennes pierres
-        for (ob = 0; ob < cob; ob++) {
-            oldb[ob].className = 'cell';
-        }
-        for (ow = 0; ow < cow; ow++) {
-            oldw[ow].className = 'cell';
-        }
-        // effacer les anciens symboles
-        for (os = 0; os < cos; os++) {
-            olds[os].parentNode.removeChild(olds[os]);
-        }
-    },//}}}
-
-    placeStones: function () {//{{{
-        var game = yygo.data.game;
-        var curbranch = yygo.data.currentbranch;
-        var curnode = yygo.data.currentnode;
-        var bstones = game[curnode][curbranch]['b'].split(',');
-        var wstones = game[curnode][curbranch]['w'].split(',');
-        var cb = bstones.length;
-        var cw = wstones.length;
-        var b, w, cell;
-        
-        // lister et afficher les pierres de l'état actuel
-        for (b = 0; b < cb; b++) {
-            if (bstones[b] != '') {
-                cell = document.getElementById(bstones[b]);
-                cell.className = 'cellb';
-            }
-        }
-        for (w = 0; w < cw; w++) {
-            if (wstones[w] != '') {
-                cell = document.getElementById(wstones[w]);
-                cell.className = 'cellw';
-            }
-        }
-    },//}}}
-
-    placeSymbols: function () {//{{{
-        var curbranch = yygo.data.currentbranch;
-        var curnode = yygo.data.currentnode;
-        var game = yygo.data.game;
-        var symbols = yygo.data.symbols;
-        var circles = [];
-        var squares = [];
-        var triangles = [];
-        var labels = [];
-        var label = [];
-        var playedstone = [];
-        var c, cc, s, cs, t, ct, l, cl, cell, color;
-
-        // afficher les symboles de l'état actuel
-        if (symbols != null && symbols[curnode] != null &&
-            symbols[curnode][curbranch] != null) {
-            if (symbols[curnode][curbranch]['CR'] != null) {
-                circles = symbols[curnode][curbranch]['CR'].split(','); 
-                cc = circles.length;
-                for (c = 0; c < cc; c++) {
-                    cell = document.getElementById(circles[c]);
-                    color = cell.className.substr(4);
-                    this.insertSymbolSvg('CR', circles[c], color);
-                }
-            }
-            if (symbols[curnode][curbranch]['SQ'] != null) {
-                squares = symbols[curnode][curbranch]['SQ'].split(',');
-                cs = squares.length;
-                for (s = 0; s < cs; s++) {
-                    cell = document.getElementById(squares[s]);
-                    color = cell.className.substr(4);
-                    this.insertSymbolSvg('SQ', squares[s], color);
-                }
-            }
-            if (symbols[curnode][curbranch]['TR'] != null) {
-                triangles = symbols[curnode][curbranch]['TR'].split(',');
-                ct = triangles.length;
-                for (t = 0; t < ct; t++) {
-                    cell = document.getElementById(triangles[t]);
-                    color = cell.className.substr(4);
-                    this.insertSymbolSvg('TR', triangles[t], color);
-                }
-            }
-            if (symbols[curnode][curbranch]['LB'] != null) {
-                labels = symbols[curnode][curbranch]['LB'].split(',');
-                cl = labels.length;
-                for (l = 0; l < cl; l++) {
-                    label = labels[l].split(':');
-                    cell = document.getElementById(label[0]);
-                    color = cell.className.substr(4);
-                    if (color == 'b') {
-                        cell.style.color = 'white';
-                    } else if (color == '') {
-                        cell.className = 'celle';
-                    }
-                    cell.title = label[1];
-                    cell.textContent = label[1];
-                }
-            }
-        }
-
-        // cercle pour indiquer la dernière pierre jouée
-        if (game[curnode][curbranch]['p'] != null) {
-            playedstone = game[curnode][curbranch]['p'].split(',');
-            this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
-        }
-    },//}}}
-
-    insertSymbolSvg: function (symbol, id, color) {//{{{
-        var cell = document.getElementById(id);
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
-            'version="1.1" viewBox="0 0 10 10">';
-
-        if (symbol == 'CR') { // cercle
-            svg += '<circle cx="5" cy="5" r="2.5"' +
-                'stroke-width="0.7" fill="none"';
-        } else if (symbol == 'SQ') { // carré
-            svg += '<rect x="1.8" y="1.8" width="6.5"' +
-                'height="6.5" stroke-width="0.7" fill="none"';
-        } else if (symbol == 'TR') { // triangle
-            svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z"' +
-                'stroke-width="0.7" fill="none"';
-        }
-
-        if (color == 'b') { // si pierre noire afficher en blanc
-            svg += ' stroke="#fff"/></svg>';
-        } else {
-            svg += ' stroke="#000"/></svg>';
-        }
-
-        cell.innerHTML = svg;
-    },//}}}
-
-    setGobanSize: function () {//{{{
-        var size = yygo.data.size;
-        var winw = $(window).width();
-        var winh = $(window).height();    
-        var heightleft = winh - 50;
-        var oldsizegoban = this.sizegoban;
-        var smaller;
-        
-        if (this.sizetextzone > winh / 2) {
-            this.sizetextzone = winh / 2;
-        }
-        if (this.showtextzone) {
-            heightleft -= this.sizetextzone;
-        }
-        if (this.showvariations) {
-            heightleft -= 20;
-        }
-        if (winw < heightleft) {
-            smaller = winw;
-        } else {
-            smaller = heightleft;
-        }
-
-        // calcul la taille en pixels du goban pour être un multiple de
-        // sa taille en intersections, cela évite un affichage baveux du SVG
-        if (this.showborders) { // ajouter les bordures si affichées
-            this.sizecell = Math.floor(smaller / (size + 2));
-            this.sizeborders = this.sizecell * (size + 2);
-            this.sizegoban =  this.sizecell * size;
-        } else {
-            this.sizecell = Math.floor(smaller / size);
-            this.sizeborders = this.sizecell * (size + 2);
-            this.sizegoban =  this.sizecell * size;
-        }
-
-        // redessine le goban si la taille a changé
-        if (this.sizegoban != oldsizegoban) {
-            this.drawGoban(); 
-        }
-    },//}}}
 
     // construction code html
 
@@ -311,9 +122,11 @@ yygo.view = {//{{{
         htmlbottom += '</div>';
         htmlleft += '</div>';
 
-        this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft;
+        // bordures et goban dans l'élément 'borders'
+        this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft +
+                           '<div id="grid"></div>';
 
-        $('#borders').html(this.htmlborders);
+        $('#goban').html(this.htmlborders);
     },//}}}
 
     makeComments: function () {//{{{
@@ -334,9 +147,9 @@ yygo.view = {//{{{
         $('#comments').html(this.htmlcomments);
     },//}}}
 
-    makeGoban: function () {//{{{
+    makeGrid: function () {//{{{
         var size = yygo.data.size;
-        var goban = document.getElementById('goban');
+        var grid = document.getElementById('grid');
         var cell = '';
         var coord = ['a','b','c','d','e','f','g','h','i','j',
                      'k','l','m','n','o','p','q','r','s'];
@@ -354,7 +167,7 @@ yygo.view = {//{{{
 
         this.htmlgoban = html;
 
-        goban.innerHTML = this.htmlgoban;
+        grid.innerHTML = this.htmlgoban;
     },//}}}
 
     makeGamesList: function () {//{{{
@@ -471,20 +284,22 @@ yygo.view = {//{{{
             // afficher la barre de variantes si masquée
             if (!this.showvariations) {
                 this.showvariations = true;
-                $('#variations').html(this.htmlvariations);
+                this.setGobanSize();
             }
         } else { // pas de variantes
             // masquer la barre de variantes si affichée
             if (this.showvariations) {
                 this.showvariations = false;
+                this.setGobanSize();
             }
         }
+        $('#variations').html(this.htmlvariations);
     },//}}}
 
     // affichage
 
-    changeGobanImage: function () {//{{{
-        $('#goban').css('background',
+    changeGridImage: function () {//{{{
+        $('#grid').css('background',
                         'url(images/' + yygo.data.size + '.svg)');
     },//}}}
 
@@ -545,31 +360,34 @@ yygo.view = {//{{{
     },//}}}
 
     drawGoban: function () {//{{{
-        var gobantop = 50;
-
         if (this.showvariations) {
-            gobantop += 20;
-        }
-        if (this.showborders) {
-            gobantop += this.sizecell;
-            $('#textzone').css('top', this.sizeborders + 50);
+            $('#textzone').css('top', this.sizegoban + 70);
         } else {
             $('#textzone').css('top', this.sizegoban + 50);
         }
 
-        $('#borders').css({
-            height: this.sizeborders,
-            width: this.sizeborders
-        });
-
         $('#goban').css({
-            top: gobantop,
-            marginLeft: - this.sizegoban / 2,
             height: this.sizegoban,
             width: this.sizegoban
         });
 
-        $('#goban div,.cb').css('height', this.sizecell);
+        if (this.showborders) {
+            $('#grid').css({
+                top: this.sizecell,
+                right: this.sizecell,
+                bottom: this.sizecell,
+                left: this.sizecell
+            });
+        } else {
+            $('#grid').css({
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            });
+        }
+
+        $('[class^="cell"],.line,.cb').css('height', this.sizecell);
         $('[class^="cell"],.cb').css({
             width: this.sizecell,
             lineHeight: this.sizecell + 'px',
@@ -577,21 +395,207 @@ yygo.view = {//{{{
         });
     },//}}}
 
-    toggleBorders: function () {//{{{
-        if (this.showborders) {
-            $('#borders').show();
-            this.setGobanSize();
+    emptyGoban: function () {//{{{
+        var size = yygo.data.size;
+        var coord = ['a','b','c','d','e','f','g','h','i','j',
+                     'k','l','m','n','o','p','q','r','s'];
+        var cell, id, i, j;
+
+        for (i = 0; i < size; i++) {
+            for (j = 0; j < size; j++) {
+                id = coord[j] + coord[i];
+                cell = document.getElementById(id);
+                cell.className = 'cell';
+                cell.innerHTML = '';
+            }
+        }
+
+       /* var oldb = document.getElementsByClassName('cellb');
+        var oldw = document.getElementsByClassName('cellw');
+        var olds = document.getElementsByTagName('svg');
+        var cob = oldb.length;
+        var cow = oldw.length;
+        var cos = olds.length;
+        var ob, ow, os;
+
+            console.log(oldb);
+        // enlever les anciennes pierres
+        for (ob = 0; ob < cob; ob++) {
+            oldb[ob].className = 'cell';
+        }
+        for (ow = 0; ow < cow; ow++) {
+            oldw[ow].className = 'cell';
+        }
+        // effacer les anciens symboles
+        for (os = 0; os < cos; os++) {
+            olds[os].parentNode.removeChild(olds[os]);
+        }*/
+    },//}}}
+
+    insertSymbolSvg: function (symbol, id, color) {//{{{
+        var cell = document.getElementById(id);
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
+            'version="1.1" viewBox="0 0 10 10">';
+
+        if (symbol == 'CR') { // cercle
+            svg += '<circle cx="5" cy="5" r="2.5"' +
+                'stroke-width="0.7" fill="none"';
+        } else if (symbol == 'SQ') { // carré
+            svg += '<rect x="1.8" y="1.8" width="6.5"' +
+                'height="6.5" stroke-width="0.7" fill="none"';
+        } else if (symbol == 'TR') { // triangle
+            svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z"' +
+                'stroke-width="0.7" fill="none"';
+        }
+
+        if (color == 'b') { // si pierre noire afficher en blanc
+            svg += ' stroke="#fff"/></svg>';
         } else {
-            $('#borders').hide();
-            this.setGobanSize();
+            svg += ' stroke="#000"/></svg>';
+        }
+
+        cell.innerHTML = svg;
+    },//}}}
+
+    placeStones: function () {//{{{
+        var game = yygo.data.game;
+        var curbranch = yygo.data.currentbranch;
+        var curnode = yygo.data.currentnode;
+        var bstones = game[curnode][curbranch]['b'].split(',');
+        var wstones = game[curnode][curbranch]['w'].split(',');
+        var cb = bstones.length;
+        var cw = wstones.length;
+        var b, w, cell;
+        
+        // lister et afficher les pierres de l'état actuel
+        for (b = 0; b < cb; b++) {
+            if (bstones[b] != '') {
+                cell = document.getElementById(bstones[b]);
+                cell.className = 'cellb';
+            }
+        }
+        for (w = 0; w < cw; w++) {
+            if (wstones[w] != '') {
+                cell = document.getElementById(wstones[w]);
+                cell.className = 'cellw';
+            }
         }
     },//}}}
 
-    toggleGoban: function () {//{{{
-        if (this.showgoban) {
-            $('#goban').show();
+    placeSymbols: function () {//{{{
+        var curbranch = yygo.data.currentbranch;
+        var curnode = yygo.data.currentnode;
+        var game = yygo.data.game;
+        var symbols = yygo.data.symbols;
+        var circles = [];
+        var squares = [];
+        var triangles = [];
+        var labels = [];
+        var label = [];
+        var playedstone = [];
+        var c, cc, s, cs, t, ct, l, cl, cell, color;
+
+        // afficher les symboles de l'état actuel
+        if (symbols != null && symbols[curnode] != null &&
+            symbols[curnode][curbranch] != null) {
+            if (symbols[curnode][curbranch]['CR'] != null) {
+                circles = symbols[curnode][curbranch]['CR'].split(','); 
+                cc = circles.length;
+                for (c = 0; c < cc; c++) {
+                    cell = document.getElementById(circles[c]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('CR', circles[c], color);
+                }
+            }
+            if (symbols[curnode][curbranch]['SQ'] != null) {
+                squares = symbols[curnode][curbranch]['SQ'].split(',');
+                cs = squares.length;
+                for (s = 0; s < cs; s++) {
+                    cell = document.getElementById(squares[s]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('SQ', squares[s], color);
+                }
+            }
+            if (symbols[curnode][curbranch]['TR'] != null) {
+                triangles = symbols[curnode][curbranch]['TR'].split(',');
+                ct = triangles.length;
+                for (t = 0; t < ct; t++) {
+                    cell = document.getElementById(triangles[t]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('TR', triangles[t], color);
+                }
+            }
+            if (symbols[curnode][curbranch]['LB'] != null) {
+                labels = symbols[curnode][curbranch]['LB'].split(',');
+                cl = labels.length;
+                for (l = 0; l < cl; l++) {
+                    label = labels[l].split(':');
+                    cell = document.getElementById(label[0]);
+                    color = cell.className.substr(4);
+                    if (color == 'b') {
+                        cell.style.color = 'white';
+                    } else if (color == '') {
+                        cell.className = 'celle';
+                    }
+                    cell.title = label[1];
+                    cell.textContent = label[1];
+                }
+            }
+        }
+
+        // cercle pour indiquer la dernière pierre jouée
+        if (game[curnode][curbranch]['p'] != null) {
+            playedstone = game[curnode][curbranch]['p'].split(',');
+            if (playedstone[1] != '') {
+                this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
+            }
+        }
+    },//}}}
+
+    setGobanSize: function () {//{{{
+        var size = yygo.data.size;
+        var winw = $(window).width();
+        var winh = $(window).height();    
+        var heightleft = winh - 50;
+        var oldsizegoban = this.sizegoban;
+        var smaller;
+        
+        if (this.sizetextzone > winh / 2) {
+            this.sizetextzone = winh / 2;
+        }
+        if (this.showtextzone) {
+            heightleft -= this.sizetextzone;
+        }
+        if (this.showvariations) {
+            heightleft -= 20;
+        }
+        if (winw < heightleft) {
+            smaller = winw;
         } else {
-            $('#goban').hide();
+            smaller = heightleft;
+        }
+
+        // calcul la taille en pixels du goban pour être un multiple de
+        // sa taille en intersections, cela évite un affichage baveux du SVG
+        if (this.showborders) { // ajouter les bordures si affichées
+            this.sizecell = Math.floor(smaller / (size + 2));
+            this.sizegoban = this.sizecell * (size + 2);
+        } else {
+            this.sizecell = Math.floor(smaller / size);
+            this.sizegoban = this.sizecell * size;
+        }
+
+        // redessine le goban si la taille a changé
+        if (this.sizegoban != oldsizegoban) {
+            this.drawGoban(); 
+        }
+    },//}}}
+
+    toggleBorders: function () {//{{{
+        if (this.showborders) {
+            $('#bordertop,#borderright,#borderbottom,#borderleft').show();
+        } else {
+            $('#bordertop,#borderright,#borderbottom,#borderleft').hide();
         }
     },//}}}
 
@@ -612,20 +616,16 @@ yygo.view = {//{{{
     toggleTextzone: function () {//{{{
         if (this.showtextzone) {
             $('#textzone').show();
-            this.setGobanSize();
         } else {
             $('#textzone').hide();
-            this.setGobanSize();
         }
     },//}}}
 
     toggleVariations: function () {//{{{
         if (this.showvariations) {
             $('#variations').show();
-            this.setGobanSize();
         } else {
             $('#variations').hide();
-            this.setGobanSize();
         }
     },//}}}
  
@@ -649,33 +649,53 @@ yygo.events = {//{{{
 
         this.makeNavBinds();
 
-        if (yygo.data.size != oldsize) {
+        if (yygo.data.size != oldsize) { // nouvelle taille tout refaire
+            console.time('makeborders');
             yygo.view.makeBorders();
-            yygo.view.makeGoban();
-            yygo.view.changeGobanImage();
+            console.timeEnd('makeborders');
+            console.time('makegrid');
+            yygo.view.makeGrid();
+            console.timeEnd('makegrid');
+            console.time('gridimage');
+            yygo.view.changeGridImage();
+            console.timeEnd('gridimage');
+        } else { // vider le goban seulement
+            console.time('emptygoban');
+            yygo.view.emptyGoban();
+            console.timeEnd('emptygoban');
         }
 
+        console.time('makes');
         yygo.view.makeVariations();
         yygo.view.makeInfos();
         yygo.view.makeComments();
+        console.timeEnd('makes');
 
+        console.time('place');
         yygo.view.placeStones();
         yygo.view.placeSymbols();
+        console.timeEnd('place');
 
         this.mode = 'replay';
         this.screen = 'goban';
     
+        console.time('screen');
         yygo.view.changeScreen();
+        console.timeEnd('screen');
 
+        console.time('toggles');
         yygo.view.toggleBorders();
-        yygo.view.toggleGoban(); // TODO enlever
         yygo.view.toggleVariations();
         yygo.view.toggleTextzone();
+        console.timeEnd('toggles');
 
+        console.time('setsize');
         yygo.view.setGobanSize();
+        console.timeEnd('setsize');
 
         
         console.timeEnd('loadtime');
+        console.log('------------');
     },//}}}
 
     makeBinds: function () {//{{{
@@ -713,9 +733,11 @@ yygo.events = {//{{{
             if (yygo.view.showtextzone) {
                 yygo.view.showtextzone = false;
                 yygo.view.toggleTextzone();
+                yygo.view.setGobanSize();
             } else {
                 yygo.view.showtextzone = true;
                 yygo.view.toggleTextzone();
+                yygo.view.setGobanSize();
             }
         });
         // bouton options
@@ -770,12 +792,13 @@ yygo.events = {//{{{
 
             yygo.data.setLastNode();
 
-            this.makeNavBinds();
+            yygo.events.makeNavBinds();
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
             yygo.view.makeComments();
 
+            yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
 
@@ -866,6 +889,7 @@ yygo.events = {//{{{
         yygo.view.makeVariations();
         yygo.view.makeComments();
 
+        yygo.view.emptyGoban();
         yygo.view.placeStones();
         yygo.view.placeSymbols();
 
@@ -905,14 +929,20 @@ jQuery(document).ready(function ($) {
     // TODO récupère les paramètres de l'utilisateur
 
     // langue du navigateur ou langue par défaut
-    var navlang = navigator.language.substr(0,2);
+    var navlang;
+
+    if (navigator.language) {
+        navlang = navigator.language.substr(0,2); // substr pour firefox
+    } else if (navigator.userLanguage) { // pour IE
+        navlang = navigator.userLanguage;
+    }
 
     yygo.data.setLang(navlang);
 
     yygo.events.makeBinds();
 
     yygo.view.changeScreen();
-    $('#borders,#goban,#resizer').disableSelection();
+    $('#goban,#resizer').disableSelection();
 
     // charge le goban d'intro
     /*$.getJSON('sgf.php',{list:'-1'},function (data) {

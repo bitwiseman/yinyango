@@ -132,7 +132,7 @@ body {
     cursor: default;
 }
 /*}}}*/
-#borders {/*{{{*/
+#goban {/*{{{*/
     position: relative;
     margin: auto;
 }
@@ -162,11 +162,8 @@ body {
     font-family: serif;
     text-align: center;
 }
-/*}}}*/
-#goban {/*{{{*/
+#grid {
     position: absolute;
-    left: 50%;
-    margin: auto;
 }
 [class^="cell"] {
     float: left;
@@ -199,8 +196,11 @@ body {
     margin: auto;
     cursor: n-resize;
 }
-#comments,#infos {
-    padding-top: 6px;
+#comments, #infos {
+    position: absolute;
+    top: 6px;
+    bottom: 0;
+    width: 100%;
     overflow: auto;
 }
 /*}}}*/
