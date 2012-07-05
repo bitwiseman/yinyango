@@ -158,10 +158,6 @@ body {
 #borderbottom div {
     float: left;
 }
-.cb {
-    font-family: serif;
-    text-align: center;
-}
 #grid {
     position: absolute;
 }

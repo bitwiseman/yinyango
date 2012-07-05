@@ -103,18 +103,19 @@ yygo.view = {//{{{
 
     makeBorders: function () {//{{{
         var size = yygo.data.size;
+        var gobanelem = document.getElementById('goban');
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
-        var htmltop = '<div id="bordertop"><div class="cb"></div>';
-        var htmlright = '<div id="borderright"><div class="cb"></div>';
-        var htmlbottom = '<div id="borderbottom"><div class="cb"></div>';
-        var htmlleft = '<div id="borderleft"><div class="cb"></div>';
+        var htmltop = '<div id="bordertop"><div class="cell"></div>';
+        var htmlright = '<div id="borderright"><div class="cell"></div>';
+        var htmlbottom = '<div id="borderbottom"><div class="cell"></div>';
+        var htmlleft = '<div id="borderleft"><div class="cell"></div>';
 
         for (var i = 0; i < size; i++) {
-            htmltop += '<div class="cb">' + letters[i] + '</div>';
-            htmlright += '<div class="cb">' + (size - i) + '</div>';
-            htmlbottom += '<div class="cb">' + letters[i] + '</div>';
-            htmlleft += '<div class="cb">' + (size - i) + '</div>';
+            htmltop += '<div class="cell">' + letters[i] + '</div>';
+            htmlright += '<div class="cell">' + (size - i) + '</div>';
+            htmlbottom += '<div class="cell">' + letters[i] + '</div>';
+            htmlleft += '<div class="cell">' + (size - i) + '</div>';
         }
 
         htmltop += '</div>';
@@ -122,17 +123,18 @@ yygo.view = {//{{{
         htmlbottom += '</div>';
         htmlleft += '</div>';
 
-        // bordures et goban dans l'élément 'borders'
+        // bordures et grille dans l'élément 'goban'
         this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft +
                            '<div id="grid"></div>';
 
-        $('#goban').html(this.htmlborders);
+        gobanelem.innerHTML = this.htmlborders;
     },//}}}
 
     makeComments: function () {//{{{
         var comments = yygo.data.comments;
         var curnode = yygo.data.currentnode;
         var curbranch = yygo.data.currentbranch;
+        var commentselem = document.getElementById('comments');
         var html = '';
 
         if (comments != null && comments[curnode] != null &&
@@ -144,12 +146,12 @@ yygo.view = {//{{{
 
         this.htmlcomments = html;
 
-        $('#comments').html(this.htmlcomments);
+        commentselem.innerHTML = this.htmlcomments;
     },//}}}
 
     makeGrid: function () {//{{{
         var size = yygo.data.size;
-        var grid = document.getElementById('grid');
+        var gridelem = document.getElementById('grid');
         var cell = '';
         var coord = ['a','b','c','d','e','f','g','h','i','j',
                      'k','l','m','n','o','p','q','r','s'];
@@ -167,11 +169,12 @@ yygo.view = {//{{{
 
         this.htmlgoban = html;
 
-        grid.innerHTML = this.htmlgoban;
+        gridelem.innerHTML = this.htmlgoban;
     },//}}}
 
     makeGamesList: function () {//{{{
         var gameslist = yygo.data.gameslist;
+        var loadlistelem = document.getElementById('loadlist');
         var html = '<table>';
         var infos = {};
         var ci = gameslist.length;
@@ -205,12 +208,13 @@ yygo.view = {//{{{
 
         this.htmllist = html;
 
-        $('#loadlist').html(this.htmllist);
+        loadlistelem.innerHTML = this.htmllist;
     },//}}}
 
     makeInfos: function () {//{{{
         var infos = yygo.data.infos;
         var locale = yygo.data.locale;
+        var infoselem = document.getElementById('infos');
         var html = '<p>';
 
         if (infos['PB'] != null) {
@@ -239,16 +243,7 @@ yygo.view = {//{{{
 
         this.htmlinfos = html;
 
-        $('#infos').html(this.htmlinfos);
-    },//}}}
-
-    makeTextzone: function () {//{{{
-        if (yygo.data.infos != null) {
-            this.createInfosHtml();
-        }
-        if (yygo.data.comments != null) {
-            this.createCommentsHtml();
-        }
+        infoselem.innerHTML = this.htmlinfos;
     },//}}}
 
     makeVariations: function () {//{{{
@@ -257,6 +252,7 @@ yygo.view = {//{{{
         var curnode = yygo.data.currentnode;
         var branchs = yygo.data.branchs;
         var pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
+        var variationselem = document.getElementById('variations');
         var variations = 0;
         var html = '';
         var i;
@@ -293,14 +289,15 @@ yygo.view = {//{{{
                 this.setGobanSize();
             }
         }
-        $('#variations').html(this.htmlvariations);
+        variationselem.innerHTML = this.htmlvariations;
     },//}}}
 
     // affichage
 
     changeGridImage: function () {//{{{
-        $('#grid').css('background',
-                        'url(images/' + yygo.data.size + '.svg)');
+        var gridelem = document.getElementById('grid');
+
+        gridelem.style.background = 'url(images/' + yygo.data.size + '.svg)';
     },//}}}
 
     changeLang: function () {//{{{
@@ -360,6 +357,11 @@ yygo.view = {//{{{
     },//}}}
 
     drawGoban: function () {//{{{
+        var cellelems = document.getElementsByClassName('cell');
+        var cellbelems = document.getElementsByClassName('cellb');
+        var cellwelems = document.getElementsByClassName('cellw');
+        var lineelems = document.getElementsByClassName('line');
+
         if (this.showvariations) {
             $('#textzone').css('top', this.sizegoban + 70);
         } else {
@@ -386,13 +388,28 @@ yygo.view = {//{{{
                 left: 0
             });
         }
+        console.time('cells');
+        $('.line').css('height', this.sizecell);
 
-        $('[class^="cell"],.line,.cb').css('height', this.sizecell);
-        $('[class^="cell"],.cb').css({
+        $('.cell').css({
+            height: this.sizecell,
             width: this.sizecell,
             lineHeight: this.sizecell + 'px',
             fontSize: this.sizecell / 1.5
         });
+        $('.cellb').css({
+            height: this.sizecell,
+            width: this.sizecell,
+            lineHeight: this.sizecell + 'px',
+            fontSize: this.sizecell / 1.5
+        });
+        $('.cellw').css({
+            height: this.sizecell,
+            width: this.sizecell,
+            lineHeight: this.sizecell + 'px',
+            fontSize: this.sizecell / 1.5
+        });
+        console.timeEnd('cells');
     },//}}}
 
     emptyGoban: function () {//{{{
@@ -555,7 +572,7 @@ yygo.view = {//{{{
     setGobanSize: function () {//{{{
         var size = yygo.data.size;
         var winw = $(window).width();
-        var winh = $(window).height();    
+        var winh = $(window).height();
         var heightleft = winh - 50;
         var oldsizegoban = this.sizegoban;
         var smaller;
@@ -936,7 +953,7 @@ jQuery(document).ready(function ($) {
     } else if (navigator.userLanguage) { // pour IE
         navlang = navigator.userLanguage;
     }
-
+    
     yygo.data.setLang(navlang);
 
     yygo.events.makeBinds();
