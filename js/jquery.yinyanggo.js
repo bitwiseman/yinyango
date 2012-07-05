@@ -75,6 +75,8 @@ jQuery(document).ready(function ($) {
     function LoadGame(num) {//{{{
         var oldsize = size;
 
+        console.time('master');
+
         load = false;
         options = false;
 
@@ -115,6 +117,9 @@ jQuery(document).ready(function ($) {
         if (com) {
             $('#comments').show();
         }
+
+
+        console.timeEnd('master');
     }//}}}
 
     // ajuste l'interface en fonction de la fenêtre du navigateur
@@ -703,13 +708,13 @@ jQuery(document).ready(function ($) {
     $('#goban,#resizer').disableSelection();
     
     // charge le goban d'intro
-    $.getJSON('sgf.php',{sql:'-1'},function (data) {
+    /*$.getJSON('sgf.php',{sql:'-1'},function (data) {
         sql = data;
         LoadGame(0);
         options = true;
         $('#navbuttons').hide();
         $('#optbuttons').show();
         sql = [];
-    });
+    });*/
 
 });
