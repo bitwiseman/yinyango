@@ -133,27 +133,22 @@ body {
 }
 /*}}}*/
 #borders {/*{{{*/
-    background: #00ff00;
     position: relative;
     margin: auto;
 }
 #bordertop {
-    background: #ff0000;
     position: absolute;
     top: 0;
 }
 #borderright {
-    background: #ff0000;
     position: absolute;
     right: 0;
 }
 #borderbottom {
-    background: #ff0000;
     position: absolute;
     bottom: 0;
 }
 #borderleft {
-    background: #ff0000;
     position: absolute;
     left: 0;
 }

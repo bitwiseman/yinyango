@@ -107,7 +107,29 @@ yygo.view = {//{{{
 
     // manipulations de variables
 
-    getCellColor: function (cell) {//{{{
+    emptyGoban: function () {//{{{
+        var oldb = document.getElementsByClassName('cellb');
+        var oldw = document.getElementsByClassName('cellw');
+        var olds = document.getElementsByTagName('svg');
+        var cob = oldb.length;
+        var cow = oldw.length;
+        var cos = olds.length;
+        var ob, ow, os;
+
+        // enlever les anciennes pierres
+        for (ob = 0; ob < cob; ob++) {
+            oldb[ob].className = 'cell';
+        }
+        for (ow = 0; ow < cow; ow++) {
+            oldw[ow].className = 'cell';
+        }
+        // effacer les anciens symboles
+        for (os = 0; os < cos; os++) {
+            olds[os].parentNode.removeChild(olds[os]);
+        }
+    },//}}}
+
+    placeStones: function () {//{{{
         var game = yygo.data.game;
         var curbranch = yygo.data.currentbranch;
         var curnode = yygo.data.currentnode;
@@ -115,24 +137,24 @@ yygo.view = {//{{{
         var wstones = game[curnode][curbranch]['w'].split(',');
         var cb = bstones.length;
         var cw = wstones.length;
-        var b, w;
+        var b, w, cell;
         
-
+        // lister et afficher les pierres de l'état actuel
         for (b = 0; b < cb; b++) {
-            if (bstones[b] == cell) {
-                return 'b';
+            if (bstones[b] != '') {
+                cell = document.getElementById(bstones[b]);
+                cell.className = 'cellb';
             }
         }
         for (w = 0; w < cw; w++) {
-            if (wstones[w] == cell) {
-                return 'w';
+            if (wstones[w] != '') {
+                cell = document.getElementById(wstones[w]);
+                cell.className = 'cellw';
             }
         }
-
-        return ''; // pas de pierre
     },//}}}
 
-    getCellSymbol: function (cell, color) {//{{{
+    placeSymbols: function () {//{{{
         var curbranch = yygo.data.currentbranch;
         var curnode = yygo.data.currentnode;
         var game = yygo.data.game;
@@ -143,35 +165,36 @@ yygo.view = {//{{{
         var labels = [];
         var label = [];
         var playedstone = [];
-        var c, cc, s, cs, t, ct, l, cl;
+        var c, cc, s, cs, t, ct, l, cl, cell, color;
 
+        // afficher les symboles de l'état actuel
         if (symbols != null && symbols[curnode] != null &&
             symbols[curnode][curbranch] != null) {
             if (symbols[curnode][curbranch]['CR'] != null) {
                 circles = symbols[curnode][curbranch]['CR'].split(','); 
                 cc = circles.length;
                 for (c = 0; c < cc; c++) {
-                    if (circles[c] == cell) {
-                        return '>' + this.getSymbolSvg('CR', color);
-                    }
+                    cell = document.getElementById(circles[c]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('CR', circles[c], color);
                 }
             }
             if (symbols[curnode][curbranch]['SQ'] != null) {
                 squares = symbols[curnode][curbranch]['SQ'].split(',');
                 cs = squares.length;
                 for (s = 0; s < cs; s++) {
-                    if (squares[s] == cell) {
-                        return '>' + this.getSymbolSvg('SQ', color);
-                    }
+                    cell = document.getElementById(squares[s]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('SQ', squares[s], color);
                 }
             }
             if (symbols[curnode][curbranch]['TR'] != null) {
                 triangles = symbols[curnode][curbranch]['TR'].split(',');
                 ct = triangles.length;
                 for (t = 0; t < ct; t++) {
-                    if (triangles[t] == cell) {
-                        return '>' + this.getSymbolSvg('TR', color);
-                    }
+                    cell = document.getElementById(triangles[t]);
+                    color = cell.className.substr(4);
+                    this.insertSymbolSvg('TR', triangles[t], color);
                 }
             }
             if (symbols[curnode][curbranch]['LB'] != null) {
@@ -179,9 +202,15 @@ yygo.view = {//{{{
                 cl = labels.length;
                 for (l = 0; l < cl; l++) {
                     label = labels[l].split(':');
-                    if (label[0] == cell) {
-                        return ' title="' + label[1] + '">' + label[1];
+                    cell = document.getElementById(label[0]);
+                    color = cell.className.substr(4);
+                    if (color == 'b') {
+                        cell.style.color = 'white';
+                    } else if (color == '') {
+                        cell.className = 'celle';
                     }
+                    cell.title = label[1];
+                    cell.textContent = label[1];
                 }
             }
         }
@@ -189,15 +218,12 @@ yygo.view = {//{{{
         // cercle pour indiquer la dernière pierre jouée
         if (game[curnode][curbranch]['p'] != null) {
             playedstone = game[curnode][curbranch]['p'].split(',');
-            if (playedstone[1] == cell) {
-                return '>' + this.getSymbolSvg('CR', playedstone[0]);
-            }
+            this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
         }
-
-        return '">'; // pas de symbole
     },//}}}
 
-    getSymbolSvg: function (symbol, color) {//{{{
+    insertSymbolSvg: function (symbol, id, color) {//{{{
+        var cell = document.getElementById(id);
         var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
             'version="1.1" viewBox="0 0 10 10">';
 
@@ -218,7 +244,7 @@ yygo.view = {//{{{
             svg += ' stroke="#000"/></svg>';
         }
 
-        return svg;
+        cell.innerHTML = svg;
     },//}}}
 
     setGobanSize: function () {//{{{
@@ -310,31 +336,25 @@ yygo.view = {//{{{
 
     makeGoban: function () {//{{{
         var size = yygo.data.size;
+        var goban = document.getElementById('goban');
         var cell = '';
         var coord = ['a','b','c','d','e','f','g','h','i','j',
                      'k','l','m','n','o','p','q','r','s'];
         var html = '';
-        var color = '';
         var i, j;
 
-        // TODO faire les pierres et symboles séparément
         for (i = 0; i < size; i++) {
-            html += '<div>'; // début de ligne
+            html += '<div class="line">'; // début de ligne
             for (j = 0; j < size; j++) {
                 cell = coord[j] + coord[i];
-                html += '<div class="cell'; // début de cellule
-                color = this.getCellColor(cell)
-                html += color;
-                html += '" id="' + cell + '"';
-                html += this.getCellSymbol(cell, color);
-                html += '</div>'; // fin de cellule
+                html += '<div class="cell" id="' + cell + '"></div>';
             }
             html += '</div>'; // fin de ligne
         }
 
         this.htmlgoban = html;
 
-        $('#goban').html(this.htmlgoban);
+        goban.innerHTML = this.htmlgoban;
     },//}}}
 
     makeGamesList: function () {//{{{
@@ -623,7 +643,7 @@ yygo.events = {//{{{
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
 
-        console.time('test');
+        console.time('loadtime');
 
         yygo.data.loadDataFromList(number);
 
@@ -631,13 +651,16 @@ yygo.events = {//{{{
 
         if (yygo.data.size != oldsize) {
             yygo.view.makeBorders();
+            yygo.view.makeGoban();
             yygo.view.changeGobanImage();
         }
 
-        yygo.view.makeGoban();
         yygo.view.makeVariations();
         yygo.view.makeInfos();
         yygo.view.makeComments();
+
+        yygo.view.placeStones();
+        yygo.view.placeSymbols();
 
         this.mode = 'replay';
         this.screen = 'goban';
@@ -645,14 +668,14 @@ yygo.events = {//{{{
         yygo.view.changeScreen();
 
         yygo.view.toggleBorders();
-        yygo.view.toggleGoban();
+        yygo.view.toggleGoban(); // TODO enlever
         yygo.view.toggleVariations();
         yygo.view.toggleTextzone();
 
         yygo.view.setGobanSize();
 
         
-        console.timeEnd('test');
+        console.timeEnd('loadtime');
     },//}}}
 
     makeBinds: function () {//{{{
@@ -751,8 +774,10 @@ yygo.events = {//{{{
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
-            yygo.view.makeGoban();
             yygo.view.makeComments();
+
+            yygo.view.placeStones();
+            yygo.view.placeSymbols();
 
             yygo.view.toggleVariations();
         });
@@ -786,7 +811,6 @@ yygo.events = {//{{{
             });
         }
         if (curnode < lastnode) {
-            console.log("bindtest");
             $('#next').bind('click', function () {
                 yygo.events.navigateNode(1)
             });
@@ -840,8 +864,10 @@ yygo.events = {//{{{
         yygo.view.toggleNavButtons();
 
         yygo.view.makeVariations();
-        yygo.view.makeGoban();
         yygo.view.makeComments();
+
+        yygo.view.placeStones();
+        yygo.view.placeSymbols();
 
         yygo.view.toggleVariations();
     },//}}}
