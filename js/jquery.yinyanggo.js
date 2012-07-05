@@ -117,6 +117,7 @@ yygo.view = {//{{{
         var cw = wstones.length;
         var b, w;
         
+
         for (b = 0; b < cb; b++) {
             if (bstones[b] == cell) {
                 return 'b';
@@ -193,7 +194,7 @@ yygo.view = {//{{{
             }
         }
 
-        return ''; // pas de symbole
+        return '">'; // pas de symbole
     },//}}}
 
     getSymbolSvg: function (symbol, color) {//{{{
@@ -267,10 +268,10 @@ yygo.view = {//{{{
         var size = yygo.data.size;
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
-        var htmltop = '<div id="bordertop">';
-        var htmlright = '<div id="borderright">';
-        var htmlbottom = '<div id="borderbottom">';
-        var htmlleft = '<div id="borderleft">';
+        var htmltop = '<div id="bordertop"><div class="cb"></div>';
+        var htmlright = '<div id="borderright"><div class="cb"></div>';
+        var htmlbottom = '<div id="borderbottom"><div class="cb"></div>';
+        var htmlleft = '<div id="borderleft"><div class="cb"></div>';
 
         for (var i = 0; i < size; i++) {
             htmltop += '<div class="cb">' + letters[i] + '</div>';
@@ -316,6 +317,7 @@ yygo.view = {//{{{
         var color = '';
         var i, j;
 
+        // TODO faire les pierres et symboles séparément
         for (i = 0; i < size; i++) {
             html += '<div>'; // début de ligne
             for (j = 0; j < size; j++) {
@@ -523,11 +525,7 @@ yygo.view = {//{{{
     },//}}}
 
     drawGoban: function () {//{{{
-        var winw = $(window).width();
-        var gobanright = winw / 2 - this.sizegoban / 2; // centrer goban
         var gobantop = 50;
-
-        console.log(winw + ',' + gobanright);
 
         if (this.showvariations) {
             gobantop += 20;
@@ -539,21 +537,18 @@ yygo.view = {//{{{
             $('#textzone').css('top', this.sizegoban + 50);
         }
 
-
         $('#borders').css({
             height: this.sizeborders,
             width: this.sizeborders
         });
-        
 
         $('#goban').css({
             top: gobantop,
-            right: gobanright,
+            marginLeft: - this.sizegoban / 2,
             height: this.sizegoban,
             width: this.sizegoban
         });
-        $('#bordertop,#borderbottom').css('right', this.sizecell);
-        $('#borderright,#borderleft').css('top', this.sizecell);
+
         $('#goban div,.cb').css('height', this.sizecell);
         $('[class^="cell"],.cb').css({
             width: this.sizecell,
@@ -628,7 +623,11 @@ yygo.events = {//{{{
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
 
+        console.time('test');
+
         yygo.data.loadDataFromList(number);
+
+        this.makeNavBinds();
 
         if (yygo.data.size != oldsize) {
             yygo.view.makeBorders();
@@ -651,6 +650,9 @@ yygo.events = {//{{{
         yygo.view.toggleTextzone();
 
         yygo.view.setGobanSize();
+
+        
+        console.timeEnd('test');
     },//}}}
 
     makeBinds: function () {//{{{
@@ -773,14 +775,27 @@ yygo.events = {//{{{
         $('#start,[id$="prev"],[id$="next"],#end').unbind();
 
         if (curnode > 0) {
-            $('#start').bind('click', navigateNode(-999999));
-            $('#fastprev').bind('click', navigateNode(-10));
-            $('#prev').bind('click', navigateNode(-1));
+            $('#start').bind('click', function () {
+                yygo.events.navigateNode(-999999)
+            });
+            $('#fastprev').bind('click', function () {
+                yygo.events.navigateNode(-10)
+            });
+            $('#prev').bind('click', function () {
+                yygo.events.navigateNode(-1)
+            });
         }
         if (curnode < lastnode) {
-            $('#next').bind('click', navigateNode(1));
-            $('#fastnext').bind('click', navigateNode(10));
-            $('#end').bind('click', navigateNode(999999));
+            console.log("bindtest");
+            $('#next').bind('click', function () {
+                yygo.events.navigateNode(1)
+            });
+            $('#fastnext').bind('click', function () {
+                yygo.events.navigateNode(10)
+            });
+            $('#end').bind('click', function () {
+                yygo.events.navigateNode(999999)
+            });
         }
     },//}}}
 
@@ -788,6 +803,7 @@ yygo.events = {//{{{
         var game = yygo.data.game;
         var curbranch = yygo.data.currentbranch;
         var curnode = yygo.data.currentnode;
+        var lastbranch = yygo.data.lastbranch;
         var lastnode = yygo.data.lastnode;
         var i;
 
