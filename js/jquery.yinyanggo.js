@@ -1,5 +1,26 @@
-//yygo = window.yygo || {};
-yygo = {};
+/*
+* PLUGINS JQUERY
+*/
+
+// désactive la sélection d'éléments
+$.fn.disableSelection = function () {//{{{
+    return this.each(function () {           
+        $(this).attr('unselectable', 'on')
+        .css({
+            '-moz-user-select':'none',
+            '-webkit-user-select':'none',
+            'user-select':'none',
+            '-ms-user-select':'none'
+        })
+        .each(function () {
+            this.onselectstart = function () {
+                return false;
+            };
+        });
+    });
+};//}}}
+
+var yygo = {};
 
 yygo.data = {//{{{
 
@@ -60,9 +81,10 @@ yygo.data = {//{{{
         }
     },//}}}
 
-    setLang: function (lang) {//{{{
+    setLang: function (lang, callback) {//{{{
         var ci = this.langs.length;
         var i;
+
 
         for (i = 0; i < ci; i++) {
             if (this.langs[i] == lang) {
@@ -73,6 +95,9 @@ yygo.data = {//{{{
         // récupère le script de la langue et traduit les éléments
         $.getScript('lang/' + this.lang + '.js', function () {
             yygo.view.changeLang();
+            if (callback != null) {
+                callback();
+            }
         });
     },//}}}
 
@@ -89,8 +114,8 @@ yygo.view = {//{{{
 
     viewmode:       '',
 
-    showborders:    true,
-    showcomments:   false,
+    showborders:    false,
+    showcomments:   true,
     showvariations: false,
 
     sizecell:       0,
@@ -327,38 +352,56 @@ yygo.view = {//{{{
     },//}}}
 
     changeScreen: function () {//{{{
+        console.time('changeScreen');
         var mode = yygo.events.mode;
         var screen = yygo.events.screen;
         var navbuttons = document.getElementById('navbuttons');
         var optbuttons = document.getElementById('optbuttons');
+        var gobbuttons = document.getElementById('gobbuttons');
+        var options = document.getElementById('options');
         var variations = document.getElementById('variations');
         var goban = document.getElementById('goban');
         var comments = document.getElementById('comments');
         var infos = document.getElementById('infos');
         var loadlist = document.getElementById('loadlist');
 
-        var all = '[id$="buttons"],#variations,#goban,' +
-                  '#infos,#loadlist';
-        var replay = '#navbuttons,#utibuttons,#variations,#goban';
-        var options = '#optbuttons,#utibuttons,#infos';
-        var list = '#optbuttons,#loadlist';
-
-        $(all).hide();
 
         if (screen == 'goban') {
+            optbuttons.style.display = 'none';
+            infos.style.display = 'none';
+            loadlist.style.display = 'none';
+
+            gobbuttons.style.display = 'block';
+            options.style.display = 'block';
+            goban.className = '';
             if (mode == 'replay') {
-                $(replay).show();
+                navbuttons.style.display = 'block';
                 this.toggleNavButtons();
                 this.toggleVariations();
                 this.toggleComments();
             }
             // TODO autres modes
         } else if (screen == 'options') {
-            $(options).show();
-            this.toggleComments();
-        } else if (screen == 'list' || screen == 'intro') {
-            $(list).show();
+            navbuttons.style.display = 'none';
+            gobbuttons.style.display = 'none';
+            variations.style.display = 'none';
+            goban.className = 'hide';
+            comments.style.display = 'none';
+            loadlist.style.display = 'none';
+ 
+            optbuttons.style.display = 'block';
+            options.style.display = 'block';
+            infos.style.display = 'block';
+        } else if (screen == 'list') {
+            options.style.display = 'none';
+            goban.className = 'hide';
+            infos.style.display = 'none';
+
+            loadlist.style.display = 'block';
+        } else if (screen == 'intro') {
+            // TODO
         }
+        console.timeEnd('changeScreen');
     },//}}}
 
     drawGoban: function (redraw) {//{{{
@@ -379,17 +422,10 @@ yygo.view = {//{{{
             gobanelem.style.height = this.sizegoban + 'px';
             gobanelem.style.width = this.sizegoban + 'px';
             // redimensionne la grille
-            if (this.showborders) {
-                gridelem.style.top = this.sizecell + 'px';
-                gridelem.style.right = this.sizecell + 'px';
-                gridelem.style.bottom = this.sizecell + 'px';
-                gridelem.style.left = this.sizecell + 'px';
-            } else {
-                gridelem.style.top = 0;
-                gridelem.style.right = 0;
-                gridelem.style.bottom = 0;
-                gridelem.style.left = 0;
-            }
+            gridelem.style.top = this.sizecell + 'px';
+            gridelem.style.right = this.sizecell + 'px';
+            gridelem.style.bottom = this.sizecell + 'px';
+            gridelem.style.left = this.sizecell + 'px';
             // redimensionne les cellules
             for (c = 0; c < cc; c++) {
                 cellelems[c].style.height = this.sizecell + 'px';
@@ -584,8 +620,8 @@ yygo.view = {//{{{
         }
         if (winw < heightleft) {
             this.viewmode = 'vertical';
-            if (this.showcomments && heightleft - 200 <= winw) {
-                smaller = heightleft - 200;
+            if (this.showcomments && heightleft - 150 <= winw) {
+                smaller = heightleft - 150;
             } else {
                 smaller = winw;
             }
@@ -600,13 +636,8 @@ yygo.view = {//{{{
 
         // calcul la taille en pixels du goban pour être un multiple de
         // sa taille en intersections, cela évite un affichage baveux du SVG
-        if (this.showborders) { // ajouter les bordures si affichées
-            this.sizecell = Math.floor(smaller / (size + 2));
-            this.sizegoban = this.sizecell * (size + 2);
-        } else {
-            this.sizecell = Math.floor(smaller / size);
-            this.sizegoban = this.sizecell * size;
-        }
+        this.sizecell = Math.floor(smaller / (size + 2));
+        this.sizegoban = this.sizecell * (size + 2);
 
         // redessine si la taille a changé
         if (this.sizegoban != oldsizegoban) {
@@ -663,63 +694,61 @@ yygo.events = {//{{{
     mode:           'replay',
     screen:         'options',
 
-    redraw:         false,
-
     // méthodes
+
+    init: function () {//{{{
+        // TODO récupère les paramètres de l'utilisateur
+        // langue du navigateur ou langue par défaut
+        var navlang = (navigator.language ||
+                       navigator.systemLanguage ||
+                       navigator.userLanguage ||
+                       'en').substr(0, 2).toLowerCase();
+
+        yygo.data.setLang(navlang, function () {
+            // callback pour être sûr d'avoir chargé la langue
+            yygo.events.makeBinds();
+            $('#goban,#resizer').disableSelection();
+            // charge le goban d'intro
+            $.getJSON('sgf.php',{list:'-1'}, function (data) {
+                yygo.data.gameslist = data;
+                yygo.events.loadGameFromList(0);
+                yygo.view.showborders = true;
+                yygo.data.gameslist = [];
+            });
+        });
+    },//}}}
 
     loadGameFromList: function (number) {//{{{
         var oldsize = yygo.data.size;
-
-        console.time('loadtime');
 
         yygo.data.loadDataFromList(number);
 
         this.makeNavBinds();
 
         if (yygo.data.size != oldsize) { // nouvelle taille tout refaire
-            console.time('makeGoban');
             yygo.view.makeGoban();
-            console.timeEnd('makeGoban');
-            console.time('gridimage');
             yygo.view.changeGridImage();
-            console.timeEnd('gridimage');
         } else { // vider le goban seulement
-            console.time('emptygoban');
             yygo.view.emptyGoban();
-            console.timeEnd('emptygoban');
         }
 
-        console.time('makes');
         yygo.view.makeVariations();
         yygo.view.makeInfos();
         yygo.view.makeComments();
-        console.timeEnd('makes');
 
-        console.time('place');
         yygo.view.placeStones();
         yygo.view.placeSymbols();
-        console.timeEnd('place');
 
         this.mode = 'replay';
         this.screen = 'goban';
     
-        console.time('screen');
         yygo.view.changeScreen();
-        console.timeEnd('screen');
 
-        console.time('toggles');
         yygo.view.toggleBorders();
         yygo.view.toggleVariations();
         yygo.view.toggleComments();
-        console.timeEnd('toggles');
 
-        console.time('setsize');
         yygo.view.setGobanSize();
-        console.timeEnd('setsize');
-
-        
-        console.timeEnd('loadtime');
-        console.log('------------');
     },//}}}
 
     makeBinds: function () {//{{{
@@ -732,7 +761,6 @@ yygo.events = {//{{{
 
         // bouton commentaires
         $('#comment').bind('click', function () {
-            yygo.events.redraw = true;
             if (yygo.view.showcomments) {
                 yygo.view.showcomments = false;
                 yygo.view.toggleComments();
@@ -901,60 +929,4 @@ yygo.events = {//{{{
 
 };//}}}
 
-jQuery(document).ready(function ($) {
-
-    /*
-     * PLUGINS JQUERY
-     */
-
-    // désactive la sélection d'éléments
-    $.fn.disableSelection = function () {//{{{
-        return this.each(function () {           
-            $(this).attr('unselectable', 'on')
-            .css({
-                '-moz-user-select':'none',
-                '-webkit-user-select':'none',
-                'user-select':'none',
-                '-ms-user-select':'none'
-            })
-            .each(function () {
-                this.onselectstart = function () {
-                    return false;
-                };
-            });
-        });
-    };//}}}
-
-    /*
-     * INITIALISATION
-     */
-
-    // TODO récupère les paramètres de l'utilisateur
-
-    // langue du navigateur ou langue par défaut
-    var navlang;
-
-    if (navigator.language) {
-        navlang = navigator.language.substr(0,2); // substr pour firefox
-    } else if (navigator.userLanguage) { // pour IE
-        navlang = navigator.userLanguage;
-    }
-    
-    yygo.data.setLang(navlang);
-
-    yygo.events.makeBinds();
-
-    yygo.view.changeScreen();
-    $('#goban,#resizer').disableSelection();
-
-    // charge le goban d'intro
-    /*$.getJSON('sgf.php',{list:'-1'},function (data) {
-        yygo.data.gameslist = data;
-        yygo.events.loadGameFromList(0);
-
-        yygo.view.changeScreen();
-
-        yygo.data.gameslist = [];
-    });*/
-
-});
+document.addEventListener("DOMContentLoaded", yygo.events.init(), false);
