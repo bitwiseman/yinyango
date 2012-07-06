@@ -152,12 +152,6 @@ body {
     position: absolute;
     left: 0;
 }
-#bordertop div {
-    float: left;
-}
-#borderbottom div {
-    float: left;
-}
 #grid {
     position: absolute;
 }
@@ -166,6 +160,9 @@ body {
     text-align: center;
     font-family: serif;
     overflow: hidden;
+}
+.cellv {
+    float: none;
 }
 .cellb {
     background: #000;

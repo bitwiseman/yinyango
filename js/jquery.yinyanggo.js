@@ -107,15 +107,16 @@ yygo.view = {//{{{
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
         var htmltop = '<div id="bordertop"><div class="cell"></div>';
-        var htmlright = '<div id="borderright"><div class="cell"></div>';
+        var htmlright = '<div id="borderright"><div class="cellv"></div>';
         var htmlbottom = '<div id="borderbottom"><div class="cell"></div>';
-        var htmlleft = '<div id="borderleft"><div class="cell"></div>';
+        var htmlleft = '<div id="borderleft"><div class="cellv"></div>';
+        var i;
 
-        for (var i = 0; i < size; i++) {
+        for (i = 0; i < size; i++) {
             htmltop += '<div class="cell">' + letters[i] + '</div>';
-            htmlright += '<div class="cell">' + (size - i) + '</div>';
+            htmlright += '<div class="cellv">' + (size - i) + '</div>';
             htmlbottom += '<div class="cell">' + letters[i] + '</div>';
-            htmlleft += '<div class="cell">' + (size - i) + '</div>';
+            htmlleft += '<div class="cellv">' + (size - i) + '</div>';
         }
 
         htmltop += '</div>';
@@ -159,7 +160,7 @@ yygo.view = {//{{{
         var i, j;
 
         for (i = 0; i < size; i++) {
-            html += '<div class="line">'; // début de ligne
+            html += '<div>'; // début de ligne
             for (j = 0; j < size; j++) {
                 cell = coord[j] + coord[i];
                 html += '<div class="cell" id="' + cell + '"></div>';
@@ -357,59 +358,66 @@ yygo.view = {//{{{
     },//}}}
 
     drawGoban: function () {//{{{
+        var textzoneelem = document.getElementById('textzone');
+        var gobanelem = document.getElementById('goban');
+        var gridelem = document.getElementById('grid');
         var cellelems = document.getElementsByClassName('cell');
+        var cellvelems = document.getElementsByClassName('cellv');
         var cellbelems = document.getElementsByClassName('cellb');
         var cellwelems = document.getElementsByClassName('cellw');
-        var lineelems = document.getElementsByClassName('line');
+        var cc = cellelems.length;
+        var ccv = cellvelems.length;
+        var ccb = cellbelems.length;
+        var ccw = cellwelems.length;
+        var fontsize = this.sizecell / 1.5;
+        var c, cv, cb, cw;
 
+        // place le haut des commenaires
         if (this.showvariations) {
-            $('#textzone').css('top', this.sizegoban + 70);
+            textzoneelem.style.top = this.sizegoban + 70 + 'px';
         } else {
-            $('#textzone').css('top', this.sizegoban + 50);
+            textzoneelem.style.top = this.sizegoban + 50 + 'px';
         }
-
-        $('#goban').css({
-            height: this.sizegoban,
-            width: this.sizegoban
-        });
-
+        // redimensionne le goban
+        gobanelem.style.height = this.sizegoban + 'px';
+        gobanelem.style.width = this.sizegoban + 'px';
+        // redimensionne la grille
         if (this.showborders) {
-            $('#grid').css({
-                top: this.sizecell,
-                right: this.sizecell,
-                bottom: this.sizecell,
-                left: this.sizecell
-            });
+            gridelem.style.top = this.sizecell + 'px';
+            gridelem.style.right = this.sizecell + 'px';
+            gridelem.style.bottom = this.sizecell + 'px';
+            gridelem.style.left = this.sizecell + 'px';
         } else {
-            $('#grid').css({
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            });
+            gridelem.style.top = 0;
+            gridelem.style.right = 0;
+            gridelem.style.bottom = 0;
+            gridelem.style.left = 0;
         }
-        console.time('cells');
-        $('.line').css('height', this.sizecell);
-
-        $('.cell').css({
-            height: this.sizecell,
-            width: this.sizecell,
-            lineHeight: this.sizecell + 'px',
-            fontSize: this.sizecell / 1.5
-        });
-        $('.cellb').css({
-            height: this.sizecell,
-            width: this.sizecell,
-            lineHeight: this.sizecell + 'px',
-            fontSize: this.sizecell / 1.5
-        });
-        $('.cellw').css({
-            height: this.sizecell,
-            width: this.sizecell,
-            lineHeight: this.sizecell + 'px',
-            fontSize: this.sizecell / 1.5
-        });
-        console.timeEnd('cells');
+        // redimensionne les cellules
+        for (c = 0; c < cc; c++) {
+            cellelems[c].style.height = this.sizecell + 'px';
+            cellelems[c].style.width = this.sizecell + 'px';
+            cellelems[c].style.lineHeight = this.sizecell + 'px';
+            cellelems[c].style.fontSize = fontsize + 'px';
+        }
+        for (cv = 0; cv < ccv; cv++) {
+            cellvelems[cv].style.height = this.sizecell + 'px';
+            cellvelems[cv].style.width = this.sizecell + 'px';
+            cellvelems[cv].style.lineHeight = this.sizecell + 'px';
+            cellvelems[cv].style.fontSize = fontsize + 'px';
+        }
+        for (cb = 0; cb < ccb; cb++) {
+            cellbelems[cb].style.height = this.sizecell + 'px';
+            cellbelems[cb].style.width = this.sizecell + 'px';
+            cellbelems[cb].style.lineHeight = this.sizecell + 'px';
+            cellbelems[cb].style.fontSize = fontsize + 'px';
+        }
+        for (cw = 0; cw < ccw; cw++) {
+            cellwelems[cw].style.height = this.sizecell + 'px';
+            cellwelems[cw].style.width = this.sizecell + 'px';
+            cellwelems[cw].style.lineHeight = this.sizecell + 'px';
+            cellwelems[cw].style.fontSize = fontsize + 'px';
+        }
     },//}}}
 
     emptyGoban: function () {//{{{
