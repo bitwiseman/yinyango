@@ -82,41 +82,40 @@ yygo.view = {//{{{
 
     // propriétés
 
-    htmlborders:    '',
     htmlcomments:   '',
-    htmlgoban:      '',
     htmlinfos:      '',
     htmllist:       '',
     htmlvariations: '',
 
+    viewmode:       '',
+
     showborders:    true,
-    showtextzone:   false,
+    showcomments:   false,
     showvariations: false,
 
     sizecell:       0,
-    sizetextzone:   200,
     sizegoban:      0,
 
     // méthodes
 
     // construction code html
 
-    makeBorders: function () {//{{{
+    makeGoban: function () {//{{{
         var size = yygo.data.size;
         var gobanelem = document.getElementById('goban');
         var letters = ['A','B','C','D','E','F','G','H','J',
                        'K','L','M','N','O','P','Q','R','S','T'];
         var htmltop = '<div id="bordertop"><div class="cell"></div>';
-        var htmlright = '<div id="borderright"><div class="cellv"></div>';
+        var htmlright = '<div id="borderright"><div class="cell vcell"></div>';
         var htmlbottom = '<div id="borderbottom"><div class="cell"></div>';
-        var htmlleft = '<div id="borderleft"><div class="cellv"></div>';
-        var i;
+        var htmlleft = '<div id="borderleft"><div class="cell vcell"></div>';
+        var html, i;
 
         for (i = 0; i < size; i++) {
             htmltop += '<div class="cell">' + letters[i] + '</div>';
-            htmlright += '<div class="cellv">' + (size - i) + '</div>';
+            htmlright += '<div class="cell vcell">' + (size - i) + '</div>';
             htmlbottom += '<div class="cell">' + letters[i] + '</div>';
-            htmlleft += '<div class="cellv">' + (size - i) + '</div>';
+            htmlleft += '<div class="cell vcell">' + (size - i) + '</div>';
         }
 
         htmltop += '</div>';
@@ -125,10 +124,10 @@ yygo.view = {//{{{
         htmlleft += '</div>';
 
         // bordures et grille dans l'élément 'goban'
-        this.htmlborders = htmltop + htmlright + htmlbottom + htmlleft +
-                           '<div id="grid"></div>';
+        html = htmltop + htmlright + htmlbottom + htmlleft +
+               '<div id="grid">' + this.makeGrid()  + '</div>';
 
-        gobanelem.innerHTML = this.htmlborders;
+        gobanelem.innerHTML = html;
     },//}}}
 
     makeComments: function () {//{{{
@@ -168,9 +167,7 @@ yygo.view = {//{{{
             html += '</div>'; // fin de ligne
         }
 
-        this.htmlgoban = html;
-
-        gridelem.innerHTML = this.htmlgoban;
+        return html;
     },//}}}
 
     makeGamesList: function () {//{{{
@@ -332,11 +329,18 @@ yygo.view = {//{{{
     changeScreen: function () {//{{{
         var mode = yygo.events.mode;
         var screen = yygo.events.screen;
-        var all = '[id$="buttons"],#variations,#borders,#goban,' +
-                  '#textzone,#comments,#infos,#loadlist';
-        var replay = '#navbuttons,#utibuttons,#variations,#borders,' +
-                     '#goban,#textzone,#comments';
-        var options = '#optbuttons,#utibuttons,#textzone,#infos';
+        var navbuttons = document.getElementById('navbuttons');
+        var optbuttons = document.getElementById('optbuttons');
+        var variations = document.getElementById('variations');
+        var goban = document.getElementById('goban');
+        var comments = document.getElementById('comments');
+        var infos = document.getElementById('infos');
+        var loadlist = document.getElementById('loadlist');
+
+        var all = '[id$="buttons"],#variations,#goban,' +
+                  '#infos,#loadlist';
+        var replay = '#navbuttons,#utibuttons,#variations,#goban';
+        var options = '#optbuttons,#utibuttons,#infos';
         var list = '#optbuttons,#loadlist';
 
         $(all).hide();
@@ -346,77 +350,69 @@ yygo.view = {//{{{
                 $(replay).show();
                 this.toggleNavButtons();
                 this.toggleVariations();
-                this.toggleTextzone();
+                this.toggleComments();
             }
             // TODO autres modes
         } else if (screen == 'options') {
             $(options).show();
-            this.toggleTextzone();
+            this.toggleComments();
         } else if (screen == 'list' || screen == 'intro') {
             $(list).show();
         }
     },//}}}
 
-    drawGoban: function () {//{{{
-        var textzoneelem = document.getElementById('textzone');
+    drawGoban: function (redraw) {//{{{
+        var commentselem = document.getElementById('comments');
         var gobanelem = document.getElementById('goban');
         var gridelem = document.getElementById('grid');
         var cellelems = document.getElementsByClassName('cell');
-        var cellvelems = document.getElementsByClassName('cellv');
-        var cellbelems = document.getElementsByClassName('cellb');
-        var cellwelems = document.getElementsByClassName('cellw');
         var cc = cellelems.length;
-        var ccv = cellvelems.length;
-        var ccb = cellbelems.length;
-        var ccw = cellwelems.length;
         var fontsize = this.sizecell / 1.5;
-        var c, cv, cb, cw;
+        var comtop = 50;
+        var c;
 
-        // place le haut des commenaires
         if (this.showvariations) {
-            textzoneelem.style.top = this.sizegoban + 70 + 'px';
+            comtop += 20;
+        }
+        if (redraw) { // c'est un redimenssionnement
+            // redimensionne le goban
+            gobanelem.style.height = this.sizegoban + 'px';
+            gobanelem.style.width = this.sizegoban + 'px';
+            // redimensionne la grille
+            if (this.showborders) {
+                gridelem.style.top = this.sizecell + 'px';
+                gridelem.style.right = this.sizecell + 'px';
+                gridelem.style.bottom = this.sizecell + 'px';
+                gridelem.style.left = this.sizecell + 'px';
+            } else {
+                gridelem.style.top = 0;
+                gridelem.style.right = 0;
+                gridelem.style.bottom = 0;
+                gridelem.style.left = 0;
+            }
+            // redimensionne les cellules
+            for (c = 0; c < cc; c++) {
+                cellelems[c].style.height = this.sizecell + 'px';
+                cellelems[c].style.width = this.sizecell + 'px';
+                cellelems[c].style.lineHeight = this.sizecell + 'px';
+                cellelems[c].style.fontSize = fontsize + 'px';
+            }
+        }
+        // place les commentaires
+        if (this.viewmode == 'horizontal') {
+            if (this.showcomments) {
+                gobanelem.style.margin = 0;
+            } else {
+                gobanelem.style.margin = 'auto';
+            }
+            commentselem.style.top = comtop + 'px';
+            commentselem.style.right = 0;
+            commentselem.style.left = this.sizegoban + 'px';
         } else {
-            textzoneelem.style.top = this.sizegoban + 50 + 'px';
-        }
-        // redimensionne le goban
-        gobanelem.style.height = this.sizegoban + 'px';
-        gobanelem.style.width = this.sizegoban + 'px';
-        // redimensionne la grille
-        if (this.showborders) {
-            gridelem.style.top = this.sizecell + 'px';
-            gridelem.style.right = this.sizecell + 'px';
-            gridelem.style.bottom = this.sizecell + 'px';
-            gridelem.style.left = this.sizecell + 'px';
-        } else {
-            gridelem.style.top = 0;
-            gridelem.style.right = 0;
-            gridelem.style.bottom = 0;
-            gridelem.style.left = 0;
-        }
-        // redimensionne les cellules
-        for (c = 0; c < cc; c++) {
-            cellelems[c].style.height = this.sizecell + 'px';
-            cellelems[c].style.width = this.sizecell + 'px';
-            cellelems[c].style.lineHeight = this.sizecell + 'px';
-            cellelems[c].style.fontSize = fontsize + 'px';
-        }
-        for (cv = 0; cv < ccv; cv++) {
-            cellvelems[cv].style.height = this.sizecell + 'px';
-            cellvelems[cv].style.width = this.sizecell + 'px';
-            cellvelems[cv].style.lineHeight = this.sizecell + 'px';
-            cellvelems[cv].style.fontSize = fontsize + 'px';
-        }
-        for (cb = 0; cb < ccb; cb++) {
-            cellbelems[cb].style.height = this.sizecell + 'px';
-            cellbelems[cb].style.width = this.sizecell + 'px';
-            cellbelems[cb].style.lineHeight = this.sizecell + 'px';
-            cellbelems[cb].style.fontSize = fontsize + 'px';
-        }
-        for (cw = 0; cw < ccw; cw++) {
-            cellwelems[cw].style.height = this.sizecell + 'px';
-            cellwelems[cw].style.width = this.sizecell + 'px';
-            cellwelems[cw].style.lineHeight = this.sizecell + 'px';
-            cellwelems[cw].style.fontSize = fontsize + 'px';
+            gobanelem.style.margin = 'auto';
+            commentselem.style.top =  this.sizegoban + comtop + 'px';
+            commentselem.style.right = 0;
+            commentselem.style.left = 0;
         }
     },//}}}
 
@@ -496,13 +492,13 @@ yygo.view = {//{{{
         for (b = 0; b < cb; b++) {
             if (bstones[b] != '') {
                 cell = document.getElementById(bstones[b]);
-                cell.className = 'cellb';
+                cell.className += ' cellb';
             }
         }
         for (w = 0; w < cw; w++) {
             if (wstones[w] != '') {
                 cell = document.getElementById(wstones[w]);
-                cell.className = 'cellw';
+                cell.className += ' cellw';
             }
         }
     },//}}}
@@ -528,7 +524,7 @@ yygo.view = {//{{{
                 cc = circles.length;
                 for (c = 0; c < cc; c++) {
                     cell = document.getElementById(circles[c]);
-                    color = cell.className.substr(4);
+                    color = cell.className.substr(9);
                     this.insertSymbolSvg('CR', circles[c], color);
                 }
             }
@@ -537,7 +533,7 @@ yygo.view = {//{{{
                 cs = squares.length;
                 for (s = 0; s < cs; s++) {
                     cell = document.getElementById(squares[s]);
-                    color = cell.className.substr(4);
+                    color = cell.className.substr(9);
                     this.insertSymbolSvg('SQ', squares[s], color);
                 }
             }
@@ -546,7 +542,7 @@ yygo.view = {//{{{
                 ct = triangles.length;
                 for (t = 0; t < ct; t++) {
                     cell = document.getElementById(triangles[t]);
-                    color = cell.className.substr(4);
+                    color = cell.className.substr(9);
                     this.insertSymbolSvg('TR', triangles[t], color);
                 }
             }
@@ -556,11 +552,9 @@ yygo.view = {//{{{
                 for (l = 0; l < cl; l++) {
                     label = labels[l].split(':');
                     cell = document.getElementById(label[0]);
-                    color = cell.className.substr(4);
-                    if (color == 'b') {
-                        cell.style.color = 'white';
-                    } else if (color == '') {
-                        cell.className = 'celle';
+                    color = cell.className.substr(9);
+                    if (color == '') {
+                        cell.className += ' celle';
                     }
                     cell.title = label[1];
                     cell.textContent = label[1];
@@ -579,25 +573,29 @@ yygo.view = {//{{{
 
     setGobanSize: function () {//{{{
         var size = yygo.data.size;
-        var winw = $(window).width();
-        var winh = $(window).height();
+        var winw = window.innerWidth;
+        var winh = window.innerHeight;
         var heightleft = winh - 50;
         var oldsizegoban = this.sizegoban;
         var smaller;
-        
-        if (this.sizetextzone > winh / 2) {
-            this.sizetextzone = winh / 2;
-        }
-        if (this.showtextzone) {
-            heightleft -= this.sizetextzone;
-        }
+
         if (this.showvariations) {
             heightleft -= 20;
         }
         if (winw < heightleft) {
-            smaller = winw;
+            this.viewmode = 'vertical';
+            if (this.showcomments && heightleft - 200 <= winw) {
+                smaller = heightleft - 200;
+            } else {
+                smaller = winw;
+            }
         } else {
-            smaller = heightleft;
+            this.viewmode = 'horizontal';
+            if (this.showcomments && winw - 200 <= heightleft) {
+                smaller = winw - 200;
+            } else {
+                smaller = heightleft;
+            }
         }
 
         // calcul la taille en pixels du goban pour être un multiple de
@@ -610,9 +608,11 @@ yygo.view = {//{{{
             this.sizegoban = this.sizecell * size;
         }
 
-        // redessine le goban si la taille a changé
+        // redessine si la taille a changé
         if (this.sizegoban != oldsizegoban) {
-            this.drawGoban(); 
+            this.drawGoban(true);
+        } else {
+            this.drawGoban(false);
         }
     },//}}}
 
@@ -638,11 +638,11 @@ yygo.view = {//{{{
         }
     },//}}}
 
-    toggleTextzone: function () {//{{{
-        if (this.showtextzone) {
-            $('#textzone').show();
+    toggleComments: function () {//{{{
+        if (this.showcomments) {
+            $('#comments').show();
         } else {
-            $('#textzone').hide();
+            $('#comments').hide();
         }
     },//}}}
 
@@ -663,6 +663,8 @@ yygo.events = {//{{{
     mode:           'replay',
     screen:         'options',
 
+    redraw:         false,
+
     // méthodes
 
     loadGameFromList: function (number) {//{{{
@@ -675,12 +677,9 @@ yygo.events = {//{{{
         this.makeNavBinds();
 
         if (yygo.data.size != oldsize) { // nouvelle taille tout refaire
-            console.time('makeborders');
-            yygo.view.makeBorders();
-            console.timeEnd('makeborders');
-            console.time('makegrid');
-            yygo.view.makeGrid();
-            console.timeEnd('makegrid');
+            console.time('makeGoban');
+            yygo.view.makeGoban();
+            console.timeEnd('makeGoban');
             console.time('gridimage');
             yygo.view.changeGridImage();
             console.timeEnd('gridimage');
@@ -711,7 +710,7 @@ yygo.events = {//{{{
         console.time('toggles');
         yygo.view.toggleBorders();
         yygo.view.toggleVariations();
-        yygo.view.toggleTextzone();
+        yygo.view.toggleComments();
         console.timeEnd('toggles');
 
         console.time('setsize');
@@ -727,41 +726,20 @@ yygo.events = {//{{{
         $(window).bind('resize', function () {
             yygo.view.setGobanSize()
         });
-        $('#resizer').bind('mousedown', function (e) {
-            // ref: http://bit.ly/gwL00h
-            var winh = $(window).height();
-            var sizebefore = yygo.view.sizetextzone;
-            var cursory = winh - e.clientY;
-            var moveHandler = function (e) {
-                var sizeafter;
-
-                sizeafter = Math.max(100, winh - e.clientY + sizebefore - cursory); 
-                if (sizeafter > winh / 2) {
-                    sizeafter = winh / 2;
-                }
-                yygo.view.sizetextzone = sizeafter;
-                yygo.view.setGobanSize();
-            };
-            var upHandler = function (e) {
-                $('html').unbind('mousemove', moveHandler)
-                .unbind('mouseup', upHandler);
-            };
-
-            $('html').bind('mousemove', moveHandler).bind('mouseup', upHandler);
-        });
 
         // boutons de navigation
         this.makeNavBinds();
 
-        // bouton textzone
+        // bouton commentaires
         $('#comment').bind('click', function () {
-            if (yygo.view.showtextzone) {
-                yygo.view.showtextzone = false;
-                yygo.view.toggleTextzone();
+            yygo.events.redraw = true;
+            if (yygo.view.showcomments) {
+                yygo.view.showcomments = false;
+                yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             } else {
-                yygo.view.showtextzone = true;
-                yygo.view.toggleTextzone();
+                yygo.view.showcomments = true;
+                yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             }
         });

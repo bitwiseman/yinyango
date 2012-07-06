@@ -155,41 +155,34 @@ body {
 #grid {
     position: absolute;
 }
-[class^="cell"] {
+.cell {
     float: left;
+    border-radius: 50%;
     text-align: center;
     font-family: serif;
     overflow: hidden;
 }
-.cellv {
+.vcell {
     float: none;
 }
 .cellb {
     background: #000;
-    border-radius: 50%;
+    color: #fff;
 }
 .cellw {
     background: #f9f0ca;
-    border-radius: 50%;
 }
 .celle {
     background: #ccaa66;
 }
 /*}}}*/
-#textzone {/*{{{*/
+#comments {/*{{{*/
     position: absolute;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
+    bottom: 0;
+    padding: 15px;
+    overflow: auto;
 }
-#resizer {
-    background: #000;
-    width: 100px;
-    height: 6px;
-    margin: auto;
-    cursor: n-resize;
-}
-#comments, #infos {
+#infos {
     position: absolute;
     top: 6px;
     bottom: 0;
