@@ -97,10 +97,10 @@ body {
 #lang {
     left: 150px;
 }
-.langen,.buttonen {
+#langen,.buttonen {
     background-position: -550px 0px;
 }
-.langfr,.buttonfr {
+#langfr,.buttonfr {
     background-position: -600px 0px;
 }
 #lang ul {
@@ -144,19 +144,19 @@ body {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
-#bordertop {
+#btop {
     position: absolute;
     top: 0;
 }
-#borderright {
+#bright {
     position: absolute;
     right: 0;
 }
-#borderbottom {
+#bbottom {
     position: absolute;
     bottom: 0;
 }
-#borderleft {
+#bleft {
     position: absolute;
     left: 0;
 }

@@ -9,9 +9,9 @@ var yygo = {}; // espace de nom yygo
         // requête ajax simple qui retourne un JSON
         var xhr = new XMLHttpRequest(); // ignorer vieux IE
 
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 &&
-                    (xhr.status == 200 || xhr.status == 0)) {
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 &&
+                    (xhr.status === 200 || xhr.status === 0)) {
                 callback(JSON.parse(xhr.responseText));
             }
         };
@@ -122,6 +122,7 @@ var yygo = {}; // espace de nom yygo
 
         viewmode:       '',
 
+        redraw:         false,
         showborders:    false,
         showcomments:   true,
         showvariations: false,
@@ -134,44 +135,45 @@ var yygo = {}; // espace de nom yygo
         // construction code html
 
         makeGoban: function () {//{{{
-            var size = yygo.data.size;
-            var gobanelem = document.getElementById('goban');
-            var letters = ['A','B','C','D','E','F','G','H','J',
-            'K','L','M','N','O','P','Q','R','S','T'];
-            var htmltop = '<div id="bordertop"><div class="cell"></div>';
-            var htmlright = '<div id="borderright"><div class="cell vcell"></div>';
-            var htmlbottom = '<div id="borderbottom"><div class="cell"></div>';
-            var htmlleft = '<div id="borderleft"><div class="cell vcell"></div>';
-            var html, i;
+            var size = yygo.data.size,
+                gobanelem = document.getElementById('goban'),
+                letters =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
+                            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
+                btop =      '<div id="btop"><div class="cell"></div>',
+                bright =    '<div id="bright"><div class="cell vcell"></div>',
+                bbottom =   '<div id="bbottom"><div class="cell"></div>',
+                bleft =     '<div id="bleft"><div class="cell vcell"></div>',
+                html,
+                i;
 
             for (i = 0; i < size; i++) {
-                htmltop += '<div class="cell">' + letters[i] + '</div>';
-                htmlright += '<div class="cell vcell">' + (size - i) + '</div>';
-                htmlbottom += '<div class="cell">' + letters[i] + '</div>';
-                htmlleft += '<div class="cell vcell">' + (size - i) + '</div>';
+                btop += '<div class="cell">' + letters[i] + '</div>';
+                bright += '<div class="cell vcell">' + (size - i) + '</div>';
+                bbottom += '<div class="cell">' + letters[i] + '</div>';
+                bleft += '<div class="cell vcell">' + (size - i) + '</div>';
             }
 
-            htmltop += '</div>';
-            htmlright += '</div>';
-            htmlbottom += '</div>';
-            htmlleft += '</div>';
+            btop += '</div>';
+            bright += '</div>';
+            bbottom += '</div>';
+            bleft += '</div>';
 
             // bordures et grille dans l'élément 'goban'
-            html = htmltop + htmlright + htmlbottom + htmlleft +
-                '<div id="grid">' + this.makeGrid()  + '</div>';
+            html = btop + bright + bbottom + bleft +
+                   '<div id="grid">' + this.makeGrid()  + '</div>';
 
             gobanelem.innerHTML = html;
         },//}}}
 
         makeComments: function () {//{{{
-            var comments = yygo.data.comments;
-            var curnode = yygo.data.curnode;
-            var curbranch = yygo.data.curbranch;
-            var commentselem = document.getElementById('comments');
-            var html = '';
+            var comments =      yygo.data.comments || {},
+                curnode =       yygo.data.curnode,
+                curbranch =     yygo.data.curbranch,
+                commentselem =  document.getElementById('comments'),
+                html =          '';
 
-            if (comments != null && comments[curnode] != null &&
-            comments[curnode][curbranch] != null) {
+            if (!isEmpty(comments) && comments[curnode] !== undefined &&
+                    comments[curnode][curbranch] !== undefined) {
                 html = '<p>';
                 html += comments[curnode][curbranch];
                 html += '</p>';
@@ -183,13 +185,14 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         makeGrid: function () {//{{{
-            var size = yygo.data.size;
-            var gridelem = document.getElementById('grid');
-            var cell = '';
-            var coord = ['a','b','c','d','e','f','g','h','i','j',
-            'k','l','m','n','o','p','q','r','s'];
-            var html = '';
-            var i, j;
+            var size =      yygo.data.size,
+                gridelem =  document.getElementById('grid'),
+                coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                html =      '',
+                cell,
+                i,
+                j;
 
             for (i = 0; i < size; i++) {
                 html += '<div>'; // début de ligne
@@ -204,30 +207,30 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         makeGamesList: function () {//{{{
-            var gameslist = yygo.data.gameslist;
-            var loadlistelem = document.getElementById('loadlist');
-            var html = '<table>';
-            var infos = {};
-            var ci = gameslist.length;
-            var i;
+            var gameslist =     yygo.data.gameslist,
+                loadlistelem =  document.getElementById('loadlist'),
+                html =          '<table id="gameslist">',
+                infos =         {},
+                ci =            gameslist.length,
+                i;
 
-            for (i = 0; i < ci; i ++) {
+            for (i = 0; i < ci; i++) {
                 infos = JSON.parse(gameslist[i].infos);
 
                 html += '<tr><td>' + gameslist[i].file + '</td>';
 
-                if (infos['PB'] != null) {
-                    html += '<td>' + infos['PB'] + '</td>';
+                if (infos.PB !== undefined) {
+                    html += '<td>' + infos.PB + '</td>';
                 } else {
                     html += '<td></td>';
                 }
-                if (infos['PW'] != null) {
-                    html += '<td>' + infos['PW'] + '</td>';
+                if (infos.PW !== undefined) {
+                    html += '<td>' + infos.PW + '</td>';
                 } else {
                     html += '<td></td>';
                 }
-                if (infos['DT'] != null) {
-                    html += '<td>' + infos['DT'] + '</td>';
+                if (infos.DT !== undefined) {
+                    html += '<td>' + infos.DT + '</td>';
                 } else {
                     html += '<td></td>';
                 }
@@ -243,31 +246,31 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         makeInfos: function () {//{{{
-            var infos = yygo.data.infos;
-            var locale = yygo.data.locale;
-            var infoselem = document.getElementById('infos');
-            var html = '<p>';
+            var infos =         yygo.data.infos,
+                locale =        yygo.data.locale,
+                infoselem =     document.getElementById('infos'),
+                html =          '<p>';
 
-            if (infos['PB'] != null) {
-                html += '<em>' + locale.black + ':</em> ' + infos['PB'];
+            if (infos.PB !== undefined) {
+                html += '<em>' + locale.black + ':</em> ' + infos.PB;
             }
-            if (infos['BR'] != null) {
-                html += ' [' + infos['BR'] + ']';
+            if (infos.BR !== undefined) {
+                html += ' [' + infos.BR + ']';
             }
-            if (infos['PW'] != null) {
-                html += ' <br /><em>' + locale.white + ':</em> ' + infos['PW'];
+            if (infos.PW !== undefined) {
+                html += ' <br /><em>' + locale.white + ':</em> ' + infos.PW;
             }
-            if (infos['WR'] != null) {
-                html += ' [' + infos['WR'] + ']';
+            if (infos.WR !== undefined) {
+                html += ' [' + infos.WR + ']';
             }
-            if (infos['DT'] != null) {
-                html += ' <br /><em>' + locale.date + ':</em> ' + infos['DT'];
+            if (infos.DT !== undefined) {
+                html += ' <br /><em>' + locale.date + ':</em> ' + infos.DT;
             }
-            if (infos['PC'] != null) {
-                html += ' <br /><em>' + locale.place + ':</em> ' + infos['PC'];
+            if (infos.PC !== undefined) {
+                html += ' <br /><em>' + locale.place + ':</em> ' + infos.PC;
             }
-            if (infos['RU'] != null) {
-                html += ' <br /><em>' + locale.rules + ':</em> ' + infos['RU'];
+            if (infos.RU !== undefined) {
+                html += ' <br /><em>' + locale.rules + ':</em> ' + infos.RU;
             }
 
             html += '</p>';
@@ -278,21 +281,31 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         makeVariations: function () {//{{{
-            var game = yygo.data.game;
-            var curbranch = yygo.data.curbranch;
-            var curnode = yygo.data.curnode;
-            var branchs = yygo.data.branchs;
-            var pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
-            var variationselem = document.getElementById('variations');
-            var variations = 0;
-            var html = '';
-            var i;
+            var game =              yygo.data.game,
+                curbranch =         yygo.data.curbranch,
+                curnode =           yygo.data.curnode,
+                branchs =           yygo.data.branchs,
+                variationselem =    document.getElementById('variations'),
+                variations =        0,
+                html =              '',
+                pbranch,
+                opbranch,
+                i;
+
+            // cherche la branche parent de la branche actuelle
+            // du noeud précédent
+            pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
 
             for (i = 0; i < branchs; i++) {
-                if (game[curnode][i] != null && curnode > 0) {
-                    if (yygo.data.getParentBranch(curnode - 1, i) == pbranch) {
+                if (game[curnode][i] !== undefined && curnode > 0) {
+                    // cherche la branche parent d'une autre branche
+                    // du noeud précédent
+                    opbranch = yygo.data.getParentBranch(curnode - 1, i);
+                    if (opbranch === pbranch) {
+                        // si les branches parents correspondent alors
+                        // c'est une variante
                         variations++;
-                        if (i == curbranch) { // variante actuelle
+                        if (i === curbranch) { // variante actuelle
                             html += '<div id="varbua' + i + '"></div>';
                         } else { // autre variante
                             html += '<div id="varbut' + i + '"></div>';
@@ -307,14 +320,12 @@ var yygo = {}; // espace de nom yygo
 
             this.htmlvariations = html;
 
-            if (this.htmlvariations != '') { // il y a des variantes
-                // afficher la barre de variantes si masquée
+            if (this.htmlvariations !== '') {
                 if (!this.showvariations) {
                     this.showvariations = true;
                     this.setGobanSize();
                 }
-            } else { // pas de variantes
-                // masquer la barre de variantes si affichée
+            } else {
                 if (this.showvariations) {
                     this.showvariations = false;
                     this.setGobanSize();
@@ -326,53 +337,58 @@ var yygo = {}; // espace de nom yygo
         // affichage
 
         changeGridImage: function () {//{{{
-            var gridelem = document.getElementById('grid');
+            var grid = document.getElementById('grid');
 
-            gridelem.style.background = 'url(images/' + yygo.data.size + '.svg)';
+            grid.style.background = 'url(images/' + yygo.data.size + '.svg)';
         },//}}}
 
         changeLang: function () {//{{{
-            var locale = yygo.data.locale;
-            var lang = yygo.data.lang;
+            var locale =    yygo.data.locale,
+                lang =      yygo.data.lang,
+                langs =     document.getElementsByClassName('lang'),
+                cl =        langs.length,
+                l;
 
             // étiquettes des boutons
-            $('#comment').attr('title', locale.comment);
-            $('#load').attr('title', locale.load);
-            $('#lang').attr('title', locale.language);
-            $('#start').attr('title', locale.start);
-            $('#prev').attr('title', locale.prev);
-            $('#fastprev').attr('title', locale.fastprev);
-            $('#next').attr('title', locale.next);
-            $('#fastnext').attr('title', locale.fastnext);
-            $('#end').attr('title', locale.end);
-            $('#options').attr('title', locale.options);
-            $('#sendsgf').attr('title', locale.sendsgf);
-            $('#downsgf').attr('title', locale.downsgf);
+            document.getElementById('comment').title =  locale.comment;
+            document.getElementById('load').title =     locale.load;
+            document.getElementById('lang').title =     locale.language;
+            document.getElementById('start').title =    locale.start;
+            document.getElementById('prev').title =     locale.prev;
+            document.getElementById('fastprev').title = locale.fastprev;
+            document.getElementById('next').title =     locale.next;
+            document.getElementById('fastnext').title = locale.fastnext;
+            document.getElementById('end').title =      locale.end;
+            document.getElementById('options').title =  locale.options;
+            document.getElementById('sendsgf').title =  locale.sendsgf;
+            document.getElementById('downsgf').title =  locale.downsgf;
 
             if (!isEmpty(yygo.data.infos)) {
                 this.makeInfos(); // réécris le code HTML des infos
             }
 
             // change l'apparence du bouton pour prendre celle de la langue
-            $('#lang').attr('class', 'button' + lang);
-            $('[class^="lang"]').show();
-            $('.lang' + lang).hide();
+            document.getElementById('lang').className = 'button' + lang;
+            for (l = 0; l < cl; l++) {
+                langs[l].style.display = 'block';
+            }
+            document.getElementById('lang' + lang).style.display = 'none';
         },//}}}
 
         changeScreen: function () {//{{{
-            var mode = yygo.events.mode;
-            var screen = yygo.events.screen;
-            var navbuttons = document.getElementById('navbuttons');
-            var optbuttons = document.getElementById('optbuttons');
-            var gobbuttons = document.getElementById('gobbuttons');
-            var options = document.getElementById('options');
-            var variations = document.getElementById('variations');
-            var goban = document.getElementById('goban');
-            var comments = document.getElementById('comments');
-            var infos = document.getElementById('infos');
-            var loadlist = document.getElementById('loadlist');
+            var mode =          yygo.events.mode,
+                screen =        yygo.events.screen,
+                navbuttons =    document.getElementById('navbuttons'),
+                optbuttons =    document.getElementById('optbuttons'),
+                gobbuttons =    document.getElementById('gobbuttons'),
+                options =       document.getElementById('options'),
+                variations =    document.getElementById('variations'),
+                goban =         document.getElementById('goban'),
+                comments =      document.getElementById('comments'),
+                infos =         document.getElementById('infos'),
+                loadlist =      document.getElementById('loadlist');
 
-            if (screen == 'goban') {
+            if (screen === 'goban') {
                 optbuttons.style.display = 'none';
                 infos.style.display = 'none';
                 loadlist.style.display = 'none';
@@ -380,14 +396,14 @@ var yygo = {}; // espace de nom yygo
                 gobbuttons.style.display = 'block';
                 options.style.display = 'block';
                 goban.className = '';
-                if (mode == 'replay') {
+                if (mode === 'replay') {
                     navbuttons.style.display = 'block';
                     this.toggleNavButtons();
                     this.toggleVariations();
                     this.toggleComments();
                 }
                 // TODO autres modes
-            } else if (screen == 'options') {
+            } else if (screen === 'options') {
                 navbuttons.style.display = 'none';
                 gobbuttons.style.display = 'none';
                 variations.style.display = 'none';
@@ -398,26 +414,26 @@ var yygo = {}; // espace de nom yygo
                 optbuttons.style.display = 'block';
                 options.style.display = 'block';
                 infos.style.display = 'block';
-            } else if (screen == 'list') {
+            } else if (screen === 'list') {
                 options.style.display = 'none';
                 goban.className = 'hide'; // déplace plus rapide
                 infos.style.display = 'none';
 
                 loadlist.style.display = 'block';
-            } else if (screen == 'intro') {
+            } else if (screen === 'intro') {
                 // TODO
             }
         },//}}}
 
         drawGoban: function (redraw) {//{{{
-            var commentselem = document.getElementById('comments');
-            var gobanelem = document.getElementById('goban');
-            var gridelem = document.getElementById('grid');
-            var cellelems = document.getElementsByClassName('cell');
-            var cc = cellelems.length;
-            var fontsize = this.sizecell / 1.5;
-            var comtop = 50;
-            var c;
+            var commentselem =  document.getElementById('comments'),
+                gobanelem =     document.getElementById('goban'),
+                gridelem =      document.getElementById('grid'),
+                cellelems =     document.getElementsByClassName('cell'),
+                cc =            cellelems.length,
+                fontsize =      this.sizecell / 1.5,
+                comtop =        50,
+                c;
 
             if (this.showvariations) {
                 comtop += 20;
@@ -440,7 +456,7 @@ var yygo = {}; // espace de nom yygo
                 }
             }
             // place les commentaires
-            if (this.viewmode == 'horizontal') {
+            if (this.viewmode === 'horizontal') {
                 if (this.showcomments) {
                     gobanelem.style.margin = 0;
                 } else {
@@ -458,10 +474,13 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         emptyGoban: function () {//{{{
-            var size = yygo.data.size;
-            var coord = ['a','b','c','d','e','f','g','h','i','j',
-            'k','l','m','n','o','p','q','r','s'];
-            var cell, id, i, j;
+            var size =  yygo.data.size,
+                coord = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                cell,
+                id,
+                i,
+                j;
 
             for (i = 0; i < size; i++) {
                 for (j = 0; j < size; j++) {
@@ -471,46 +490,25 @@ var yygo = {}; // espace de nom yygo
                     cell.innerHTML = '';
                 }
             }
-
-            /* var oldb = document.getElementsByClassName('cellb');
-            var oldw = document.getElementsByClassName('cellw');
-            var olds = document.getElementsByTagName('svg');
-            var cob = oldb.length;
-            var cow = oldw.length;
-            var cos = olds.length;
-            var ob, ow, os;
-
-            console.log(oldb);
-            // enlever les anciennes pierres
-            for (ob = 0; ob < cob; ob++) {
-            oldb[ob].className = 'cell';
-            }
-            for (ow = 0; ow < cow; ow++) {
-            oldw[ow].className = 'cell';
-            }
-            // effacer les anciens symboles
-            for (os = 0; os < cos; os++) {
-            olds[os].parentNode.removeChild(olds[os]);
-            }*/
         },//}}}
 
         insertSymbolSvg: function (symbol, id, color) {//{{{
-            var cell = document.getElementById(id);
-            var svg = '<svg xmlns="http://www.w3.org/2000/svg"' +
-                'version="1.1" viewBox="0 0 10 10">';
+            var cell =  document.getElementById(id),
+                svg =   '<svg xmlns="http://www.w3.org/2000/svg"' +
+                        'version="1.1" viewBox="0 0 10 10">';
 
-            if (symbol == 'CR') { // cercle
+            if (symbol === 'CR') { // cercle
                 svg += '<circle cx="5" cy="5" r="2.5"' +
                     'stroke-width="0.7" fill="none"';
-            } else if (symbol == 'SQ') { // carré
+            } else if (symbol === 'SQ') { // carré
                 svg += '<rect x="1.8" y="1.8" width="6.5"' +
                     'height="6.5" stroke-width="0.7" fill="none"';
-            } else if (symbol == 'TR') { // triangle
+            } else if (symbol === 'TR') { // triangle
                 svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z"' +
                     'stroke-width="0.7" fill="none"';
             }
 
-            if (color == 'b') { // si pierre noire afficher en blanc
+            if (color === 'b') { // si pierre noire afficher en blanc
                 svg += ' stroke="#fff"/></svg>';
             } else {
                 svg += ' stroke="#000"/></svg>';
@@ -520,24 +518,26 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         placeStones: function () {//{{{
-            var game = yygo.data.game;
-            var curbranch = yygo.data.curbranch;
-            var curnode = yygo.data.curnode;
-            var bstones = game[curnode][curbranch]['b'].split(',');
-            var wstones = game[curnode][curbranch]['w'].split(',');
-            var cb = bstones.length;
-            var cw = wstones.length;
-            var b, w, cell;
+            var game =          yygo.data.game,
+                curbranch =     yygo.data.curbranch,
+                curnode =       yygo.data.curnode,
+                bstones =       game[curnode][curbranch].b.split(','),
+                wstones =       game[curnode][curbranch].w.split(','),
+                cb =            bstones.length,
+                cw =            wstones.length,
+                cell,
+                b,
+                w;
 
             // lister et afficher les pierres de l'état actuel
             for (b = 0; b < cb; b++) {
-                if (bstones[b] != '') {
+                if (bstones[b] !== '') {
                     cell = document.getElementById(bstones[b]);
                     cell.className += ' cellb';
                 }
             }
             for (w = 0; w < cw; w++) {
-                if (wstones[w] != '') {
+                if (wstones[w] !== '') {
                     cell = document.getElementById(wstones[w]);
                     cell.className += ' cellw';
                 }
@@ -545,23 +545,32 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         placeSymbols: function () {//{{{
-            var curbranch = yygo.data.curbranch;
-            var curnode = yygo.data.curnode;
-            var game = yygo.data.game;
-            var symbols = yygo.data.symbols;
-            var circles = [];
-            var squares = [];
-            var triangles = [];
-            var labels = [];
-            var label = [];
-            var playedstone = [];
-            var c, cc, s, cs, t, ct, l, cl, cell, color;
+            var curbranch =     yygo.data.curbranch,
+                curnode =       yygo.data.curnode,
+                game =          yygo.data.game,
+                symbols =       yygo.data.symbols || {},
+                circles =       [],
+                squares =       [],
+                triangles =     [],
+                labels =        [],
+                label =         [],
+                playedstone =   [],
+                color,
+                cell,
+                c,
+                cc,
+                s,
+                cs,
+                t,
+                ct,
+                l,
+                cl;
 
             // afficher les symboles de l'état actuel
-            if (symbols != null && symbols[curnode] != null &&
-            symbols[curnode][curbranch] != null) {
-                if (symbols[curnode][curbranch]['CR'] != null) {
-                    circles = symbols[curnode][curbranch]['CR'].split(','); 
+            if (!isEmpty(symbols) && symbols[curnode] !== undefined &&
+                    symbols[curnode][curbranch] !== undefined) {
+                if (symbols[curnode][curbranch].CR !== undefined) {
+                    circles = symbols[curnode][curbranch].CR.split(',');
                     cc = circles.length;
                     for (c = 0; c < cc; c++) {
                         cell = document.getElementById(circles[c]);
@@ -569,8 +578,8 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('CR', circles[c], color);
                     }
                 }
-                if (symbols[curnode][curbranch]['SQ'] != null) {
-                    squares = symbols[curnode][curbranch]['SQ'].split(',');
+                if (symbols[curnode][curbranch].SQ !== undefined) {
+                    squares = symbols[curnode][curbranch].SQ.split(',');
                     cs = squares.length;
                     for (s = 0; s < cs; s++) {
                         cell = document.getElementById(squares[s]);
@@ -578,8 +587,8 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('SQ', squares[s], color);
                     }
                 }
-                if (symbols[curnode][curbranch]['TR'] != null) {
-                    triangles = symbols[curnode][curbranch]['TR'].split(',');
+                if (symbols[curnode][curbranch].TR !== undefined) {
+                    triangles = symbols[curnode][curbranch].TR.split(',');
                     ct = triangles.length;
                     for (t = 0; t < ct; t++) {
                         cell = document.getElementById(triangles[t]);
@@ -587,14 +596,14 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('TR', triangles[t], color);
                     }
                 }
-                if (symbols[curnode][curbranch]['LB'] != null) {
-                    labels = symbols[curnode][curbranch]['LB'].split(',');
+                if (symbols[curnode][curbranch].LB !== undefined) {
+                    labels = symbols[curnode][curbranch].LB.split(',');
                     cl = labels.length;
                     for (l = 0; l < cl; l++) {
                         label = labels[l].split(':');
                         cell = document.getElementById(label[0]);
                         color = cell.className.substr(9);
-                        if (color == '') {
+                        if (color === '') {
                             cell.className += ' celle';
                         }
                         cell.title = label[1];
@@ -604,21 +613,21 @@ var yygo = {}; // espace de nom yygo
             }
 
             // cercle pour indiquer la dernière pierre jouée
-            if (game[curnode][curbranch]['p'] != null) {
-                playedstone = game[curnode][curbranch]['p'].split(',');
-                if (playedstone[1] != '') {
+            if (game[curnode][curbranch].p !== undefined) {
+                playedstone = game[curnode][curbranch].p.split(',');
+                if (playedstone[1] !== '') {
                     this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
                 }
             }
         },//}}}
 
         setGobanSize: function () {//{{{
-            var size = yygo.data.size;
-            var winw = window.innerWidth;
-            var winh = window.innerHeight;
-            var heightleft = winh - 50;
-            var oldsizegoban = this.sizegoban;
-            var smaller;
+            var size =          yygo.data.size,
+                winw =          window.innerWidth,
+                winh =          window.innerHeight,
+                heightleft =    winh - 50,
+                oldsizegoban =  this.sizegoban,
+                smaller;
 
             if (this.showvariations) {
                 heightleft -= 20;
@@ -645,7 +654,10 @@ var yygo = {}; // espace de nom yygo
             this.sizegoban = this.sizecell * (size + 2);
 
             // redessine si la taille a changé
-            if (this.sizegoban != oldsizegoban) {
+            if (this.sizegoban !== oldsizegoban || this.redraw) {
+                if (this.redraw) {
+                    this.redraw = false;
+                }
                 this.drawGoban(true);
             } else {
                 this.drawGoban(false);
@@ -653,42 +665,71 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         toggleBorders: function () {//{{{
+            var btop =      document.getElementById('btop'),
+                bright =    document.getElementById('bright'),
+                bbottom =   document.getElementById('bbottom'),
+                bleft =     document.getElementById('bleft');
+
             if (this.showborders) {
-                $('#bordertop,#borderright,#borderbottom,#borderleft').show();
+                btop.style.display = 'block';
+                bright.style.display = 'block';
+                bbottom.style.display = 'block';
+                bleft.style.display = 'block';
             } else {
-                $('#bordertop,#borderright,#borderbottom,#borderleft').hide();
+                btop.style.display = 'none';
+                bright.style.display = 'none';
+                bbottom.style.display = 'none';
+                bleft.style.display = 'none';
             }
         },//}}}
 
         toggleNavButtons: function () {//{{{
-            var curnode = yygo.data.curnode;
-            var lastnode = yygo.data.lastnode;
+            var curnode =   yygo.data.curnode,
+                lastnode =  yygo.data.lastnode,
+                start =     document.getElementById('start'),
+                prev =      document.getElementById('prev'),
+                fastprev =  document.getElementById('fastprev'),
+                next =      document.getElementById('next'),
+                fastnext =  document.getElementById('fastnext'),
+                end =       document.getElementById('end');
 
-            $('[id$="prev"],#start,[id$="next"],#end').attr('class','button');
+            start.className = 'button';
+            prev.className = 'button';
+            fastprev.className = 'button';
+            next.className = 'button';
+            fastnext.className = 'button';
+            end.className = 'button';
 
-            if (curnode == 0) {
-                $('[id$="prev"],#start').attr('class','buttond');
+            if (curnode === 0) {
+                start.className = 'buttond';
+                prev.className = 'buttond';
+                fastprev.className = 'buttond';
             }
-            if (curnode == lastnode) {
-                $('[id$="next"],#end').attr('class','buttond');
+            if (curnode === lastnode) {
+                next.className = 'buttond';
+                fastnext.className = 'buttond';
+                end.className = 'buttond';
             }
         },//}}}
 
         toggleComments: function () {//{{{
+            var comments = document.getElementById('comments');
+
             if (this.showcomments) {
-                $('#comments').show();
+                comments.style.display = 'block';
             } else {
-                $('#comments').hide();
+                comments.style.display = 'none';
             }
         },//}}}
 
         toggleVariations: function () {//{{{
+            var variations = document.getElementById('variations');
             if (this.showvariations) {
-                $('#variations').show();
+                variations.style.display = 'block';
             } else {
-                $('#variations').hide();
+                variations.style.display = 'none';
             }
-        },//}}}
+        }//}}}
 
     };//}}}
 
@@ -702,12 +743,12 @@ var yygo = {}; // espace de nom yygo
         // méthodes
 
         init: function () {//{{{
+            var navlang =   (navigator.language ||
+                            navigator.systemLanguage ||
+                            navigator.userLanguage ||
+                            'en').substr(0, 2).toLowerCase();
+
             // TODO récupère les paramètres de l'utilisateur
-            // langue du navigateur ou langue par défaut
-            var navlang = (navigator.language ||
-                navigator.systemLanguage ||
-                navigator.userLanguage ||
-                'en').substr(0, 2).toLowerCase();
 
             yygo.data.setLang(navlang, function () {
                 // callback pour être sûr d'avoir chargé la langue
@@ -729,7 +770,7 @@ var yygo = {}; // espace de nom yygo
 
             this.makeNavBinds();
 
-            if (yygo.data.size != oldsize) { // nouvelle taille tout refaire
+            if (yygo.data.size !== oldsize) { // nouvelle taille tout refaire
                 yygo.view.makeGoban();
                 yygo.view.changeGridImage();
             } else { // vider le goban seulement
@@ -752,78 +793,79 @@ var yygo = {}; // espace de nom yygo
             yygo.view.toggleVariations();
             yygo.view.toggleComments();
 
+            yygo.view.redraw = true;
             yygo.view.setGobanSize();
         },//}}}
 
+    loadList: function () {//{{{
+        var htmllist = yygo.view.htmllist;
+
+        // TODO prévoir rafraichissement, limiter les données affichées
+        // afficher sur plusieurs pages
+
+        if (htmllist === '') { // récupère la liste si non chargée
+            jsonRequest('sgf.php?list=0', function (data) {
+                yygo.data.gameslist = data;
+                yygo.view.makeGamesList();
+                yygo.events.makeListBinds();
+            });
+        }
+
+        if (yygo.events.screen === 'options') {
+            yygo.events.screen = 'list';
+            yygo.view.changeScreen();
+        } else {
+            yygo.events.screen = 'options';
+            yygo.view.changeScreen();
+        }
+    },//}}}
+
         makeBinds: function () {//{{{
-            $(window).bind('resize', function () {
-                yygo.view.setGobanSize()
-            });
+            var comment =   document.getElementById('comment'),
+                options =   document.getElementById('options'),
+                load =      document.getElementById('load'),
+                langen =    document.getElementById('langen'),
+                langfr =    document.getElementById('langfr'),
+                sendsgf =   document.getElementById('sendsgf'),
+                selfile =   document.getElementById('selfile'),
+                sendinput = document.getElementById('sendinput');
 
-            // boutons de navigation
-            this.makeNavBinds();
-
-            // bouton commentaires
-            $('#comment').bind('click', function () {
-                if (yygo.view.showcomments) {
-                    yygo.view.showcomments = false;
-                    yygo.view.toggleComments();
-                    yygo.view.setGobanSize();
-                } else {
-                    yygo.view.showcomments = true;
-                    yygo.view.toggleComments();
-                    yygo.view.setGobanSize();
-                }
-            });
-            // bouton options
-            $('#options').bind('click', function () {
-                if (yygo.events.screen == 'goban') {
-                    yygo.events.screen = 'options';
-                    yygo.view.changeScreen();
-                } else {
-                    yygo.events.screen = 'goban';
-                    yygo.view.changeScreen();
-                }
-            });
-            // bouton de chargement liste
-            $('#load').bind('click', function () {
-                var htmllist = yygo.view.htmllist;
-
-
-                // TODO prévoir rafraichissement, limiter les données affichées
-                // afficher sur plusieurs pages
-
-                if (htmllist == '') { // récupère la liste si non chargée
-                    jsonRequest('sgf.php?list=0', function (data) {
-                        yygo.data.gameslist = data;
-                        yygo.view.makeGamesList();
-                    });
-                }
-
-                if (yygo.events.screen == 'options') {
-                    yygo.events.screen = 'list';
-                    yygo.view.changeScreen();
-                } else {
-                    yygo.events.screen = 'options';
-                    yygo.view.changeScreen();
-                }
-            });
-            // bouton langues
-            $('[class^="lang"]').bind('click', function () {
-                var lang = $(this).attr('class').substr(4);
-
-                yygo.data.setLang(lang);
-            });
-            // bouton envoi de fichier SGF
-            $('#sendsgf').bind('click', function () {
-                $('#sendinput input[type="file"]').trigger('click');
-            });
+            // redimensionnement de la fenêtre
+            window.addEventListener('resize', function () {
+                yygo.view.setGobanSize();
+            }, false);
+            // clic bouton commentaires
+            comment.addEventListener('click', function () { 
+                yygo.events.toggleComments();
+            }, false);
+            // clic bouton options
+            options.addEventListener('click', function () {
+                yygo.events.toggleOptions(); 
+            }, false);
+            // clic bouton de chargement liste
+            load.addEventListener('click', function () {
+                yygo.events.loadList();
+            }, false);
+            // clic boutons langues
+            langen.addEventListener('click', function () {
+                yygo.data.setLang('en');
+            }, false);
+            langfr.addEventListener('click', function () {
+                yygo.data.setLang('fr');
+            }, false);
+            // clic bouton envoi de fichier SGF
+            sendsgf.addEventListener('click', function () {
+                selfile.click();
+            }, false);
+            selfile.addEventListener('change', function () {
+                sendinput.submit();
+            }, false);
             // boutons de variantes
             $('[id^="varbut"]').live('click', function () {
                 var branch = $(this).attr('id').substr(6);
 
-                yygo.data.curbranch = branch;
-                yygo.data.lastbranch = branch;
+                yygo.data.curbranch = parseInt(branch, 10);
+                yygo.data.lastbranch = parseInt(branch, 10);
 
                 yygo.data.setLastNode();
 
@@ -839,17 +881,23 @@ var yygo = {}; // espace de nom yygo
 
                 yygo.view.toggleVariations();
             });
-            // ligne de la liste de chargement
-            $('#loadlist tr').live('click',function () {
-                var number = $(this).index();
 
-                yygo.events.loadGameFromList(number); 
-            });
-            // fichier à envoyer
-            $('#sendinput input[type="file"]').bind('change', function () {
-                $('#sendinput').submit();
-            });
+            // boutons de navigation
+            this.makeNavBinds();
         },//}}}
+
+    makeListBinds: function () {//{{{
+        var table =     document.getElementById('gameslist'),
+            rows =      table.getElementsByTagName('tr'),
+            rl =        rows.length,
+            r;
+
+        for (r = 0; r < rl; r++) {
+            rows[r].addEventListener('click', function () {
+                yygo.events.loadGameFromList(this.rowIndex); 
+            }, false);
+        }
+    },//}}}
 
         makeNavBinds: function () {//{{{
             var curnode = yygo.data.curnode;
@@ -930,6 +978,28 @@ var yygo = {}; // espace de nom yygo
 
             yygo.view.toggleVariations();
         },//}}}
+
+    toggleComments: function () {//{{{
+        if (yygo.view.showcomments) {
+            yygo.view.showcomments = false;
+            yygo.view.toggleComments();
+            yygo.view.setGobanSize();
+        } else {
+            yygo.view.showcomments = true;
+            yygo.view.toggleComments();
+            yygo.view.setGobanSize();
+        }
+    },//}}}
+
+    toggleOptions: function () {//{{{
+        if (yygo.events.screen === 'goban') {
+            yygo.events.screen = 'options';
+            yygo.view.changeScreen();
+        } else {
+            yygo.events.screen = 'goban';
+            yygo.view.changeScreen();
+        }
+    },//}}}
 
     };//}}}
 

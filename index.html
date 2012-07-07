@@ -18,8 +18,8 @@
                 <div class="button" id="load"></div>
                 <div class="button" id="lang">
                     <ul>
-                        <li class="langen" title="English"></li>
-                        <li class="langfr" title="Français"></li>
+                        <li id="langen" class="lang" title="English"></li>
+                        <li id="langfr" class="lang" title="Français"></li>
                     </ul>
                 </div>
                 <div class="button" id="sendsgf"></div>
@@ -40,7 +40,7 @@
         <div id="comments"></div>
         <form id="sendinput" target="sendtarget"
               enctype="multipart/form-data" action="sgf.php" method="POST">
-            <input type="file" name="sgf"></input>
+            <input id="selfile" type="file" name="sgf"></input>
             <input type="submit"></input>
             <iframe name="sendtarget" src=""></iframe>
         </form>
