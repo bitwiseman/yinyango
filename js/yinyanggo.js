@@ -124,6 +124,7 @@ var yygo = {}; // espace de nom yygo
 
         viewmode:       '',
 
+        comtoshow:      false,
         redraw:         false,
         showborders:    false,
         showcomments:   true,
@@ -183,13 +184,24 @@ var yygo = {}; // espace de nom yygo
             }
 
             this.htmlcomments = html;
-
             commentselem.innerHTML = this.htmlcomments;
+
+            if (html === '') {
+                if (this.comtoshow === true) {
+                    this.comtoshow = false;
+                    this.setGobanSize();
+                }
+            } else {
+                if (this.comtoshow === false) {
+                    this.comtoshow = true;
+                    this.setGobanSize();
+                }
+            }
+            this.toggleComments();
         },//}}}
 
         makeGrid: function () {//{{{
             var size =      yygo.data.size,
-                gridelem =  document.getElementById('grid'),
                 coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 html =      '',
@@ -397,8 +409,6 @@ var yygo = {}; // espace de nom yygo
                 goban.className = '';
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
-                    this.toggleNavButtons();
-                    this.toggleComments();
                 }
                 // TODO autres modes
             } else if (screen === 'options') {
@@ -452,7 +462,7 @@ var yygo = {}; // espace de nom yygo
             }
             // place les commentaires
             if (this.viewmode === 'horizontal') {
-                if (this.showcomments) {
+                if (this.showcomments && this.comtoshow) {
                     gobanelem.style.margin = 0;
                 } else {
                     gobanelem.style.margin = 'auto';
@@ -627,14 +637,16 @@ var yygo = {}; // espace de nom yygo
 
             if (winw < heightleft) {
                 this.viewmode = 'vertical';
-                if (this.showcomments && heightleft - 150 <= winw) {
+                if (this.showcomments && this.comtoshow &&
+                        heightleft - 150 <= winw) {
                     smaller = heightleft - 150;
                 } else {
                     smaller = winw;
                 }
             } else {
                 this.viewmode = 'horizontal';
-                if (this.showcomments && winw - 200 <= heightleft) {
+                if (this.showcomments && this.comtoshow &&
+                        winw - 200 <= heightleft) {
                     smaller = winw - 200;
                 } else {
                     smaller = heightleft;
@@ -706,12 +718,19 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         toggleComments: function () {//{{{
-            var comments = document.getElementById('comments');
+            var comments =  document.getElementById('comments'),
+                comment =   document.getElementById('comment');
 
-            if (this.showcomments) {
+            if (this.showcomments && this.comtoshow) {
                 comments.style.display = 'block';
             } else {
                 comments.style.display = 'none';
+            }
+
+            if (this.comtoshow) {
+                comment.className = 'button';
+            } else {
+                comment.className = 'buttond';
             }
         }//}}}
 
@@ -772,7 +791,7 @@ var yygo = {}; // espace de nom yygo
             yygo.view.changeScreen();
 
             yygo.view.toggleBorders();
-            yygo.view.toggleComments();
+            yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize();
@@ -823,11 +842,11 @@ var yygo = {}; // espace de nom yygo
             }, false);
             // clic bouton commentaires
             comment.addEventListener('click', function () {
-                yygo.events.toggleComments();
+                yygo.events.clickComments();
             }, false);
             // clic bouton options
             options.addEventListener('click', function () {
-                yygo.events.toggleOptions();
+                yygo.events.clickOptions();
             }, false);
             // clic bouton de chargement liste
             load.addEventListener('click', function () {
@@ -983,19 +1002,19 @@ var yygo = {}; // espace de nom yygo
             yygo.view.placeSymbols();
         },//}}}
 
-        toggleComments: function () {//{{{
-            if (yygo.view.showcomments) {
+        clickComments: function () {//{{{
+            if (yygo.view.showcomments && yygo.view.comtoshow) {
                 yygo.view.showcomments = false;
                 yygo.view.toggleComments();
                 yygo.view.setGobanSize();
-            } else {
+            } else if (yygo.view.comtoshow) {
                 yygo.view.showcomments = true;
                 yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             }
         },//}}}
 
-        toggleOptions: function () {//{{{
+        clickOptions: function () {//{{{
             if (yygo.events.screen === 'goban') {
                 yygo.events.screen = 'options';
                 yygo.view.changeScreen();
