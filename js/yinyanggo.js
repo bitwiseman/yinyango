@@ -181,22 +181,21 @@ var yygo = {}; // espace de nom yygo
                 html = '<p>';
                 html += comments[curnode][curbranch];
                 html += '</p>';
+
+                if (this.comtoshow === false) {
+                    this.comtoshow = true;
+                    this.setGobanSize();
+                }
+            } else {
+                if (this.comtoshow === true) {
+                    this.comtoshow = false;
+                    this.setGobanSize();
+                }
             }
 
             this.htmlcomments = html;
             commentselem.innerHTML = this.htmlcomments;
 
-            if (html === '') {
-                if (this.comtoshow === true) {
-                    this.comtoshow = false;
-                    this.setGobanSize();
-                }
-            } else {
-                if (this.comtoshow === false) {
-                    this.comtoshow = true;
-                    this.setGobanSize();
-                }
-            }
             this.toggleComments();
         },//}}}
 
