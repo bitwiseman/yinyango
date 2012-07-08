@@ -25,7 +25,7 @@ var yygo = {}; // espace de nom yygo
         return Object.keys(obj).length === 0;
     }//}}}
 
-    // création de l'objet yygo
+    // création de yygo
 
     yygo.data = {//{{{
 
@@ -125,7 +125,6 @@ var yygo = {}; // espace de nom yygo
         redraw:         false,
         showborders:    false,
         showcomments:   true,
-        showvariations: false,
 
         sizecell:       0,
         sizegoban:      0,
@@ -288,6 +287,7 @@ var yygo = {}; // espace de nom yygo
                 variationselem =    document.getElementById('variations'),
                 variations =        0,
                 html =              '',
+                binds =             [],
                 pbranch,
                 opbranch,
                 i;
@@ -309,6 +309,7 @@ var yygo = {}; // espace de nom yygo
                             html += '<div id="varbua' + i + '"></div>';
                         } else { // autre variante
                             html += '<div id="varbut' + i + '"></div>';
+                            binds.push(i);
                         }
                     }
                 }
@@ -319,19 +320,12 @@ var yygo = {}; // espace de nom yygo
             }
 
             this.htmlvariations = html;
+            variationselem.innerHTML = this.htmlvariations;
 
             if (this.htmlvariations !== '') {
-                if (!this.showvariations) {
-                    this.showvariations = true;
-                    this.setGobanSize();
-                }
-            } else {
-                if (this.showvariations) {
-                    this.showvariations = false;
-                    this.setGobanSize();
-                }
+                // lier les boutons à leur variante respective
+                yygo.events.makeVariationsBinds(binds);
             }
-            variationselem.innerHTML = this.htmlvariations;
         },//}}}
 
         // affichage
@@ -395,11 +389,11 @@ var yygo = {}; // espace de nom yygo
 
                 gobbuttons.style.display = 'block';
                 options.style.display = 'block';
+                variations.style.display = 'block';
                 goban.className = '';
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
                     this.toggleNavButtons();
-                    this.toggleVariations();
                     this.toggleComments();
                 }
                 // TODO autres modes
@@ -432,12 +426,9 @@ var yygo = {}; // espace de nom yygo
                 cellelems =     document.getElementsByClassName('cell'),
                 cc =            cellelems.length,
                 fontsize =      this.sizecell / 1.5,
-                comtop =        50,
+                comtop =        70,
                 c;
 
-            if (this.showvariations) {
-                comtop += 20;
-            }
             if (redraw) { // c'est un redimenssionnement
                 // redimensionne le goban
                 gobanelem.style.height = this.sizegoban + 'px';
@@ -625,13 +616,10 @@ var yygo = {}; // espace de nom yygo
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
-                heightleft =    winh - 50,
+                heightleft =    winh - 70,
                 oldsizegoban =  this.sizegoban,
                 smaller;
 
-            if (this.showvariations) {
-                heightleft -= 20;
-            }
             if (winw < heightleft) {
                 this.viewmode = 'vertical';
                 if (this.showcomments && heightleft - 150 <= winw) {
@@ -720,15 +708,6 @@ var yygo = {}; // espace de nom yygo
             } else {
                 comments.style.display = 'none';
             }
-        },//}}}
-
-        toggleVariations: function () {//{{{
-            var variations = document.getElementById('variations');
-            if (this.showvariations) {
-                variations.style.display = 'block';
-            } else {
-                variations.style.display = 'none';
-            }
         }//}}}
 
     };//}}}
@@ -768,8 +747,6 @@ var yygo = {}; // espace de nom yygo
 
             yygo.data.loadDataFromList(number);
 
-            this.makeNavBinds();
-
             if (yygo.data.size !== oldsize) { // nouvelle taille tout refaire
                 yygo.view.makeGoban();
                 yygo.view.changeGridImage();
@@ -790,35 +767,34 @@ var yygo = {}; // espace de nom yygo
             yygo.view.changeScreen();
 
             yygo.view.toggleBorders();
-            yygo.view.toggleVariations();
             yygo.view.toggleComments();
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize();
         },//}}}
 
-    loadList: function () {//{{{
-        var htmllist = yygo.view.htmllist;
+        loadList: function () {//{{{
+            var htmllist = yygo.view.htmllist;
 
-        // TODO prévoir rafraichissement, limiter les données affichées
-        // afficher sur plusieurs pages
+            // TODO prévoir rafraichissement, limiter les données affichées
+            // afficher sur plusieurs pages
 
-        if (htmllist === '') { // récupère la liste si non chargée
-            jsonRequest('sgf.php?list=0', function (data) {
-                yygo.data.gameslist = data;
-                yygo.view.makeGamesList();
-                yygo.events.makeListBinds();
-            });
-        }
+            if (htmllist === '') { // récupère la liste si non chargée
+                jsonRequest('sgf.php?list=0', function (data) {
+                    yygo.data.gameslist = data;
+                    yygo.view.makeGamesList();
+                    yygo.events.makeListBinds();
+                });
+            }
 
-        if (yygo.events.screen === 'options') {
-            yygo.events.screen = 'list';
-            yygo.view.changeScreen();
-        } else {
-            yygo.events.screen = 'options';
-            yygo.view.changeScreen();
-        }
-    },//}}}
+            if (yygo.events.screen === 'options') {
+                yygo.events.screen = 'list';
+                yygo.view.changeScreen();
+            } else {
+                yygo.events.screen = 'options';
+                yygo.view.changeScreen();
+            }
+        },//}}}
 
         makeBinds: function () {//{{{
             var comment =   document.getElementById('comment'),
@@ -828,19 +804,25 @@ var yygo = {}; // espace de nom yygo
                 langfr =    document.getElementById('langfr'),
                 sendsgf =   document.getElementById('sendsgf'),
                 selfile =   document.getElementById('selfile'),
-                sendinput = document.getElementById('sendinput');
+                sendinput = document.getElementById('sendinput'),
+                start =     document.getElementById('start'),
+                fastprev =  document.getElementById('fastprev'),
+                prev =      document.getElementById('prev'),
+                next =      document.getElementById('next'),
+                fastnext =  document.getElementById('fastnext'),
+                end =       document.getElementById('end');
 
             // redimensionnement de la fenêtre
             window.addEventListener('resize', function () {
                 yygo.view.setGobanSize();
             }, false);
             // clic bouton commentaires
-            comment.addEventListener('click', function () { 
+            comment.addEventListener('click', function () {
                 yygo.events.toggleComments();
             }, false);
             // clic bouton options
             options.addEventListener('click', function () {
-                yygo.events.toggleOptions(); 
+                yygo.events.toggleOptions();
             }, false);
             // clic bouton de chargement liste
             load.addEventListener('click', function () {
@@ -860,82 +842,97 @@ var yygo = {}; // espace de nom yygo
             selfile.addEventListener('change', function () {
                 sendinput.submit();
             }, false);
-            // boutons de variantes
-            $('[id^="varbut"]').live('click', function () {
-                var branch = $(this).attr('id').substr(6);
-
-                yygo.data.curbranch = parseInt(branch, 10);
-                yygo.data.lastbranch = parseInt(branch, 10);
-
-                yygo.data.setLastNode();
-
-                yygo.events.makeNavBinds();
-                yygo.view.toggleNavButtons();
-
-                yygo.view.makeVariations();
-                yygo.view.makeComments();
-
-                yygo.view.emptyGoban();
-                yygo.view.placeStones();
-                yygo.view.placeSymbols();
-
-                yygo.view.toggleVariations();
-            });
-
             // boutons de navigation
-            this.makeNavBinds();
+            start.addEventListener('click', function () {
+                if (yygo.data.curnode > 0) {
+                    yygo.events.navigateNode(-999999);
+                }
+            }, false);
+            fastprev.addEventListener('click', function () {
+                if (yygo.data.curnode > 0) {
+                    yygo.events.navigateNode(-10);
+                }
+            }, false);
+            prev.addEventListener('click', function () {
+                if (yygo.data.curnode > 0) {
+                    yygo.events.navigateNode(-1);
+                }
+            }, false);
+            next.addEventListener('click', function () {
+                if (yygo.data.curnode < yygo.data.lastnode) {
+                    yygo.events.navigateNode(1);
+                }
+            }, false);
+            fastnext.addEventListener('click', function () {
+                if (yygo.data.curnode < yygo.data.lastnode) {
+                    yygo.events.navigateNode(10);
+                }
+            }, false);
+            end.addEventListener('click', function () {
+                if (yygo.data.curnode < yygo.data.lastnode) {
+                    yygo.events.navigateNode(999999);
+                }
+            }, false);
         },//}}}
 
-    makeListBinds: function () {//{{{
-        var table =     document.getElementById('gameslist'),
-            rows =      table.getElementsByTagName('tr'),
-            rl =        rows.length,
-            r;
+        makeListBinds: function () {//{{{
+            var table =     document.getElementById('gameslist'),
+                rows =      table.getElementsByTagName('tr'),
+                rl =        rows.length,
+                r;
 
-        for (r = 0; r < rl; r++) {
-            rows[r].addEventListener('click', function () {
-                yygo.events.loadGameFromList(this.rowIndex); 
-            }, false);
-        }
-    },//}}}
-
-        makeNavBinds: function () {//{{{
-            var curnode = yygo.data.curnode;
-            var lastnode = yygo.data.lastnode;
-
-            $('#start,[id$="prev"],[id$="next"],#end').unbind();
-
-            if (curnode > 0) {
-                $('#start').bind('click', function () {
-                    yygo.events.navigateNode(-999999)
-                });
-                $('#fastprev').bind('click', function () {
-                    yygo.events.navigateNode(-10)
-                });
-                $('#prev').bind('click', function () {
-                    yygo.events.navigateNode(-1)
-                });
+            function rowClick(rowindex) {
+                return function () {
+                    yygo.events.loadGameFromList(rowindex);
+                };
             }
-            if (curnode < lastnode) {
-                $('#next').bind('click', function () {
-                    yygo.events.navigateNode(1)
-                });
-                $('#fastnext').bind('click', function () {
-                    yygo.events.navigateNode(10)
-                });
-                $('#end').bind('click', function () {
-                    yygo.events.navigateNode(999999)
-                });
+
+            for (r = 0; r < rl; r++) {
+                rows[r].addEventListener('click', rowClick(rows[r].rowIndex),
+                    false);
+            }
+        },//}}}
+
+        makeVariationsBinds: function (binds) {//{{{
+            var ci = binds.length,
+                varbut,
+                i;
+
+            function varbutClick(id) {
+                return function () {
+                    var branch = parseInt(id.substr(6), 10);
+
+                    yygo.data.curbranch = branch;
+                    yygo.data.lastbranch = branch;
+
+                    yygo.data.setLastNode();
+
+                    yygo.view.toggleNavButtons();
+
+                    yygo.view.makeVariations();
+                    yygo.view.makeComments();
+
+                    yygo.view.emptyGoban();
+                    yygo.view.placeStones();
+                    yygo.view.placeSymbols();
+                };
+            }
+
+            for (i = 0; i < ci; i++) {
+                varbut = document.getElementById('varbut' + binds[i]);
+                varbut.addEventListener('click', varbutClick(varbut.id),
+                    false);
             }
         },//}}}
 
         navigateNode: function (move) {//{{{
-            var game = yygo.data.game;
-            var curbranch = yygo.data.curbranch;
-            var curnode = yygo.data.curnode;
-            var lastbranch = yygo.data.lastbranch;
-            var lastnode = yygo.data.lastnode;
-            var i;
+            var game =          yygo.data.game,
+                curbranch =     yygo.data.curbranch,
+                curnode =       yygo.data.curnode,
+                lastbranch =    yygo.data.lastbranch,
+                lastnode =      yygo.data.lastnode,
+                lastbranchp,
+                i;
 
             // défini le nouveau noeud actuel
             if (curnode + move < 0) {
@@ -946,16 +943,21 @@ var yygo = {}; // espace de nom yygo
                 curnode = curnode + move;
             }
 
+            lastbranchp = yygo.data.getParentBranch(curnode, lastbranch);
+
             // défini la nouvelle branche actuelle
-            if (move < 0 && game[curnode][curbranch] == null) {
-                curbranch = yygo.data.getParentBranch(curnode, lastbranch);
+            if (move < 0 && game[curnode][curbranch] === undefined) {
+                // branche parent de la dernière
+                curbranch = lastbranchp;
             } else if (move > 0) {
-                if (game[curnode][lastbranch] != null) { // dernière branche
+                if (game[curnode][lastbranch] !== undefined) {
+                    // dernière branche
                     curbranch = lastbranch;
                 } else {
-                    // cherche la première branche entre l'actuelle et la dernière
+                    // cherche la branche menant à la dernière
                     for (i = curbranch + 1; i < lastbranch; i++) {
-                        if (game[curnode][i] != null) {
+                        if (game[curnode][i] !== undefined &&
+                                lastbranchp === i) {
                             curbranch = i;
                             break;
                         }
@@ -966,7 +968,6 @@ var yygo = {}; // espace de nom yygo
             yygo.data.curbranch = curbranch;
             yygo.data.curnode = curnode;
 
-            this.makeNavBinds();
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
@@ -975,31 +976,29 @@ var yygo = {}; // espace de nom yygo
             yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
-
-            yygo.view.toggleVariations();
         },//}}}
 
-    toggleComments: function () {//{{{
-        if (yygo.view.showcomments) {
-            yygo.view.showcomments = false;
-            yygo.view.toggleComments();
-            yygo.view.setGobanSize();
-        } else {
-            yygo.view.showcomments = true;
-            yygo.view.toggleComments();
-            yygo.view.setGobanSize();
-        }
-    },//}}}
+        toggleComments: function () {//{{{
+            if (yygo.view.showcomments) {
+                yygo.view.showcomments = false;
+                yygo.view.toggleComments();
+                yygo.view.setGobanSize();
+            } else {
+                yygo.view.showcomments = true;
+                yygo.view.toggleComments();
+                yygo.view.setGobanSize();
+            }
+        },//}}}
 
-    toggleOptions: function () {//{{{
-        if (yygo.events.screen === 'goban') {
-            yygo.events.screen = 'options';
-            yygo.view.changeScreen();
-        } else {
-            yygo.events.screen = 'goban';
-            yygo.view.changeScreen();
-        }
-    },//}}}
+        toggleOptions: function () {//{{{
+            if (yygo.events.screen === 'goban') {
+                yygo.events.screen = 'options';
+                yygo.view.changeScreen();
+            } else {
+                yygo.events.screen = 'goban';
+                yygo.view.changeScreen();
+            }
+        }//}}}
 
     };//}}}
 
@@ -1007,4 +1006,4 @@ var yygo = {}; // espace de nom yygo
 
     document.addEventListener("DOMContentLoaded", yygo.events.init(), false);
 
-})();
+}());
