@@ -478,6 +478,7 @@ var yygo = {}; // espace de nom yygo
                     id = coord[j] + coord[i];
                     cell = document.getElementById(id);
                     cell.className = 'cell';
+                    cell.title = '';
                     cell.innerHTML = '';
                 }
             }
