@@ -52,7 +52,8 @@ var yygo = {}; // espace de nom yygo
         // méthodes
 
         getParentBranch: function (node, branch) {//{{{
-            var game = this.game, i;
+            var game = this.game,
+                i;
 
             for (i = branch; i >= 0; i--) {
                 if (game[node] !== undefined && game[node][i] !== undefined) {
@@ -91,7 +92,8 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         setLang: function (lang, callback) {//{{{
-            var langs = this.langs, i;
+            var langs = this.langs,
+                i;
 
             for (i in langs) {
                 if (langs[i] === lang) {
@@ -134,6 +136,7 @@ var yygo = {}; // espace de nom yygo
         // construction code html
 
         makeGoban: function () {//{{{
+            // création du code HTML du goban
             var size = yygo.data.size,
                 gobanelem = document.getElementById('goban'),
                 letters =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
@@ -145,6 +148,7 @@ var yygo = {}; // espace de nom yygo
                 html,
                 i;
 
+            // création des bordures
             for (i = 0; i < size; i++) {
                 btop += '<div class="cell">' + letters[i] + '</div>';
                 bright += '<div class="cell vcell">' + (size - i) + '</div>';
@@ -157,7 +161,7 @@ var yygo = {}; // espace de nom yygo
             bbottom += '</div>';
             bleft += '</div>';
 
-            // bordures et grille dans l'élément 'goban'
+            // insère les bordures et la grille dans l'élément 'goban'
             html = btop + bright + bbottom + bleft +
                    '<div id="grid">' + this.makeGrid()  + '</div>';
 
@@ -1005,6 +1009,6 @@ var yygo = {}; // espace de nom yygo
 
     // initialisation quand le DOM est chargé (navigateurs récents)
 
-    document.addEventListener("DOMContentLoaded", yygo.events.init(), false);
+    document.addEventListener('DOMContentLoaded', yygo.events.init(), false);
 
 }());
