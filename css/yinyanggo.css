@@ -3,6 +3,11 @@ body {
     color: #000;
     margin: 0;
 }
+.hide {
+   position: absolute !important;
+   top: -9999px !important;
+   left: -9999px !important;
+}
 #loadlist {/*{{{*/
     position: absolute;
     top: 50px;
@@ -92,10 +97,10 @@ body {
 #lang {
     left: 150px;
 }
-.langen,.buttonen {
+#langen,.buttonen {
     background-position: -550px 0px;
 }
-.langfr,.buttonfr {
+#langfr,.buttonfr {
     background-position: -600px 0px;
 }
 #lang ul {
@@ -132,41 +137,64 @@ body {
     cursor: default;
 }
 /*}}}*/
-#comments {/*{{{*/
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
-}
-#resizer {
-    background: #000;
-    width: 100px;
-    height: 6px;
-    margin: auto;
-    cursor: n-resize;
-}
-#textarea {
-    overflow: auto;
-}
-/*}}}*/
 #goban {/*{{{*/
+    position: relative;
     margin: auto;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
-[class^="cell"] {
+#btop {
+    position: absolute;
+    top: 0;
+}
+#bright {
+    position: absolute;
+    right: 0;
+}
+#bbottom {
+    position: absolute;
+    bottom: 0;
+}
+#bleft {
+    position: absolute;
+    left: 0;
+}
+#grid {
+    position: absolute;
+}
+.cell {
     float: left;
+    border-radius: 50%;
     text-align: center;
     font-family: serif;
     overflow: hidden;
 }
+.vcell {
+    float: none;
+}
 .cellb {
     background: #000;
-    border-radius: 50%;
+    color: #fff;
 }
 .cellw {
     background: #f9f0ca;
-    border-radius: 50%;
 }
 .celle {
     background: #ccaa66;
+}
+/*}}}*/
+#comments {/*{{{*/
+    position: absolute;
+    bottom: 0;
+    padding: 15px;
+    overflow: auto;
+}
+#infos {
+    position: absolute;
+    top: 6px;
+    bottom: 0;
+    width: 100%;
+    overflow: auto;
 }
 /*}}}*/

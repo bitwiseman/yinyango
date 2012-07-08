@@ -5,18 +5,20 @@
         <meta charset="utf-8" />
         <link rel="icon" type="image/png" href="images/favicon.png" />
         <link rel="stylesheet" href="css/yinyanggo.css" />
-        <script src="js/jquery.1.7.2.js"></script>
     </head>
     <body>
         <div id="loadlist"></div>
+        <div id="infos"></div>
         <div id="buttonsbar">
-            <div class="button" id="comment"></div>
+            <div id="gobbuttons">
+                <div class="button" id="comment"></div>
+            </div>
             <div id="optbuttons">
                 <div class="button" id="load"></div>
                 <div class="button" id="lang">
                     <ul>
-                        <li class="langen" title="English"></li>
-                        <li class="langfr" title="Français"></li>
+                        <li id="langen" class="lang" title="English"></li>
+                        <li id="langfr" class="lang" title="Français"></li>
                     </ul>
                 </div>
                 <div class="button" id="sendsgf"></div>
@@ -34,16 +36,13 @@
         </div>
         <div id="variations"></div>
         <div id="goban"></div>
-        <div id="comments">
-            <div id="resizer"></div>
-            <div id="textarea"></div>
-        </div>
+        <div id="comments"></div>
         <form id="sendinput" target="sendtarget"
               enctype="multipart/form-data" action="sgf.php" method="POST">
-            <input type="file" name="sgf"></input>
+            <input id="selfile" type="file" name="sgf"></input>
             <input type="submit"></input>
             <iframe name="sendtarget" src=""></iframe>
         </form>
-        <script src="js/jquery.yinyanggo.js"></script>
+        <script src="js/yinyanggo.js"></script>
     </body>
 </html>
