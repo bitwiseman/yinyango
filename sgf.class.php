@@ -10,7 +10,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
  * @link     https://github.com/hickop/yinyanggo
  */
-class sgf
+Class sgf
 {
     private $size;      // taille du goban
     private $infos;     // infos de la partie
@@ -23,7 +23,8 @@ class sgf
     private $prison = Array('b' => 0, 'w' => 0); // prisonniers
 
     // construction des variables
-    function __construct() {/*{{{*/
+    function __construct()/*{{{*/
+    {
         
     }/*}}}*/
 
