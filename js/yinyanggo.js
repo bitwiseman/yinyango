@@ -360,6 +360,7 @@ var yygo = {}; // espace de nom yygo
 
             // étiquettes des boutons
             document.getElementById('comment').title =  locale.comment;
+            document.getElementById('border').title =   locale.border;
             document.getElementById('load').title =     locale.load;
             document.getElementById('lang').title =     locale.language;
             document.getElementById('start').title =    locale.start;
@@ -759,7 +760,6 @@ var yygo = {}; // espace de nom yygo
                 jsonRequest('sgf.php?list=-1', function (data) {
                     yygo.data.gameslist = data;
                     yygo.events.loadGameFromList(0);
-                    yygo.view.showborders = true;
                     yygo.data.gameslist = [];
                 });
             });
@@ -821,6 +821,7 @@ var yygo = {}; // espace de nom yygo
 
         makeBinds: function () {//{{{
             var comment =   document.getElementById('comment'),
+                border =    document.getElementById('border'),
                 options =   document.getElementById('options'),
                 load =      document.getElementById('load'),
                 langen =    document.getElementById('langen'),
@@ -842,6 +843,10 @@ var yygo = {}; // espace de nom yygo
             // clic bouton commentaires
             comment.addEventListener('click', function () {
                 yygo.events.clickComments();
+            }, false);
+            // clic bouton bordures
+            border.addEventListener('click', function () {
+                yygo.events.clickBorders();
             }, false);
             // clic bouton options
             options.addEventListener('click', function () {
@@ -999,6 +1004,16 @@ var yygo = {}; // espace de nom yygo
             yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
+        },//}}}
+
+        clickBorders: function () {//{{{
+            if (yygo.view.showborders) {
+                yygo.view.showborders = false;
+                yygo.view.toggleBorders();
+            } else {
+                yygo.view.showborders = true;
+                yygo.view.toggleBorders();
+            }
         },//}}}
 
         clickComments: function () {//{{{

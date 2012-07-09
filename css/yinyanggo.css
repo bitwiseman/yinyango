@@ -33,7 +33,7 @@ body {
 #buttonsbar {/*{{{*/
     position: relative;
     margin: auto;
-    width: 400px;
+    width: 500px;
     height: 50px;
 }
 [class^="button"],[class^="lang"] {
@@ -48,27 +48,27 @@ body {
     cursor: default;
 }
 #start {
-    left: 50px;
+    left: 100px;
     background-position: 0px 0px;
 }
 #fastprev {
-    left: 100px;
+    left: 150px;
     background-position: -50px 0px;
 }
 #prev {
-    left: 150px;
+    left: 200px;
     background-position: -100px 0px;
 }
 #next {
-    left: 200px;
+    left: 250px;
     background-position: -150px 0px;
 }
 #fastnext {
-    left: 250px;
+    left: 300px;
     background-position: -200px 0px;
 }
 #end {
-    left: 300px;
+    left: 350px;
     background-position: -250px 0px;
 }
 #comment {
@@ -76,11 +76,11 @@ body {
     background-position: -300px 0px;
 }
 #load {
-    left: 100px;
+    left: 0;
     background-position: -350px 0px;
 }
 #options {
-    left: 350px;
+    left: 450px;
     background-position: -400px 0px;
 }
 #sendsgf {
@@ -94,14 +94,18 @@ body {
     left: 250px;
     background-position: -500px 0px;
 }
+#border {
+    left: 50px;
+    background-position: -550px 0px;
+}
 #lang {
     left: 150px;
 }
 #langen,.buttonen {
-    background-position: -550px 0px;
+    background-position: -600px 0px;
 }
 #langfr,.buttonfr {
-    background-position: -600px 0px;
+    background-position: -650px 0px;
 }
 #lang ul {
     display: none;
