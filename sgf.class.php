@@ -10,25 +10,39 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
  * @link     https://github.com/hickop/yinyanggo
  */
-Class sgf
+class Sgf
 {
-    private $size;      // taille du goban
-    private $infos;     // infos de la partie
-    private $comments;  // commentaires
-    private $symbols;   // annotations sur le goban
-    private $branchs;   // nombre total de branches
-    private $game;      // déroulement de la partie
-    private $state;     // état du goban
-    private $deads;     // pierres potentiellement mortes
-    private $prison = Array('b' => 0, 'w' => 0); // prisonniers
+    private $_size;      // taille du goban
+    private $_infos;     // infos de la partie
+    private $_comments;  // commentaires
+    private $_symbols;   // annotations sur le goban
+    private $_branchs;   // nombre total de branches
+    private $_game;      // déroulement de la partie
+    private $_state;     // état du goban
+    private $_deads;     // pierres potentiellement mortes
+    private $_prison = Array('b' => 0, 'w' => 0); // prisonniers
 
-    // construction des variables
+    /**
+     * Construction des variables
+     */
     function __construct()/*{{{*/
     {
         
     }/*}}}*/
 
-    public function sendFile($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
+    /**
+     * Enregistrement de fichier dans la base de données
+     *
+     * @param string $file     fichier à enregister
+     * @param string $hostname addresse du serveur
+     * @param string $dbuser   login bdd
+     * @param string $dbpass   pass bdd
+     * @param string $dbname   nom de la bdd 
+     *
+     * @return boolean
+     */ 
+    public function saveFile($file,$hostname,$dbuser,$dbpass,$dbname)/*{{{*/
+    {
         // connexion base de données
         try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
@@ -36,7 +50,8 @@ Class sgf
                 'mysql:host=' . $hostname . ';dbname=' . $dbname,
                 $dbuser,
                 $dbpass,
-                $pdo_options);
+                $pdo_options
+            );
         } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
@@ -49,30 +64,37 @@ Class sgf
         if (!empty($vars)) {
             return false;
         } else {
-            $data = $this->SgfToTab($file);
-            $this->infos = $data[0][0];
-            $this->size = $this->infos['SZ'];
-            $this->GameTable($data);
-            $this->infos['branchs'] = $this->branchs;
+            $data = $this->sgfToTab($file);
+            $this->_infos = $data[0][0];
+            $this->_size = $this->_infos['SZ'];
+            $this->gameTable($data);
+            $this->_infos['branchs'] = $this->_branchs;
 
-            $insert = $db->prepare('INSERT INTO sgf(
-                file, infos, comments, symbols, game) VALUES(
-                :file, :infos, :comments, :symbols, :game)');
-            $insert->execute(array(
-                'file' => $file,
-                'infos' => json_encode($this->infos),
-                'comments' => json_encode($this->comments),
-                'symbols' => json_encode($this->symbols),
-                'game' => json_encode($this->game),
-            ));
+            $insert = $db->prepare(
+                'INSERT INTO sgf(file, infos, comments, symbols, game)' .
+                'VALUES(:file, :infos, :comments, :symbols, :game)'
+            );
+            $insert->execute(
+                array('file' => $file,
+                'infos' => json_encode($this->_infos),
+                'comments' => json_encode($this->_comments),
+                'symbols' => json_encode($this->_symbols),
+                'game' => json_encode($this->_game))
+            );
         }
         $db = null; // ferme la connexion
         return true;
     }/*}}}*/
 
-    // lit un SGF et le stocke dans une table[noeud][branche]
-    protected function SgfToTab($data) {/*{{{*/
-
+    /**
+     * Lit un fichier SGF et le stocke dans un tableau
+     *
+     * @param string $file fichier à traiter
+     *
+     * @return array
+     */
+    protected function sgfToTab($file)/*{{{*/
+    {
         $tab = [];          // tab[node][branch][key][val,val,...]
 
         $branch = -1;       // branche actuelle
@@ -86,10 +108,10 @@ Class sgf
         $prevkey = '';      // clé précédente pour plusieurs valeurs
         $val = '';          // valeur enregistrée
 
-        $file = fopen($data, "r"); // ouverture du fichier en lecture seule
+        $handle = fopen($file, "r"); // ouverture du fichier en lecture seule
 
-        while (!feof($file)) { // lecture du fichier caractère par caractère
-            $char = fgetc($file); // caractère courant
+        while (!feof($handle)) { // lecture du fichier caractère par caractère
+            $char = fgetc($handle); // caractère courant
             switch ($char) {
             case '\\': // caractère d'échappement ?
                 if ($escape) { // '\' qui fait partie de la valeur
@@ -162,51 +184,57 @@ Class sgf
                 }
             }
         }
-        $this->branchs = $branch + 1;
+        $this->_branchs = $branch + 1;
         return $tab;
     }/*}}}*/
 
-    // traite le déroulement du jeu et enregistre chaque état dans un tableau
-    protected function GameTable($table) {/*{{{*/
-
-        for ($i = 0; $i <= $this->branchs; $i++) {
+    /**
+     * Traite le déroulement du jeu et enregistre chaque état dans un tableau
+     *
+     * @param array $table tableau de représentation du fichier SGF
+     *
+     * @return null
+     */
+    protected function gameTable($table)/*{{{*/
+    {
+        for ($i = 0; $i <= $this->_branchs; $i++) {
             for ($j = 0; $j < sizeof($table); $j++) {
                 if (isset($table[$j][$i])) {
                     // toujours avoir au moins un goban vide
-                    $this->game[$j][$i]['b'] = '';
-                    $this->game[$j][$i]['w'] = '';
+                    $this->_game[$j][$i]['b'] = '';
+                    $this->_game[$j][$i]['w'] = '';
                     // ajouter les pierres jouées ou placées
                     foreach ($table[$j][$i] as $key => $value) {
                         switch ($key) {
                         case 'B': // noir joue
-                            $this->PlayMove($j,$i,'b',$value);
+                            $this->playMove($j, $i, 'b', $value);
                             break;
                         case 'W': // blanc joue
-                            $this->PlayMove($j,$i,'w',$value);
+                            $this->playMove($j, $i, 'w', $value);
                             break;
                         case 'AB': // ajout de pierre(s) noire(s)
-                            $this->AddStones($j,$i,'b',$value);
+                            $this->addStones($j, $i, 'b', $value);
                             break;
                         case 'AW': // ajout de pierre(s) blanche(s)
-                            $this->AddStones($j,$i,'w',$value);
+                            $this->addStones($j, $i, 'w', $value);
                             break;
                         case 'AE': // enlève les pierres
-                            $this->RemoveStones($j,$i,$value);
+                            $this->removeStones($j, $i, $value);
                             break;
                         case 'CR': // ajout symbole cercle
-                            $this->symbols[$j][$i]['CR'] = $value;
+                            $this->_symbols[$j][$i]['CR'] = $value;
                             break;
                         case 'SQ': // ajout symbole carré
-                            $this->symbols[$j][$i]['SQ'] = $value;
+                            $this->_symbols[$j][$i]['SQ'] = $value;
                             break;
                         case 'TR': // ajout symbole triangle
-                            $this->symbols[$j][$i]['TR'] = $value;
+                            $this->_symbols[$j][$i]['TR'] = $value;
                             break;
                         case 'LB': // ajout symbole label
-                            $this->symbols[$j][$i]['LB'] = $value;
+                            $this->_symbols[$j][$i]['LB'] = $value;
                             break;
                         case 'C': // ajout de commentaire(s)
-                            $this->comments[$j][$i] = $value;
+                            $this->_comments[$j][$i] = $value;
                             break;
                         default:
                         }
@@ -214,169 +242,264 @@ Class sgf
                 }
             }
         }
+        return;
     }/*}}}*/
 
-    // ajoute des pierres sur le goban
-    protected function AddStones($node,$branch,$color,$coords) {/*{{{*/
+    /**
+     * Ajoute des pierres sur le goban
+     *
+     * @param int    $node   noeud
+     * @param int    $branch branche
+     * @param string $color  couleur
+     * @param string $coords coordonées en lettres
+     *
+     * @return null
+     */
+    protected function addStones($node,$branch,$color,$coords)/*{{{*/
+    {
         $b = $branch;
-        $stones = explode(',',$coords);
+        $stones = explode(',', $coords);
         $cs = count($stones);
 
         while ($b >= 0) { //cherche un état précédent
-            if (isset($this->game[$node-1][$b])) {
-                $this->state = $this->GobanState($node-1,$b);
+            if (isset($this->_game[$node-1][$b])) {
+                $this->_state = $this->gobanState($node-1, $b);
                 break;
             }
             $b--;
         }
         for ($i = 0; $i < $cs; $i++) { // ajoute les pierres à l'état
-            $x = ord(substr($stones[$i],0,1)) - 97;
-            $y = ord(substr($stones[$i],1,1)) - 97;
-            $this->state[$x][$y] = $color; 
+            $x = ord(substr($stones[$i], 0, 1)) - 97;
+            $y = ord(substr($stones[$i], 1, 1)) - 97;
+            $this->_state[$x][$y] = $color; 
         }
-        $this->StateToGame($node,$branch); // enregistre le jeu
+        $this->stateToGame($node, $branch); // enregistre le jeu
+        return;
     }/*}}}*/
 
-    // enlève des pierres sur le goban
-    protected function RemoveStones($node,$branch,$coords) {/*{{{*/
+    /**
+     * Enlève des pierres sur le goban
+     *
+     * @param int    $node   noeud
+     * @param int    $branch branche
+     * @param string $coords coordonées en lettres
+     *
+     * @return null
+     */
+    protected function removeStones($node,$branch,$coords)/*{{{*/
+    {
         $b = $branch;
-        $stones = explode(',',$coords);
+        $stones = explode(',', $coords);
         $cs = count($stones);
 
         while ($b >= 0) { //cherche un état précédent
-            if (isset($this->game[$node-1][$b])) {
-                $this->state = $this->GobanState($node-1,$b);
+            if (isset($this->_game[$node-1][$b])) {
+                $this->_state = $this->gobanState($node-1, $b);
                 break;
             }
             $b--;
         }
         for ($i = 0; $i < $cs; $i++) { // ajoute les pierres à l'état
-            $x = ord(substr($stones[$i],0,1)) - 97;
-            $y = ord(substr($stones[$i],1,1)) - 97;
-            $this->state[$x][$y] = ''; 
+            $x = ord(substr($stones[$i], 0, 1)) - 97;
+            $y = ord(substr($stones[$i], 1, 1)) - 97;
+            $this->_state[$x][$y] = ''; 
         }
-        $this->StateToGame($node,$branch); // enregistre le jeu
+        $this->stateToGame($node, $branch); // enregistre le jeu
+        return;
     }/*}}}*/
 
-    // joue un coup et calcul l'état du goban en fonction de l'état précédent
-    protected function PlayMove($node,$branch,$color,$coord) {/*{{{*/
+    /**
+     * Joue un coup et calcul l'état du goban en fonction de l'état précédent
+     *
+     * @param int    $node   noeud
+     * @param int    $branch branche
+     * @param string $color  couleur
+     * @param string $coord  coordonée du coup joué en lettres
+     *
+     * @return null
+     */
+    protected function playMove($node,$branch,$color,$coord)/*{{{*/
+    {
         $b = $branch;
 
         while ($b >= 0) { //cherche un état précédent
-            if (isset($this->game[$node-1][$b])) {
-                $this->state = $this->GobanState($node-1,$b);
-                $x = ord(substr($coord,0,1)) - 97;
-                $y = ord(substr($coord,1,1)) - 97;
-                $this->state[$x][$y] = $color; // ajoute le coup joué à l'état
-                $this->TestDeath($color,$x,$y); // test pierres mortes
-                $this->StateToGame($node,$branch); // enregistre le jeu
+            if (isset($this->_game[$node-1][$b])) {
+                $this->_state = $this->gobanState($node-1, $b);
+                $x = ord(substr($coord, 0, 1)) - 97;
+                $y = ord(substr($coord, 1, 1)) - 97;
+                $this->_state[$x][$y] = $color; // ajoute le coup joué à l'état
+                $this->testDeath($color, $x, $y); // test pierres mortes
+                $this->stateToGame($node, $branch); // enregistre le jeu
                 // TODO calculer les KO
                 break;
             }
             $b--;
         }
-        $this->game[$node][$branch]['p'] = $color.','.$coord;
+        $this->_game[$node][$branch]['p'] = $color.','.$coord;
+        return;
     }/*}}}*/
 
-    // enregistre l'état du goban
-    protected function GobanState($node,$branch) {/*{{{*/
-        $bstones = explode(',',$this->game[$node][$branch]['b']);
-        $wstones = explode(',',$this->game[$node][$branch]['w']);
+    /**
+     * Enregistre l'état du goban
+     *
+     * @param int $node   noeud
+     * @param int $branch branche
+     *
+     * @return array
+     */
+    protected function gobanState($node,$branch)/*{{{*/
+    {
+        $bstones = explode(',', $this->_game[$node][$branch]['b']);
+        $wstones = explode(',', $this->_game[$node][$branch]['w']);
         $sb = count($bstones);
         $sw = count($wstones);
         // vide l'état précédent
-        for ($x = 0; $x < $this->size; $x++) {
-            for ($y = 0; $y < $this->size; $y++) {
+        for ($x = 0; $x < $this->_size; $x++) {
+            for ($y = 0; $y < $this->_size; $y++) {
                 $state[$x][$y] = '';
             }
         }
         // enregistre l'état
         for ($b = 0; $b < $sb; $b++) {
-            $x = ord(substr($bstones[$b],0,1)) - 97;
-            $y = ord(substr($bstones[$b],1,1)) - 97;
-            if ($x >= 0 && $y >= 0) $state[$x][$y] = 'b';
+            $x = ord(substr($bstones[$b], 0, 1)) - 97;
+            $y = ord(substr($bstones[$b], 1, 1)) - 97;
+            if ($x >= 0 && $y >= 0) {
+                $state[$x][$y] = 'b';
+            }
         }
         for ($w = 0; $w < $sw; $w++) {
-            $x = ord(substr($wstones[$w],0,1)) - 97;
-            $y = ord(substr($wstones[$w],1,1)) - 97;
-            if ($x >= 0 && $y >= 0) $state[$x][$y] = 'w';
+            $x = ord(substr($wstones[$w], 0, 1)) - 97;
+            $y = ord(substr($wstones[$w], 1, 1)) - 97;
+            if ($x >= 0 && $y >= 0) {
+                $state[$x][$y] = 'w';
+            }
         }
         return $state;
     }/*}}}*/
 
-    // convertit l'état du goban sous forme de coordonnées en lettres
-    protected function StateToGame($node,$branch) {/*{{{*/
+    /**
+     * Convertit l'état du goban sous forme de coordonnées en lettres
+     *
+     * @param int $node   noeud
+     * @param int $branch branche
+     *
+     * @return null
+     */
+    protected function stateToGame($node,$branch)/*{{{*/
+    {
         $let = ['a','b','c','d','e','f','g','h','i',
                 'j','k','l','m','n','o','p','q','r','s'];
-        for ($x = 0; $x < $this->size; $x++) {
-            for ($y = 0; $y < $this->size; $y++) {
+        for ($x = 0; $x < $this->_size; $x++) {
+            for ($y = 0; $y < $this->_size; $y++) {
                 $coord = $let[$x].$let[$y];
-                if (isset($this->state[$x][$y])) {
-                    if ($this->state[$x][$y] == 'b') {
-                        $this->game[$node][$branch]['b'] .=
-                            ($this->game[$node][$branch]['b'] != '') ?
+                if (isset($this->_state[$x][$y])) {
+                    if ($this->_state[$x][$y] == 'b') {
+                        $this->_game[$node][$branch]['b'] .=
+                            ($this->_game[$node][$branch]['b'] != '') ?
                             ','.$coord : $coord;
-                    }
-                    else if ($this->state[$x][$y] == 'w') {
-                        $this->game[$node][$branch]['w'] .=
-                            ($this->game[$node][$branch]['w'] != '') ?
+                    } else if ($this->_state[$x][$y] == 'w') {
+                        $this->_game[$node][$branch]['w'] .=
+                            ($this->_game[$node][$branch]['w'] != '') ?
                             ','.$coord : $coord;
                     }
                 }
             }
         }
+        return;
     }/*}}}*/
 
-    // test des pierres mortes
-    protected function TestDeath($color,$x,$y) {/*{{{*/
-        $this->deads = [];
-        if ($this->TestLiberties($color,$x-1,$y) == 0)
-            $this->KillStones($color);
-        $this->deads = []; // vider les morts d'avant à chaque test
-        if ($this->TestLiberties($color,$x,$y-1) == 0)
-            $this->KillStones($color);
-        $this->deads = [];
-        if ($this->TestLiberties($color,$x+1,$y) == 0)
-            $this->KillStones($color);
-        $this->deads = [];
-        if ($this->TestLiberties($color,$x,$y+1) == 0)
-            $this->KillStones($color);
+    /**
+     * Test des pierres mortes
+     *
+     * @param string $color couleur jouée
+     * @param int    $x     coordonée X
+     * @param int    $y     coordonée Y
+     *
+     * @return null
+     */
+    protected function testDeath($color,$x,$y)/*{{{*/
+    {
+        $this->_deads = [];
+        if ($this->testLiberties($color, $x-1, $y) == 0) {
+            $this->killStones($color);
+        }
+        $this->_deads = []; // vider les morts d'avant à chaque test
+        if ($this->testLiberties($color, $x, $y-1) == 0) {
+            $this->killStones($color);
+        }
+        $this->_deads = [];
+        if ($this->testLiberties($color, $x+1, $y) == 0) {
+            $this->killStones($color);
+        }
+        $this->_deads = [];
+        if ($this->testLiberties($color, $x, $y+1) == 0) {
+            $this->killStones($color);
+        }
     }/*}}}*/
 
-    // test les libertés d'une pierre ou un groupe de pierres
-    protected function TestLiberties($color,$x,$y) {/*{{{*/
+    /**
+     * Test les libertés d'une pierre ou un groupe de pierres
+     *
+     * @param string $color couleur jouée
+     * @param int    $x     coordonée X
+     * @param int    $y     coordonée Y
+     *
+     * @return int
+     */
+    protected function testLiberties($color,$x,$y)/*{{{*/
+    {
         $ennemy = ($color == 'b') ? 'w' : 'b';
-        if (isset($this->state[$x][$y])) {
-            if ($this->state[$x][$y] == '') {
+        if (isset($this->_state[$x][$y])) {
+            if ($this->_state[$x][$y] == '') {
                 return 1; // liberté
             }
-            if ($this->state[$x][$y] == $ennemy) {
+            if ($this->_state[$x][$y] == $ennemy) {
                 $dead = $x . ',' . $y;
-                for ($i = 0, $ci = count($this->deads); $i < $ci; $i++) {
+                for ($i = 0, $ci = count($this->_deads); $i < $ci; $i++) {
                     // déjà dans la liste des morts
-                    if ($this->deads[$i] == $dead) return 0; 
+                    if ($this->_deads[$i] == $dead) {
+                        return 0;
+                    }
                 }
-                $this->deads[] = $dead;
+                $this->_deads[] = $dead;
 
-                if ($this->TestLiberties($color,$x-1,$y) == 1) return 1;
-                if ($this->TestLiberties($color,$x,$y-1) == 1) return 1;
-                if ($this->TestLiberties($color,$x+1,$y) == 1) return 1;
-                if ($this->TestLiberties($color,$x,$y+1) == 1) return 1;
+                if ($this->testLiberties($color, $x-1, $y) == 1) {
+                    return 1;
+                }
+                if ($this->testLiberties($color, $x, $y-1) == 1) {
+                    return 1;
+                }
+                if ($this->testLiberties($color, $x+1, $y) == 1) {
+                    return 1;
+                }
+                if ($this->testLiberties($color, $x, $y+1) == 1) {
+                    return 1;
+                }
                 return 0; // aucune liberté
             }
             return 2; // pierre de la même couleur
-        } else return 2; // bord du goban
+        } else {
+            return 2; // bord du goban
+        }
     }/*}}}*/
 
-    // supprime les pierres mortes de l'état actuel du goban
-    protected function KillStones($color) {/*{{{*/
-        $ci = count($this->deads);
-        $this->prison[$color] += $ci; // ajoute prisonniers pour le score
+    /**
+     * Supprime les pierres mortes de l'état actuel du goban
+     *
+     * @param string $color couleur des pierres mortes
+     *
+     * @return null
+     */
+    protected function killStones($color)/*{{{*/
+    {
+        $ci = count($this->_deads);
+        $this->_prison[$color] += $ci; // ajoute prisonniers pour le score
         for ($i = 0; $i < $ci; $i++) {
-            $coord = explode(',',$this->deads[$i]);
+            $coord = explode(',', $this->_deads[$i]);
             // enlève la pierre  morte du goban
-            $this->state[$coord[0]][$coord[1]] = '';
+            $this->_state[$coord[0]][$coord[1]] = '';
         }
+        return;
     }/*}}}*/
 
 }

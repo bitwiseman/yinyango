@@ -59,8 +59,8 @@ if (isset($_FILES['sgf']['name'])) {/*{{{*/
             move_uploaded_file($tempname, $file);
         }
         // enregistre le fichier dans la base de données
-        $sgf = new sgf();
-        $sent = $sgf->sendFile(
+        $sgf = new Sgf();
+        $sent = $sgf->saveFile(
             $file,
             $conf['db_hostname'],
             $conf['db_username'],
