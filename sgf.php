@@ -1,6 +1,17 @@
 <?php
-include_once 'config.php';
-include_once 'sgf.class.php';
+/**
+ * Fichier de communication utilisateur <> base de données
+ *
+ * PHP version 5
+ *
+ * @category PHP
+ * @package  Yinyanggo
+ * @author   hickop <hickop@gmail.com>
+ * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
+ * @link     https://github.com/hickop/yinyanggo
+ */
+require_once 'config.php';
+require_once 'sgf.class.php';
 
 if (isset($_GET['createtable'])) {/*{{{*/
     // connexion base de données
@@ -17,35 +28,35 @@ if (isset($_GET['createtable'])) {/*{{{*/
         die('Erreur : ' . $e->getMessage());
     }
     // création de la table si non existante
-    $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] . '`;
-              USE `' . $conf['db_name'] . '`;
-              CREATE TABLE IF NOT EXISTS `sgf` (
-              `id` int(11) NOT NULL AUTO_INCREMENT,
-              `file` text NOT NULL,
-              `infos` text NOT NULL,
-              `comments` text NOT NULL,
-              `symbols` text NOT NULL,
-              `game` text NOT NULL,
-              PRIMARY KEY (`id`)
-              )';
+    $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] .
+        '`;USE `' . $conf['db_name'] .
+        '`;CREATE TABLE IF NOT EXISTS `sgf` (' .
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' .
+        '`file` text NOT NULL,' .
+        '`infos` text NOT NULL,' .
+        '`comments` text NOT NULL,' .
+        '`symbols` text NOT NULL,' .
+        '`game` text NOT NULL,' .
+        'PRIMARY KEY (`id`))';
     $db->exec($create);
     $db = null; // ferme la connexion
 
 }/*}}}*/
 // envoi de fichier SGF
 if (isset($_FILES['sgf']['name'])) {/*{{{*/
+    $tempname = $_FILES['sgf']['tmp_name'];
+    $name = $_FILES['sgf']['name'];
+    $file = 'sgf/' . $name;
     $answer = '';
 
-    $file = 'sgf/'.$_FILES['sgf']['name'];
-
     // vérifie le fichier envoyé avec SGFC
-    $sgfc = rtrim(shell_exec('bin/sgfc ' . $_FILES['sgf']['tmp_name']));
-    $test = substr($sgfc,-2); // 'OK' si valide
+    $sgfc = rtrim(shell_exec('bin/sgfc ' . $tempname));
+    $test = substr($sgfc, -2); // 'OK' si valide
 
-    if ($test == 'OK') {
+    if ($test === 'OK') {
         // test si le fichier existe déjà
         if (!file_exists($file)) {
-            move_uploaded_file($_FILES['sgf']['tmp_name'],$file);
+            move_uploaded_file($tempname, $file);
         }
         // enregistre le fichier dans la base de données
         $sgf = new sgf();
@@ -90,12 +101,14 @@ if (isset($_GET['list'])) {/*{{{*/
         // TODO charger la dernière partie de l'utilisateur
         if ($lim == -1) {
             // goban d'acceuil
-            $select = $db->prepare('SELECT * FROM sgf ' .
+            $select = $db->prepare(
+                'SELECT * FROM sgf ' .
                 'WHERE id=1'
             );
         } else {
             // récupère les 10 derniers enregistrements
-            $select = $db->prepare('SELECT * FROM sgf ' .
+            $select = $db->prepare(
+                'SELECT * FROM sgf ' .
                 'ORDER BY id DESC LIMIT ' . $lim . ', 10'
             );
         }
