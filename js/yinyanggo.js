@@ -405,7 +405,7 @@ var yygo = {}; // espace de nom yygo
             gobbuttons.style.display = 'none';
             options.style.display = 'none';
             variations.style.display = 'none';
-            goban.className = 'hide'; // déplace plus rapide
+            goban.style.display = 'none';
             comments.style.display = 'none';
             infos.style.display = 'none';
             sendinput.style.display = 'none';
@@ -416,7 +416,7 @@ var yygo = {}; // espace de nom yygo
                 gobbuttons.style.display = 'block';
                 options.style.display = 'block';
                 variations.style.display = 'block';
-                goban.className = '';
+                goban.style.display = 'block';
                 this.toggleComments();
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
