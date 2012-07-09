@@ -435,7 +435,7 @@ var yygo = {}; // espace de nom yygo
             }
         },//}}}
 
-        drawGoban: function (redraw) {//{{{
+        drawGoban: function () {//{{{
             var commentselem =  document.getElementById('comments'),
                 gobanelem =     document.getElementById('goban'),
                 gridelem =      document.getElementById('grid'),
@@ -445,7 +445,8 @@ var yygo = {}; // espace de nom yygo
                 comtop =        70,
                 c;
 
-            if (redraw) { // c'est un redimenssionnement
+            if (this.redraw) { // c'est un redimenssionnement
+                this.redraw = false;
                 // redimensionne le goban
                 gobanelem.style.height = this.sizegoban + 'px';
                 gobanelem.style.width = this.sizegoban + 'px';
@@ -662,13 +663,9 @@ var yygo = {}; // espace de nom yygo
 
             // redessine si la taille a changé
             if (this.sizegoban !== oldsizegoban || this.redraw) {
-                if (this.redraw) {
-                    this.redraw = false;
-                }
-                this.drawGoban(true);
-            } else {
-                this.drawGoban(false);
+                this.redraw = true;
             }
+            this.drawGoban();
         },//}}}
 
         toggleBorders: function () {//{{{
