@@ -15,7 +15,11 @@ class sgf
     private $prison = Array('b' => 0, 'w' => 0); // prisonniers
 
     // construction des variables
-    function __construct($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
+    function __construct() {/*{{{*/
+        
+    }/*}}}*/
+
+    public function sendFile($file,$hostname,$dbuser,$dbpass,$dbname) {/*{{{*/
         // connexion base de données
         try {
             $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
@@ -28,18 +32,13 @@ class sgf
             die('Erreur : ' . $e->getMessage());
         }
 
-        // récupère les données ou les enregistre si elles n'existent pas
+        // enregistre les données si elles n'existent pas
         $select = $db->prepare('SELECT * FROM sgf WHERE file=?');
         $select->execute(array($file));
         $vars = $select->fetch();
         $select->closeCursor();
         if (!empty($vars)) {
-            $this->infos = json_decode($vars['infos']);
-            $this->size = $this->infos['SZ'];
-            $this->branchs = $this->infos['branchs'];
-            $this->comments = json_decode($vars['comments']);
-            $this->symbols = json_decode($vars['symbols']);
-            $this->game = json_decode($vars['game']);
+            return false;
         } else {
             $data = $this->SgfToTab($file);
             $this->infos = $data[0][0];
@@ -59,16 +58,8 @@ class sgf
             ));
         }
         $db = null; // ferme la connexion
+        return true;
     }/*}}}*/
-
-    public function getData() {
-        $sgfdata['size'] = $this->size;
-        $sgfdata['infos'] = $this->infos;
-        $sgfdata['comments'] = $this->comments;
-        $sgfdata['symbols'] = $this->symbols;
-        $sgfdata['game'] = $this->game;
-        return $sgfdata;
-    }
 
     // lit un SGF et le stocke dans une table[noeud][branche]
     protected function SgfToTab($data) {/*{{{*/

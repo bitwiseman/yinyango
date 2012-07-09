@@ -34,6 +34,7 @@ if (isset($_GET['createtable'])) {/*{{{*/
 }/*}}}*/
 // envoi de fichier SGF
 if (isset($_FILES['sgf']['name'])) {/*{{{*/
+    $answer = '';
 
     $file = 'sgf/'.$_FILES['sgf']['name'];
 
@@ -47,14 +48,23 @@ if (isset($_FILES['sgf']['name'])) {/*{{{*/
             move_uploaded_file($_FILES['sgf']['tmp_name'],$file);
         }
         // enregistre le fichier dans la base de données
-        $sgf = new sgf(
+        $sgf = new sgf();
+        $sent = $sgf->sendFile(
             $file,
             $conf['db_hostname'],
             $conf['db_username'],
             $conf['db_password'],
             $conf['db_name']
         );
+        if ($sent) {
+            $answer = 'success';
+        } else {
+            $answer = 'exist';
+        }
+    } else {
+        $answer = 'invalid';
     }
+    echo json_encode($answer);
 }/*}}}*/
 // récupère la table SQL
 if (isset($_GET['list'])) {/*{{{*/

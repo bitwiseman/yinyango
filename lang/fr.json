@@ -17,5 +17,10 @@
     "white":        "Blanc",
     "date":         "Date",
     "place":        "Emplacement",
-    "rules":        "Règles"
+    "rules":        "Règles",
+
+    "invalid":      "Fichier SGF non valide.",
+    "success":      "Fichier enregisré avec succès.",
+    "exist":        "Le fichier existe déjà.",
+    "error":        "Une erreur est survenue durant l'envoi du fichier."
 }

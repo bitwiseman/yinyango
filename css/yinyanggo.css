@@ -28,7 +28,20 @@ body {
 /*}}}*/
 #sendinput {/*{{{*/
     display: none;
-}/*}}}*/
+    position: absolute;
+    top: 70px;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+    overflow: auto;
+    text-align: center;
+}
+#sendinput iframe {
+    border: none;
+    width: 100%;
+    text-align: center;
+}
+/*}}}*/
 #buttonsbar {/*{{{*/
     display: none;
     position: relative;

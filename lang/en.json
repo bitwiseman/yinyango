@@ -17,5 +17,10 @@
     "white":        "White",
     "date":         "Date",
     "place":        "Place",
-    "rules":        "Rules"
+    "rules":        "Rules",
+
+    "invalid":      "Invalid SGF file.",
+    "success":      "File successfully registered.",
+    "exist":        "File already exist.",
+    "error":        "Error happened during file transfer."
 }

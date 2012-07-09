@@ -840,19 +840,20 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         makeBinds: function () {//{{{
-            var comment =   document.getElementById('comment'),
-                border =    document.getElementById('border'),
-                options =   document.getElementById('options'),
-                load =      document.getElementById('load'),
-                langen =    document.getElementById('langen'),
-                langfr =    document.getElementById('langfr'),
-                sendsgf =   document.getElementById('sendsgf'),
-                start =     document.getElementById('start'),
-                fastprev =  document.getElementById('fastprev'),
-                prev =      document.getElementById('prev'),
-                next =      document.getElementById('next'),
-                fastnext =  document.getElementById('fastnext'),
-                end =       document.getElementById('end');
+            var comment =       document.getElementById('comment'),
+                border =        document.getElementById('border'),
+                options =       document.getElementById('options'),
+                load =          document.getElementById('load'),
+                langen =        document.getElementById('langen'),
+                langfr =        document.getElementById('langfr'),
+                sendsgf =       document.getElementById('sendsgf'),
+                sendtarget =    document.getElementById('sendtarget'),
+                start =         document.getElementById('start'),
+                fastprev =      document.getElementById('fastprev'),
+                prev =          document.getElementById('prev'),
+                next =          document.getElementById('next'),
+                fastnext =      document.getElementById('fastnext'),
+                end =           document.getElementById('end');
 
             // redimensionnement de la fenêtre
             window.addEventListener('resize', function () {
@@ -884,6 +885,10 @@ var yygo = {}; // espace de nom yygo
             // clic bouton envoi de fichier SGF
             sendsgf.addEventListener('click', function () {
                 yygo.events.clickSendSgf();
+            }, false);
+            // retour de l'envoi de fichier
+            sendtarget.addEventListener('load', function () {
+                yygo.events.sendResponse();
             }, false);
             // boutons de navigation
             start.addEventListener('click', function () {
@@ -1060,6 +1065,27 @@ var yygo = {}; // espace de nom yygo
             } else {
                 this.screen = 'options';
                 yygo.view.changeScreen();
+            }
+        },//}}}
+
+        sendResponse: function () {//{{{
+            var locale = yygo.data.locale,
+                responseelem = document.getElementById('response'),
+                response,
+                data;
+
+            response = frames['sendtarget']
+                .document.getElementsByTagName("body")[0].innerHTML;
+            data = JSON.parse(response);
+
+            if (data === 'invalid') {
+                responseelem.textContent = locale.invalid;
+            } else if (data === 'success') {
+                responseelem.textContent = locale.success;
+            } else if (data === 'exist') {
+                responseelem.textContent = locale.exist;
+            } else {
+                responseelem.textContent = locale.error;
             }
         }//}}}
 
