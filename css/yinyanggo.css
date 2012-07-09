@@ -4,6 +4,7 @@ body {
     margin: 0;
 }
 #loadlist {/*{{{*/
+    display: none;
     position: absolute;
     top: 50px;
     right: 20px;
@@ -25,7 +26,11 @@ body {
     cursor: pointer;
 }
 /*}}}*/
+#sendinput {/*{{{*/
+    display: none;
+}/*}}}*/
 #buttonsbar {/*{{{*/
+    display: none;
     position: relative;
     margin: auto;
     width: 500px;
@@ -82,9 +87,6 @@ body {
     left: 200px;
     background-position: -450px 0px;
 }
-#sendinput {
-    display: none;
-}
 #downsgf {
     left: 250px;
     background-position: -500px 0px;
@@ -119,6 +121,7 @@ body {
 }
 /*}}}*/
 #variations {/*{{{*/
+    display: none;
     text-align: center;
     height: 20px;
 }
@@ -137,6 +140,7 @@ body {
 }
 /*}}}*/
 #goban {/*{{{*/
+    display: none;
     position: relative;
     margin: auto;
     -moz-user-select: none;
@@ -184,6 +188,7 @@ body {
 }
 /*}}}*/
 #comments {/*{{{*/
+    display: none;
     position: absolute;
     bottom: 0;
     padding: 15px;

@@ -345,6 +345,38 @@ var yygo = {}; // espace de nom yygo
 
         // affichage
 
+        changeButtons: function () {//{{{
+            var mode =          yygo.events.mode,
+                screen =        yygo.events.screen,
+                navbuttons =    document.getElementById('navbuttons'),
+                optbuttons =    document.getElementById('optbuttons'),
+                gobbuttons =    document.getElementById('gobbuttons'),
+                options =       document.getElementById('options');
+
+            // masquer tout les boutons
+            navbuttons.style.display = 'none';
+            optbuttons.style.display = 'none';
+            gobbuttons.style.display = 'none';
+            options.style.display = 'none';
+
+            // afficher les boutons en fonction de l'écran et du mode
+            if (screen === 'goban') {
+                gobbuttons.style.display = 'block';
+                options.style.display = 'block';
+                if (mode === 'replay') {
+                    navbuttons.style.display = 'block';
+                }
+                // TODO autres modes
+            } else if (screen === 'options') {
+                optbuttons.style.display = 'block';
+                options.style.display = 'block';
+            } else if (screen === 'list') {
+                optbuttons.style.display = 'block';
+            } else if (screen === 'sendsgf') {
+                optbuttons.style.display = 'block';
+            }
+        },//}}}
+
         changeGridImage: function () {//{{{
             var grid = document.getElementById('grid');
 
@@ -386,12 +418,8 @@ var yygo = {}; // espace de nom yygo
         },//}}}
 
         changeScreen: function () {//{{{
-            var mode =          yygo.events.mode,
-                screen =        yygo.events.screen,
-                navbuttons =    document.getElementById('navbuttons'),
-                optbuttons =    document.getElementById('optbuttons'),
-                gobbuttons =    document.getElementById('gobbuttons'),
-                options =       document.getElementById('options'),
+            var screen =        yygo.events.screen,
+                buttonsbar =    document.getElementById('buttonsbar'),
                 variations =    document.getElementById('variations'),
                 goban =         document.getElementById('goban'),
                 comments =      document.getElementById('comments'),
@@ -400,10 +428,7 @@ var yygo = {}; // espace de nom yygo
                 loadlist =      document.getElementById('loadlist');
 
             // masquer tout les éléments
-            navbuttons.style.display = 'none';
-            optbuttons.style.display = 'none';
-            gobbuttons.style.display = 'none';
-            options.style.display = 'none';
+            buttonsbar.style.display = 'none';
             variations.style.display = 'none';
             goban.style.display = 'none';
             comments.style.display = 'none';
@@ -411,26 +436,22 @@ var yygo = {}; // espace de nom yygo
             sendinput.style.display = 'none';
             loadlist.style.display = 'none';
 
+            this.changeButtons();
+
             // afficher les éléments nécessaires en fonction de l'écran
             if (screen === 'goban') {
-                gobbuttons.style.display = 'block';
-                options.style.display = 'block';
+                buttonsbar.style.display = 'block';
                 variations.style.display = 'block';
                 goban.style.display = 'block';
                 this.toggleComments();
-                if (mode === 'replay') {
-                    navbuttons.style.display = 'block';
-                }
-                // TODO autres modes
             } else if (screen === 'options') {
-                optbuttons.style.display = 'block';
-                options.style.display = 'block';
+                buttonsbar.style.display = 'block';
                 infos.style.display = 'block';
             } else if (screen === 'list') {
-                optbuttons.style.display = 'block';
+                buttonsbar.style.display = 'block';
                 loadlist.style.display = 'block';
             } else if (screen === 'sendsgf') {
-                optbuttons.style.display = 'block';
+                buttonsbar.style.display = 'block';
                 sendinput.style.display = 'block';
             }
         },//}}}
