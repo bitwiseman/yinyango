@@ -396,40 +396,42 @@ var yygo = {}; // espace de nom yygo
                 goban =         document.getElementById('goban'),
                 comments =      document.getElementById('comments'),
                 infos =         document.getElementById('infos'),
+                sendinput =     document.getElementById('sendinput'),
                 loadlist =      document.getElementById('loadlist');
 
-            if (screen === 'goban') {
-                optbuttons.style.display = 'none';
-                infos.style.display = 'none';
-                loadlist.style.display = 'none';
+            // masquer tout les éléments
+            navbuttons.style.display = 'none';
+            optbuttons.style.display = 'none';
+            gobbuttons.style.display = 'none';
+            options.style.display = 'none';
+            variations.style.display = 'none';
+            goban.className = 'hide'; // déplace plus rapide
+            comments.style.display = 'none';
+            infos.style.display = 'none';
+            sendinput.style.display = 'none';
+            loadlist.style.display = 'none';
 
+            // afficher les éléments nécessaires en fonction de l'écran
+            if (screen === 'goban') {
                 gobbuttons.style.display = 'block';
                 options.style.display = 'block';
                 variations.style.display = 'block';
                 goban.className = '';
+                this.toggleComments();
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
                 }
                 // TODO autres modes
             } else if (screen === 'options') {
-                navbuttons.style.display = 'none';
-                gobbuttons.style.display = 'none';
-                variations.style.display = 'none';
-                goban.className = 'hide'; // déplace plus rapide
-                comments.style.display = 'none';
-                loadlist.style.display = 'none';
-
                 optbuttons.style.display = 'block';
                 options.style.display = 'block';
                 infos.style.display = 'block';
             } else if (screen === 'list') {
-                options.style.display = 'none';
-                goban.className = 'hide'; // déplace plus rapide
-                infos.style.display = 'none';
-
+                optbuttons.style.display = 'block';
                 loadlist.style.display = 'block';
-            } else if (screen === 'intro') {
-                // TODO
+            } else if (screen === 'sendsgf') {
+                optbuttons.style.display = 'block';
+                sendinput.style.display = 'block';
             }
         },//}}}
 
@@ -741,7 +743,7 @@ var yygo = {}; // espace de nom yygo
         // propriétés
 
         mode:           'replay',
-        screen:         'options',
+        screen:         'goban',
 
         // méthodes
 
@@ -827,8 +829,6 @@ var yygo = {}; // espace de nom yygo
                 langen =    document.getElementById('langen'),
                 langfr =    document.getElementById('langfr'),
                 sendsgf =   document.getElementById('sendsgf'),
-                selfile =   document.getElementById('selfile'),
-                sendinput = document.getElementById('sendinput'),
                 start =     document.getElementById('start'),
                 fastprev =  document.getElementById('fastprev'),
                 prev =      document.getElementById('prev'),
@@ -865,10 +865,7 @@ var yygo = {}; // espace de nom yygo
             }, false);
             // clic bouton envoi de fichier SGF
             sendsgf.addEventListener('click', function () {
-                selfile.click();
-            }, false);
-            selfile.addEventListener('change', function () {
-                sendinput.submit();
+                yygo.events.clickSendSgf();
             }, false);
             // boutons de navigation
             start.addEventListener('click', function () {
@@ -1034,6 +1031,16 @@ var yygo = {}; // espace de nom yygo
                 yygo.view.changeScreen();
             } else {
                 yygo.events.screen = 'goban';
+                yygo.view.changeScreen();
+            }
+        },//}}}
+
+        clickSendSgf: function () {//{{{
+            if (this.screen === 'options') {
+                this.screen = 'sendsgf';
+                yygo.view.changeScreen();
+            } else {
+                this.screen = 'options';
                 yygo.view.changeScreen();
             }
         }//}}}
