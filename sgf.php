@@ -11,7 +11,7 @@
  * @link     https://github.com/hickop/yinyanggo
  */
 require_once 'config.php';
-require_once 'sgf.class.php';
+require_once 'Sgf.class.php';
 
 if (isset($_GET['createtable'])) {/*{{{*/
     // connexion base de données
