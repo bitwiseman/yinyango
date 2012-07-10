@@ -1083,7 +1083,7 @@ var yygo = {}; // espace de nom yygo
                 response,
                 data;
 
-            response = frames['sendtarget']
+            response = frames.sendtarget
                 .document.getElementsByTagName("body")[0].innerHTML;
             data = JSON.parse(response);
 
