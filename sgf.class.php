@@ -22,15 +22,15 @@ class Sgf
     private $_deads;     // pierres potentiellement mortes
     private $_prison = Array('b' => 0, 'w' => 0); // prisonniers
 
-    /**
+    /** __construct {{{
      * Construction des variables
      */
-    function __construct()/*{{{*/
+    function __construct()
     {
         
     }/*}}}*/
 
-    /**
+    /** saveFile {{{
      * Enregistrement de fichier dans la base de données
      *
      * @param string $file     fichier à enregister
@@ -41,7 +41,7 @@ class Sgf
      *
      * @return boolean
      */ 
-    public function saveFile($file,$hostname,$dbuser,$dbpass,$dbname)/*{{{*/
+    public function saveFile($file,$hostname,$dbuser,$dbpass,$dbname)
     {
         // connexion base de données
         try {
@@ -86,14 +86,14 @@ class Sgf
         return true;
     }/*}}}*/
 
-    /**
+    /** sgfToTab {{{
      * Lit un fichier SGF et le stocke dans un tableau
      *
      * @param string $file fichier à traiter
      *
      * @return array
      */
-    protected function sgfToTab($file)/*{{{*/
+    protected function sgfToTab($file)
     {
         $tab = [];          // tab[node][branch][key][val,val,...]
 
@@ -188,14 +188,14 @@ class Sgf
         return $tab;
     }/*}}}*/
 
-    /**
+    /** gameTable {{{
      * Traite le déroulement du jeu et enregistre chaque état dans un tableau
      *
      * @param array $table tableau de représentation du fichier SGF
      *
      * @return null
      */
-    protected function gameTable($table)/*{{{*/
+    protected function gameTable($table)
     {
         for ($i = 0; $i <= $this->_branchs; $i++) {
             for ($j = 0; $j < sizeof($table); $j++) {
@@ -245,7 +245,7 @@ class Sgf
         return;
     }/*}}}*/
 
-    /**
+    /** addStones {{{
      * Ajoute des pierres sur le goban
      *
      * @param int    $node   noeud
@@ -255,7 +255,7 @@ class Sgf
      *
      * @return null
      */
-    protected function addStones($node,$branch,$color,$coords)/*{{{*/
+    protected function addStones($node,$branch,$color,$coords)
     {
         $b = $branch;
         $stones = explode(',', $coords);
@@ -277,7 +277,7 @@ class Sgf
         return;
     }/*}}}*/
 
-    /**
+    /** removeStones {{{
      * Enlève des pierres sur le goban
      *
      * @param int    $node   noeud
@@ -286,7 +286,7 @@ class Sgf
      *
      * @return null
      */
-    protected function removeStones($node,$branch,$coords)/*{{{*/
+    protected function removeStones($node,$branch,$coords)
     {
         $b = $branch;
         $stones = explode(',', $coords);
@@ -308,7 +308,7 @@ class Sgf
         return;
     }/*}}}*/
 
-    /**
+    /** playMove {{{
      * Joue un coup et calcul l'état du goban en fonction de l'état précédent
      *
      * @param int    $node   noeud
@@ -318,7 +318,7 @@ class Sgf
      *
      * @return null
      */
-    protected function playMove($node,$branch,$color,$coord)/*{{{*/
+    protected function playMove($node,$branch,$color,$coord)
     {
         $b = $branch;
 
@@ -339,7 +339,7 @@ class Sgf
         return;
     }/*}}}*/
 
-    /**
+    /** gobanState {{{
      * Enregistre l'état du goban
      *
      * @param int $node   noeud
@@ -347,7 +347,7 @@ class Sgf
      *
      * @return array
      */
-    protected function gobanState($node,$branch)/*{{{*/
+    protected function gobanState($node,$branch)
     {
         $bstones = explode(',', $this->_game[$node][$branch]['b']);
         $wstones = explode(',', $this->_game[$node][$branch]['w']);
@@ -377,7 +377,7 @@ class Sgf
         return $state;
     }/*}}}*/
 
-    /**
+    /** stateToGame {{{
      * Convertit l'état du goban sous forme de coordonnées en lettres
      *
      * @param int $node   noeud
@@ -385,7 +385,7 @@ class Sgf
      *
      * @return null
      */
-    protected function stateToGame($node,$branch)/*{{{*/
+    protected function stateToGame($node,$branch)
     {
         $let = ['a','b','c','d','e','f','g','h','i',
                 'j','k','l','m','n','o','p','q','r','s'];
@@ -408,7 +408,7 @@ class Sgf
         return;
     }/*}}}*/
 
-    /**
+    /** testDeath {{{
      * Test des pierres mortes
      *
      * @param string $color couleur jouée
@@ -417,7 +417,7 @@ class Sgf
      *
      * @return null
      */
-    protected function testDeath($color,$x,$y)/*{{{*/
+    protected function testDeath($color,$x,$y)
     {
         $this->_deads = [];
         if ($this->testLiberties($color, $x-1, $y) == 0) {
@@ -437,7 +437,7 @@ class Sgf
         }
     }/*}}}*/
 
-    /**
+    /** testLiberties {{{
      * Test les libertés d'une pierre ou un groupe de pierres
      *
      * @param string $color couleur jouée
@@ -446,7 +446,7 @@ class Sgf
      *
      * @return int
      */
-    protected function testLiberties($color,$x,$y)/*{{{*/
+    protected function testLiberties($color,$x,$y)
     {
         $ennemy = ($color == 'b') ? 'w' : 'b';
         if (isset($this->_state[$x][$y])) {
@@ -483,14 +483,14 @@ class Sgf
         }
     }/*}}}*/
 
-    /**
+    /** killStones {{{
      * Supprime les pierres mortes de l'état actuel du goban
      *
      * @param string $color couleur des pierres mortes
      *
      * @return null
      */
-    protected function killStones($color)/*{{{*/
+    protected function killStones($color)
     {
         $ci = count($this->_deads);
         $this->_prison[$color] += $ci; // ajoute prisonniers pour le score
@@ -501,6 +501,5 @@ class Sgf
         }
         return;
     }/*}}}*/
-
 }
 ?>
