@@ -1,22 +1,29 @@
 /**
- * Interface utilisateur 
+ * User interface of yinyanggo.
  *
- * @category Javascript
- * @package  Yinyanggo
  * @author   hickop <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
  * @link     https://github.com/hickop/yinyanggo
  */
-var yygo = {}; // espace de nom yygo
+
+/**
+ * @namespace Contains all properties and methods of interface.
+ */
+var yygo = {};
 
 (function () {
     'use strict';
 
-    // fonctions utilitaires
+    // Utilities functions.
 
-    function jsonRequest(url, callback) {//{{{
-        // requête ajax simple qui retourne un JSON
-        var xhr = new XMLHttpRequest(); // ignorer vieux IE
+    /** jsonRequest {{{
+     * Simple ajax request expecting json in answer.
+     *
+     * @param {String} url Destination url.
+     * @param {Function} callback Callback function.
+     */
+    function jsonRequest(url, callback) {
+        var xhr = new XMLHttpRequest(); // Ignore old IE.
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 &&
@@ -25,20 +32,46 @@ var yygo = {}; // espace de nom yygo
             }
         };
 
-        xhr.open('GET', url, true); // GET asynchrone
+        xhr.open('GET', url, true); // Asynchronous GET.
         xhr.send(null);
-    }//}}}
+    }
+    /*}}}*/
 
-    function isEmpty(obj) {//{{{
-        // test si un objet est vide (navigateurs récents)
+    /** isEmpty {{{
+     * Test if an Object is empty.
+     * @link http://stackoverflow.com/a/7864800
+     *
+     * @param {Object} obj Object to check.
+     * @return {Boolean} TRUE if Object is empty.
+     */
+    function isEmpty(obj) {
         return Object.keys(obj).length === 0;
-    }//}}}
+    }
+    /*}}}*/
 
-    // création de yygo
+    // Creation of yygo.
 
-    yygo.data = {//{{{
+    /** yygo.data {{{
+     * Data part of the yygo namespace, where we store the game and the actual
+     * state.
+     *
+     * @property {String[]} langs       Actually supported languages.
+     * @property {Object}   comments    Comments of the game.
+     * @property {Object}   game        Goban states of the game.
+     * @property {Object}   gameslist   Loadable games.
+     * @property {Object}   infos       Informations of the game.
+     * @property {Object}   symbols     Symbols of the game.
+     * @property {String}   lang        Language set by the user.
+     * @property {Number}   branchs     Total number of branchs (variations).
+     * @property {Number}   size        Size of the goban (9, 13, 19).
+     * @property {Number}   curbranch   Current branch (variation) navigated.
+     * @property {Number}   curnode     Current node (move).
+     * @property {Number}   lastbranch  Last branch to reach.
+     * @property {Number}   lastnode    Last node of the last branch.
+     */
+    yygo.data = {
 
-        // propriétés
+        // Properties.
 
         langs:          ['en', 'fr'],
 
@@ -58,9 +91,17 @@ var yygo = {}; // espace de nom yygo
         lastbranch:     0,
         lastnode:       0,
 
-        // méthodes
+        // Methods.
 
-        getParentBranch: function (node, branch) {//{{{
+        /** getParentBranch {{{
+         * Find the branch of which depends a given branch at a given node.
+         *
+         * @param   {Number} node       Node to check.
+         * @param   {Number} branch     Child branch.
+         *
+         * @return  {Number}            The parent branch.
+         */
+        getParentBranch: function (node, branch) {
             var game = this.game,
                 i;
 
@@ -70,13 +111,19 @@ var yygo = {}; // espace de nom yygo
                 }
             }
             return 0;
-        },//}}}
+        },
+        /*}}}*/
 
-        loadDataFromList: function (number) {//{{{
-            this.infos = JSON.parse(this.gameslist[number].infos);
-            this.comments = JSON.parse(this.gameslist[number].comments);
-            this.symbols = JSON.parse(this.gameslist[number].symbols);
-            this.game = JSON.parse(this.gameslist[number].game);
+        /** parseDataFromList {{{
+         * Parse the data of the selected game in list.
+         *
+         * @param {Number} index Index of the selected game in list.
+         */
+        parseDataFromList: function (index) {
+            this.infos = JSON.parse(this.gameslist[index].infos);
+            this.comments = JSON.parse(this.gameslist[index].comments);
+            this.symbols = JSON.parse(this.gameslist[index].symbols);
+            this.game = JSON.parse(this.gameslist[index].game);
 
             this.size = parseInt(this.infos.SZ, 10);
             this.branchs = this.infos.branchs;
@@ -86,9 +133,13 @@ var yygo = {}; // espace de nom yygo
             this.lastbranch = 0;
 
             this.setLastNode();
-        },//}}}
+        },
+        /*}}}*/
 
-        setLastNode: function () {//{{{
+        /** setLastNode {{{
+         * Define the last node of the current branch.
+         */
+        setLastNode: function () {
             var game =      this.game,
                 lastnode =  this.curnode,
                 curbranch = this.curbranch;
@@ -98,9 +149,16 @@ var yygo = {}; // espace de nom yygo
                 lastnode++;
             }
             this.lastnode = lastnode;
-        },//}}}
+        },
+        /*}}}*/
 
-        setLang: function (lang, callback) {//{{{
+        /** setLang {{{
+         * Define the current language to use.
+         *
+         * @param {String}      lang        Language to use.
+         * @param {Function}    callback    Callback function.
+         */
+        setLang: function (lang, callback) {
             var langs = this.langs,
                 i;
 
@@ -110,7 +168,7 @@ var yygo = {}; // espace de nom yygo
                 }
             }
 
-            // récupère le json de la langue et traduit les éléments
+            // Get language json file and translate elements.
             jsonRequest('lang/' + this.lang + '.json', function (data) {
                 yygo.data.locale = data;
                 yygo.view.changeLang();
@@ -118,20 +176,28 @@ var yygo = {}; // espace de nom yygo
                     callback();
                 }
             });
-        }//}}}
+        }
+        /*}}}*/
 
-    };//}}}
+    };
+    /*}}}*/
 
-    yygo.view = {//{{{
+    /** yygo.view {{{
+     * View part of the yygo namespace, where we treat all the rendering.
+     *
+     * @property {String}   orientation     Orientation of the screen.
+     * @property {Boolean}  comtoshow       There is comments to show.
+     * @property {Boolean}  redraw          We need to redraw the goban.
+     * @property {Boolean}  showborders     We must show the goban borders.
+     * @property {Boolean}  showcomments    We must show the comments.
+     * @property {Number}   sizecell        Size of a goban cell in pixels.
+     * @property {Number}   sizegoban       Size of goban in pixels.
+     */
+    yygo.view = {
 
-        // propriétés
+        // Properties.
 
-        htmlcomments:   '',
-        htmlinfos:      '',
-        htmllist:       '',
-        htmlvariations: '',
-
-        viewmode:       '',
+        orientation:    '',
 
         comtoshow:      false,
         redraw:         false,
@@ -141,12 +207,15 @@ var yygo = {}; // espace de nom yygo
         sizecell:       0,
         sizegoban:      0,
 
-        // méthodes
+        // Methods.
 
-        // construction code html
+        // Construction/insertion of html code.
 
-        makeGoban: function () {//{{{
-            // création du code HTML du goban
+        /** makeGoban {{{
+         * Create and insert goban html code. This include the borders and
+         * the grid.
+         */
+        makeGoban: function () {
             var size = yygo.data.size,
                 gobanelem = document.getElementById('goban'),
                 letters =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
@@ -158,7 +227,7 @@ var yygo = {}; // espace de nom yygo
                 html,
                 i;
 
-            // création des bordures
+            // Make borders.
             for (i = 0; i < size; i++) {
                 btop += '<div class="cell">' + letters[i] + '</div>';
                 bright += '<div class="cell vcell">' + (size - i) + '</div>';
@@ -171,14 +240,18 @@ var yygo = {}; // espace de nom yygo
             bbottom += '</div>';
             bleft += '</div>';
 
-            // insère les bordures et la grille dans l'élément 'goban'
+            // Make grid and insert it with borders in goban element.
             html = btop + bright + bbottom + bleft +
                    '<div id="grid">' + this.makeGrid()  + '</div>';
 
             gobanelem.innerHTML = html;
-        },//}}}
+        },
+        /*}}}*/
 
-        makeComments: function () {//{{{
+        /** makeComments {{{
+         * Create and insert comments html code.
+         */
+        makeComments: function () {
             var comments =      yygo.data.comments || {},
                 curnode =       yygo.data.curnode,
                 curbranch =     yygo.data.curbranch,
@@ -191,24 +264,34 @@ var yygo = {}; // espace de nom yygo
                 html += comments[curnode][curbranch];
                 html += '</p>';
 
+                commentselem.innerHTML = html; // Insert html.
+
                 if (this.comtoshow === false) {
                     this.comtoshow = true;
-                    this.setGobanSize();
+                    if (this.showcomments) {
+                        // Resize if we are showing comments.
+                        this.setGobanSize();
+                    }
                 }
             } else {
                 if (this.comtoshow === true) {
                     this.comtoshow = false;
-                    this.setGobanSize();
+                    if (this.showcomments) {
+                        // Resize if we are showing comments.
+                        this.setGobanSize();
+                    }
                 }
             }
+            this.toggleComments(); // Show/hide comments if needed.
+        },
+        /*}}}*/
 
-            this.htmlcomments = html;
-            commentselem.innerHTML = this.htmlcomments;
-
-            this.toggleComments();
-        },//}}}
-
-        makeGrid: function () {//{{{
+        /** makeGrid {{{
+         * Create grid to be inserted in goban element.
+         *
+         * @return {String} Grid html code.
+         */
+        makeGrid: function () {
             var size =      yygo.data.size,
                 coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
@@ -218,18 +301,21 @@ var yygo = {}; // espace de nom yygo
                 j;
 
             for (i = 0; i < size; i++) {
-                html += '<div>'; // début de ligne
+                html += '<div>'; // Row start.
                 for (j = 0; j < size; j++) {
                     cell = coord[j] + coord[i];
                     html += '<div class="cell" id="' + cell + '"></div>';
                 }
-                html += '</div>'; // fin de ligne
+                html += '</div>'; // Row end.
             }
-
             return html;
-        },//}}}
+        },
+        /*}}}*/
 
-        makeGamesList: function () {//{{{
+        /** makeGamesList {{{
+         * Create and insert games list html code.
+         */
+        makeGamesList: function () {
             var gameslist =     yygo.data.gameslist,
                 loadlistelem =  document.getElementById('loadlist'),
                 html =          '<table id="gameslist">',
@@ -260,15 +346,16 @@ var yygo = {}; // espace de nom yygo
 
                 html += '</tr>';
             }
-
             html += '</table>';
 
-            this.htmllist = html;
+            loadlistelem.innerHTML = html;
+        },
+        /*}}}*/
 
-            loadlistelem.innerHTML = this.htmllist;
-        },//}}}
-
-        makeInfos: function () {//{{{
+        /** makeInfos {{{
+         * Create and insert informations html code.
+         */
+        makeInfos: function () {
             var infos =         yygo.data.infos,
                 locale =        yygo.data.locale,
                 infoselem =     document.getElementById('infos'),
@@ -295,15 +382,16 @@ var yygo = {}; // espace de nom yygo
             if (infos.RU !== undefined) {
                 html += ' <br /><em>' + locale.rules + ':</em> ' + infos.RU;
             }
-
             html += '</p>';
 
-            this.htmlinfos = html;
+            infoselem.innerHTML = html;
+        },
+        /*}}}*/
 
-            infoselem.innerHTML = this.htmlinfos;
-        },//}}}
-
-        makeVariations: function () {//{{{
+        /** makeVariations {{{
+         * Create and insert variations html code.
+         */
+        makeVariations: function () {
             var game =              yygo.data.game,
                 curbranch =         yygo.data.curbranch,
                 curnode =           yygo.data.curnode,
@@ -316,45 +404,49 @@ var yygo = {}; // espace de nom yygo
                 opbranch,
                 i;
 
-            // cherche la branche parent de la branche actuelle
-            // du noeud précédent
+            // Get parent of the current branch at previous node.
             pbranch = yygo.data.getParentBranch(curnode - 1, curbranch);
 
+            // Browse the branchs to find variations of the actual branch.
             for (i = 0; i < branchs; i++) {
                 if (game[curnode][i] !== undefined && curnode > 0) {
-                    // cherche la branche parent d'une autre branche
-                    // du noeud précédent
+                    // Get parent of 'i' branch at previous node.
                     opbranch = yygo.data.getParentBranch(curnode - 1, i);
                     if (opbranch === pbranch) {
-                        // si les branches parents correspondent alors
-                        // c'est une variante
+                        // Our branch and 'i' branch got the same parent so
+                        // 'i' is a variation.
                         variations++;
-                        if (i === curbranch) { // variante actuelle
+                        if (i === curbranch) {
+                            // This is our branch show a plain radio button.
                             html += '<div id="varbua' + i + '"></div>';
-                        } else { // autre variante
+                        } else {
+                            // Show a clickable empty radio button.
                             html += '<div id="varbut' + i + '"></div>';
-                            binds.push(i);
+                            binds.push(i); // Add variation to the binds.
                         }
                     }
                 }
             }
 
-            if (variations <= 1) { // pas de variantes, effacer le code HTML
+            if (variations <= 1) { // No variations, delete html.
                 html = '';
             }
 
-            this.htmlvariations = html;
-            variationselem.innerHTML = this.htmlvariations;
+            variationselem.innerHTML = html;
 
-            if (this.htmlvariations !== '') {
-                // lier les boutons à leur variante respective
+            if (html !== '') {
+                // Binds radio buttons to their respective variation.
                 yygo.events.makeVariationsBinds(binds);
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        // affichage
+        // Display. 
 
-        changeButtons: function () {//{{{
+        /** changeButtons {{{
+         * Change the displayed buttons depending on the actual screen.
+         */
+        changeButtons: function () {
             var mode =          yygo.events.mode,
                 screen =        yygo.events.screen,
                 navbuttons =    document.getElementById('navbuttons'),
@@ -362,20 +454,20 @@ var yygo = {}; // espace de nom yygo
                 gobbuttons =    document.getElementById('gobbuttons'),
                 options =       document.getElementById('options');
 
-            // masquer tout les boutons
+            // Hide all buttons.
             navbuttons.style.display = 'none';
             optbuttons.style.display = 'none';
             gobbuttons.style.display = 'none';
             options.style.display = 'none';
 
-            // afficher les boutons en fonction de l'écran et du mode
+            // Show the buttons we need for the actual screen.
             if (screen === 'goban') {
                 gobbuttons.style.display = 'block';
                 options.style.display = 'block';
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
                 }
-                // TODO autres modes
+                // TODO Other modes.
             } else if (screen === 'options') {
                 optbuttons.style.display = 'block';
                 options.style.display = 'block';
@@ -384,22 +476,30 @@ var yygo = {}; // espace de nom yygo
             } else if (screen === 'sendsgf') {
                 optbuttons.style.display = 'block';
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        changeGridImage: function () {//{{{
+        /** changeGridImage {{{
+         * Change the background svg image depending on the goban size.
+         */
+        changeGridImage: function () {
             var grid = document.getElementById('grid');
 
             grid.style.background = 'url(images/' + yygo.data.size + '.svg)';
-        },//}}}
+        },
+        /*}}}*/
 
-        changeLang: function () {//{{{
+        /** changeLang {{{
+         * Change elements showing informations based on language.
+         */
+        changeLang: function () {
             var locale =    yygo.data.locale,
                 lang =      yygo.data.lang,
                 langs =     document.getElementsByClassName('lang'),
                 cl =        langs.length,
                 l;
 
-            // étiquettes des boutons
+            // Buttons labels.
             document.getElementById('comment').title =  locale.comment;
             document.getElementById('border').title =   locale.border;
             document.getElementById('load').title =     locale.load;
@@ -415,18 +515,24 @@ var yygo = {}; // espace de nom yygo
             document.getElementById('downsgf').title =  locale.downsgf;
 
             if (!isEmpty(yygo.data.infos)) {
-                this.makeInfos(); // réécris le code HTML des infos
+                this.makeInfos(); // Remake infos as it depends on locale.
             }
 
-            // change l'apparence du bouton pour prendre celle de la langue
+            // Change button shape to reflect the actual language.
             document.getElementById('lang').className = 'button' + lang;
+
+            // Hide current language button in the languages list.
             for (l = 0; l < cl; l++) {
                 langs[l].style.display = 'block';
             }
             document.getElementById('lang' + lang).style.display = 'none';
-        },//}}}
+        },
+        /*}}}*/
 
-        changeScreen: function () {//{{{
+        /** changeScreen {{{
+         * Change the elements to display depending on the actual screen.
+         */
+        changeScreen: function () {
             var screen =        yygo.events.screen,
                 buttonsbar =    document.getElementById('buttonsbar'),
                 variations =    document.getElementById('variations'),
@@ -436,7 +542,7 @@ var yygo = {}; // espace de nom yygo
                 sendinput =     document.getElementById('sendinput'),
                 loadlist =      document.getElementById('loadlist');
 
-            // masquer tout les éléments
+            // Hide all elements.
             buttonsbar.style.display = 'none';
             variations.style.display = 'none';
             goban.style.display = 'none';
@@ -445,9 +551,9 @@ var yygo = {}; // espace de nom yygo
             sendinput.style.display = 'none';
             loadlist.style.display = 'none';
 
-            this.changeButtons();
+            this.changeButtons(); // Change the buttons to display.
 
-            // afficher les éléments nécessaires en fonction de l'écran
+            // Show the elements we need for the actual screen.
             if (screen === 'goban') {
                 buttonsbar.style.display = 'block';
                 variations.style.display = 'block';
@@ -463,9 +569,13 @@ var yygo = {}; // espace de nom yygo
                 buttonsbar.style.display = 'block';
                 sendinput.style.display = 'block';
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        drawGoban: function () {//{{{
+        /** drawGoban {{{
+         * Draw the goban and the comments.
+         */
+        drawGoban: function () {
             var commentselem =  document.getElementById('comments'),
                 gobanelem =     document.getElementById('goban'),
                 gridelem =      document.getElementById('grid'),
@@ -475,17 +585,17 @@ var yygo = {}; // espace de nom yygo
                 comtop =        70,
                 c;
 
-            if (this.redraw) { // c'est un redimenssionnement
+            if (this.redraw) { // Redraw only when needed.
                 this.redraw = false;
-                // redimensionne le goban
+                // Resize goban.
                 gobanelem.style.height = this.sizegoban + 'px';
                 gobanelem.style.width = this.sizegoban + 'px';
-                // redimensionne la grille
+                // Center grid into goban.
                 gridelem.style.top = this.sizecell + 'px';
                 gridelem.style.right = this.sizecell + 'px';
                 gridelem.style.bottom = this.sizecell + 'px';
                 gridelem.style.left = this.sizecell + 'px';
-                // redimensionne les cellules
+                // Resize the cells.
                 for (c = 0; c < cc; c++) {
                     cellelems[c].style.height = this.sizecell + 'px';
                     cellelems[c].style.width = this.sizecell + 'px';
@@ -493,8 +603,9 @@ var yygo = {}; // espace de nom yygo
                     cellelems[c].style.fontSize = fontsize + 'px';
                 }
             }
-            // place les commentaires
-            if (this.viewmode === 'horizontal') {
+            // Place comments depending on orientation.
+            if (this.orientation === 'horizontal') {
+                // Move goban on left side and place comments on the right.
                 if (this.showcomments && this.comtoshow) {
                     gobanelem.style.margin = 0;
                 } else {
@@ -504,14 +615,19 @@ var yygo = {}; // espace de nom yygo
                 commentselem.style.right = 0;
                 commentselem.style.left = this.sizegoban + 'px';
             } else {
+                // Keep goban centered and comments at bottom.
                 gobanelem.style.margin = 'auto';
                 commentselem.style.top =  this.sizegoban + comtop + 'px';
                 commentselem.style.right = 0;
                 commentselem.style.left = 0;
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        emptyGoban: function () {//{{{
+        /** emptyGoban {{{
+         * Empty the goban of all stones, symbols, labels.
+         */
+        emptyGoban: function () {
             var size =  yygo.data.size,
                 coord = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
@@ -529,34 +645,46 @@ var yygo = {}; // espace de nom yygo
                     cell.innerHTML = '';
                 }
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        insertSymbolSvg: function (symbol, id, color) {//{{{
+        /** insertSymbolSvg {{{
+         * Insert a symbol in a cell using svg format.
+         *
+         * @param {String} symbol   Symbol to insert.
+         * @param {String} id       Identifier of the cell.
+         * @param {String} color    Color of the stone in cell.
+         */
+        insertSymbolSvg: function (symbol, id, color) {
             var cell =  document.getElementById(id),
                 svg =   '<svg xmlns="http://www.w3.org/2000/svg"' +
                         'version="1.1" viewBox="0 0 10 10">';
 
-            if (symbol === 'CR') { // cercle
+            if (symbol === 'CR') { // Circle.
                 svg += '<circle cx="5" cy="5" r="2.5"' +
                     'stroke-width="0.7" fill="none"';
-            } else if (symbol === 'SQ') { // carré
+            } else if (symbol === 'SQ') { // Square.
                 svg += '<rect x="1.8" y="1.8" width="6.5"' +
                     'height="6.5" stroke-width="0.7" fill="none"';
-            } else if (symbol === 'TR') { // triangle
+            } else if (symbol === 'TR') { // Triangle.
                 svg += '<path d="M5 0.5 L8.8 7.4 L1.2 7.4 Z"' +
                     'stroke-width="0.7" fill="none"';
             }
 
-            if (color === 'b') { // si pierre noire afficher en blanc
+            if (color === 'b') { // Stone is black make symbol color white.
                 svg += ' stroke="#fff"/></svg>';
             } else {
                 svg += ' stroke="#000"/></svg>';
             }
 
             cell.innerHTML = svg;
-        },//}}}
+        },
+        /*}}}*/
 
-        placeStones: function () {//{{{
+        /** placeStones {{{
+         * Place the stones of the actual state on the goban.
+         */
+        placeStones: function () {
             var game =          yygo.data.game,
                 curbranch =     yygo.data.curbranch,
                 curnode =       yygo.data.curnode,
@@ -568,7 +696,6 @@ var yygo = {}; // espace de nom yygo
                 b,
                 w;
 
-            // lister et afficher les pierres de l'état actuel
             for (b = 0; b < cb; b++) {
                 if (bstones[b] !== '') {
                     cell = document.getElementById(bstones[b]);
@@ -581,9 +708,13 @@ var yygo = {}; // espace de nom yygo
                     cell.className += ' cellw';
                 }
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        placeSymbols: function () {//{{{
+        /** placeSymbols {{{
+         * Place the symbols of the actual state on the goban.
+         */
+        placeSymbols: function () {
             var curbranch =     yygo.data.curbranch,
                 curnode =       yygo.data.curnode,
                 game =          yygo.data.game,
@@ -605,9 +736,9 @@ var yygo = {}; // espace de nom yygo
                 l,
                 cl;
 
-            // afficher les symboles de l'état actuel
             if (!isEmpty(symbols) && symbols[curnode] !== undefined &&
                     symbols[curnode][curbranch] !== undefined) {
+                // Circles.
                 if (symbols[curnode][curbranch].CR !== undefined) {
                     circles = symbols[curnode][curbranch].CR.split(',');
                     cc = circles.length;
@@ -617,6 +748,7 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('CR', circles[c], color);
                     }
                 }
+                // Squares.
                 if (symbols[curnode][curbranch].SQ !== undefined) {
                     squares = symbols[curnode][curbranch].SQ.split(',');
                     cs = squares.length;
@@ -626,6 +758,7 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('SQ', squares[s], color);
                     }
                 }
+                // Triangles.
                 if (symbols[curnode][curbranch].TR !== undefined) {
                     triangles = symbols[curnode][curbranch].TR.split(',');
                     ct = triangles.length;
@@ -635,6 +768,7 @@ var yygo = {}; // espace de nom yygo
                         this.insertSymbolSvg('TR', triangles[t], color);
                     }
                 }
+                // Labels.
                 if (symbols[curnode][curbranch].LB !== undefined) {
                     labels = symbols[curnode][curbranch].LB.split(',');
                     cl = labels.length;
@@ -643,6 +777,7 @@ var yygo = {}; // espace de nom yygo
                         cell = document.getElementById(label[0]);
                         color = cell.className.substr(9);
                         if (color === '') {
+                            // Empty cell background for better visibility.
                             cell.className += ' celle';
                         }
                         cell.title = label[1];
@@ -651,16 +786,21 @@ var yygo = {}; // espace de nom yygo
                 }
             }
 
-            // cercle pour indiquer la dernière pierre jouée
+            // Circle to indicate the last played stone.
             if (game[curnode][curbranch].p !== undefined) {
                 playedstone = game[curnode][curbranch].p.split(',');
                 if (playedstone[1] !== '') {
                     this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
                 }
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        setGobanSize: function () {//{{{
+        /** setGobanSize {{{
+         * Define the size of the goban and elements depending on it. Redraw
+         * if necessary or asked.
+         */
+        setGobanSize: function () {
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
@@ -669,7 +809,7 @@ var yygo = {}; // espace de nom yygo
                 smaller;
 
             if (winw < heightleft) {
-                this.viewmode = 'vertical';
+                this.orientation = 'vertical';
                 if (this.showcomments && this.comtoshow &&
                         heightleft - 150 <= winw) {
                     smaller = heightleft - 150;
@@ -677,7 +817,7 @@ var yygo = {}; // espace de nom yygo
                     smaller = winw;
                 }
             } else {
-                this.viewmode = 'horizontal';
+                this.orientation = 'horizontal';
                 if (this.showcomments && this.comtoshow &&
                         winw - 200 <= heightleft) {
                     smaller = winw - 200;
@@ -686,19 +826,24 @@ var yygo = {}; // espace de nom yygo
                 }
             }
 
-            // calcul la taille en pixels du goban pour être un multiple de
-            // sa taille en intersections, cela évite un affichage baveux du SVG
+            // Calculate the size of the goban in pixels to be a multiple of
+            // his size in intersections. This avoid bad display with svg and
+            // minimize redraws.
             this.sizecell = Math.floor(smaller / (size + 2));
             this.sizegoban = this.sizecell * (size + 2);
 
-            // redessine si la taille a changé
+            // Redraw if size changed or if asked.
             if (this.sizegoban !== oldsizegoban || this.redraw) {
                 this.redraw = true;
             }
             this.drawGoban();
-        },//}}}
+        },
+        /*}}}*/
 
-        toggleBorders: function () {//{{{
+        /** toggleBorders {{{
+         * Alternate the display of the goban borders.
+         */
+        toggleBorders: function () {
             var btop =      document.getElementById('btop'),
                 bright =    document.getElementById('bright'),
                 bbottom =   document.getElementById('bbottom'),
@@ -715,9 +860,13 @@ var yygo = {}; // espace de nom yygo
                 bbottom.style.display = 'none';
                 bleft.style.display = 'none';
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        toggleNavButtons: function () {//{{{
+        /** toggleNavButtons {{{
+         * Alternate active state of navigation buttons.
+         */
+        toggleNavButtons: function () {
             var curnode =   yygo.data.curnode,
                 lastnode =  yygo.data.lastnode,
                 start =     document.getElementById('start'),
@@ -727,6 +876,7 @@ var yygo = {}; // espace de nom yygo
                 fastnext =  document.getElementById('fastnext'),
                 end =       document.getElementById('end');
 
+            // Activate all buttons.
             start.className = 'button';
             prev.className = 'button';
             fastprev.className = 'button';
@@ -734,19 +884,25 @@ var yygo = {}; // espace de nom yygo
             fastnext.className = 'button';
             end.className = 'button';
 
+            // We are at the start, make rewind buttons inactive.
             if (curnode === 0) {
                 start.className = 'buttond';
                 prev.className = 'buttond';
                 fastprev.className = 'buttond';
             }
+            // We are at the end, make forward buttons inactive.
             if (curnode === lastnode) {
                 next.className = 'buttond';
                 fastnext.className = 'buttond';
                 end.className = 'buttond';
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        toggleComments: function () {//{{{
+        /** toggleComments {{{
+         * Alternate the display of the comments.
+         */
+        toggleComments: function () {
             var comments =  document.getElementById('comments'),
                 comment =   document.getElementById('comment');
 
@@ -761,43 +917,61 @@ var yygo = {}; // espace de nom yygo
             } else {
                 comment.className = 'buttond';
             }
-        }//}}}
+        }
+        /*}}}*/
 
-    };//}}}
+    };
+    /*}}}*/
 
-    yygo.events = {//{{{
+    /** yygo.events {{{
+     * Events part of the yygo namespace.
+     *
+     * @property {String} mode      Goban mode: replay, play, modify...
+     * @property {String} screen    Actual screen to show.
+     */
+    yygo.events = {
 
-        // propriétés
+        // Properties.
 
         mode:           'replay',
         screen:         'goban',
 
-        // méthodes
+        // Methods.
 
-        init: function () {//{{{
+        /** init {{{
+         * This is where we start.
+         */
+        init: function () {
             var navlang =   (navigator.language ||
                             navigator.systemLanguage ||
                             navigator.userLanguage ||
                             'en').substr(0, 2).toLowerCase();
 
-            // TODO récupère les paramètres de l'utilisateur
+            // TODO Get user parameters.
 
+            // Define language.
             yygo.data.setLang(navlang, function () {
-                // callback pour être sûr d'avoir chargé la langue
+                // Callback to be sure we have the locale data.
                 yygo.events.makeBinds();
-                // charge le goban d'intro
+                // Load introdutive goban. TODO Make it better.
                 jsonRequest('sgf.php?list=-1', function (data) {
                     yygo.data.gameslist = data;
                     yygo.events.loadGameFromList(0);
                     yygo.data.gameslist = [];
                 });
             });
-        },//}}}
+        },
+        /*}}}*/
 
-        loadGameFromList: function (number) {//{{{
+        /** loadGameFromList {{{
+         * Load a game selected in games list.
+         *
+         * @param {Number} index Index of the selected game.
+         */
+        loadGameFromList: function (index) {
             var oldsize = yygo.data.size;
 
-            yygo.data.loadDataFromList(number);
+            yygo.data.parseDataFromList(index);
 
             if (yygo.data.size !== oldsize) { // nouvelle taille tout refaire
                 yygo.view.makeGoban();
@@ -823,15 +997,18 @@ var yygo = {}; // espace de nom yygo
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize();
-        },//}}}
+        },
+        /*}}}*/
 
-        loadList: function () {//{{{
-            var htmllist = yygo.view.htmllist;
+        /** clickGamesList {{{
+         * Load/show/hide the games list.
+         */
+        clickGamesList: function () {
+            var gameslist = yygo.data.gameslist || {};
 
-            // TODO prévoir rafraichissement, limiter les données affichées
-            // afficher sur plusieurs pages
+            // TODO Refresh, multiple pages.
 
-            if (htmllist === '') { // récupère la liste si non chargée
+            if (isEmpty(gameslist)) { // Get list if empty.
                 jsonRequest('sgf.php?list=0', function (data) {
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
@@ -846,9 +1023,13 @@ var yygo = {}; // espace de nom yygo
                 yygo.events.screen = 'options';
                 yygo.view.changeScreen();
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        makeBinds: function () {//{{{
+        /** makeBinds {{{
+         * Bind events to the elements.
+         */
+        makeBinds: function () {
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
                 options =       document.getElementById('options'),
@@ -864,42 +1045,39 @@ var yygo = {}; // espace de nom yygo
                 fastnext =      document.getElementById('fastnext'),
                 end =           document.getElementById('end');
 
-            // redimensionnement de la fenêtre
+            // Window resize.
             window.addEventListener('resize', function () {
                 yygo.view.setGobanSize();
             }, false);
-            // clic bouton commentaires
+
+            // Click comments button.
             comment.addEventListener('click', function () {
                 yygo.events.clickComments();
             }, false);
-            // clic bouton bordures
+            // Click borders button.
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
-            // clic bouton options
+            // Click options button.
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
             }, false);
-            // clic bouton de chargement liste
+            // Click games list button.
             load.addEventListener('click', function () {
-                yygo.events.loadList();
+                yygo.events.clickGamesList();
             }, false);
-            // clic boutons langues
+            // Click language buttons.
             langen.addEventListener('click', function () {
                 yygo.data.setLang('en');
             }, false);
             langfr.addEventListener('click', function () {
                 yygo.data.setLang('fr');
             }, false);
-            // clic bouton envoi de fichier SGF
+            // Click send sgf file button.
             sendsgf.addEventListener('click', function () {
                 yygo.events.clickSendSgf();
             }, false);
-            // retour de l'envoi de fichier
-            sendtarget.addEventListener('load', function () {
-                yygo.events.sendResponse();
-            }, false);
-            // boutons de navigation
+            // Click navigation buttons.
             start.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-999999);
@@ -930,9 +1108,19 @@ var yygo = {}; // espace de nom yygo
                     yygo.events.navigateNode(999999);
                 }
             }, false);
-        },//}}}
 
-        makeListBinds: function () {//{{{
+            // Load response after sending sgf file.
+            sendtarget.addEventListener('load', function () {
+                yygo.events.sendResponse();
+            }, false);
+        },
+        /*}}}*/
+
+        /** makeListBinds {{{
+         * Assign a click event to each row in games list to load the proper
+         * game index.
+         */
+        makeListBinds: function () {
             var table =     document.getElementById('gameslist'),
                 rows =      table.getElementsByTagName('tr'),
                 rl =        rows.length,
@@ -948,9 +1136,14 @@ var yygo = {}; // espace de nom yygo
                 rows[r].addEventListener('click', rowClick(rows[r].rowIndex),
                     false);
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        makeVariationsBinds: function (binds) {//{{{
+        /** makeVariationsBinds {{{
+         * Assign each variation radio button a click event with proper
+         * reference to it.
+         */
+        makeVariationsBinds: function (binds) {
             var ci = binds.length,
                 varbut,
                 i;
@@ -980,9 +1173,15 @@ var yygo = {}; // espace de nom yygo
                 varbut.addEventListener('click', varbutClick(varbut.id),
                     false);
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        navigateNode: function (move) {//{{{
+        /** navigateNode {{{
+         * Navigate the game depending on the defined last branch.
+         *
+         * @param {Number} move Move to apply to current position in game.
+         */
+        navigateNode: function (move) {
             var game =          yygo.data.game,
                 curbranch =     yygo.data.curbranch,
                 curnode =       yygo.data.curnode,
@@ -991,7 +1190,7 @@ var yygo = {}; // espace de nom yygo
                 lastbranchp,
                 i;
 
-            // défini le nouveau noeud actuel
+            // Define the new current node.
             if (curnode + move < 0) {
                 curnode = 0;
             } else if (curnode + move > lastnode) {
@@ -1000,25 +1199,24 @@ var yygo = {}; // espace de nom yygo
                 curnode = curnode + move;
             }
 
+            // Get the parent of the last branch at new current node.
             lastbranchp = yygo.data.getParentBranch(curnode, lastbranch);
 
-            // défini la nouvelle branche actuelle
+            // Define the new current branch.
             if (move < 0 && game[curnode][curbranch] === undefined) {
-                // branche parent de la dernière
+                // We are moving back and the current branch is no more so
+                // current branch is now last branch parent.
                 curbranch = lastbranchp;
             } else if (move > 0) {
+                // We are moving forward.
                 if (game[curnode][lastbranch] !== undefined) {
-                    // dernière branche
+                    // Last branch exist at this new current node so make it
+                    // the current branch.
                     curbranch = lastbranch;
                 } else {
-                    // cherche la branche menant à la dernière
-                    for (i = curbranch + 1; i < lastbranch; i++) {
-                        if (game[curnode][i] !== undefined &&
-                                lastbranchp === i) {
-                            curbranch = i;
-                            break;
-                        }
-                    }
+                    // Current branch is the branch that lead to last branch,
+                    // that mean last branch parent.
+                    curbranch = lastbranchp;
                 }
             }
 
@@ -1033,9 +1231,13 @@ var yygo = {}; // espace de nom yygo
             yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
-        },//}}}
+        },
+        /*}}}*/
 
-        clickBorders: function () {//{{{
+        /** clickBorders {{{
+         * Toggle display state of the goban borders.
+         */
+        clickBorders: function () {
             if (yygo.view.showborders) {
                 yygo.view.showborders = false;
                 yygo.view.toggleBorders();
@@ -1043,9 +1245,13 @@ var yygo = {}; // espace de nom yygo
                 yygo.view.showborders = true;
                 yygo.view.toggleBorders();
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        clickComments: function () {//{{{
+        /** clickComments {{{
+         * Toggle display state of the comments.
+         */
+        clickComments: function () {
             if (yygo.view.showcomments && yygo.view.comtoshow) {
                 yygo.view.showcomments = false;
                 yygo.view.toggleComments();
@@ -1055,9 +1261,13 @@ var yygo = {}; // espace de nom yygo
                 yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        clickOptions: function () {//{{{
+        /** clickOptions {{{
+         * Toggle display state of the options.
+         */
+        clickOptions: function () {
             if (yygo.events.screen === 'goban') {
                 yygo.events.screen = 'options';
                 yygo.view.changeScreen();
@@ -1065,9 +1275,13 @@ var yygo = {}; // espace de nom yygo
                 yygo.events.screen = 'goban';
                 yygo.view.changeScreen();
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        clickSendSgf: function () {//{{{
+        /** clickSendSgf {{{
+         * Toggle the display state of the form to send sgf files.
+         */
+        clickSendSgf: function () {
             if (this.screen === 'options') {
                 this.screen = 'sendsgf';
                 yygo.view.changeScreen();
@@ -1075,9 +1289,13 @@ var yygo = {}; // espace de nom yygo
                 this.screen = 'options';
                 yygo.view.changeScreen();
             }
-        },//}}}
+        },
+        /*}}}*/
 
-        sendResponse: function () {//{{{
+        /** sendResponse {{{
+         * Show the response of the server after sending a sgf file.
+         */
+        sendResponse: function () {
             var locale = yygo.data.locale,
                 responseelem = document.getElementById('response'),
                 response,
@@ -1096,11 +1314,13 @@ var yygo = {}; // espace de nom yygo
             } else {
                 responseelem.textContent = locale.error;
             }
-        }//}}}
+        }
+        /*}}}*/
 
-    };//}}}
+    };
+    /*}}}*/
 
-    // initialisation quand le DOM est chargé (navigateurs récents)
+    // Call init when DOM is loaded (recent navigators).
 
     document.addEventListener('DOMContentLoaded', yygo.events.init(), false);
 

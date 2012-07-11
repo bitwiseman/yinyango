@@ -33,11 +33,11 @@ class Sgf
     /** saveFile {{{
      * Enregistrement de fichier dans la base de données
      *
-     * @param string $file     fichier à enregister
-     * @param string $hostname addresse du serveur
-     * @param string $dbuser   login bdd
-     * @param string $dbpass   pass bdd
-     * @param string $dbname   nom de la bdd 
+     * @param {string} $file     fichier à enregister
+     * @param {string} $hostname addresse du serveur
+     * @param {string} $dbuser   login bdd
+     * @param {string} $dbpass   pass bdd
+     * @param {string} $dbname   nom de la bdd 
      *
      * @return boolean
      */ 
