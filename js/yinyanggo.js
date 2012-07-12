@@ -954,7 +954,7 @@ var yygo = {};
                 // Callback to be sure we have the locale data.
                 yygo.events.makeBinds();
                 // Load introdutive goban. TODO Make it better.
-                jsonRequest('sgf.php?list=-1', function (data) {
+                jsonRequest('model.php?list=-1', function (data) {
                     yygo.data.gameslist = data;
                     yygo.events.loadGameFromList(0);
                     yygo.data.gameslist = [];
@@ -1246,7 +1246,7 @@ var yygo = {};
             // TODO Refresh, multiple pages.
 
             if (isEmpty(gameslist)) { // Get list if empty.
-                jsonRequest('sgf.php?list=0', function (data) {
+                jsonRequest('model.php?list=0', function (data) {
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
