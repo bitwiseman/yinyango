@@ -1187,8 +1187,7 @@ var yygo = {};
                 curnode =       yygo.data.curnode,
                 lastbranch =    yygo.data.lastbranch,
                 lastnode =      yygo.data.lastnode,
-                lastbranchp,
-                i;
+                lastbranchp;
 
             // Define the new current node.
             if (curnode + move < 0) {
