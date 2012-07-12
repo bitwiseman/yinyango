@@ -1,18 +1,6 @@
-Objectifs:
-- Séparer l'affichage du traitement des données
-- Avoir un affichage plus réactif grâce à javascript
-- Ajouter des effets visuels
-- Réécrire le code
-- Adapter le code pour avoir un support des bases de données
-
-Idées en vrac:
-- Traduire les fichiers SGF en données JSON et vice-versa
-- différents modes: jeu, démo, édition ...
-- réaranger le class
-- score
-- écrire la base SQL si non existante
-- afficher les commentaires précédent le coup actuel avec une référence
-- simplifier class
-- charger la dernière partie de l'utilisateur
-- séparer comments et infos
-- récupérer l'événement 'joueur passe'
+- Translate game to SGF.
+- Make different modes: play, edition...
+- Make a better Sgf class.
+- Calculate the score.
+- Make a user registration.
+- Treat other keys like 'pass'.
