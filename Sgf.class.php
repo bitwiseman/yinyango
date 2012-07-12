@@ -450,6 +450,7 @@ class Sgf
 
     /** testLiberties {{{
      * Test liberties of a stone or a group of stones recursively.
+     * Inspired by eidogo algorithm.
      *
      * @param {string}  $color Color of the played stone.
      * @param {integer} $x     X coordinate to test.
