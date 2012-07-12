@@ -1,8 +1,7 @@
 <?php
-// fichier de configuration à modifier et renommer en config.php
+// Configuration file to modify and rename to config.php.
 $conf['db_hostname'] = "hostname";
 $conf['db_username'] = "username";
 $conf['db_password'] = "password";
 $conf['db_name'] = "database";
-
 ?>
