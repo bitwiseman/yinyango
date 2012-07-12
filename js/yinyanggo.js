@@ -93,7 +93,7 @@ var yygo = {};
 
         // Methods.
 
-        /** getParentBranch {{{
+        /** yygo.data.getParentBranch {{{
          * Find the branch of which depends a given branch at a given node.
          *
          * @param   {Number} node       Node to check.
@@ -114,7 +114,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** parseDataFromList {{{
+        /** yygo.data.parseDataFromList {{{
          * Parse the data of the selected game in list.
          *
          * @param {Number} index Index of the selected game in list.
@@ -136,7 +136,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** setLastNode {{{
+        /** yygo.data.setLastNode {{{
          * Define the last node of the current branch.
          */
         setLastNode: function () {
@@ -152,7 +152,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** setLang {{{
+        /** yygo.data.setLang {{{
          * Define the current language to use.
          *
          * @param {String}      lang        Language to use.
@@ -211,7 +211,7 @@ var yygo = {};
 
         // Construction/insertion of html code.
 
-        /** makeGoban {{{
+        /** yygo.view.makeGoban {{{
          * Create and insert goban html code. This include the borders and
          * the grid.
          */
@@ -248,7 +248,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeComments {{{
+        /** yygo.view.makeComments {{{
          * Create and insert comments html code.
          */
         makeComments: function () {
@@ -286,7 +286,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeGrid {{{
+        /** yygo.view.makeGrid {{{
          * Create grid to be inserted in goban element.
          *
          * @return {String} Grid html code.
@@ -312,7 +312,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeGamesList {{{
+        /** yygo.view.makeGamesList {{{
          * Create and insert games list html code.
          */
         makeGamesList: function () {
@@ -352,7 +352,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeInfos {{{
+        /** yygo.view.makeInfos {{{
          * Create and insert informations html code.
          */
         makeInfos: function () {
@@ -388,7 +388,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeVariations {{{
+        /** yygo.view.makeVariations {{{
          * Create and insert variations html code.
          */
         makeVariations: function () {
@@ -443,7 +443,7 @@ var yygo = {};
 
         // Display. 
 
-        /** changeButtons {{{
+        /** yygo.view.changeButtons {{{
          * Change the displayed buttons depending on the actual screen.
          */
         changeButtons: function () {
@@ -479,7 +479,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** changeGridImage {{{
+        /** yygo.view.changeGridImage {{{
          * Change the background svg image depending on the goban size.
          */
         changeGridImage: function () {
@@ -489,7 +489,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** changeLang {{{
+        /** yygo.view.changeLang {{{
          * Change elements showing informations based on language.
          */
         changeLang: function () {
@@ -529,7 +529,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** changeScreen {{{
+        /** yygo.view.changeScreen {{{
          * Change the elements to display depending on the actual screen.
          */
         changeScreen: function () {
@@ -572,7 +572,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** drawGoban {{{
+        /** yygo.view.drawGoban {{{
          * Draw the goban and the comments.
          */
         drawGoban: function () {
@@ -624,7 +624,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** emptyGoban {{{
+        /** yygo.view.emptyGoban {{{
          * Empty the goban of all stones, symbols, labels.
          */
         emptyGoban: function () {
@@ -648,7 +648,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** insertSymbolSvg {{{
+        /** yygo.view.insertSymbolSvg {{{
          * Insert a symbol in a cell using svg format.
          *
          * @param {String} symbol   Symbol to insert.
@@ -681,7 +681,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** placeStones {{{
+        /** yygo.view.placeStones {{{
          * Place the stones of the actual state on the goban.
          */
         placeStones: function () {
@@ -711,7 +711,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** placeSymbols {{{
+        /** yygo.view.placeSymbols {{{
          * Place the symbols of the actual state on the goban.
          */
         placeSymbols: function () {
@@ -796,7 +796,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** setGobanSize {{{
+        /** yygo.view.setGobanSize {{{
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
          */
@@ -840,7 +840,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** toggleBorders {{{
+        /** yygo.view.toggleBorders {{{
          * Alternate the display of the goban borders.
          */
         toggleBorders: function () {
@@ -863,7 +863,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** toggleNavButtons {{{
+        /** yygo.view.toggleNavButtons {{{
          * Alternate active state of navigation buttons.
          */
         toggleNavButtons: function () {
@@ -899,7 +899,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** toggleComments {{{
+        /** yygo.view.toggleComments {{{
          * Alternate the display of the comments.
          */
         toggleComments: function () {
@@ -938,7 +938,7 @@ var yygo = {};
 
         // Methods.
 
-        /** init {{{
+        /** yygo.events.init {{{
          * This is where we start.
          */
         init: function () {
@@ -963,7 +963,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** loadGameFromList {{{
+        /** yygo.events.loadGameFromList {{{
          * Load a game selected in games list.
          *
          * @param {Number} index Index of the selected game.
@@ -1000,33 +1000,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** clickGamesList {{{
-         * Load/show/hide the games list.
-         */
-        clickGamesList: function () {
-            var gameslist = yygo.data.gameslist || {};
-
-            // TODO Refresh, multiple pages.
-
-            if (isEmpty(gameslist)) { // Get list if empty.
-                jsonRequest('sgf.php?list=0', function (data) {
-                    yygo.data.gameslist = data;
-                    yygo.view.makeGamesList();
-                    yygo.events.makeListBinds();
-                });
-            }
-
-            if (yygo.events.screen === 'options') {
-                yygo.events.screen = 'list';
-                yygo.view.changeScreen();
-            } else {
-                yygo.events.screen = 'options';
-                yygo.view.changeScreen();
-            }
-        },
-        /*}}}*/
-
-        /** makeBinds {{{
+        /** yygo.events.makeBinds {{{
          * Bind events to the elements.
          */
         makeBinds: function () {
@@ -1064,7 +1038,7 @@ var yygo = {};
             }, false);
             // Click games list button.
             load.addEventListener('click', function () {
-                yygo.events.clickGamesList();
+                yygo.events.clickLoadList();
             }, false);
             // Click language buttons.
             langen.addEventListener('click', function () {
@@ -1116,7 +1090,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeListBinds {{{
+        /** yygo.events.makeListBinds {{{
          * Assign a click event to each row in games list to load the proper
          * game index.
          */
@@ -1139,7 +1113,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** makeVariationsBinds {{{
+        /** yygo.events.makeVariationsBinds {{{
          * Assign each variation radio button a click event with proper
          * reference to it.
          */
@@ -1176,7 +1150,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** navigateNode {{{
+        /** yygo.events.navigateNode {{{
          * Navigate the game depending on the defined last branch.
          *
          * @param {Number} move Move to apply to current position in game.
@@ -1233,7 +1207,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** clickBorders {{{
+        /** yygo.events.clickBorders {{{
          * Toggle display state of the goban borders.
          */
         clickBorders: function () {
@@ -1247,7 +1221,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** clickComments {{{
+        /** yygo.events.clickComments {{{
          * Toggle display state of the comments.
          */
         clickComments: function () {
@@ -1263,7 +1237,33 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** clickOptions {{{
+        /** yygo.events.clickLoadList {{{
+         * Load/show/hide the games list.
+         */
+        clickLoadList: function () {
+            var gameslist = yygo.data.gameslist || {};
+
+            // TODO Refresh, multiple pages.
+
+            if (isEmpty(gameslist)) { // Get list if empty.
+                jsonRequest('sgf.php?list=0', function (data) {
+                    yygo.data.gameslist = data;
+                    yygo.view.makeGamesList();
+                    yygo.events.makeListBinds();
+                });
+            }
+
+            if (yygo.events.screen === 'options') {
+                yygo.events.screen = 'list';
+                yygo.view.changeScreen();
+            } else {
+                yygo.events.screen = 'options';
+                yygo.view.changeScreen();
+            }
+        },
+        /*}}}*/
+
+        /** yygo.events.clickOptions {{{
          * Toggle display state of the options.
          */
         clickOptions: function () {
@@ -1277,7 +1277,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** clickSendSgf {{{
+        /** yygo.events.clickSendSgf {{{
          * Toggle the display state of the form to send sgf files.
          */
         clickSendSgf: function () {
@@ -1291,7 +1291,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** sendResponse {{{
+        /** yygo.events.sendResponse {{{
          * Show the response of the server after sending a sgf file.
          */
         sendResponse: function () {
