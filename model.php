@@ -32,7 +32,7 @@ function createTable()
             $pdo_options
         );
     } catch (Exception $e) {
-        die('Erreur : ' . $e->getMessage());
+        die('Error: ' . $e->getMessage());
     }
     $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] .
         '`;USE `' . $conf['db_name'] .
@@ -75,7 +75,7 @@ function getList($limit)
                 $pdo_options
             );
         } catch (Exception $e) {
-            die('Erreur : ' . $e->getMessage());
+            die('Error: ' . $e->getMessage());
         }
         // TODO Load last user game.
         if ($limit == -1) {
@@ -118,7 +118,7 @@ function saveToDatabase()
     $test = substr($sgfc, -2); // 'OK' if valid.
 
     if ($test === 'OK') {
-        // Move file if does not already exist.
+        // Move file if it does not already exist.
         if (!file_exists($file)) {
             move_uploaded_file($tempname, $file);
         }

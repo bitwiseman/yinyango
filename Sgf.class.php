@@ -55,7 +55,7 @@ class Sgf
                 $pdo_options
             );
         } catch (Exception $e) {
-            die('Erreur : ' . $e->getMessage());
+            die('Error: ' . $e->getMessage());
         }
 
         // Check if file is already in database.
