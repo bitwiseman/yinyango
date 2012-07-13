@@ -13,35 +13,38 @@
 require_once 'config.php';
 require_once 'Sgf.class.php';
 
+/** connectDatabase {{{
+ * Connect to datase and return pdo object.
+ *
+ * @return {object} Pdo object of the connection.
+ */
 function connectDatabase() 
 {
-    return null;
-}
+    global $config;
+    static $pdo;
 
-/** createTable {{{
- * Create database/table if they do not exist.
+    if (!$pdo) {
+        $pdo = new PDO(
+            $config['db_reference'],
+            $config['db_login'],
+            $config['db_pass']
+        );
+    }
+
+    return $pdo;
+}
+/*}}}*/
+
+/** createTables {{{
+ * Create tables if they doe not exist.
  *
  * @return {null}
  */
-function createTable()
+function createTables()
 {
-    global $conf;
+    $database = connectDatabase();
 
-    try {
-        $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-        $db = new PDO(
-            $conf['db_type'] . ':host=' .
-            $conf['db_hostname'],
-            $conf['db_username'],
-            $conf['db_password'],
-            $pdo_options
-        );
-    } catch (Exception $e) {
-        die('Error: ' . $e->getMessage());
-    }
-    $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] . '`;' .
-        'USE `' . $conf['db_name'] . '`;' .
-        'CREATE TABLE IF NOT EXISTS `sgf` (' .
+    $create = 'CREATE TABLE IF NOT EXISTS `sgf` (' .
         '`id` int(11) NOT NULL AUTO_INCREMENT,' .
         '`file` text NOT NULL,' .
         '`infos` text NOT NULL,' .
@@ -49,8 +52,10 @@ function createTable()
         '`symbols` text NOT NULL,' .
         '`game` text NOT NULL,' .
         'PRIMARY KEY (`id`))';
-    $db->exec($create);
-    $db = null; // Close connection.
+
+    $database->exec($create);
+    $database = null; // Close connection.
+
     return null;
 }
 /*}}}*/
@@ -64,34 +69,22 @@ function createTable()
  */
 function getList($limit)
 {
-    global $conf;
     $list = [];
 
     if ($limit >= 0 || $limit == -1) {
-        try {
-            $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-            $db = new PDO(
-                'mysql:host=' .
-                $conf['db_hostname'] .
-                ';dbname=' .
-                $conf['db_name'],
-                $conf['db_username'],
-                $conf['db_password'],
-                $pdo_options
-            );
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
+
+        $database = connectDatabase();
+
         // TODO Load last user game.
         if ($limit == -1) {
             // Introduction game.
-            $select = $db->prepare(
+            $select = $database->prepare(
                 'SELECT * FROM sgf ' .
                 'WHERE id=1'
             );
         } else {
             // Get the last 10 saved games.
-            $select = $db->prepare(
+            $select = $database->prepare(
                 'SELECT * FROM sgf ' .
                 'ORDER BY id DESC LIMIT ' . $limit . ', 10'
             );
@@ -99,7 +92,8 @@ function getList($limit)
         $select->execute();
         $list = $select->fetchAll(PDO::FETCH_ASSOC);
         $select->closeCursor();
-        $db = null;
+
+        $database = null;
     }
     return $list;
 }
@@ -112,7 +106,7 @@ function getList($limit)
  */
 function saveToDatabase()
 {
-    global $conf;
+    global $config;
     $tempname = $_FILES['sgf']['tmp_name'];
     $name = $_FILES['sgf']['name'];
     $file = 'sgf/' . $name;
@@ -131,10 +125,9 @@ function saveToDatabase()
         $sgf = new Sgf();
         $sent = $sgf->saveFile(
             $file,
-            $conf['db_hostname'],
-            $conf['db_username'],
-            $conf['db_password'],
-            $conf['db_name']
+            $config['db_reference'],
+            $config['db_login'],
+            $config['db_pass']
         );
         if ($sent) {
             $answer = 'success';
@@ -148,8 +141,8 @@ function saveToDatabase()
 }
 /*}}}*/
 
-if (isset($_GET['createtable'])) {
-    createTable();
+if (isset($_GET['createtables'])) {
+    createTables();
 }
 if (isset($_GET['list'])) {
     $limit = intval($_GET['list']);

@@ -1,8 +1,10 @@
 <?php
 // Configuration file to modify and rename to config.php.
-$conf['db_hostname'] = "localhost";
-$conf['db_type'] = "mysql";
-$conf['db_username'] = "username";
-$conf['db_password'] = "password";
-$conf['db_name'] = "yinyanggo";
+
+// PDO reference to the database. Make sure to have created the database.
+$config['db_reference'] =       "mysql:host=localhost;dbname=yinyanggo";
+// Database login and password.
+$config['db_login'] =           "login";
+$config['db_pass'] =            "password";
+
 ?>

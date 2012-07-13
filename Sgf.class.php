@@ -35,28 +35,17 @@ class Sgf
     /** saveFile {{{
      * Save a file in database.
      *
-     * @param {string} $file     File to save.
-     * @param {string} $hostname Server url.
-     * @param {string} $dbuser   Login.
-     * @param {string} $dbpass   Password.
-     * @param {string} $dbname   Name of database. 
+     * @param {string} $file      File to save.
+     * @param {string} $reference Reference to database.
+     * @param {string} $dbuser    Login.
+     * @param {string} $dbpass    Password.
      *
      * @return {boolean} FALSE if file exist.
      */ 
-    public function saveFile($file, $hostname, $dbuser, $dbpass, $dbname)
+    public function saveFile($file, $reference, $dbuser, $dbpass)
     {
         // Connect to database.
-        try {
-            $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-            $db = new PDO(
-                'mysql:host=' . $hostname . ';dbname=' . $dbname,
-                $dbuser,
-                $dbpass,
-                $pdo_options
-            );
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
+        $db = new PDO($reference, $dbuser, $dbpass);
 
         // Check if file is already in database.
         $select = $db->prepare('SELECT * FROM sgf WHERE file=?');
