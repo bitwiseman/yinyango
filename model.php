@@ -30,7 +30,6 @@ function connectDatabase()
             $config['db_pass']
         );
     }
-
     return $pdo;
 }
 /*}}}*/
@@ -71,26 +70,18 @@ function getList($limit)
 {
     $list = [];
 
-    if ($limit >= 0 || $limit == -1) {
+    if ($limit >= 0) {
 
         $database = connectDatabase();
 
-        // TODO Load last user game.
-        if ($limit == -1) {
-            // Introduction game.
-            $select = $database->prepare(
-                'SELECT * FROM sgf ' .
-                'WHERE id=1'
-            );
-        } else {
-            // Get the last 10 saved games.
-            $select = $database->prepare(
-                'SELECT * FROM sgf ' .
-                'ORDER BY id DESC LIMIT ' . $limit . ', 10'
-            );
-        }
+        // Get the last 10 saved games.
+        $select = $database->prepare(
+            'SELECT * FROM sgf ' .
+            'ORDER BY id DESC LIMIT ' . $limit . ', 10'
+        );
+
         $select->execute();
-        $list = $select->fetchAll(PDO::FETCH_ASSOC);
+        $list = $select->fetchAll();
         $select->closeCursor();
 
         $database = null;
