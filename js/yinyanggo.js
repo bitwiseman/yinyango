@@ -1297,18 +1297,16 @@ var yygo = {};
         sendResponse: function () {
             var locale = yygo.data.locale,
                 responseelem = document.getElementById('response'),
-                response,
-                data;
+                response;
 
             response = frames.sendtarget
                 .document.getElementsByTagName("body")[0].innerHTML;
-            data = JSON.parse(response);
 
-            if (data === 'invalid') {
+            if (response === 'invalid') {
                 responseelem.textContent = locale.invalid;
-            } else if (data === 'success') {
+            } else if (response === 'success') {
                 responseelem.textContent = locale.success;
-            } else if (data === 'exist') {
+            } else if (response === 'exist') {
                 responseelem.textContent = locale.exist;
             } else {
                 responseelem.textContent = locale.error;

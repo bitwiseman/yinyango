@@ -20,6 +20,8 @@ require_once 'Sgf.class.php';
  */
 function createTable()
 {
+    global $conf;
+
     try {
         $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
         $db = new PDO(
@@ -57,6 +59,7 @@ function createTable()
  */
 function getList($limit)
 {
+    global $conf;
     $list = [];
 
     if ($limit >= 0 || $limit == -1) {
@@ -104,6 +107,7 @@ function getList($limit)
  */
 function saveToDatabase()
 {
+    global $conf;
     $tempname = $_FILES['sgf']['tmp_name'];
     $name = $_FILES['sgf']['name'];
     $file = 'sgf/' . $name;
@@ -150,7 +154,6 @@ if (isset($_GET['list'])) {
 }
 if (isset($_FILES['sgf']['name'])) {
     $response = saveToDatabase();
-    header('Content-type: application/json');
-    echo json_encode($response);
+    echo $response;
 }
 ?>
