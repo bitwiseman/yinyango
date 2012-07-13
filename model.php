@@ -145,4 +145,8 @@ if (isset($_FILES['sgf']['name'])) {
     $response = saveToDatabase();
     echo $response;
 }
+if (isset($_GET['test'])) {
+    $sgf = new Sgf($_GET['test']);
+}
+
 ?>

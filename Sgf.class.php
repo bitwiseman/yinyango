@@ -23,14 +23,34 @@ class Sgf
     private $_prison = Array('b' => 0, 'w' => 0); // Prisonners.
 
     /** __construct {{{
+     * Construct variables parsing the provided sgf file.
      *
      * @constructor
+     * @param {string} $sgf Sgf file.
+     *
+     * @return {null}
      */
-    function __construct()
+    /*function __construct($sgf)
     {
-        return null; 
-    }
+
+        echo('Parsing: ' . $sgf . '<br />');
+
+        $data = $this->sgfToTab($sgf);
+        $this->_infos = $data[0][0];
+        $this->_size = $this->_infos['SZ'];
+        $this->gameTable($data);
+        $this->_infos['branchs'] = $this->_branchs;
+
+        echo('Done.');
+
+        return null;
+    }*/
     /*}}}*/
+
+    public function parseSgf($sgf)
+    {
+        return null;
+    }
 
     /** saveFile {{{
      * Save a file in database.
@@ -217,6 +237,15 @@ class Sgf
                     // Always have an empty goban at least.
                     $this->_game[$j][$i]['b'] = '';
                     $this->_game[$j][$i]['w'] = '';
+                    // Store the previous state.
+                    $b = $i;
+                    while ($b >= 0) {
+                        if (isset($this->_game[$j-1][$b])) {
+                            $this->_state = $this->gobanState($j-1, $i);
+                            break;
+                        }
+                        $b--;
+                    }
                     // Browse the keys and make actions.
                     foreach ($table[$j][$i] as $key => $value) {
                         switch ($key) {
@@ -251,8 +280,10 @@ class Sgf
                             $this->_comments[$j][$i] = $value;
                             break;
                         default:
-                        }
-                    }
+                        } // Switch.
+                    } // For each.
+                    // Save state into game.
+                    $this->stateToGame($j, $i);
                 }
             }
         }
@@ -272,26 +303,16 @@ class Sgf
      */
     protected function addStones($node, $branch, $color, $coords)
     {
-        $b = $branch;
         $stones = explode(',', $coords);
         $cs = count($stones);
-
-        while ($b >= 0) { // Look for previous state.
-            if (isset($this->_game[$node-1][$b])) {
-                // Get the previous state.
-                $this->_state = $this->gobanState($node-1, $b);
-                break;
-            }
-            $b--;
-        }
+        
         for ($i = 0; $i < $cs; $i++) {
             // Transform coordinates into numbers. 
             $x = ord(substr($stones[$i], 0, 1)) - 97;
             $y = ord(substr($stones[$i], 1, 1)) - 97;
             // Add stone(s)/empty to previous state.
-            $this->_state[$x][$y] = $color; 
+            $this->_state[$x][$y] = $color;
         }
-        $this->stateToGame($node, $branch); // Save state into game.
         return null;
     }
     /*}}}*/
@@ -308,27 +329,18 @@ class Sgf
      */
     protected function playMove($node, $branch, $color, $coord)
     {
-        $b = $branch;
+        // Transform coordinates to numbers.
+        $x = ord(substr($coord, 0, 1)) - 97;
+        $y = ord(substr($coord, 1, 1)) - 97;
+        // Add played stone to previous state.
+        $this->_state[$x][$y] = $color;
+        // Test if that makes deaths.
+        $this->testDeath($color, $x, $y);
+        // TODO Calculate KO
 
-        while ($b >= 0) { // Look for previous state.
-            if (isset($this->_game[$node-1][$b])) {
-                // Get previous state.
-                $this->_state = $this->gobanState($node-1, $b);
-                // Transform coordinates to numbers.
-                $x = ord(substr($coord, 0, 1)) - 97;
-                $y = ord(substr($coord, 1, 1)) - 97;
-                // Add played stone to previous state.
-                $this->_state[$x][$y] = $color;
-                // Test if that makes deaths.
-                $this->testDeath($color, $x, $y);
-                // TODO Calculate KO
-                $this->stateToGame($node, $branch); // Save state to game.
-                break;
-            }
-            $b--;
-        }
         // Add the played stone in game state so we can track it.
         $this->_game[$node][$branch]['p'] = $color.','.$coord;
+
         return null;
     }
     /*}}}*/
