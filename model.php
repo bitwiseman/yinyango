@@ -112,20 +112,36 @@ function saveToDatabase()
         if (!file_exists($file)) {
             move_uploaded_file($tempname, $file);
         }
-        // Try to save file in database.
-        $sgf = new Sgf();
-        $sent = $sgf->saveFile(
-            $file,
-            $config['db_reference'],
-            $config['db_login'],
-            $config['db_pass']
-        );
-        if ($sent) {
-            $answer = 'success';
-        } else {
+        // Check if file is already in database.
+        $database = connectDatabase();
+
+        $select = $database->prepare('SELECT * FROM sgf WHERE file=?');
+        $select->execute(array($file));
+        $vars = $select->fetch();
+        $select->closeCursor();
+        if (!empty($vars)) {
             $answer = 'exist';
+        } else {
+            // Parse sgf file, get data and save it to database.
+            $sgf = new Sgf($file);
+            $data = $sgf->getData();
+
+            $insert = $database->prepare(
+                'INSERT INTO sgf(file, infos, comments, symbols, game)' .
+                'VALUES(:file, :infos, :comments, :symbols, :game)'
+            );
+            // Send data encoded in json format.
+            $insert->execute(
+                array('file' => $file,
+                'infos' => $data['infos'],
+                'comments' => $data['comments'],
+                'symbols' => $data['symbols'],
+                'game' => $data['game'])
+            );
+            $answer = 'success';
         }
-    } else {
+        $database = null; // Close connection.
+    } else { // Sgfc reports other than 'OK'.
         $answer = 'invalid';
     }
     return $answer;

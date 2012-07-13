@@ -30,73 +30,32 @@ class Sgf
      *
      * @return {null}
      */
-    /*function __construct($sgf)
+    function __construct($sgf)
     {
-
-        echo('Parsing: ' . $sgf . '<br />');
-
         $data = $this->sgfToTab($sgf);
         $this->_infos = $data[0][0];
         $this->_size = $this->_infos['SZ'];
         $this->gameTable($data);
         $this->_infos['branchs'] = $this->_branchs;
 
-        echo('Done.');
-
-        return null;
-    }*/
-    /*}}}*/
-
-    public function parseSgf($sgf)
-    {
         return null;
     }
+    /*}}}*/
 
-    /** saveFile {{{
-     * Save a file in database.
+    /** getData {{{
+     * Collect and return all the data to be sent to database. Encode it in
+     * json format.
      *
-     * @param {string} $file      File to save.
-     * @param {string} $reference Reference to database.
-     * @param {string} $dbuser    Login.
-     * @param {string} $dbpass    Password.
-     *
-     * @return {boolean} FALSE if file exist.
-     */ 
-    public function saveFile($file, $reference, $dbuser, $dbpass)
+     * @return {array} Data to be sent.
+     */
+    public function getData() 
     {
-        // Connect to database.
-        $db = new PDO($reference, $dbuser, $dbpass);
+        $data['infos'] = json_encode($this->_infos);
+        $data['comments'] = json_encode($this->_comments);
+        $data['symbols'] = json_encode($this->_symbols);
+        $data['game'] = json_encode($this->_game);
 
-        // Check if file is already in database.
-        $select = $db->prepare('SELECT * FROM sgf WHERE file=?');
-        $select->execute(array($file));
-        $vars = $select->fetch();
-        $select->closeCursor();
-        if (!empty($vars)) {
-            return false;
-        } else {
-            // Read the file and prepare data to be sent.
-            $data = $this->sgfToTab($file);
-            $this->_infos = $data[0][0];
-            $this->_size = $this->_infos['SZ'];
-            $this->gameTable($data);
-            $this->_infos['branchs'] = $this->_branchs;
-
-            $insert = $db->prepare(
-                'INSERT INTO sgf(file, infos, comments, symbols, game)' .
-                'VALUES(:file, :infos, :comments, :symbols, :game)'
-            );
-            // Send data encoded in json format.
-            $insert->execute(
-                array('file' => $file,
-                'infos' => json_encode($this->_infos),
-                'comments' => json_encode($this->_comments),
-                'symbols' => json_encode($this->_symbols),
-                'game' => json_encode($this->_game))
-            );
-        }
-        $db = null; // Close connexion.
-        return true;
+        return $data;
     }
     /*}}}*/
 
@@ -241,7 +200,7 @@ class Sgf
                     $b = $i;
                     while ($b >= 0) {
                         if (isset($this->_game[$j-1][$b])) {
-                            $this->_state = $this->gobanState($j-1, $i);
+                            $this->_state = $this->gobanState($j-1, $b);
                             break;
                         }
                         $b--;
@@ -346,12 +305,12 @@ class Sgf
     /*}}}*/
 
     /** gobanState {{{
-     * Get the state at a given node/branch.
+     * Get the goban state at a given node/branch.
      *
      * @param {integer} $node   Node to get state at.
      * @param {integer} $branch Branch to get state at.
      *
-     * @return {array} State of the game.
+     * @return {array} Goban state.
      */
     protected function gobanState($node, $branch)
     {
