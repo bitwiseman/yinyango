@@ -954,12 +954,6 @@ var yygo = {};
                 // Callback to be sure we have the locale data.
                 yygo.events.makeBinds();
                 yygo.events.loadIntro();
-                // Load introdutive goban. TODO Make it better.
-                jsonRequest('model.php?list=-1', function (data) {
-                    yygo.data.gameslist = data;
-                    yygo.events.loadGameFromList(0);
-                    yygo.data.gameslist = [];
-                });
             });
         },
         /*}}}*/
@@ -1005,24 +999,33 @@ var yygo = {};
          * Load introductive goban data and show it.
          */
         loadIntro: function () {
-            var locale = yygo.data.locale;
 
-            yygo.data.game = {0:{0:{
-                "b":"fm,fn,fo,fp,gl,gm,gn,go,gp,gq,hk,hl,hm,hn,ho,hp,hq,hr,ie,if,ik,il,im,in,ip,iq,ir,je,jf,jk,jl,jm,jp,jq,jr,js,ka,kj,kk,kl,km,kp,kq,kr,ks,la,lj,lk,ll,lm,ln,lo,lp,lq,lr,ls,ma,mb,mi,mj,mk,ml,mm,mn,mo,mp,mq,mr,ms,nb,nc,nh,ni,nj,nk,nl,nm,nn,no,np,nq,nr,ob,oc,od,oe,of,og,oh,oi,oj,ok,ol,om,on,oo,op,oq,or,pc,pd,pe,pf,pg,ph,pi,pj,pk,pl,pm,pn,po,pp,pq,qd,qe,qf,qg,qh,qi,qj,qk,ql,qm,qn,qo,qp,re,rf,rg,rh,ri,rj,rk,rl,rm,rn,ro,sg,sh,si,sj,sk,sl,sm",
-                "w":"ag,ah,ai,aj,ak,al,am,be,bf,bg,bh,bi,bj,bk,bl,bm,bn,bo,cd,ce,cf,cg,ch,ci,cj,ck,cl,cm,cn,co,cp,dc,dd,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,eb,ec,ed,ee,ef,eg,eh,ei,ej,ek,el,em,en,eo,ep,eq,er,fb,fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fq,fr,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk,gr,gs,ha,hb,hc,hd,he,hf,hg,hh,hi,hj,hs,ia,ib,ic,id,ig,ih,ii,ij,is,ja,jb,jc,jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn,ko,lb,lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
-            }}};
-            yygo.data.symbols = {0:{0:{
-                "LB":"ch:Y,dh:I,eh:N,gh:Y,hh:A,ih:N,jh:G,nl:G,ol:O"
-            }}};
-        
+            yygo.data.game = {0: {0: {
+                "b": "fm,fn,fo,fp,gl,gm,gn,go,gp,gq,hk,hl,hm,hn,ho,hp,hq,hr," +
+                    "ie,if,ik,il,im,in,ip,iq,ir,je,jf,jk,jl,jm,jp,jq,jr,js," +
+                    "ka,kj,kk,kl,km,kp,kq,kr,ks,la,lj,lk,ll,lm,ln,lo,lp,lq," +
+                    "lr,ls,ma,mb,mi,mj,mk,ml,mm,mn,mo,mp,mq,mr,ms,nb,nc,nh," +
+                    "ni,nj,nk,nl,nm,nn,no,np,nq,nr,ob,oc,od,oe,of,og,oh,oi," +
+                    "oj,ok,ol,om,on,oo,op,oq,or,pc,pd,pe,pf,pg,ph,pi,pj,pk," +
+                    "pl,pm,pn,po,pp,pq,qd,qe,qf,qg,qh,qi,qj,qk,ql,qm,qn,qo," +
+                    "qp,re,rf,rg,rh,ri,rj,rk,rl,rm,rn,ro,sg,sh,si,sj,sk,sl,sm",
+                "w": "ag,ah,ai,aj,ak,al,am,be,bf,bg,bh,bi,bj,bk,bl,bm,bn,bo," +
+                    "cd,ce,cf,cg,ch,ci,cj,ck,cl,cm,cn,co,cp,dc,dd,de,df,dg," +
+                    "dh,di,dj,dk,dl,dm,dn,do,dp,dq,eb,ec,ed,ee,ef,eg,eh,ei," +
+                    "ej,ek,el,em,en,eo,ep,eq,er,fb,fc,fd,fe,ff,fg,fh,fi,fj," +
+                    "fk,fl,fq,fr,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk,gr,gs,ha," +
+                    "hb,hc,hd,he,hf,hg,hh,hi,hj,hs,ia,ib,ic,id,ig,ih,ii,ij," +
+                    "is,ja,jb,jc,jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn," +
+                    "ko,lb,lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
+            } } };
+            yygo.data.symbols = {0: {0: {
+                "LB": "ch:Y,dh:I,eh:N,gh:Y,hh:A,ih:N,jh:G,nl:G,ol:O"
+            } } };
+
             yygo.data.size = 19;
 
             yygo.view.makeGoban();
             yygo.view.changeGridImage();
-
-            yygo.view.makeVariations();
-            yygo.view.makeInfos();
-            yygo.view.makeComments();
 
             yygo.view.placeStones();
             yygo.view.placeSymbols();
