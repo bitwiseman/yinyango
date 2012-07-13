@@ -28,7 +28,7 @@ class Sgf
      */
     function __construct()
     {
-        
+        return null; 
     }
     /*}}}*/
 
@@ -256,7 +256,7 @@ class Sgf
                 }
             }
         }
-        return;
+        return null;
     }
     /*}}}*/
 
@@ -292,7 +292,7 @@ class Sgf
             $this->_state[$x][$y] = $color; 
         }
         $this->stateToGame($node, $branch); // Save state into game.
-        return;
+        return null;
     }
     /*}}}*/
 
@@ -329,7 +329,7 @@ class Sgf
         }
         // Add the played stone in game state so we can track it.
         $this->_game[$node][$branch]['p'] = $color.','.$coord;
-        return;
+        return null;
     }
     /*}}}*/
 
@@ -403,7 +403,7 @@ class Sgf
                 }
             }
         }
-        return;
+        return null;
     }
     /*}}}*/
 
@@ -434,6 +434,7 @@ class Sgf
         if ($this->testLiberties($color, $x, $y+1) == 0) {
             $this->killStones($color);
         }
+        return null;
     }
     /*}}}*/
 
@@ -507,7 +508,7 @@ class Sgf
             // Remove stone from state.
             $this->_state[$coord[0]][$coord[1]] = '';
         }
-        return;
+        return null;
     }
     /*}}}*/
 }
