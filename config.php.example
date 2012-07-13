@@ -1,7 +1,8 @@
 <?php
 // Configuration file to modify and rename to config.php.
-$conf['db_hostname'] = "hostname";
+$conf['db_hostname'] = "localhost";
+$conf['db_type'] = "mysql";
 $conf['db_username'] = "username";
 $conf['db_password'] = "password";
-$conf['db_name'] = "database";
+$conf['db_name'] = "yinyanggo";
 ?>

@@ -13,6 +13,11 @@
 require_once 'config.php';
 require_once 'Sgf.class.php';
 
+function connectDatabase() 
+{
+    return null;
+}
+
 /** createTable {{{
  * Create database/table if they do not exist.
  *
@@ -25,7 +30,7 @@ function createTable()
     try {
         $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
         $db = new PDO(
-            'mysql:host=' .
+            $conf['db_type'] . ':host=' .
             $conf['db_hostname'],
             $conf['db_username'],
             $conf['db_password'],
@@ -34,9 +39,9 @@ function createTable()
     } catch (Exception $e) {
         die('Error: ' . $e->getMessage());
     }
-    $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] .
-        '`;USE `' . $conf['db_name'] .
-        '`;CREATE TABLE IF NOT EXISTS `sgf` (' .
+    $create = 'CREATE DATABASE IF NOT EXISTS `' . $conf['db_name'] . '`;' .
+        'USE `' . $conf['db_name'] . '`;' .
+        'CREATE TABLE IF NOT EXISTS `sgf` (' .
         '`id` int(11) NOT NULL AUTO_INCREMENT,' .
         '`file` text NOT NULL,' .
         '`infos` text NOT NULL,' .
