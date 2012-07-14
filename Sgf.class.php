@@ -13,6 +13,16 @@
 
 /** Sgf {{{
  * Sgf class.
+ * A node represents a move in the game and a branch represents a variation.
+ * Expicative schema: B are branchs.
+ *                    N are nodes.
+ *
+ * B0(N0__N1__N2__N3__N4__N5__N6__N7__N8)
+ *  B3(\__N1__N2__N3)       B1(\__N7__N8)
+ *          B4(\__N3__N4)       B2(\__N8__N9__N10)
+ *
+ * A given node can have multiple branchs.
+ * We store game states in arrays of the form: array[node][branch].
  *
  * @category PHP
  * @package  Yinyanggo
@@ -81,31 +91,31 @@ class Sgf
     /*}}}*/
 
     /** sgfToTab {{{
-     * Read a sgf file and register keys/values in an array.
+     * Read a sgf file and register keys/values in an array, sorting the
+     * nodes (moves) and branchs (variations).
      *
-     * @param {string} $file Sgf file.
+     * @param {string} $sgf Sgf file.
      *
      * @return {array} Array containing sgf data.
      */
-    protected function sgfToTab($file)
+    protected function sgfToTab($sgf)
     {
-        $tab = [];          // Array containing data.
-
-        $branch = -1;       // Current branch.
-        $escape = false;    // Escape character.
-        $isstart = true;    // Branch start.
-        $isval = false;     // We are getting a value.
-        $key = '';          // Current registered key.
-        $mark = 0;          // Marks counter.
-        $node = -1;         // Current node.
+        $sgftable = [];     // Array containing data.
+        $branch =   -1;     // Current branch.
+        $escape =   false;  // Escape character.
+        $isstart =  true;   // Branch start.
+        $isval =    false;  // We are registering a value.
+        $key =      '';     // Current registered key.
+        $mark =     0;      // Marks counter.
+        $node =     -1;     // Current node.
         $nodemark = [-1];   // Marks table.
-        $prevkey = '';      // Previous key in case of multiple values.
-        $val = '';          // Current registered value.
+        $prevkey =  '';     // Previous key in case of multiple values.
+        $val =      '';     // Current registered value.
 
-        $handle = fopen($file, "r"); // Open file read only.
+        $file = fopen($sgf, "r"); // Open file read only.
 
-        while (!feof($handle)) { // Read file character by character.
-            $char = fgetc($handle); // Current character.
+        while (!feof($file)) { // Read file character by character.
+            $char = fgetc($file); // Current character.
             switch ($char) {
             case '\\': // Escape character.
                 if ($escape) {
@@ -171,10 +181,10 @@ class Sgf
                     // End of value. Save it to the corresponding key.
                     if ($key == '') {
                         // Key was unset, save it into the previous key.
-                        $tab[$node][$branch][$prevkey] .= ','.$val;
+                        $sgftable[$node][$branch][$prevkey] .= ','.$val;
                     } else {
                         // Key changed, save it in and unset key.
-                        $tab[$node][$branch][$key] = $val;
+                        $sgftable[$node][$branch][$key] = $val;
                         $prevkey = $key;
                         $key = '';
                     }
@@ -198,7 +208,7 @@ class Sgf
             }
         }
         $this->_branchs = $branch + 1;
-        return $tab;
+        return $sgftable;
     }
     /*}}}*/
 
