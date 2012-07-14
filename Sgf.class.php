@@ -63,12 +63,12 @@ class Sgf
      */
     function __construct($sgf)
     {
-        $data = $this->sgfToTab($sgf);
-        $this->_infos = $data[0][0];
+        $tree = $this->makeTree($sgf);
+        $this->_infos = $tree[0][0];
         $this->_size = $this->_infos['SZ'];
-        $this->gameTable($data);
+        $this->gameTable($tree);
         $this->_infos['branchs'] = $this->_branchs;
-
+echo json_encode($this->_game);
         return null;
     }
     /*}}}*/
@@ -90,7 +90,7 @@ class Sgf
     }
     /*}}}*/
 
-    /** sgfToTab {{{
+    /** makeTree {{{
      * Read a sgf file and register keys/values in an array, sorting the
      * nodes (moves) and branchs (variations).
      *
@@ -98,7 +98,7 @@ class Sgf
      *
      * @return {array} Array containing sgf data.
      */
-    protected function sgfToTab($sgf)
+    protected function makeTree($sgf)
     {
         $sgftable = [];     // Array containing data.
         $branch =   -1;     // Current branch.
@@ -215,65 +215,68 @@ class Sgf
     /** gameTable {{{
      * Make game states according to the keys/values registered.
      *
-     * @param {array} $table Array containing the sgf data.
+     * @param {array} $tree Array containing the sgf tree.
      *
      * @return {null}
      */
-    protected function gameTable($table)
+    protected function gameTable($tree)
     {
-        for ($i = 0; $i <= $this->_branchs; $i++) {
-            for ($j = 0; $j < sizeof($table); $j++) {
-                if (isset($table[$j][$i])) {
+        $branchs = $this->_branchs;
+        $nodes = sizeof($tree);
+
+        for ($node = 0; $node < $nodes; $node++) {
+            for ($branch = 0; $branch < $branchs; $branch++) {
+                if (isset($tree[$node][$branch])) {
                     // Always have an empty goban at least.
-                    $this->_game[$j][$i]['b'] = '';
-                    $this->_game[$j][$i]['w'] = '';
-                    // Store the previous state.
-                    $b = $i;
+                    //$this->_game[$node][$branch]['b'] = '';
+                    //$this->_game[$node][$branch]['w'] = '';
+                    // Seek and store the previous state.
+                    $b = $branch;
                     while ($b >= 0) {
-                        if (isset($this->_game[$j-1][$b])) {
-                            $this->_state = $this->gobanState($j-1, $b);
+                        if (isset($this->_game[$node-1][$b])) {
+                            $this->_state = $this->gobanState($node-1, $b);
                             break;
                         }
                         $b--;
                     }
                     // Browse the keys and make actions.
-                    foreach ($table[$j][$i] as $key => $value) {
+                    foreach ($tree[$node][$branch] as $key => $value) {
                         switch ($key) {
                         case 'B': // Black play.
-                            $this->playMove($j, $i, 'b', $value);
+                            $this->playMove($node, $branch, 'b', $value);
                             break;
                         case 'W': // White play.
-                            $this->playMove($j, $i, 'w', $value);
+                            $this->playMove($node, $branch, 'w', $value);
                             break;
                         case 'AB': // Add black(s) stone(s).
-                            $this->addStones($j, $i, 'b', $value);
+                            $this->addStones($node, $branch, 'b', $value);
                             break;
                         case 'AW': // Add white(s) stone(s).
-                            $this->addStones($j, $i, 'w', $value);
+                            $this->addStones($node, $branch, 'w', $value);
                             break;
                         case 'AE': // Add empty. Remove stone(s).
-                            $this->addStones($j, $i, '', $value);
+                            $this->addStones($node, $branch, '', $value);
                             break;
                         case 'CR': // Circle symbol.
-                            $this->_symbols[$j][$i]['CR'] = $value;
+                            $this->_symbols[$node][$branch]['CR'] = $value;
                             break;
                         case 'SQ': // Square symbol.
-                            $this->_symbols[$j][$i]['SQ'] = $value;
+                            $this->_symbols[$node][$branch]['SQ'] = $value;
                             break;
                         case 'TR': // Triangle symbol.
-                            $this->_symbols[$j][$i]['TR'] = $value;
+                            $this->_symbols[$node][$branch]['TR'] = $value;
                             break;
                         case 'LB': // Label.
-                            $this->_symbols[$j][$i]['LB'] = $value;
+                            $this->_symbols[$node][$branch]['LB'] = $value;
                             break;
                         case 'C': // Comments.
-                            $this->_comments[$j][$i] = $value;
+                            $this->_comments[$node][$branch] = $value;
                             break;
                         default:
                         } // Switch.
                     } // For each.
                     // Save state into game.
-                    $this->stateToGame($j, $i);
+                    $this->stateToGame($node, $branch);
                 }
             }
         }
@@ -345,10 +348,19 @@ class Sgf
      */
     protected function gobanState($node, $branch)
     {
-        $bstones = explode(',', $this->_game[$node][$branch]['b']);
-        $wstones = explode(',', $this->_game[$node][$branch]['w']);
-        $sb = count($bstones);
-        $sw = count($wstones);
+        $bstones =  [];
+        $wstones =  [];
+        $sb =       0;
+        $sw =       0;
+
+        if (isset($this->_game[$node][$branch]['b'])) {
+            $bstones = explode(',', $this->_game[$node][$branch]['b']);
+            $sb = count($bstones);
+        }
+        if (isset($this->_game[$node][$branch]['w'])) {
+            $wstones = explode(',', $this->_game[$node][$branch]['w']);
+            $sw = count($wstones);
+        }
 
         // Make an empty goban.
         for ($x = 0; $x < $this->_size; $x++) {
@@ -394,13 +406,17 @@ class Sgf
                 $coord = $let[$x].$let[$y];
                 if (isset($this->_state[$x][$y])) {
                     if ($this->_state[$x][$y] == 'b') {
-                        $this->_game[$node][$branch]['b'] .=
-                            ($this->_game[$node][$branch]['b'] != '') ?
-                            ','.$coord : $coord;
+                        if (isset($this->_game[$node][$branch]['b'])) {
+                            $this->_game[$node][$branch]['b'] .= ','.$coord;
+                        } else {
+                            $this->_game[$node][$branch]['b'] = $coord;
+                        }
                     } else if ($this->_state[$x][$y] == 'w') {
-                        $this->_game[$node][$branch]['w'] .=
-                            ($this->_game[$node][$branch]['w'] != '') ?
-                            ','.$coord : $coord;
+                        if (isset($this->_game[$node][$branch]['w'])) {
+                            $this->_game[$node][$branch]['w'] .= ','.$coord;
+                        } else {
+                            $this->_game[$node][$branch]['w'] = $coord;
+                        }
                     }
                 }
             }
