@@ -10,23 +10,44 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
  * @link     https://github.com/hickop/yinyanggo
  */
+
+/** Sgf {{{
+ * Sgf class.
+ *
+ * @category PHP
+ * @package  Yinyanggo
+ * @author   hickop <hickop@gmail.com>
+ * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
+ * @link     https://github.com/hickop/yinyanggo
+ *
+ * @property {integer} $_size     Size of goban (9, 13, 19).
+ * @property {integer} $_branchs  Total number of branchs (variations).
+ * @property {array}   $_infos    Informations about the game.
+ * @property {array}   $_comments Comments in the game.
+ * @property {array}   $_symbols  Symbols on goban.
+ * @property {array}   $_game     Game states.
+ * @property {array}   $_state    Game state at a given moment.
+ * @property {array}   $_deads    Potential dead stones.
+ * @property {array}   $_prison   Prisonners.
+ */
 class Sgf
 {
-    private $_size;      // Size of goban (9, 13, 19).
-    private $_infos;     // Informations about the game.
-    private $_comments;  // Comments in the game.
-    private $_symbols;   // Symbols/annotations on goban.
-    private $_branchs;   // Total number of branchs.
-    private $_game;      // Game states.
-    private $_state;     // Game state at a given moment.
-    private $_deads;     // Potential dead stones.
-    private $_prison = Array('b' => 0, 'w' => 0); // Prisonners.
+    private $_size;
+    private $_branchs;
+    private $_infos;
+    private $_comments;
+    private $_symbols;
+    private $_game;
+    private $_state;
+    private $_deads;
+    private $_prison = ['b' => 0, 'w' => 0];
 
     /** __construct {{{
      * Construct variables parsing the provided sgf file.
      *
-     * @constructor
      * @param {string} $sgf Sgf file.
+     *
+     * @constructor
      *
      * @return {null}
      */
@@ -483,4 +504,5 @@ class Sgf
     }
     /*}}}*/
 }
+/*}}}*/
 ?>
