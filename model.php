@@ -46,9 +46,6 @@ function createTables()
     $create = 'CREATE TABLE IF NOT EXISTS `sgf` (' .
         '`id` int(11) NOT NULL AUTO_INCREMENT,' .
         '`file` text NOT NULL,' .
-        '`infos` text NOT NULL,' .
-        '`comments` text NOT NULL,' .
-        '`symbols` text NOT NULL,' .
         '`game` text NOT NULL,' .
         'PRIMARY KEY (`id`))';
 
@@ -127,17 +124,10 @@ function saveToDatabase()
             $data = $sgf->getData();
 
             $insert = $database->prepare(
-                'INSERT INTO sgf(file, infos, comments, symbols, game)' .
-                'VALUES(:file, :infos, :comments, :symbols, :game)'
+                'INSERT INTO sgf(file, game) VALUES(:file, :game)'
             );
             // Send data encoded in json format.
-            $insert->execute(
-                array('file' => $file,
-                'infos' => $data['infos'],
-                'comments' => $data['comments'],
-                'symbols' => $data['symbols'],
-                'game' => $data['game'])
-            );
+            $insert->execute(['file' => $file, 'game' => $data]);
             $answer = 'success';
         }
         $database = null; // Close connection.

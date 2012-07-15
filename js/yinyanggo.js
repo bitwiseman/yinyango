@@ -56,11 +56,8 @@ var yygo = {};
      * state.
      *
      * @property {String[]} langs       Actually supported languages.
-     * @property {Object}   comments    Comments of the game.
-     * @property {Object}   game        Goban states of the game.
+     * @property {Object}   game        All the game data.
      * @property {Object}   gameslist   Loadable games.
-     * @property {Object}   infos       Informations of the game.
-     * @property {Object}   symbols     Symbols of the game.
      * @property {String}   lang        Language set by the user.
      * @property {Number}   branchs     Total number of branchs (variations).
      * @property {Number}   size        Size of the goban (9, 13, 19).
@@ -75,11 +72,8 @@ var yygo = {};
 
         langs:          ['en', 'fr'],
 
-        comments:       {},
         game:           {},
         gameslist:      {},
-        infos:          {},
-        symbols:        {},
 
         lang:           'en',
 
@@ -120,13 +114,10 @@ var yygo = {};
          * @param {Number} index Index of the selected game in list.
          */
         parseDataFromList: function (index) {
-            this.infos = JSON.parse(this.gameslist[index].infos);
-            this.comments = JSON.parse(this.gameslist[index].comments);
-            this.symbols = JSON.parse(this.gameslist[index].symbols);
             this.game = JSON.parse(this.gameslist[index].game);
 
-            this.size = parseInt(this.infos.SZ, 10);
-            this.branchs = this.infos.branchs;
+            this.size = parseInt(this.game[0][0].SZ, 10);
+            this.branchs = this.game[0][0].branchs;
 
             this.curnode = 0;
             this.curbranch = 0;
@@ -252,16 +243,15 @@ var yygo = {};
          * Create and insert comments html code.
          */
         makeComments: function () {
-            var comments =      yygo.data.comments || {},
+            var game =          yygo.data.game,
                 curnode =       yygo.data.curnode,
                 curbranch =     yygo.data.curbranch,
                 commentselem =  document.getElementById('comments'),
                 html =          '';
 
-            if (!isEmpty(comments) && comments[curnode] !== undefined &&
-                    comments[curnode][curbranch] !== undefined) {
+            if (game[curnode][curbranch].C !== undefined) {
                 html = '<p>';
-                html += comments[curnode][curbranch];
+                html += game[curnode][curbranch].C;
                 html += '</p>';
 
                 commentselem.innerHTML = html; // Insert html.
@@ -320,11 +310,13 @@ var yygo = {};
                 loadlistelem =  document.getElementById('loadlist'),
                 html =          '<table id="gameslist">',
                 infos =         {},
+                game =          {},
                 ci =            gameslist.length,
                 i;
 
             for (i = 0; i < ci; i++) {
-                infos = JSON.parse(gameslist[i].infos);
+                game = JSON.parse(gameslist[i].game);
+                infos = game[0][0];
 
                 html += '<tr><td>' + gameslist[i].file + '</td>';
 
@@ -356,7 +348,7 @@ var yygo = {};
          * Create and insert informations html code.
          */
         makeInfos: function () {
-            var infos =         yygo.data.infos,
+            var infos =         yygo.data.game[0][0],
                 locale =        yygo.data.locale,
                 infoselem =     document.getElementById('infos'),
                 html =          '<p>';
@@ -514,7 +506,7 @@ var yygo = {};
             document.getElementById('sendsgf').title =  locale.sendsgf;
             document.getElementById('downsgf').title =  locale.downsgf;
 
-            if (!isEmpty(yygo.data.infos)) {
+            if (!isEmpty(yygo.data.game)) {
                 this.makeInfos(); // Remake infos as it depends on locale.
             }
 
@@ -686,10 +678,11 @@ var yygo = {};
          */
         placeStones: function () {
             var game =          yygo.data.game,
-                curbranch =     yygo.data.curbranch,
                 curnode =       yygo.data.curnode,
-                bstones =       game[curnode][curbranch].b.split(','),
-                wstones =       game[curnode][curbranch].w.split(','),
+                curbranch =     yygo.data.curbranch,
+                stones =        game[curnode][curbranch].stones,
+                bstones =       stones.b.split(','),
+                wstones =       stones.w.split(','),
                 cb =            bstones.length,
                 cw =            wstones.length,
                 cell,
@@ -718,7 +711,6 @@ var yygo = {};
             var curbranch =     yygo.data.curbranch,
                 curnode =       yygo.data.curnode,
                 game =          yygo.data.game,
-                symbols =       yygo.data.symbols || {},
                 circles =       [],
                 squares =       [],
                 triangles =     [],
@@ -736,61 +728,63 @@ var yygo = {};
                 l,
                 cl;
 
-            if (!isEmpty(symbols) && symbols[curnode] !== undefined &&
-                    symbols[curnode][curbranch] !== undefined) {
-                // Circles.
-                if (symbols[curnode][curbranch].CR !== undefined) {
-                    circles = symbols[curnode][curbranch].CR.split(',');
-                    cc = circles.length;
-                    for (c = 0; c < cc; c++) {
-                        cell = document.getElementById(circles[c]);
-                        color = cell.className.substr(9);
-                        this.insertSymbolSvg('CR', circles[c], color);
-                    }
+            // Circles.
+            if (game[curnode][curbranch].CR !== undefined) {
+                circles = game[curnode][curbranch].CR.split(',');
+                cc = circles.length;
+                for (c = 0; c < cc; c++) {
+                    cell = document.getElementById(circles[c]);
+                    color = cell.className.substr(9);
+                    this.insertSymbolSvg('CR', circles[c], color);
                 }
-                // Squares.
-                if (symbols[curnode][curbranch].SQ !== undefined) {
-                    squares = symbols[curnode][curbranch].SQ.split(',');
-                    cs = squares.length;
-                    for (s = 0; s < cs; s++) {
-                        cell = document.getElementById(squares[s]);
-                        color = cell.className.substr(9);
-                        this.insertSymbolSvg('SQ', squares[s], color);
-                    }
+            }
+            // Squares.
+            if (game[curnode][curbranch].SQ !== undefined) {
+                squares = game[curnode][curbranch].SQ.split(',');
+                cs = squares.length;
+                for (s = 0; s < cs; s++) {
+                    cell = document.getElementById(squares[s]);
+                    color = cell.className.substr(9);
+                    this.insertSymbolSvg('SQ', squares[s], color);
                 }
-                // Triangles.
-                if (symbols[curnode][curbranch].TR !== undefined) {
-                    triangles = symbols[curnode][curbranch].TR.split(',');
-                    ct = triangles.length;
-                    for (t = 0; t < ct; t++) {
-                        cell = document.getElementById(triangles[t]);
-                        color = cell.className.substr(9);
-                        this.insertSymbolSvg('TR', triangles[t], color);
-                    }
+            }
+            // Triangles.
+            if (game[curnode][curbranch].TR !== undefined) {
+                triangles = game[curnode][curbranch].TR.split(',');
+                ct = triangles.length;
+                for (t = 0; t < ct; t++) {
+                    cell = document.getElementById(triangles[t]);
+                    color = cell.className.substr(9);
+                    this.insertSymbolSvg('TR', triangles[t], color);
                 }
-                // Labels.
-                if (symbols[curnode][curbranch].LB !== undefined) {
-                    labels = symbols[curnode][curbranch].LB.split(',');
-                    cl = labels.length;
-                    for (l = 0; l < cl; l++) {
-                        label = labels[l].split(':');
-                        cell = document.getElementById(label[0]);
-                        color = cell.className.substr(9);
-                        if (color === '') {
-                            // Empty cell background for better visibility.
-                            cell.className += ' celle';
-                        }
-                        cell.title = label[1];
-                        cell.textContent = label[1];
+            }
+            // Labels.
+            if (game[curnode][curbranch].LB !== undefined) {
+                labels = game[curnode][curbranch].LB.split(',');
+                cl = labels.length;
+                for (l = 0; l < cl; l++) {
+                    label = labels[l].split(':');
+                    cell = document.getElementById(label[0]);
+                    color = cell.className.substr(9);
+                    if (color === '') {
+                        // Empty cell background for better visibility.
+                        cell.className += ' celle';
                     }
+                    cell.title = label[1];
+                    cell.textContent = label[1];
                 }
             }
 
             // Circle to indicate the last played stone.
-            if (game[curnode][curbranch].p !== undefined) {
-                playedstone = game[curnode][curbranch].p.split(',');
-                if (playedstone[1] !== '') {
-                    this.insertSymbolSvg('CR', playedstone[1], playedstone[0]);
+            if (game[curnode][curbranch].W !== undefined) {
+                playedstone = game[curnode][curbranch].W;
+                if (playedstone !== '') { // If player did no pass.
+                    this.insertSymbolSvg('CR', playedstone, 'w');
+                }
+            } else if (game[curnode][curbranch].B !== undefined) {
+                playedstone = game[curnode][curbranch].B;
+                if (playedstone !== '') { // If player did no pass.
+                    this.insertSymbolSvg('CR', playedstone, 'b');
                 }
             }
         },
@@ -1001,24 +995,26 @@ var yygo = {};
         loadIntro: function () {
 
             yygo.data.game = {0: {0: {
-                "b": "fm,fn,fo,fp,gl,gm,gn,go,gp,gq,hk,hl,hm,hn,ho,hp,hq,hr," +
-                    "ie,if,ik,il,im,in,ip,iq,ir,je,jf,jk,jl,jm,jp,jq,jr,js," +
-                    "ka,kj,kk,kl,km,kp,kq,kr,ks,la,lj,lk,ll,lm,ln,lo,lp,lq," +
-                    "lr,ls,ma,mb,mi,mj,mk,ml,mm,mn,mo,mp,mq,mr,ms,nb,nc,nh," +
-                    "ni,nj,nk,nl,nm,nn,no,np,nq,nr,ob,oc,od,oe,of,og,oh,oi," +
-                    "oj,ok,ol,om,on,oo,op,oq,or,pc,pd,pe,pf,pg,ph,pi,pj,pk," +
-                    "pl,pm,pn,po,pp,pq,qd,qe,qf,qg,qh,qi,qj,qk,ql,qm,qn,qo," +
-                    "qp,re,rf,rg,rh,ri,rj,rk,rl,rm,rn,ro,sg,sh,si,sj,sk,sl,sm",
-                "w": "ag,ah,ai,aj,ak,al,am,be,bf,bg,bh,bi,bj,bk,bl,bm,bn,bo," +
-                    "cd,ce,cf,cg,ch,ci,cj,ck,cl,cm,cn,co,cp,dc,dd,de,df,dg," +
-                    "dh,di,dj,dk,dl,dm,dn,do,dp,dq,eb,ec,ed,ee,ef,eg,eh,ei," +
-                    "ej,ek,el,em,en,eo,ep,eq,er,fb,fc,fd,fe,ff,fg,fh,fi,fj," +
-                    "fk,fl,fq,fr,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk,gr,gs,ha," +
-                    "hb,hc,hd,he,hf,hg,hh,hi,hj,hs,ia,ib,ic,id,ig,ih,ii,ij," +
-                    "is,ja,jb,jc,jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn," +
-                    "ko,lb,lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
-            } } };
-            yygo.data.symbols = {0: {0: {
+                "stones": {
+                    "b": "fm,fn,fo,fp,gl,gm,gn,go,gp,gq,hk,hl,hm,hn,ho,hp," +
+                        "hq,hr,ie,if,ik,il,im,in,ip,iq,ir,je,jf,jk,jl,jm," +
+                        "jp,jq,jr,js,ka,kj,kk,kl,km,kp,kq,kr,ks,la,lj,lk," +
+                        "ll,lm,ln,lo,lp,lq,lr,ls,ma,mb,mi,mj,mk,ml,mm,mn," +
+                        "mo,mp,mq,mr,ms,nb,nc,nh,ni,nj,nk,nl,nm,nn,no,np," +
+                        "nq,nr,ob,oc,od,oe,of,og,oh,oi,oj,ok,ol,om,on,oo," +
+                        "op,oq,or,pc,pd,pe,pf,pg,ph,pi,pj,pk,pl,pm,pn,po," +
+                        "pp,pq,qd,qe,qf,qg,qh,qi,qj,qk,ql,qm,qn,qo,qp,re," +
+                        "rf,rg,rh,ri,rj,rk,rl,rm,rn,ro,sg,sh,si,sj,sk,sl,sm",
+                    "w": "ag,ah,ai,aj,ak,al,am,be,bf,bg,bh,bi,bj,bk,bl,bm," +
+                        "bn,bo,cd,ce,cf,cg,ch,ci,cj,ck,cl,cm,cn,co,cp,dc," +
+                        "dd,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,eb,ec," +
+                        "ed,ee,ef,eg,eh,ei,ej,ek,el,em,en,eo,ep,eq,er,fb," +
+                        "fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fq,fr,ga,gb,gc,gd," +
+                        "ge,gf,gg,gh,gi,gj,gk,gr,gs,ha,hb,hc,hd,he,hf,hg," +
+                        "hh,hi,hj,hs,ia,ib,ic,id,ig,ih,ii,ij,is,ja,jb,jc," +
+                        "jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn,ko,lb," +
+                        "lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
+                },
                 "LB": "ch:Y,dh:I,eh:N,gh:Y,hh:A,ih:N,jh:G,nl:G,ol:O"
             } } };
 
