@@ -203,22 +203,22 @@ class Sgf
      */
     protected function makeStates()
     {
-        $game =     $this->_game;
-        $branchs =  $game[0][0]['branchs'];
+        $branchs =  $this->_game[0][0]['branchs'];
         $state =    [];
-        $nodes =    sizeof($game);
+        $nodes =    sizeof($this->_game);
 
         // Browse all nodes and branchs.
         for ($node = 0; $node < $nodes; $node++) {
             for ($branch = 0; $branch < $branchs; $branch++) {
                 // We have keys registered here, analyze them.
-                if (isset($game[$node][$branch])) {
+                if (isset($this->_game[$node][$branch])) {
                     // Always have an empty goban at least.
-                    $game[$node][$branch]['stones'] = ['b' => '', 'w' => ''];
+                    $this->_game[$node][$branch]['stones'] 
+                        = ['b' => '', 'w' => ''];
                     // Seek and store the previous state.
-                    $state = $this->previousState($game, $node, $branch);
+                    $state = $this->previousState($node, $branch);
                     // Browse the keys and make actions.
-                    foreach ($game[$node][$branch] as $key => $value) {
+                    foreach ($this->_game[$node][$branch] as $key => $value) {
                         switch ($key) {
                         case 'B': // Play black stone and get new state.
                             $state = $this->playMove(
@@ -249,12 +249,9 @@ class Sgf
                             break;
                         } // Switch.
                     } // For each.
-                    // Convert state to stones.
-                    $game[$node][$branch]['stones'] 
-                        = $this->stateToStones($state);
                     // Register stones for the global game.
                     $this->_game[$node][$branch]['stones']
-                        = $game[$node][$branch]['stones'];
+                        = $this->stateToStones($state);
                 }
             }
         }
@@ -320,14 +317,14 @@ class Sgf
     /** previousState {{{
      * Get the previous goban state.
      *
-     * @param {array}   $game   Game to test.
      * @param {integer} $node   Current node.
      * @param {integer} $branch Current branch.
      *
      * @return {array} Previous goban state.
      */
-    protected function previousState($game, $node, $branch)
+    protected function previousState($node, $branch)
     {
+        $game =     $this->_game;
         $size =     $game[0][0]['SZ'];
         $bstones =  [];
         $wstones =  [];
