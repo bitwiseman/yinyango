@@ -30,7 +30,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
  * @link     https://github.com/hickop/yinyanggo
  *
- * @property {array}   $_game     Game states.
+ * @property {array}   $_game     All game data.
  * @property {array}   $_captures Potential captured stones.
  * @property {array}   $_prison   Prisonners.
  */
@@ -297,21 +297,21 @@ class Sgf
      * @param {integer} $branch Branch to play the stone.
      * @param {string}  $color  Color of played stone.
      * @param {string}  $coord  Coordinate of played stone in letters.
-     * @param {array}   $state  Previous state before playing the stone.
+     * @param {array}   $state  Previous goban state before playing the stone.
      *
      * @return {array} New goban state after playing the stone and making 
      *                 eventuals captures.
      */
     protected function playMove($node, $branch, $color, $coord, $state)
     {
-        // Transform coordinates to numbers.
+        // Transform coordinates into numbers.
         $x = ord(substr($coord, 0, 1)) - 97;
         $y = ord(substr($coord, 1, 1)) - 97;
         // Add played stone to previous state.
         $state[$x][$y] = $color;
-        // Test if that makes captures.
+        // Test if that makes captures and get new state if so.
         $state = $this->testCaptures($color, $x, $y, $state);
-        // TODO Calculate KO
+        // TODO Calculate KO.
 
         return $state;
     }
@@ -383,9 +383,9 @@ class Sgf
     /*}}}*/
 
     /** stateToStones {{{
-     * Convert a state to a stones list.
+     * Convert a goban state to a stones list.
      *
-     * @param {array} $state State to convert.
+     * @param {array} $state Goban state to convert.
      *
      * @return {array} Stones list.
      */
@@ -428,15 +428,17 @@ class Sgf
      * @param {integer} $y     Y coordinate of played stone.
      * @param {array}   $state Previous goban state before testing captures.
      *
-     * @return {array} New state after making eventuals captures.
+     * @return {array} New goban state after making eventuals captures.
      */
     protected function testCaptures($color, $x, $y, $state)
     {
-        $this->_captures = [];
+        $this->_captures = []; // Empty potential captures before each test.
         if ($this->testLiberties($color, $x-1, $y, $state) == 0) {
+            // No liberties found, capture the potentials cpatures.
             $state = $this->captureStones($color, $state);
         }
-        $this->_captures = []; // Empty potential captures before each test.
+        // Repeat for each direction.
+        $this->_captures = [];
         if ($this->testLiberties($color, $x, $y-1, $state) == 0) {
             $state = $this->captureStones($color, $state);
         }
@@ -476,7 +478,8 @@ class Sgf
             if ($state[$x][$y] == $ennemy) {
                 $capture = $x . ',' . $y;
                 // Check if we already added that one.
-                for ($i = 0, $ci = count($this->_captures); $i < $ci; $i++) {
+                $ci = count($this->_captures);
+                for ($i = 0; $i < $ci; $i++) {
                     if ($this->_captures[$i] == $capture) {
                         // Already in potential captures.
                         return 0;
@@ -511,9 +514,9 @@ class Sgf
      * Remove captured stone(s) from the state.
      *
      * @param {string} $color Color of captured stone(s).
-     * @param {array}  $state Previous state before making captures.
+     * @param {array}  $state Previous goban state before making captures.
      *
-     * @return {array} New state after captures.
+     * @return {array} New goban state after captures.
      */
     protected function captureStones($color, $state)
     {
