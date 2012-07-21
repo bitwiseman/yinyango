@@ -38,13 +38,33 @@
         <div id="variations"></div>
         <div id="goban"></div>
         <div id="comments"></div>
-        <form id="sendinput" target="sendtarget"
-              enctype="multipart/form-data" action="model.php" method="POST">
-            <p><input type="file" name="sgf" /></p>
-            <p><input type="submit" /></p>
-            <p id="response"></p>
-            <iframe id="sendtarget" name="sendtarget"></iframe>
-        </form>
+        <div id="serverforms">
+            <iframe id="responseframe" name="responseframe"></iframe>
+            <p id="serverresponse"></p>
+            <form id="sendsgfform" target="responseframe"
+                    enctype="multipart/form-data" action="model.php"
+                    method="POST">
+                <p><input type="file" name="sgf" /></p>
+                <p><input type="submit" /></p>
+            </form>
+            <form id="loginform" target="responseframe"
+                    enctype="multipart/form-data" action="model.php"
+                    method="POST">
+                <p><input type="text" name="login" /></p>
+                <p><input type="password" name="pass" /></p>
+                <p><input type="submit" /></p>
+                <p id="registerlink"></p>
+            </form>
+            <form id="registerform" target="responseframe"
+                    enctype="multipart/form-data" action="model.php"
+                    method="POST">
+                <p><input type="text" name="login" /></p>
+                <p><input type="password" name="pass" /></p>
+                <p><input type="password" name="repass" /></p>
+                <p><input type="text" name="mail" /></p>
+                <p><input type="submit" /></p>
+            </form>
+        </div>
         <script src="js/yinyanggo.js"></script>
     </body>
 </html>

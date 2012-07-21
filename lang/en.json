@@ -19,6 +19,7 @@
     "place":        "Place",
     "rules":        "Rules",
 
+    "loading":      "Sending data, please be patient...",
     "invalid":      "Invalid SGF file.",
     "success":      "File successfully registered.",
     "exist":        "File already exist.",

@@ -525,14 +525,18 @@ var yygo = {};
          * Change the elements to display depending on the actual screen.
          */
         changeScreen: function () {
-            var screen =        yygo.events.screen,
-                buttonsbar =    document.getElementById('buttonsbar'),
-                variations =    document.getElementById('variations'),
-                goban =         document.getElementById('goban'),
-                comments =      document.getElementById('comments'),
-                infos =         document.getElementById('infos'),
-                sendinput =     document.getElementById('sendinput'),
-                loadlist =      document.getElementById('loadlist');
+            var screen =            yygo.events.screen,
+                buttonsbar =        document.getElementById('buttonsbar'),
+                variations =        document.getElementById('variations'),
+                goban =             document.getElementById('goban'),
+                comments =          document.getElementById('comments'),
+                infos =             document.getElementById('infos'),
+                serverforms =       document.getElementById('serverforms'),
+                serverresponse =    document.getElementById('serverresponse'),
+                sendsgfform =       document.getElementById('sendsgfform'),
+                loginform =         document.getElementById('loginform'),
+                registerform =      document.getElementById('registerform'),
+                loadlist =          document.getElementById('loadlist');
 
             // Hide all elements.
             buttonsbar.style.display = 'none';
@@ -540,8 +544,13 @@ var yygo = {};
             goban.style.display = 'none';
             comments.style.display = 'none';
             infos.style.display = 'none';
-            sendinput.style.display = 'none';
+            serverforms.style.display = 'none';
+            sendsgfform.style.display = 'none';
+            loginform.style.display = 'none';
+            registerform.style.display = 'none';
             loadlist.style.display = 'none';
+
+            serverresponse.textContent = ''; // Empty the server response.
 
             this.changeButtons(); // Change the buttons to display.
 
@@ -559,7 +568,8 @@ var yygo = {};
                 loadlist.style.display = 'block';
             } else if (screen === 'sendsgf') {
                 buttonsbar.style.display = 'block';
-                sendinput.style.display = 'block';
+                serverforms.style.display = 'block';
+                sendsgfform.style.display = 'block';
             }
         },
         /*}}}*/
@@ -1050,7 +1060,10 @@ var yygo = {};
                 langen =        document.getElementById('langen'),
                 langfr =        document.getElementById('langfr'),
                 sendsgf =       document.getElementById('sendsgf'),
-                sendtarget =    document.getElementById('sendtarget'),
+                sendsgfform =   document.getElementById('sendsgfform'),
+                loginform =     document.getElementById('loginform'),
+                registerform =  document.getElementById('registerform'),
+                responseframe = document.getElementById('responseframe'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
                 prev =          document.getElementById('prev'),
@@ -1122,9 +1135,14 @@ var yygo = {};
                 }
             }, false);
 
-            // Load response after sending sgf file.
-            sendtarget.addEventListener('load', function () {
-                yygo.events.sendResponse();
+            // Load response after sending sgf file, login or registering.
+            responseframe.addEventListener('load', function () {
+                yygo.events.serverResponse();
+            }, false);
+
+            // Show a message when submiting data to server.
+            window.addEventListener('submit', function () {
+                yygo.events.submitData();
             }, false);
         },
         /*}}}*/
@@ -1246,6 +1264,17 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.events.submitData {{{
+         * Show message while sending data to server and waiting for answer.
+         */
+        submitData: function () {
+            var locale =            yygo.data.locale,
+                serverresponse =    document.getElementById('serverresponse');
+
+            serverresponse.textContent = locale.loading;
+        },
+        /*}}}*/
+
         /** yygo.events.clickBorders {{{
          * Toggle display state of the goban borders.
          */
@@ -1330,27 +1359,26 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.sendResponse {{{
-         * Show the response of the server after sending a sgf file.
+        /** yygo.events.serverResponse {{{
+         * Show the response of the server after sending a sgf file,
+         * user login or user registration.
          */
-        sendResponse: function () {
-            var locale = yygo.data.locale,
-                responseelem = document.getElementById('response'),
+        serverResponse: function () {
+            var locale =            yygo.data.locale,
+                serverresponse =    document.getElementById('serverresponse'),
                 response;
 
-            responseelem.textContent = ''; // Empty response.
-
-            response = frames.sendtarget
+            response = frames.responseframe
                 .document.getElementsByTagName("body")[0].innerHTML;
 
             if (response === 'invalid') {
-                responseelem.textContent = locale.invalid;
+                serverresponse.textContent = locale.invalid;
             } else if (response === 'success') {
-                responseelem.textContent = locale.success;
+                serverresponse.textContent = locale.success;
             } else if (response === 'exist') {
-                responseelem.textContent = locale.exist;
+                serverresponse.textContent = locale.exist;
             } else {
-                responseelem.textContent = locale.error;
+                serverresponse.textContent = locale.error;
             }
         }
         /*}}}*/
