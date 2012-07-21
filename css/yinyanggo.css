@@ -47,16 +47,6 @@ body {
     overflow: auto;
     text-align: center;
 }
-[id$="form"] {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
-    overflow: auto;
-    text-align: center;
-}
 #responseframe {
     display: none;
 }
