@@ -1321,7 +1321,7 @@ var yygo = {};
                 });
             }
 
-            if (yygo.events.screen === 'options') {
+            if (yygo.events.screen !== 'list') {
                 yygo.events.screen = 'list';
                 yygo.view.changeScreen();
             } else {
@@ -1335,11 +1335,11 @@ var yygo = {};
          * Toggle display state of the options.
          */
         clickOptions: function () {
-            if (yygo.events.screen === 'goban') {
-                yygo.events.screen = 'options';
+            if (yygo.events.screen !== 'goban') {
+                yygo.events.screen = 'goban';
                 yygo.view.changeScreen();
             } else {
-                yygo.events.screen = 'goban';
+                yygo.events.screen = 'options';
                 yygo.view.changeScreen();
             }
         },
@@ -1349,7 +1349,7 @@ var yygo = {};
          * Toggle the display state of the form to send sgf files.
          */
         clickSendSgf: function () {
-            if (this.screen === 'options') {
+            if (this.screen !== 'sendsgf') {
                 this.screen = 'sendsgf';
                 yygo.view.changeScreen();
             } else {
