@@ -105,6 +105,10 @@ body {
     left: 450px;
     background-position: -400px 0px;
 }
+#game {
+    left: 400px;
+    background-position: -350px 0px;
+}
 #sendsgf {
     left: 200px;
     background-position: -450px 0px;

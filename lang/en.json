@@ -9,6 +9,7 @@
     "next":         "Next",
     "fastnext":     "Fast forward",
     "end":          "Go to end",
+    "game":         "Back to game",
     "options":      "Options menu",
     "sendsgf":      "Send SGF file",
     "downsgf":      "Download with SGF format",

@@ -444,12 +444,14 @@ var yygo = {};
                 navbuttons =    document.getElementById('navbuttons'),
                 optbuttons =    document.getElementById('optbuttons'),
                 gobbuttons =    document.getElementById('gobbuttons'),
+                game =          document.getElementById('game'),
                 options =       document.getElementById('options');
 
             // Hide all buttons.
             navbuttons.style.display = 'none';
             optbuttons.style.display = 'none';
             gobbuttons.style.display = 'none';
+            game.style.display = 'none';
             options.style.display = 'none';
 
             // Show the buttons we need for the actual screen.
@@ -462,11 +464,13 @@ var yygo = {};
                 // TODO Other modes.
             } else if (screen === 'options') {
                 optbuttons.style.display = 'block';
-                options.style.display = 'block';
+                game.style.display = 'block';
             } else if (screen === 'list') {
-                optbuttons.style.display = 'block';
+                game.style.display = 'block';
+                options.style.display = 'block';
             } else if (screen === 'sendsgf') {
-                optbuttons.style.display = 'block';
+                game.style.display = 'block';
+                options.style.display = 'block';
             }
         },
         /*}}}*/
@@ -502,6 +506,7 @@ var yygo = {};
             document.getElementById('next').title =     locale.next;
             document.getElementById('fastnext').title = locale.fastnext;
             document.getElementById('end').title =      locale.end;
+            document.getElementById('game').title =     locale.game;
             document.getElementById('options').title =  locale.options;
             document.getElementById('sendsgf').title =  locale.sendsgf;
             document.getElementById('downsgf').title =  locale.downsgf;
@@ -1055,6 +1060,7 @@ var yygo = {};
         makeBinds: function () {
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
+                game =          document.getElementById('game'),
                 options =       document.getElementById('options'),
                 load =          document.getElementById('load'),
                 langen =        document.getElementById('langen'),
@@ -1083,6 +1089,10 @@ var yygo = {};
             // Click borders button.
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
+            }, false);
+            // Click game button.
+            game.addEventListener('click', function () {
+                yygo.events.clickGame();
             }, false);
             // Click options button.
             options.addEventListener('click', function () {
@@ -1306,7 +1316,7 @@ var yygo = {};
         /*}}}*/
 
         /** yygo.events.clickLoadList {{{
-         * Load/show/hide the games list.
+         * Load and show the games list.
          */
         clickLoadList: function () {
             var gameslist = yygo.data.gameslist || {};
@@ -1321,41 +1331,35 @@ var yygo = {};
                 });
             }
 
-            if (yygo.events.screen !== 'list') {
-                yygo.events.screen = 'list';
-                yygo.view.changeScreen();
-            } else {
-                yygo.events.screen = 'options';
-                yygo.view.changeScreen();
-            }
+            this.screen = 'list';
+            yygo.view.changeScreen();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickGame {{{
+         * Show the current game.
+         */
+        clickGame: function () {
+            this.screen = 'goban';
+            yygo.view.changeScreen();
         },
         /*}}}*/
 
         /** yygo.events.clickOptions {{{
-         * Toggle display state of the options.
+         * Show the options.
          */
         clickOptions: function () {
-            if (yygo.events.screen !== 'goban') {
-                yygo.events.screen = 'goban';
-                yygo.view.changeScreen();
-            } else {
-                yygo.events.screen = 'options';
-                yygo.view.changeScreen();
-            }
+            this.screen = 'options';
+            yygo.view.changeScreen();
         },
         /*}}}*/
 
         /** yygo.events.clickSendSgf {{{
-         * Toggle the display state of the form to send sgf files.
+         * Show the form to send sgf files.
          */
         clickSendSgf: function () {
-            if (this.screen !== 'sendsgf') {
-                this.screen = 'sendsgf';
-                yygo.view.changeScreen();
-            } else {
-                this.screen = 'options';
-                yygo.view.changeScreen();
-            }
+            this.screen = 'sendsgf';
+            yygo.view.changeScreen();
         },
         /*}}}*/
 
