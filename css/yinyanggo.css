@@ -50,6 +50,9 @@ body {
 #responseframe {
     display: none;
 }
+#reglink {
+    cursor: pointer;
+}
 /*}}}*/
 #buttonsbar {/*{{{*/
     display: none;

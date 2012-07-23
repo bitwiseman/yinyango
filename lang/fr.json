@@ -1,7 +1,7 @@
 {
     "comment":      "Commentaires",
     "border":       "Bordures",
-    "load":         "Charger",
+    "load":         "Charger une partie de la liste",
     "language":     "Langue",
     "start":        "Revenir au début",
     "prev":         "Précédent",
@@ -13,6 +13,8 @@
     "options":      "Menu des options",
     "sendsgf":      "Envoyer fichier SGF",
     "downsgf":      "Télécharger au format SGF",
+    "login":        "Connexion",
+    "logout":       "Déconnexion",
 
     "black":        "Noir",
     "white":        "Blanc",
@@ -20,9 +22,13 @@
     "place":        "Emplacement",
     "rules":        "Règles",
 
+    "nickname":     "Pseudonyme",
+    "password":     "Mot de passe",
+    "email":        "E-mail",
+    "register":     "S'enregistrer",
     "loading":      "Envoi des données, veuillez patienter...",
     "invalid":      "Fichier SGF non valide.",
     "success":      "Fichier enregisré avec succès.",
     "exist":        "Le fichier existe déjà.",
-    "error":        "Une erreur est survenue durant l'envoi du fichier."
+    "error":        "Une erreur est survenue."
 }

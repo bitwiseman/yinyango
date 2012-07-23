@@ -443,6 +443,8 @@ var yygo = {};
                 screen =        yygo.events.screen,
                 navbuttons =    document.getElementById('navbuttons'),
                 optbuttons =    document.getElementById('optbuttons'),
+                sendsgf =       document.getElementById('sendsgf'),
+                userstatus =    document.getElementById('userstatus'),
                 gobbuttons =    document.getElementById('gobbuttons'),
                 game =          document.getElementById('game'),
                 options =       document.getElementById('options');
@@ -465,10 +467,24 @@ var yygo = {};
             } else if (screen === 'options') {
                 optbuttons.style.display = 'block';
                 game.style.display = 'block';
+                // Consider user login status.
+                if (yygo.events.logged === false) {
+                    sendsgf.style.display = 'none';
+                    userstatus.style.backgroundColor = '#cf142b';
+                } else {
+                    sendsgf.style.display = 'block';
+                    userstatus.style.backgroundColor = '#96b14e';
+                }
             } else if (screen === 'list') {
                 game.style.display = 'block';
                 options.style.display = 'block';
             } else if (screen === 'sendsgf') {
+                game.style.display = 'block';
+                options.style.display = 'block';
+            } else if (screen === 'login') {
+                game.style.display = 'block';
+                options.style.display = 'block';
+            } else if (screen === 'register') {
                 game.style.display = 'block';
                 options.style.display = 'block';
             }
@@ -510,6 +526,21 @@ var yygo = {};
             document.getElementById('options').title =  locale.options;
             document.getElementById('sendsgf').title =  locale.sendsgf;
             document.getElementById('downsgf').title =  locale.downsgf;
+
+            // User button label considering login status.
+            if (yygo.events.logged === false) {
+                document.getElementById('user').title = locale.login;
+            } else {
+                document.getElementById('user').title = locale.logout;
+            }
+
+            // Forms labels.
+            document.getElementById('logname').textContent = locale.nickname;
+            document.getElementById('regname').textContent = locale.nickname;
+            document.getElementById('logpass').textContent = locale.password;
+            document.getElementById('regpass').textContent = locale.password;
+            document.getElementById('regmail').textContent = locale.email;
+            document.getElementById('reglink').textContent = locale.register;
 
             if (!isEmpty(yygo.data.game)) {
                 this.makeInfos(); // Remake infos as it depends on locale.
@@ -575,6 +606,14 @@ var yygo = {};
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
                 sendsgfform.style.display = 'block';
+            } else if (screen === 'login') {
+                buttonsbar.style.display = 'block';
+                serverforms.style.display = 'block';
+                loginform.style.display = 'block';
+            } else if (screen === 'register') {
+                buttonsbar.style.display = 'block';
+                serverforms.style.display = 'block';
+                registerform.style.display = 'block';
             }
         },
         /*}}}*/
@@ -935,12 +974,15 @@ var yygo = {};
     /** yygo.events {{{
      * Events part of the yygo namespace.
      *
-     * @property {String} mode      Goban mode: replay, play, modify...
-     * @property {String} screen    Actual screen to show.
+     * @property {Boolean}  logged  User login state.
+     * @property {String}   mode    Goban mode: replay, play, modify...
+     * @property {String}   screen  Actual screen to show.
      */
     yygo.events = {
 
         // Properties.
+
+        logged:         false,
 
         mode:           'replay',
         screen:         'goban',
@@ -1065,8 +1107,10 @@ var yygo = {};
                 load =          document.getElementById('load'),
                 langen =        document.getElementById('langen'),
                 langfr =        document.getElementById('langfr'),
+                user =          document.getElementById('user'),
                 sendsgf =       document.getElementById('sendsgf'),
                 responseframe = document.getElementById('responseframe'),
+                reglink =       document.getElementById('reglink'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
                 prev =          document.getElementById('prev'),
@@ -1079,38 +1123,37 @@ var yygo = {};
                 yygo.view.setGobanSize();
             }, false);
 
-            // Click comments button.
+            // Clicks.
             comment.addEventListener('click', function () {
                 yygo.events.clickComments();
             }, false);
-            // Click borders button.
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
-            // Click game button.
             game.addEventListener('click', function () {
                 yygo.events.clickGame();
             }, false);
-            // Click options button.
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
             }, false);
-            // Click games list button.
             load.addEventListener('click', function () {
                 yygo.events.clickLoadList();
             }, false);
-            // Click language buttons.
             langen.addEventListener('click', function () {
                 yygo.data.setLang('en');
             }, false);
             langfr.addEventListener('click', function () {
                 yygo.data.setLang('fr');
             }, false);
-            // Click send sgf file button.
+            user.addEventListener('click', function () {
+                yygo.events.clickUser();
+            }, false);
+            reglink.addEventListener('click', function () {
+                yygo.events.clickRegister();
+            }, false);
             sendsgf.addEventListener('click', function () {
                 yygo.events.clickSendSgf();
             }, false);
-            // Click navigation buttons.
             start.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-999999);
@@ -1312,6 +1355,15 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.events.clickGame {{{
+         * Show the current game.
+         */
+        clickGame: function () {
+            this.screen = 'goban';
+            yygo.view.changeScreen();
+        },
+        /*}}}*/
+
         /** yygo.events.clickLoadList {{{
          * Load and show the games list.
          */
@@ -1333,20 +1385,20 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.clickGame {{{
-         * Show the current game.
-         */
-        clickGame: function () {
-            this.screen = 'goban';
-            yygo.view.changeScreen();
-        },
-        /*}}}*/
-
         /** yygo.events.clickOptions {{{
          * Show the options.
          */
         clickOptions: function () {
             this.screen = 'options';
+            yygo.view.changeScreen();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickRegister {{{
+         * Registration of the user.
+         */
+        clickRegister: function () {
+            this.screen = 'register';
             yygo.view.changeScreen();
         },
         /*}}}*/
@@ -1357,6 +1409,19 @@ var yygo = {};
         clickSendSgf: function () {
             this.screen = 'sendsgf';
             yygo.view.changeScreen();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickUser {{{
+         * Login/logout and parameters of the user.
+         */
+        clickUser: function () {
+            if (this.logged === false) { // Login.
+                this.screen = 'login';
+                yygo.view.changeScreen();
+            } else { // TODO Parameters and logout.
+                this.logged = false;
+            }
         },
         /*}}}*/
 
