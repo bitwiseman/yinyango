@@ -99,7 +99,7 @@ body {
 }
 #load {
     left: 0;
-    background-position: -350px 0px;
+    background-position: -600px 0px;
 }
 #options {
     left: 450px;
@@ -109,12 +109,23 @@ body {
     left: 400px;
     background-position: -350px 0px;
 }
-#sendsgf {
+#user {
     left: 200px;
+    background-position: -650px 0px;
+}
+#userstatus {
+    width: 18px;
+    height: 18px;
+    margin: 10px 16px 22px 16px;
+    background-color: #cf142b;
+    border-radius: 50%;
+}
+#sendsgf {
+    left: 250px;
     background-position: -450px 0px;
 }
 #downsgf {
-    left: 250px;
+    left: 300px;
     background-position: -500px 0px;
 }
 #border {
@@ -125,10 +136,10 @@ body {
     left: 150px;
 }
 #langen,.buttonen {
-    background-position: -600px 0px;
+    background-position: -700px 0px;
 }
 #langfr,.buttonfr {
-    background-position: -650px 0px;
+    background-position: -750px 0px;
 }
 #lang ul {
     display: none;
