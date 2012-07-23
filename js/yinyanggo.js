@@ -351,30 +351,39 @@ var yygo = {};
             var infos =         yygo.data.game[0][0],
                 locale =        yygo.data.locale,
                 infoselem =     document.getElementById('infos'),
-                html =          '<p>';
+                html =          '<table>';
 
             if (infos.PB !== undefined) {
-                html += '<em>' + locale.black + ':</em> ' + infos.PB;
+                html += '<tr><td class="infolabel"><em>' + locale.black +
+                    ':</em></td><td>' + infos.PB;
+                if (infos.BR !== undefined) {
+                    html += ' [' + infos.BR + ']';
+                }
+                html += '</td></tr>';
             }
-            if (infos.BR !== undefined) {
-                html += ' [' + infos.BR + ']';
-            }
+            
             if (infos.PW !== undefined) {
-                html += ' <br /><em>' + locale.white + ':</em> ' + infos.PW;
+                html += '<tr><td class="infolabel"><em>' + locale.white +
+                    ':</em></td><td>' + infos.PW;
+                if (infos.WR !== undefined) {
+                    html += ' [' + infos.WR + ']';
+                }
+                html += '</td></tr>';
             }
-            if (infos.WR !== undefined) {
-                html += ' [' + infos.WR + ']';
-            }
+            
             if (infos.DT !== undefined) {
-                html += ' <br /><em>' + locale.date + ':</em> ' + infos.DT;
+                html += '<tr><td class="infolabel"><em>' + locale.date +
+                    ':</em></td><td>' + infos.DT + '</td></tr>';
             }
             if (infos.PC !== undefined) {
-                html += ' <br /><em>' + locale.place + ':</em> ' + infos.PC;
+                html += '<tr><td class="infolabel"><em>' + locale.place +
+                    ':</em></td><td>' + infos.PC + '</td></tr>';
             }
             if (infos.RU !== undefined) {
-                html += ' <br /><em>' + locale.rules + ':</em> ' + infos.RU;
+                html += '<tr><td class="infolabel"><em>' + locale.rules +
+                    ':</em></td><td>' + infos.RU + '</td></tr>';
             }
-            html += '</p>';
+            html += '</table>';
 
             infoselem.innerHTML = html;
         },
