@@ -112,7 +112,7 @@ function loginUser()
     // Quote to protect from SQL injection.
     $nickname = $database->quote($_POST['logname']);
 
-    if (strlen($nickname) <= 15) {
+    if (strlen($nickname) <= 17) {
         $select = $database->prepare(
             'SELECT hash, salt FROM users WHERE nick=?'
         );
@@ -125,7 +125,7 @@ function loginUser()
             $hash = hash('sha512', $user['salt'] . $_POST['logpass']);
             if ($hash == $user['hash']) {
                 // Register nickname in session.
-                $_SESSION['nickname'] = $nickname;
+                $_SESSION['nickname'] = $_POST['logname'];
                 $answer = 'logsuccess';
             } else {
                 $answer = 'wrong';
