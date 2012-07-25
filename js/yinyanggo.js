@@ -496,6 +496,9 @@ var yygo = {};
             } else if (screen === 'register') {
                 game.style.display = 'block';
                 options.style.display = 'block';
+            } else if (screen === 'param') {
+                game.style.display = 'block';
+                options.style.display = 'block';
             }
         },
         /*}}}*/
@@ -618,6 +621,8 @@ var yygo = {};
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
                 registerform.style.display = 'block';
+            } else if (screen === 'param') {
+                buttonsbar.style.display = 'block';
             }
         },
         /*}}}*/
@@ -1001,13 +1006,17 @@ var yygo = {};
                             navigator.userLanguage ||
                             'en').substr(0, 2).toLowerCase();
 
-            // TODO Get user parameters.
-
-            // Define language.
-            yygo.data.setLang(navlang, function () {
-                // Callback to be sure we have the locale data.
-                yygo.events.makeBinds();
-                yygo.events.loadIntro();
+            // Get user session if it still exist.
+            jsonRequest('model.php?nickname', function (data) {
+                if (data !== '') {
+                    yygo.events.nickname = data;
+                }
+                // Define language.
+                yygo.data.setLang(navlang, function () {
+                    // Callback to be sure we have the locale data.
+                    yygo.events.makeBinds();
+                    yygo.events.loadIntro();
+                });
             });
         },
         /*}}}*/

@@ -249,7 +249,7 @@ function saveToDatabase()
                     'game' => $data,
                     'sender' => $sender]
                 );
-                $answer = 'success';
+                $answer = 'sendsuccess';
             }
             $database = null; // Close connection.
         } else { // Sgfc reports other than 'OK'.

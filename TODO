@@ -2,5 +2,5 @@
 - Make different modes: play, edition...
 - Make a better Sgf class.
 - Calculate the score.
-- Make a user registration.
 - Treat other keys like 'pass'.
+- Save user parameters.
