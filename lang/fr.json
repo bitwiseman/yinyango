@@ -24,11 +24,16 @@
 
     "nickname":     "Pseudonyme",
     "password":     "Mot de passe",
-    "email":        "E-mail",
+    "email":        "Email",
     "register":     "S'enregistrer",
+
     "loading":      "Envoi des données, veuillez patienter...",
-    "invalid":      "Fichier SGF non valide.",
-    "success":      "Fichier enregisré avec succès.",
-    "exist":        "Le fichier existe déjà.",
+    "invalidsgf":   "Fichier SGF non valide.",
+    "sendsuccess":  "Fichier enregisré avec succès.",
+    "sgfexist":     "Le fichier existe déjà.",
+    "invalidnick":  "Le pseudonyme ne doit contenir que des caractères alphanumériques",
+    "invalidmail":  "Addresse email non valide.",
+    "nickexist":    "Ce pseudonyme est déjà pris.",
+    "regsuccess":   "Enregistrement réussit.",
     "error":        "Une erreur est survenue."
 }

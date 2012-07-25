@@ -54,9 +54,9 @@
                     enctype="multipart/form-data" action="model.php"
                     method="POST">
                 <p><label id="logname"></label></p>
-                <p><input type="text" name="loginname" /></p>
+                <p><input type="text" name="logname" maxlength="15" /></p>
                 <p><label id="logpass"></label></p>
-                <p><input type="password" name="loginpass" /></p>
+                <p><input type="password" name="logpass" /></p>
                 <p><input type="submit" /></p>
                 <p id="reglink"></p>
             </form>
@@ -64,11 +64,11 @@
                     enctype="multipart/form-data" action="model.php"
                     method="POST">
                 <p><label id="regname"></label></p>
-                <p><input type="text" name="registername" /></p>
+                <p><input type="text" name="regname" maxlength="15" /></p>
                 <p><label id="regpass"></label></p>
-                <p><input type="password" name="registerpass" /></p>
+                <p><input type="password" name="regpass" /></p>
                 <p><label id="regmail"></label></p>
-                <p><input type="text" name="registermail" /></p>
+                <p><input type="email" name="regmail" /></p>
                 <p><input type="submit" /></p>
             </form>
             <p id="serverresponse"></p>

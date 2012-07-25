@@ -361,7 +361,7 @@ var yygo = {};
                 }
                 html += '</td></tr>';
             }
-            
+
             if (infos.PW !== undefined) {
                 html += '<tr><td class="infolabel"><em>' + locale.white +
                     ':</em></td><td>' + infos.PW;
@@ -370,7 +370,7 @@ var yygo = {};
                 }
                 html += '</td></tr>';
             }
-            
+
             if (infos.DT !== undefined) {
                 html += '<tr><td class="infolabel"><em>' + locale.date +
                     ':</em></td><td>' + infos.DT + '</td></tr>';
@@ -477,7 +477,7 @@ var yygo = {};
                 optbuttons.style.display = 'block';
                 game.style.display = 'block';
                 // Consider user login status.
-                if (yygo.events.logged === false) {
+                if (yygo.events.nickname === '') {
                     sendsgf.style.display = 'none';
                     userstatus.style.backgroundColor = '#cf142b';
                 } else {
@@ -517,6 +517,7 @@ var yygo = {};
             var locale =    yygo.data.locale,
                 lang =      yygo.data.lang,
                 langs =     document.getElementsByClassName('lang'),
+                nickname =  yygo.events.nickname,
                 cl =        langs.length,
                 l;
 
@@ -537,10 +538,10 @@ var yygo = {};
             document.getElementById('downsgf').title =  locale.downsgf;
 
             // User button label considering login status.
-            if (yygo.events.logged === false) {
+            if (nickname === '') {
                 document.getElementById('user').title = locale.login;
             } else {
-                document.getElementById('user').title = locale.logout;
+                document.getElementById('user').title = nickname;
             }
 
             // Forms labels.
@@ -983,17 +984,16 @@ var yygo = {};
     /** yygo.events {{{
      * Events part of the yygo namespace.
      *
-     * @property {Boolean}  logged  User login state.
-     * @property {String}   mode    Goban mode: replay, play, modify...
-     * @property {String}   screen  Actual screen to show.
+     * @property {String}   mode        Goban mode: replay, play, modify...
+     * @property {String}   nickname    Nickname of user.
+     * @property {String}   screen      Actual screen to show.
      */
     yygo.events = {
 
         // Properties.
 
-        logged:         false,
-
         mode:           'replay',
+        nickname:       '',
         screen:         'goban',
 
         // Methods.
@@ -1425,12 +1425,16 @@ var yygo = {};
          * Login/logout and parameters of the user.
          */
         clickUser: function () {
-            if (this.logged === false) { // Login.
-                this.screen = 'login';
-                yygo.view.changeScreen();
-            } else { // TODO Parameters and logout.
-                this.logged = false;
-            }
+            jsonRequest('model.php?nickname', function (data) {
+                if (data !== '') {
+                    yygo.events.nickname = data;
+                    yygo.events.screen = 'param';
+                    yygo.view.changeScreen();
+                } else {
+                    yygo.events.screen = 'login';
+                    yygo.view.changeScreen();
+                }
+            });
         },
         /*}}}*/
 
@@ -1446,12 +1450,20 @@ var yygo = {};
             response = frames.responseframe
                 .document.getElementsByTagName("body")[0].innerHTML;
 
-            if (response === 'invalid') {
-                serverresponse.textContent = locale.invalid;
-            } else if (response === 'success') {
-                serverresponse.textContent = locale.success;
-            } else if (response === 'exist') {
-                serverresponse.textContent = locale.exist;
+            if (response === 'invalidsgf') {
+                serverresponse.textContent = locale.invalidsgf;
+            } else if (response === 'sendsuccess') {
+                serverresponse.textContent = locale.sendsuccess;
+            } else if (response === 'sgfexist') {
+                serverresponse.textContent = locale.sgfexist;
+            } else if (response === 'invalidnick') {
+                serverresponse.textContent = locale.invalidnick;
+            } else if (response === 'invalidmail') {
+                serverresponse.textContent = locale.invalidmail;
+            } else if (response === 'nickexist') {
+                serverresponse.textContent = locale.nickexist;
+            } else if (response === 'regsuccess') {
+                serverresponse.textContent = locale.regsuccess;
             } else {
                 serverresponse.textContent = locale.error;
             }

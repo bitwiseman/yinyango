@@ -24,11 +24,16 @@
 
     "nickname":     "Nickname",
     "password":     "Password",
-    "email":        "E-mail",
+    "email":        "Email",
     "register":     "Register",
+
     "loading":      "Sending data, please be patient...",
-    "invalid":      "Invalid SGF file.",
-    "success":      "File successfully registered.",
-    "exist":        "File already exist.",
+    "invalidsgf":   "Invalid SGF file.",
+    "sendsuccess":  "File successfully registered.",
+    "sgfexist":     "File already exist.",
+    "invalidnick":  "Nickname must contain only alphanumeric characters.",
+    "invalidmail":  "Invalid email address.",
+    "nickexist":    "This nickname is already taken.",
+    "regsuccess":   "Registering successfull.",
     "error":        "Error happened."
 }

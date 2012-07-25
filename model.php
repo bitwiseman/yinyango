@@ -13,6 +13,8 @@
 require_once 'config.php';
 require_once 'Sgf.class.php';
 
+session_start();
+
 /** connectDatabase {{{
  * Connect to datase and return pdo object.
  *
@@ -43,13 +45,23 @@ function createTables()
 {
     $database = connectDatabase();
 
-    $create = 'CREATE TABLE IF NOT EXISTS `sgf` (' .
+    $createsgf = 'CREATE TABLE IF NOT EXISTS `sgf` (' .
         '`id` int(11) NOT NULL AUTO_INCREMENT,' .
-        '`file` text NOT NULL,' .
-        '`game` text NOT NULL,' .
+        '`file` TEXT NOT NULL,' .
+        '`game` TEXT NOT NULL,' .
+        '`sender` VARCHAR(15) NOT NULL,' .
         'PRIMARY KEY (`id`))';
 
-    $database->exec($create);
+    $createusers = 'CREATE TABLE IF NOT EXISTS `users` (' .
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' .
+        '`nick` VARCHAR(15) NOT NULL,' .
+        '`hash` CHAR(64) NOT NULL,' .
+        '`salt` CHAR(64) NOT NULL,' .
+        '`mail` TEXT NOT NULL,' .
+        'PRIMARY KEY (`id`))';
+
+    $database->exec($createsgf);
+    $database->exec($createusers);
     $database = null; // Close connection.
 
     return null;
@@ -87,10 +99,68 @@ function getList($limit)
 }
 /*}}}*/
 
+/** registerUser {{{
+ * Register user in database.
+ *
+ * @return {string} Response to send to user.
+ */
+function registerUser()
+{
+    $answer = '';
+    $database = connectDatabase();
+
+    // Check nickname for special characters.
+    if (!ctype_alnum($_POST['regname'])) {
+        return 'invalidnick';
+    }
+    // Check if mail syntax is valid.
+    if (!filter_var($_POST['regmail'], FILTER_VALIDATE_EMAIL)) {
+        return 'invalidmail';
+    }
+    
+    // Quote to protect from SQL injection.
+    $nickname = $database->quote($_POST['regname']);
+    $mail = $database->quote($_POST['regmail']);
+    // Generate salt to have unique password.
+    $strong = false;
+    while ($strong == false) {
+        $salt = base64_encode(openssl_random_pseudo_bytes(64, $strong));
+    }
+    // Hash salt + password with sha512.
+    $hash = hash('sha512', $salt . $_POST['regpass']);
+
+    if (strlen($nickname) <= 15) {
+        // Check if nickname already exist in database.
+        $select = $database->prepare('SELECT * FROM users WHERE nick=?');
+        $select->execute([$nickname]);
+        $exist = $select->fetch();
+        $select->closeCursor();
+        if (!empty($exist)) {
+            $answer = 'nickexist';
+        } else {
+            $insert = $database->prepare(
+                'INSERT INTO users(nick, hash, salt, mail) ' .
+                'VALUES(:nick, :hash, :salt, :mail)'
+            );
+            $insert->execute(
+                ['nick' => $nickname,
+                'hash' => $hash,
+                'salt' => $salt,
+                'mail' => $mail]
+            );
+            $answer = 'regsuccess';
+        }
+    }
+
+    $database = null; // Close connection.
+    return $answer;
+}
+/*}}}*/
+
 /** saveToDatabase {{{
  * Check received file and try to save it in database.
  *
- * @return {string} Response to be sent to user.
+ * @return {string} Response to send to user.
  */
 function saveToDatabase()
 {
@@ -100,44 +170,58 @@ function saveToDatabase()
     $file = 'sgf/' . $name;
     $answer = '';
 
-    // Check file with sgfc.
-    $sgfc = rtrim(shell_exec('bin/sgfc ' . $tempname));
-    $test = substr($sgfc, -2); // 'OK' if valid.
+    // Only logged users can send files.
+    if (isset($_SESSION['nickname'])) {
+        $sender = $_SESSION['nickname'];
 
-    if ($test === 'OK') {
-        // Move file if it does not already exist.
-        if (!file_exists($file)) {
-            move_uploaded_file($tempname, $file);
+        // Check file with sgfc.
+        $sgfc = rtrim(shell_exec('bin/sgfc ' . $tempname));
+        $test = substr($sgfc, -2); // 'OK' if valid.
+
+        if ($test === 'OK') {
+            // Move file if it does not already exist.
+            if (!file_exists($file)) {
+                move_uploaded_file($tempname, $file);
+            }
+            // Check if file is already in database.
+            $database = connectDatabase();
+
+            $select = $database->prepare('SELECT * FROM sgf WHERE file=?');
+            $select->execute([$file]);
+            $exist = $select->fetch();
+            $select->closeCursor();
+            if (!empty($exist)) {
+                $answer = 'exist';
+            } else {
+                // Parse sgf file, get data and save it to database.
+                $sgf = new Sgf($file);
+                $data = $sgf->getData();
+
+                $insert = $database->prepare(
+                    'INSERT INTO sgf(file, game, sender) ' .
+                    'VALUES(:file, :game, :sender)'
+                );
+                // Send data encoded in json format.
+                $insert->execute(
+                    ['file' => $file,
+                    'game' => $data,
+                    'sender' => $sender]
+                );
+                $answer = 'success';
+            }
+            $database = null; // Close connection.
+        } else { // Sgfc reports other than 'OK'.
+            $answer = 'invalidsgf';
         }
-        // Check if file is already in database.
-        $database = connectDatabase();
-
-        $select = $database->prepare('SELECT * FROM sgf WHERE file=?');
-        $select->execute(array($file));
-        $vars = $select->fetch();
-        $select->closeCursor();
-        if (!empty($vars)) {
-            $answer = 'exist';
-        } else {
-            // Parse sgf file, get data and save it to database.
-            $sgf = new Sgf($file);
-            $data = $sgf->getData();
-
-            $insert = $database->prepare(
-                'INSERT INTO sgf(file, game) VALUES(:file, :game)'
-            );
-            // Send data encoded in json format.
-            $insert->execute(['file' => $file, 'game' => $data]);
-            $answer = 'success';
-        }
-        $database = null; // Close connection.
-    } else { // Sgfc reports other than 'OK'.
-        $answer = 'invalid';
     }
     return $answer;
 }
 /*}}}*/
 
+if (isset($_FILES['sgf']['name'])) {
+    $response = saveToDatabase();
+    echo $response;
+}
 if (isset($_GET['createtables'])) {
     createTables();
 }
@@ -147,10 +231,20 @@ if (isset($_GET['list'])) {
     header('Content-type: application/json');
     echo json_encode($list);
 }
-if (isset($_FILES['sgf']['name'])) {
-    $response = saveToDatabase();
+if (isset($_GET['nickname'])) {
+    $nickname = '';
+
+    if (isset($_SESSION['nickname'])) {
+        $nickname = $_SESSION['nickname'];
+    }
+    header('Content-type: application/json');
+    echo json_encode($nickname);
+}
+if (isset($_POST['regname'])) {
+    $response = registerUser();
     echo $response;
 }
+
 if (isset($_GET['test'])) {
     $sgf = new Sgf($_GET['test']);
 }
