@@ -13,8 +13,7 @@
     "options":      "Menu des options",
     "sendsgf":      "Envoyer fichier SGF",
     "downsgf":      "Télécharger au format SGF",
-    "login":        "Connexion",
-    "logout":       "Déconnexion",
+    "user":         "Utilisateur",
 
     "black":        "Noir",
     "white":        "Blanc",
@@ -34,6 +33,8 @@
     "invalidnick":  "Le pseudonyme ne doit contenir que des caractères alphanumériques",
     "invalidmail":  "Addresse email non valide.",
     "nickexist":    "Ce pseudonyme est déjà pris.",
-    "regsuccess":   "Enregistrement réussit.",
+    "regsuccess":   "Enregistrement réussi.",
+    "wrong":        "Mauvais pseudonyme ou mot de passe.",
+    "logsuccess":   "Connexion réussie.",
     "error":        "Une erreur est survenue."
 }

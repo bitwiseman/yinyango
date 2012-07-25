@@ -536,13 +536,7 @@ var yygo = {};
             document.getElementById('options').title =  locale.options;
             document.getElementById('sendsgf').title =  locale.sendsgf;
             document.getElementById('downsgf').title =  locale.downsgf;
-
-            // User button label considering login status.
-            if (nickname === '') {
-                document.getElementById('user').title = locale.login;
-            } else {
-                document.getElementById('user').title = nickname;
-            }
+            document.getElementById('user').title =     locale.user;
 
             // Forms labels.
             document.getElementById('logname').textContent = locale.nickname;
@@ -1464,6 +1458,11 @@ var yygo = {};
                 serverresponse.textContent = locale.nickexist;
             } else if (response === 'regsuccess') {
                 serverresponse.textContent = locale.regsuccess;
+            } else if (response === 'wrong') {
+                serverresponse.textContent = locale.wrong;
+            } else if (response === 'logsuccess') {
+                serverresponse.textContent = locale.logsuccess;
+                this.nickname = document.getElementById('nickname').value;
             } else {
                 serverresponse.textContent = locale.error;
             }

@@ -55,8 +55,8 @@ function createTables()
     $createusers = 'CREATE TABLE IF NOT EXISTS `users` (' .
         '`id` int(11) NOT NULL AUTO_INCREMENT,' .
         '`nick` VARCHAR(15) NOT NULL,' .
-        '`hash` CHAR(64) NOT NULL,' .
-        '`salt` CHAR(64) NOT NULL,' .
+        '`hash` CHAR(128) NOT NULL,' .
+        '`salt` CHAR(88) NOT NULL,' .
         '`mail` TEXT NOT NULL,' .
         'PRIMARY KEY (`id`))';
 
@@ -99,6 +99,47 @@ function getList($limit)
 }
 /*}}}*/
 
+/** loginUser {{{
+ * User login.
+ *
+ * @return {string} Response to send to user.
+ */
+function loginUser()
+{
+    $answer = '';
+    $database = connectDatabase();
+
+    // Quote to protect from SQL injection.
+    $nickname = $database->quote($_POST['logname']);
+
+    if (strlen($nickname) <= 15) {
+        $select = $database->prepare(
+            'SELECT hash, salt FROM users WHERE nick=?'
+        );
+        $select->execute([$nickname]);
+        $user = $select->fetch();
+        $select->closeCursor();
+
+        if (!empty($user)) {
+            // Compare hashs.
+            $hash = hash('sha512', $user['salt'] . $_POST['logpass']);
+            if ($hash == $user['hash']) {
+                // Register nickname in session.
+                $_SESSION['nickname'] = $nickname;
+                $answer = 'logsuccess';
+            } else {
+                $answer = 'wrong';
+            }
+        } else {
+            $answer = 'wrong';
+        }
+    }
+
+    $database = null; // Close connection.
+    return $answer;
+}
+/*}}}*/
+
 /** registerUser {{{
  * Register user in database.
  *
@@ -107,7 +148,6 @@ function getList($limit)
 function registerUser()
 {
     $answer = '';
-    $database = connectDatabase();
 
     // Check nickname for special characters.
     if (!ctype_alnum($_POST['regname'])) {
@@ -118,6 +158,8 @@ function registerUser()
         return 'invalidmail';
     }
     
+    $database = connectDatabase();
+
     // Quote to protect from SQL injection.
     $nickname = $database->quote($_POST['regname']);
     $mail = $database->quote($_POST['regmail']);
@@ -240,6 +282,10 @@ if (isset($_GET['nickname'])) {
     header('Content-type: application/json');
     echo json_encode($nickname);
 }
+if (isset($_POST['logname'])) {
+    $response = loginUser();
+    echo $response;
+}
 if (isset($_POST['regname'])) {
     $response = registerUser();
     echo $response;
@@ -249,4 +295,7 @@ if (isset($_GET['test'])) {
     $sgf = new Sgf($_GET['test']);
 }
 
+if (isset($_GET['logout'])) {
+    session_destroy();
+}
 ?>

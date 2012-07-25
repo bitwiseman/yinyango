@@ -13,8 +13,7 @@
     "options":      "Options menu",
     "sendsgf":      "Send SGF file",
     "downsgf":      "Download with SGF format",
-    "login":        "Login",
-    "logout":       "Logout",
+    "user":         "User",
 
     "black":        "Black",
     "white":        "White",
@@ -35,5 +34,7 @@
     "invalidmail":  "Invalid email address.",
     "nickexist":    "This nickname is already taken.",
     "regsuccess":   "Registering successfull.",
+    "wrong":        "Wrong nickname or password.",
+    "logsuccess":   "Login successfull.",
     "error":        "Error happened."
 }
