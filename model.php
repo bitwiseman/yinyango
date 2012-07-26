@@ -71,22 +71,22 @@ function createTables()
 /** getList {{{
  * Get the games list from database.
  *
- * @param {integer} $limit Limit of the files to get.
+ * @param {integer} $page Limit files to get to this page.
  *
  * @return {array} Games list.
  */
-function getList($limit)
+function getList($page)
 {
     $list = [];
 
-    if ($limit >= 0) {
+    if ($page >= 0) {
 
         $database = connectDatabase();
 
         // Get the last 10 saved games.
         $select = $database->prepare(
             'SELECT * FROM sgf ' .
-            'ORDER BY id DESC LIMIT ' . $limit * 10 . ', 10'
+            'ORDER BY id DESC LIMIT ' . $page * 10 . ', 10'
         );
 
         $select->execute();
@@ -268,8 +268,8 @@ if (isset($_GET['createtables'])) {
     createTables();
 }
 if (isset($_GET['list'])) {
-    $limit = intval($_GET['list']);
-    $list = getList($limit);
+    $page = intval($_GET['list']);
+    $list = getList($page);
     header('Content-type: application/json');
     echo json_encode($list);
 }
@@ -282,7 +282,7 @@ if (isset($_GET['nickname'])) {
     header('Content-type: application/json');
     echo json_encode($nickname);
 }
-if (isset($_POST['logname'])) {
+if (isset($_POST['login'])) {
     $response = loginUser();
     echo $response;
 }
@@ -290,7 +290,7 @@ if (isset($_POST['logout'])) {
     session_destroy();
     echo 'logout';
 }
-if (isset($_POST['regname'])) {
+if (isset($_POST['register'])) {
     $response = registerUser();
     echo $response;
 }

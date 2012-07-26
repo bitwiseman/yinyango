@@ -23,8 +23,8 @@
                 <div class="button" id="load"></div>
                 <div class="button" id="lang">
                     <ul>
-                        <li id="langen" class="lang" title="English"></li>
-                        <li id="langfr" class="lang" title="Français"></li>
+                    <li id="langen" class="buttonlang" title="English"></li>
+                    <li id="langfr" class="buttonlang" title="Français"></li>
                     </ul>
                 </div>
                 <div class="button" id="user">
@@ -63,7 +63,7 @@
                         maxlength="15" /></p>
                 <p><label id="logpass"></label></p>
                 <p><input type="password" name="logpass" /></p>
-                <p><input id="login" type="submit" /></p>
+                <p><input id="login" type="submit" name="login" /></p>
                 <p id="reglink"></p>
             </form>
             <form id="registerform" target="responseframe"
@@ -75,11 +75,12 @@
                 <p><input type="password" name="regpass" /></p>
                 <p><label id="regmail"></label></p>
                 <p><input type="email" name="regmail" /></p>
-                <p><input id="register" type="submit" /></p>
+                <p><input id="register" type="submit" name="register" /></p>
             </form>
             <form id="paramform" target="responseframe"
                     enctype="multipart/form-data" action="model.php"
                     method="POST">
+                <p><input id="changepass" type="submit" name="changepass" /></p>
                 <p><input id="logout" type="submit" name="logout" /></p>
             </form>
             <p id="serverresponse"></p>

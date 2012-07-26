@@ -61,7 +61,7 @@ body {
     width: 500px;
     height: 50px;
 }
-[class^="button"],[class^="lang"] {
+[class^="button"] {
     position: absolute;
     background: url(../images/buttons.png);
     width: 50px;
@@ -72,6 +72,9 @@ body {
     opacity: 0.2;
     cursor: default;
 }
+/** navbuttons {{{
+ * Nagivation buttons.
+ */
 #start {
     left: 100px;
     background-position: 0px 0px;
@@ -96,56 +99,25 @@ body {
     left: 350px;
     background-position: -250px 0px;
 }
+/*}}}*/
+/** gobbuttons {{{
+ * Buttons specific to goban.
+ */
 #comment {
     left: 0;
     background-position: -300px 0px;
 }
-#load {
-    left: 100px;
-    background-position: -600px 0px;
-}
-#refresh {
-    left: 250px;
-    background-position: -700px 0px;
-}
-#listprev {
-    left: 200px;
-    background-position: -100px 0px;
-}
-#listnext {
-    left: 300px;
-    background-position: -150px 0px;
-}
-#options {
-    left: 450px;
-    background-position: -400px 0px;
-}
-#game {
-    left: 350px;
-    background-position: -350px 0px;
-}
-#user {
-    left: 200px;
-    background-position: -650px 0px;
-}
-#userstatus {
-    width: 18px;
-    height: 18px;
-    margin: 10px 16px 22px 16px;
-    background-color: #cf142b;
-    border-radius: 50%;
-}
-#sendsgf {
-    left: 250px;
-    background-position: -450px 0px;
-}
-#downsgf {
-    left: 300px;
-    background-position: -500px 0px;
-}
 #border {
     left: 50px;
     background-position: -550px 0px;
+}
+/*}}}*/
+/** optbuttons {{{
+ * Buttons specific to the options menu.
+ */
+#load {
+    left: 100px;
+    background-position: -600px 0px;
 }
 #lang {
     left: 150px;
@@ -170,6 +142,50 @@ body {
 }
 #lang li {
     position: relative;
+}
+#user {
+    left: 200px;
+    background-position: -650px 0px;
+}
+#userstatus {
+    width: 18px;
+    height: 18px;
+    margin: 10px 16px 22px 16px;
+    background-color: #cf142b;
+    border-radius: 50%;
+}
+#sendsgf {
+    left: 250px;
+    background-position: -450px 0px;
+}
+#downsgf {
+    left: 300px;
+    background-position: -500px 0px;
+}
+/*}}}*/
+/** listbuttons {{{
+ * Buttons specific to the games list.
+ */
+#refresh {
+    left: 250px;
+    background-position: -700px 0px;
+}
+#listprev {
+    left: 200px;
+    background-position: -100px 0px;
+}
+#listnext {
+    left: 300px;
+    background-position: -150px 0px;
+}
+/*}}}*/
+#options {
+    left: 450px;
+    background-position: -400px 0px;
+}
+#game {
+    left: 350px;
+    background-position: -350px 0px;
 }
 /*}}}*/
 #variations {/*{{{*/

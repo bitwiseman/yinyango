@@ -520,11 +520,11 @@ var yygo = {};
          * Change elements showing informations based on language.
          */
         changeLang: function () {
-            var locale =    yygo.data.locale,
-                lang =      yygo.data.lang,
-                langs =     document.getElementsByClassName('lang'),
-                nickname =  yygo.events.nickname,
-                cl =        langs.length,
+            var locale =        yygo.data.locale,
+                lang =          yygo.data.lang,
+                buttonlang =    document.getElementsByClassName('buttonlang'),
+                nickname =      yygo.events.nickname,
+                cl =            buttonlang.length,
                 l;
 
             // Buttons labels.
@@ -569,7 +569,7 @@ var yygo = {};
 
             // Hide current language button in the languages list.
             for (l = 0; l < cl; l++) {
-                langs[l].style.display = 'block';
+                buttonlang[l].style.display = 'block';
             }
             document.getElementById('lang' + lang).style.display = 'none';
         },
@@ -1446,7 +1446,8 @@ var yygo = {};
          * Load and show the games list.
          */
         clickLoadList: function () {
-            var gameslist = yygo.data.gameslist || {};
+            var gameslist = yygo.data.gameslist || {},
+                nextpage;
 
             if (isEmpty(gameslist)) { // Get list if empty.
                 jsonRequest('model.php?list=' + this.listpage,
@@ -1455,7 +1456,9 @@ var yygo = {};
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
                 });
-                jsonRequest('model.php?list=' + this.listpage + 1,
+                // TODO Count games of page instead of another request.
+                nextpage = this.listpage + 1;
+                jsonRequest('model.php?list=' + nextpage,
                         function (data) {
                     if (isEmpty(data)) {
                         yygo.events.lastpage = yygo.events.listpage;
@@ -1548,6 +1551,7 @@ var yygo = {};
                 this.screen = 'options';
                 yygo.view.changeScreen();
             } else if (response === 'logout') {
+                // TODO Refresh page after logout.
                 this.nickname = '';
                 this.screen = 'options';
                 yygo.view.changeScreen();
@@ -1560,8 +1564,7 @@ var yygo = {};
     };
     /*}}}*/
 
-    // Call init when DOM is loaded (recent navigators).
-
+    // Call init when DOM is loaded.
     document.addEventListener('DOMContentLoaded', yygo.events.init(), false);
 
 }());
