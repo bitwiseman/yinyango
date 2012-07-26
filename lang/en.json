@@ -14,6 +14,9 @@
     "sendsgf":      "Send SGF file",
     "downsgf":      "Download with SGF format",
     "user":         "User",
+    "listprev":     "Previous page",
+    "listnext":     "Next page",
+    "refresh":      "Refresh list",
 
     "black":        "Black",
     "white":        "White",

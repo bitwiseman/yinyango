@@ -104,6 +104,18 @@ body {
     left: 100px;
     background-position: -600px 0px;
 }
+#refresh {
+    left: 250px;
+    background-position: -700px 0px;
+}
+#listprev {
+    left: 200px;
+    background-position: -100px 0px;
+}
+#listnext {
+    left: 300px;
+    background-position: -150px 0px;
+}
 #options {
     left: 450px;
     background-position: -400px 0px;
@@ -139,10 +151,10 @@ body {
     left: 150px;
 }
 #langen,.buttonen {
-    background-position: -700px 0px;
+    background-position: -750px 0px;
 }
 #langfr,.buttonfr {
-    background-position: -750px 0px;
+    background-position: -800px 0px;
 }
 #lang ul {
     display: none;

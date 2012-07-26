@@ -86,7 +86,7 @@ function getList($limit)
         // Get the last 10 saved games.
         $select = $database->prepare(
             'SELECT * FROM sgf ' .
-            'ORDER BY id DESC LIMIT ' . $limit . ', 10'
+            'ORDER BY id DESC LIMIT ' . $limit * 10 . ', 10'
         );
 
         $select->execute();
