@@ -237,7 +237,7 @@ function saveToDatabase()
             } else {
                 // Parse sgf file, get data and save it to database.
                 $sgf = new Sgf($file);
-                $data = $sgf->getData();
+                $game = $sgf->getGame();
 
                 $insert = $database->prepare(
                     'INSERT INTO sgf(file, game, sender) ' .
@@ -246,7 +246,7 @@ function saveToDatabase()
                 // Send data encoded in json format.
                 $insert->execute(
                     ['file' => $file,
-                    'game' => $data,
+                    'game' => $game,
                     'sender' => $sender]
                 );
                 $answer = 'sendsuccess';

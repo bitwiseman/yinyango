@@ -59,16 +59,14 @@ class Sgf
     }
     /*}}}*/
 
-    /** getData {{{
+    /** getGame {{{
      * Return game tree to be sent to database. Encode it in json format.
      *
      * @return {array} Data to be sent.
      */
-    public function getData() 
+    public function getGame() 
     {
-        $data = json_encode($this->_game);
-
-        return $data;
+        return json_encode($this->_game);
     }
     /*}}}*/
 
