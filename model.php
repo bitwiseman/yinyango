@@ -126,7 +126,7 @@ function loginUser()
             if ($hash == $user['hash']) {
                 // Register nickname in session.
                 $_SESSION['nickname'] = $_POST['logname'];
-                $answer = 'logsuccess';
+                $answer = 'login';
             } else {
                 $answer = 'wrong';
             }
@@ -286,6 +286,10 @@ if (isset($_POST['logname'])) {
     $response = loginUser();
     echo $response;
 }
+if (isset($_POST['logout'])) {
+    session_destroy();
+    echo 'logout';
+}
 if (isset($_POST['regname'])) {
     $response = registerUser();
     echo $response;
@@ -293,9 +297,5 @@ if (isset($_POST['regname'])) {
 
 if (isset($_GET['test'])) {
     $sgf = new Sgf($_GET['test']);
-}
-
-if (isset($_GET['logout'])) {
-    session_destroy();
 }
 ?>

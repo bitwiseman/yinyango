@@ -548,6 +548,11 @@ var yygo = {};
             document.getElementById('regpass').textContent = locale.password;
             document.getElementById('regmail').textContent = locale.email;
             document.getElementById('reglink').textContent = locale.register;
+            // Forms submit buttons.
+            document.getElementById('register').value = locale.register;
+            document.getElementById('sendfile').value = locale.sendfile;
+            document.getElementById('login').value = locale.login;
+            document.getElementById('logout').value = locale.logout;
 
             if (!isEmpty(yygo.data.game)) {
                 this.makeInfos(); // Remake infos as it depends on locale.
@@ -579,6 +584,7 @@ var yygo = {};
                 sendsgfform =       document.getElementById('sendsgfform'),
                 loginform =         document.getElementById('loginform'),
                 registerform =      document.getElementById('registerform'),
+                paramform =         document.getElementById('paramform'),
                 loadlist =          document.getElementById('loadlist');
 
             // Hide all elements.
@@ -591,6 +597,7 @@ var yygo = {};
             sendsgfform.style.display = 'none';
             loginform.style.display = 'none';
             registerform.style.display = 'none';
+            paramform.style.display = 'none';
             loadlist.style.display = 'none';
 
             serverresponse.textContent = ''; // Empty the server response.
@@ -623,6 +630,8 @@ var yygo = {};
                 registerform.style.display = 'block';
             } else if (screen === 'param') {
                 buttonsbar.style.display = 'block';
+                serverforms.style.display = 'block';
+                paramform.style.display = 'block';
             }
         },
         /*}}}*/
@@ -1469,9 +1478,14 @@ var yygo = {};
                 serverresponse.textContent = locale.regsuccess;
             } else if (response === 'wrong') {
                 serverresponse.textContent = locale.wrong;
-            } else if (response === 'logsuccess') {
-                serverresponse.textContent = locale.logsuccess;
+            } else if (response === 'login') {
                 this.nickname = document.getElementById('nickname').value;
+                this.screen = 'options';
+                yygo.view.changeScreen();
+            } else if (response === 'logout') {
+                this.nickname = '';
+                this.screen = 'options';
+                yygo.view.changeScreen();
             } else {
                 serverresponse.textContent = locale.error;
             }

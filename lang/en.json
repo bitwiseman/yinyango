@@ -25,6 +25,9 @@
     "password":     "Password",
     "email":        "Email",
     "register":     "Register",
+    "sendfile":     "Send file",
+    "login":        "Login",
+    "logout":       "Logout",
 
     "loading":      "Sending data, please be patient...",
     "invalidsgf":   "Invalid SGF file.",
@@ -35,6 +38,5 @@
     "nickexist":    "This nickname is already taken.",
     "regsuccess":   "Registering successfull.",
     "wrong":        "Wrong nickname or password.",
-    "logsuccess":   "Login successfull.",
     "error":        "Error happened."
 }

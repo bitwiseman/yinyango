@@ -48,7 +48,7 @@ body {
     text-align: center;
 }
 #responseframe {
-    /*display: none;*/
+    display: none;
 }
 #reglink {
     cursor: pointer;
@@ -101,7 +101,7 @@ body {
     background-position: -300px 0px;
 }
 #load {
-    left: 0;
+    left: 100px;
     background-position: -600px 0px;
 }
 #options {
@@ -109,7 +109,7 @@ body {
     background-position: -400px 0px;
 }
 #game {
-    left: 400px;
+    left: 350px;
     background-position: -350px 0px;
 }
 #user {
