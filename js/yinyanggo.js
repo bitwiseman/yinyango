@@ -325,6 +325,11 @@ var yygo = {};
                 ci =            gameslist.length,
                 i;
 
+            // Maximum 10 games on the page.
+            if (ci === 11) {
+                ci = 10;
+            }
+
             for (i = 0; i < ci; i++) {
                 game = JSON.parse(gameslist[i].game);
                 infos = game[0][0];
@@ -1465,8 +1470,8 @@ var yygo = {};
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
-                    // If we have less than 10 games this is latest page.
-                    if (objSize(data) < 10) {
+                    // If we have less than 11 games this is latest page.
+                    if (objSize(data) < 11) {
                         yygo.events.lastpage = yygo.events.listpage;
                     } else {
                         yygo.events.lastpage = yygo.events.listpage + 1;

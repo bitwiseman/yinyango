@@ -83,10 +83,10 @@ function getList($page)
 
         $database = connectDatabase();
 
-        // Get the last 10 saved games.
+        // Get 11 games of given page.
         $select = $database->prepare(
             'SELECT * FROM sgf ' .
-            'ORDER BY id DESC LIMIT ' . $page * 10 . ', 10'
+            'ORDER BY id DESC LIMIT ' . $page * 10 . ', 11'
         );
 
         $select->execute();
