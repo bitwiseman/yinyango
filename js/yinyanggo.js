@@ -49,6 +49,17 @@ var yygo = {};
     }
     /*}}}*/
 
+    /** objSize {{{
+     * Return number of keys of an Object.
+     *
+     * @param {Object} obj Object to check.
+     * @return {Integer} Number of keys.
+     */
+    function objSize(obj) {
+        return Object.keys(obj).length;
+    }
+    /*}}}*/
+
     // Creation of yygo.
 
     /** yygo.data {{{
@@ -1446,8 +1457,7 @@ var yygo = {};
          * Load and show the games list.
          */
         clickLoadList: function () {
-            var gameslist = yygo.data.gameslist || {},
-                nextpage;
+            var gameslist = yygo.data.gameslist || {};
 
             if (isEmpty(gameslist)) { // Get list if empty.
                 jsonRequest('model.php?list=' + this.listpage,
@@ -1455,12 +1465,8 @@ var yygo = {};
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
-                });
-                // TODO Count games of page instead of another request.
-                nextpage = this.listpage + 1;
-                jsonRequest('model.php?list=' + nextpage,
-                        function (data) {
-                    if (isEmpty(data)) {
+                    // If we have less than 10 games this is latest page.
+                    if (objSize(data) < 10) {
                         yygo.events.lastpage = yygo.events.listpage;
                     } else {
                         yygo.events.lastpage = yygo.events.listpage + 1;
@@ -1551,10 +1557,8 @@ var yygo = {};
                 this.screen = 'options';
                 yygo.view.changeScreen();
             } else if (response === 'logout') {
-                // TODO Refresh page after logout.
-                this.nickname = '';
-                this.screen = 'options';
-                yygo.view.changeScreen();
+                // Reload page after logout.
+                window.location.reload();
             } else {
                 serverresponse.textContent = locale.error;
             }
