@@ -48,7 +48,7 @@ body {
     text-align: center;
 }
 #responseframe {
-    /*display: none;*/
+    display: none;
 }
 #reglink {
     cursor: pointer;

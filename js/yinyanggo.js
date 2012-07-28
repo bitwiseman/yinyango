@@ -124,17 +124,23 @@ var yygo = {};
          *
          * @param {Number} index Index of the selected game in list.
          */
-        parseDataFromList: function (index) {
-            this.game = JSON.parse(this.gameslist[index].game);
+        parseDataFromList: function (index, callback) {
+            var table = document.getElementById('gameslist'),
+                id =    table.rows[index].cells[0].textContent;
 
-            this.size = parseInt(this.game[0][0].SZ, 10);
-            this.branchs = this.game[0][0].branchs;
+            jsonRequest('model.php?game=' + id, function (data) {
+                yygo.data.game = data;
 
-            this.curnode = 0;
-            this.curbranch = 0;
-            this.lastbranch = 0;
+                yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
+                yygo.data.branchs = yygo.data.game[0][0].branchs;
 
-            this.setLastNode();
+                yygo.data.curnode = 0;
+                yygo.data.curbranch = 0;
+                yygo.data.lastbranch = 0;
+
+                yygo.data.setLastNode();
+                callback();
+            });
         },
         /*}}}*/
 
@@ -331,28 +337,8 @@ var yygo = {};
             }
 
             for (i = 0; i < ci; i++) {
-                game = JSON.parse(gameslist[i].game);
-                infos = game[0][0];
-
-                html += '<tr><td>' + gameslist[i].name + '</td>';
-
-                if (infos.PB !== undefined) {
-                    html += '<td>' + infos.PB + '</td>';
-                } else {
-                    html += '<td></td>';
-                }
-                if (infos.PW !== undefined) {
-                    html += '<td>' + infos.PW + '</td>';
-                } else {
-                    html += '<td></td>';
-                }
-                if (infos.DT !== undefined) {
-                    html += '<td>' + infos.DT + '</td>';
-                } else {
-                    html += '<td></td>';
-                }
-
-                html += '</tr>';
+                html += '<tr><td>' + gameslist[i].id + '</td>';
+                html += '<td>' + gameslist[i].name + '</td></tr>';
             }
             html += '</table>';
 
@@ -1089,32 +1075,34 @@ var yygo = {};
         loadGameFromList: function (index) {
             var oldsize = yygo.data.size;
 
-            yygo.data.parseDataFromList(index);
+            yygo.data.parseDataFromList(index, function () {
+                // Make view when data is acquired.
 
-            if (yygo.data.size !== oldsize) { // nouvelle taille tout refaire
-                yygo.view.makeGoban();
-                yygo.view.changeGridImage();
-            } else { // vider le goban seulement
-                yygo.view.emptyGoban();
-            }
+                if (yygo.data.size !== oldsize) { // New size remake all.
+                    yygo.view.makeGoban();
+                    yygo.view.changeGridImage();
+                } else { // Empty goban only.
+                    yygo.view.emptyGoban();
+                }
 
-            yygo.view.makeVariations();
-            yygo.view.makeInfos();
-            yygo.view.makeComments();
+                yygo.view.makeVariations();
+                yygo.view.makeInfos();
+                yygo.view.makeComments();
 
-            yygo.view.placeStones();
-            yygo.view.placeSymbols();
+                yygo.view.placeStones();
+                yygo.view.placeSymbols();
 
-            this.mode = 'replay';
-            this.screen = 'goban';
+                yygo.events.mode = 'replay';
+                yygo.events.screen = 'goban';
 
-            yygo.view.changeScreen();
+                yygo.view.changeScreen();
 
-            yygo.view.toggleBorders();
-            yygo.view.toggleNavButtons();
+                yygo.view.toggleBorders();
+                yygo.view.toggleNavButtons();
 
-            yygo.view.redraw = true;
-            yygo.view.setGobanSize();
+                yygo.view.redraw = true;
+                yygo.view.setGobanSize();
+            });
         },
         /*}}}*/
 

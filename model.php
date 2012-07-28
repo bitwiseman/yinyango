@@ -69,6 +69,48 @@ function createTables()
 }
 /*}}}*/
 
+/** echoJson {{{
+ * Echo json data in response of an ajax request.
+ *
+ * @param {various} $data Data to be returned.
+ * @return {null}
+ */
+function echoJson($data) 
+{
+    header('Content-type: application/json');
+    echo json_encode($data);
+
+    return null;
+}
+/*}}}*/
+
+/** getGame {{{
+ * Get the game data from database corresponding to id.
+ *
+ * @param {integer} $id Game id to retrieve data.
+ *
+ * @return {array} Game data.
+ */
+function getGame($id)
+{
+    $game = [];
+
+    if ($id >= 1) {
+
+        $database = connectDatabase();
+
+        $select = $database->prepare('SELECT game FROM sgf WHERE id=?');
+
+        $select->execute([$id]);
+        $game = $select->fetch(PDO::FETCH_ASSOC);
+        $select->closeCursor();
+
+        $database = null;
+    }
+    return $game['game'];
+}
+/*}}}*/
+
 /** getList {{{
  * Get the games list from database.
  *
@@ -86,12 +128,12 @@ function getList($page)
 
         // Get 11 games of given page.
         $select = $database->prepare(
-            'SELECT * FROM sgf ' .
+            'SELECT id, name FROM sgf ' .
             'ORDER BY id DESC LIMIT ' . $page * 10 . ', 11'
         );
 
         $select->execute();
-        $list = $select->fetchAll();
+        $list = $select->fetchAll(PDO::FETCH_ASSOC);
         $select->closeCursor();
 
         $database = null;
@@ -259,17 +301,17 @@ function saveToDatabase()
 /*}}}*/
 
 if (isset($_FILES['sgf']['name'])) {
-    $response = saveToDatabase();
-    echo $response;
+    echo saveToDatabase();
 }
 if (isset($_GET['createtables'])) {
     createTables();
 }
+if (isset($_GET['game'])) {
+    echo getGame($_GET['game']);
+}
 if (isset($_GET['list'])) {
     $page = intval($_GET['list']);
-    $list = getList($page);
-    header('Content-type: application/json');
-    echo json_encode($list);
+    echoJson(getList($page));
 }
 if (isset($_GET['nickname'])) {
     $nickname = '';
@@ -277,20 +319,17 @@ if (isset($_GET['nickname'])) {
     if (isset($_SESSION['nickname'])) {
         $nickname = $_SESSION['nickname'];
     }
-    header('Content-type: application/json');
-    echo json_encode($nickname);
+    echoJson($nickname);
 }
 if (isset($_POST['login'])) {
-    $response = loginUser();
-    echo $response;
+    echo loginUser();
 }
 if (isset($_POST['logout'])) {
     session_destroy();
     echo 'logout';
 }
 if (isset($_POST['register'])) {
-    $response = registerUser();
-    echo $response;
+    echo registerUser();
 }
 
 if (isset($_GET['test'])) {
