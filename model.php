@@ -114,30 +114,25 @@ function getGame($id)
 /** getList {{{
  * Get the games list from database.
  *
- * @param {integer} $page Limit files to get to this page.
- *
  * @return {array} Games list.
  */
-function getList($page)
+function getList()
 {
     $list = [];
 
-    if ($page >= 0) {
+    $database = connectDatabase();
 
-        $database = connectDatabase();
+    // Get games starting with latest added.
+    $select = $database->prepare(
+        'SELECT id, name, sender FROM sgf ORDER BY id DESC'
+    );
 
-        // Get 11 games of given page.
-        $select = $database->prepare(
-            'SELECT id, name FROM sgf ' .
-            'ORDER BY id DESC LIMIT ' . $page * 10 . ', 11'
-        );
+    $select->execute();
+    $list = $select->fetchAll(PDO::FETCH_ASSOC);
+    $select->closeCursor();
 
-        $select->execute();
-        $list = $select->fetchAll(PDO::FETCH_ASSOC);
-        $select->closeCursor();
+    $database = null;
 
-        $database = null;
-    }
     return $list;
 }
 /*}}}*/

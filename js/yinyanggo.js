@@ -331,14 +331,10 @@ var yygo = {};
                 ci =            gameslist.length,
                 i;
 
-            // Maximum 10 games on the page.
-            if (ci === 11) {
-                ci = 10;
-            }
-
             for (i = 0; i < ci; i++) {
                 html += '<tr><td>' + gameslist[i].id + '</td>';
-                html += '<td>' + gameslist[i].name + '</td></tr>';
+                html += '<td>' + gameslist[i].name + '</td>';
+                html += '<td>' + gameslist[i].sender + '</td></tr>';
             }
             html += '</table>';
 
@@ -546,8 +542,6 @@ var yygo = {};
             document.getElementById('downsgf').title =  locale.downsgf;
             document.getElementById('user').title =     locale.user;
             document.getElementById('refresh').title =  locale.refresh;
-            document.getElementById('listprev').title = locale.listprev;
-            document.getElementById('listnext').title = locale.listnext;
 
             // Forms labels.
             document.getElementById('logname').textContent = locale.nickname;
@@ -937,30 +931,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.toggleListButtons {{{
-         * Alternate active state of list buttons.
-         */
-        toggleListButtons: function () {
-            var listpage =      yygo.events.listpage,
-                lastpage =      yygo.events.lastpage,
-                listprev =      document.getElementById('listprev'),
-                listnext =      document.getElementById('listnext');
-
-            // Activate all buttons.
-            listprev.className = 'button';
-            listnext.className = 'button';
-
-            // First page.
-            if (listpage === 0) {
-                listprev.className = 'buttond';
-            }
-            // Last page.
-            if (listpage === lastpage) {
-                listnext.className = 'buttond';
-            }
-        },
-        /*}}}*/
-
         /** yygo.view.toggleNavButtons {{{
          * Alternate active state of navigation buttons.
          */
@@ -1027,8 +997,6 @@ var yygo = {};
      * @property {String}   mode        Goban mode: replay, play, modify...
      * @property {String}   nickname    Nickname of user.
      * @property {String}   screen      Actual screen to show.
-     * @property {Integer}  lastpage    Last page of games list.
-     * @property {Integer}  listpage    Actual page to show for games list.
      */
     yygo.events = {
 
@@ -1037,9 +1005,6 @@ var yygo = {};
         mode:           'replay',
         nickname:       '',
         screen:         'goban',
-
-        lastpage:       0,
-        listpage:       0,
 
         // Methods.
 
@@ -1203,23 +1168,8 @@ var yygo = {};
                 yygo.events.clickLoadList();
             }, false);
             refresh.addEventListener('click', function () {
-                yygo.events.listpage = 0;
                 yygo.data.gameslist = [];
                 yygo.events.clickLoadList();
-            }, false);
-            listprev.addEventListener('click', function () {
-                if (yygo.events.listpage > 0) {
-                    yygo.events.listpage--;
-                    yygo.data.gameslist = [];
-                    yygo.events.clickLoadList();
-                }
-            }, false);
-            listnext.addEventListener('click', function () {
-                if (yygo.events.listpage < yygo.events.lastpage) {
-                    yygo.events.listpage++;
-                    yygo.data.gameslist = [];
-                    yygo.events.clickLoadList();
-                }
             }, false);
             langen.addEventListener('click', function () {
                 yygo.data.setLang('en');
@@ -1452,19 +1402,11 @@ var yygo = {};
         clickLoadList: function () {
             var gameslist = yygo.data.gameslist || {};
 
-            if (isEmpty(gameslist)) { // Get list if empty.
-                jsonRequest('model.php?list=' + this.listpage,
-                        function (data) {
+            if (isEmpty(gameslist)) {
+                jsonRequest('model.php?list', function (data) {
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
-                    // If we have less than 11 games this is latest page.
-                    if (objSize(data) < 11) {
-                        yygo.events.lastpage = yygo.events.listpage;
-                    } else {
-                        yygo.events.lastpage = yygo.events.listpage + 1;
-                    }
-                    yygo.view.toggleListButtons();
                 });
             }
 
