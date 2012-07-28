@@ -334,7 +334,7 @@ var yygo = {};
                 game = JSON.parse(gameslist[i].game);
                 infos = game[0][0];
 
-                html += '<tr><td>' + gameslist[i].file + '</td>';
+                html += '<tr><td>' + gameslist[i].name + '</td>';
 
                 if (infos.PB !== undefined) {
                     html += '<td>' + infos.PB + '</td>';

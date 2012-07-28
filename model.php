@@ -46,14 +46,15 @@ function createTables()
     $database = connectDatabase();
 
     $createsgf = 'CREATE TABLE IF NOT EXISTS `sgf` (' .
-        '`id` int(11) NOT NULL AUTO_INCREMENT,' .
-        '`file` TEXT NOT NULL,' .
+        '`id` INT(11) NOT NULL AUTO_INCREMENT,' .
+        '`name` TEXT NOT NULL,' .
+        '`md5` CHAR(32) NOT NULL,' .
         '`game` TEXT NOT NULL,' .
         '`sender` VARCHAR(15) NOT NULL,' .
         'PRIMARY KEY (`id`))';
 
     $createusers = 'CREATE TABLE IF NOT EXISTS `users` (' .
-        '`id` int(11) NOT NULL AUTO_INCREMENT,' .
+        '`id` INT(11) NOT NULL AUTO_INCREMENT,' .
         '`nick` VARCHAR(15) NOT NULL,' .
         '`hash` CHAR(128) NOT NULL,' .
         '`salt` CHAR(88) NOT NULL,' .
@@ -208,8 +209,8 @@ function saveToDatabase()
 {
     global $config;
     $tempname = $_FILES['sgf']['tmp_name'];
-    $name = $_FILES['sgf']['name'];
-    $file = 'sgf/' . $name;
+    $name = preg_replace('/\.[^.]*$/', '', $_FILES['sgf']['name']);
+    $md5 = md5_file($tempname);
     $answer = '';
 
     // Only logged users can send files.
@@ -221,31 +222,28 @@ function saveToDatabase()
         $test = substr($sgfc, -2); // 'OK' if valid.
 
         if ($test === 'OK') {
-            // Move file if it does not already exist.
-            if (!file_exists($file)) {
-                move_uploaded_file($tempname, $file);
-            }
-            // Check if file is already in database.
+            // Check if file is already in database with its md5 hash.
             $database = connectDatabase();
 
-            $select = $database->prepare('SELECT * FROM sgf WHERE file=?');
-            $select->execute([$file]);
+            $select = $database->prepare('SELECT md5 FROM sgf WHERE md5=?');
+            $select->execute([$md5]);
             $exist = $select->fetch();
             $select->closeCursor();
             if (!empty($exist)) {
-                $answer = 'exist';
+                $answer = 'sgfexist';
             } else {
                 // Parse sgf file, get data and save it to database.
-                $sgf = new Sgf($file);
+                $sgf = new Sgf($tempname);
                 $game = $sgf->getGame();
 
                 $insert = $database->prepare(
-                    'INSERT INTO sgf(file, game, sender) ' .
-                    'VALUES(:file, :game, :sender)'
+                    'INSERT INTO sgf(name, md5, game, sender) ' .
+                    'VALUES(:name, :md5, :game, :sender)'
                 );
                 // Send data encoded in json format.
                 $insert->execute(
-                    ['file' => $file,
+                    ['name' => $name,
+                    'md5' => $md5,
                     'game' => $game,
                     'sender' => $sender]
                 );
