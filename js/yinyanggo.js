@@ -324,7 +324,7 @@ var yygo = {};
          */
         makeGamesList: function () {
             var gameslist =     yygo.data.gameslist,
-                loadlistelem =  document.getElementById('loadlist'),
+                loadlist =      document.getElementById('loadlist'),
                 html =          '<table id="gameslist">',
                 infos =         {},
                 game =          {},
@@ -332,13 +332,12 @@ var yygo = {};
                 i;
 
             for (i = 0; i < ci; i++) {
-                html += '<tr><td>' + gameslist[i].id + '</td>';
-                html += '<td>' + gameslist[i].name + '</td>';
-                html += '<td>' + gameslist[i].sender + '</td></tr>';
+                html += '<tr><td>' + gameslist[i].id + '</td>' +
+                    '<td>' + gameslist[i].name + '</td>';
             }
             html += '</table>';
 
-            loadlistelem.innerHTML = html;
+            loadlist.innerHTML = html;
         },
         /*}}}*/
 
@@ -1131,8 +1130,6 @@ var yygo = {};
                 options =       document.getElementById('options'),
                 load =          document.getElementById('load'),
                 refresh =       document.getElementById('refresh'),
-                listprev =      document.getElementById('listprev'),
-                listnext =      document.getElementById('listnext'),
                 langen =        document.getElementById('langen'),
                 langfr =        document.getElementById('langfr'),
                 user =          document.getElementById('user'),
