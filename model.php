@@ -305,8 +305,7 @@ if (isset($_GET['game'])) {
     echo getGame($_GET['game']);
 }
 if (isset($_GET['list'])) {
-    $page = intval($_GET['list']);
-    echoJson(getList($page));
+    echoJson(getList());
 }
 if (isset($_GET['nickname'])) {
     $nickname = '';
