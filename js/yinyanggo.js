@@ -49,17 +49,6 @@ var yygo = {};
     }
     /*}}}*/
 
-    /** objSize {{{
-     * Return number of keys of an Object.
-     *
-     * @param {Object} obj Object to check.
-     * @return {Integer} Number of keys.
-     */
-    function objSize(obj) {
-        return Object.keys(obj).length;
-    }
-    /*}}}*/
-
     // Creation of yygo.
 
     /** yygo.data {{{
@@ -326,8 +315,6 @@ var yygo = {};
             var gameslist =     yygo.data.gameslist,
                 loadlist =      document.getElementById('loadlist'),
                 html =          '<table id="gameslist">',
-                infos =         {},
-                game =          {},
                 ci =            gameslist.length,
                 i;
 
@@ -520,7 +507,6 @@ var yygo = {};
             var locale =        yygo.data.locale,
                 lang =          yygo.data.lang,
                 buttonlang =    document.getElementsByClassName('buttonlang'),
-                nickname =      yygo.events.nickname,
                 cl =            buttonlang.length,
                 l;
 
