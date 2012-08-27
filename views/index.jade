@@ -1,0 +1,62 @@
+extends layout
+
+block content
+    #buttonsbar
+        #gobbuttons
+            .button#comment
+            .button#border
+        #listbuttons
+            .button#refresh
+        #optbuttons
+            .button#load
+            .button#lang
+                ul
+                    li.buttonlang#langen(title='English')
+                    li.buttonlang#langfr(title='Français')
+            .button#user
+                #userstatus
+            .button#sendsgf
+            .button#downsgf
+        #navbuttons
+            .button#start
+            .button#fastprev
+            .button#prev
+            .button#next
+            .button#fastnext
+            .button#end
+        .button#options
+        .button#game
+    #variations
+    #loadlist
+    #infos
+    #goban
+    #comments
+    #serverforms
+        iframe#responseframe(name='responseframe')
+        form#sendsgfform(target='responseframe', enctype='multipart/form-data',
+            action='', method='POST')
+            p: input(type='file', name='sgf')
+            p: input#sendfile(type='submit')
+        form#loginform(target='responseframe', enctype='multipart/form-data',
+            action='', method='POST')
+            p: label#logname
+            p: input#nickname(type='text', name='logname', maxlength='15')
+            p: label#logpass
+            p: input(type='password', name='logpass')
+            p: input#login(type='submit', name='login')
+            p#reglink
+        form#registerform(target='responseframe', enctype='multipart/form-data',
+            action='', method='POST')
+            p: label#regname
+            p: input(type='text', name='regname', maxlength='15')
+            p: label#regpass
+            p: input(type='password', name='regpass')
+            p: label#regmail
+            p: input(type='email', name='regmail')
+            p: input#register(type='submit', name='register')
+        form#paramform(target='responseframe', enctype='multipart/form-data',
+            action='', method='POST')
+            p: input#changepass(type='submit', name='changepass')
+            p: input#logout(type='submit', name='logout')
+        p#serverresponse
+    script(src='/javascripts/yinyanggo.js')
