@@ -5,3 +5,14 @@ A small project that aims at making a Go player in PHP and Javascript.
 
 Main goal of this project is to teach myself those languages and coding in
 general.
+
+TODO
+====
+
+- Translate game to SGF.
+- Make different modes: play, edition...
+- Make a better Sgf class.
+- Calculate the score.
+- Treat other keys like 'pass'.
+- Save user parameters.
+- Experiment a new server using node.js.
