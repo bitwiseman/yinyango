@@ -1,4 +1,3 @@
 *.swp
 
-server/bin/
-server/config.php
+bin/
