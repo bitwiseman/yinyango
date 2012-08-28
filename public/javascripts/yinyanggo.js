@@ -17,7 +17,7 @@ var yygo = {};
     // Utilities functions.
 
     /** jsonRequest {{{
-     * Simple ajax request expecting json in answer.
+     * Simple ajax request expecting json in response.
      *
      * @param {String} url Destination url.
      * @param {Function} callback Callback function.
@@ -166,7 +166,7 @@ var yygo = {};
             }
 
             // Get language json file and translate elements.
-            jsonRequest('lang/' + this.lang + '.json', function (data) {
+            jsonRequest('langs/' + this.lang + '.json', function (data) {
                 yygo.data.locale = data;
                 yygo.view.changeLang();
                 if (callback !== undefined) {
@@ -1005,7 +1005,7 @@ var yygo = {};
             // Get user session if it still exist.
             jsonRequest('nickname', function (data) {
                 if (data !== '') {
-                    yygo.events.nickname = data;
+                    yygo.events.nickname = data.nickname;
                 }
                 // Define language.
                 yygo.data.setLang(navlang, function () {
