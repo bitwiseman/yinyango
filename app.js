@@ -10,8 +10,7 @@
  * Modules dependencies.
  */
 
-var express = require('express'),
-    routes = require('./routes');
+var express = require('express');
 
 // Express is the application.
 var app = express();
@@ -23,6 +22,8 @@ var app = express();
 app.configure(function () {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
     app.use(express.logger('dev'));
     app.use(express.static(__dirname + '/public'));
 });
@@ -31,7 +32,9 @@ app.configure(function () {
  * Application.
  */
 
-app.get('/', routes.index);
+app.get('/', function (req, res) {
+    res.render('index', { title: 'Yin yan go' });
+});
 
 /**
  * Server init.

@@ -1003,7 +1003,7 @@ var yygo = {};
                             'en').substr(0, 2).toLowerCase();
 
             // Get user session if it still exist.
-            jsonRequest('model.php?nickname', function (data) {
+            jsonRequest('nickname', function (data) {
                 if (data !== '') {
                     yygo.events.nickname = data;
                 }
