@@ -117,7 +117,7 @@ var yygo = {};
             var table = document.getElementById('gameslist'),
                 id =    table.rows[index].cells[0].textContent;
 
-            jsonRequest('model.php?game=' + id, function (data) {
+            jsonRequest('games/' + id, function (data) {
                 yygo.data.game = data;
 
                 yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
@@ -1003,8 +1003,8 @@ var yygo = {};
                             'en').substr(0, 2).toLowerCase();
 
             // Get user session if it still exist.
-            jsonRequest('nickname', function (data) {
-                if (data !== '') {
+            jsonRequest('session', function (data) {
+                if (data.nickname !== '') {
                     yygo.events.nickname = data.nickname;
                 }
                 // Define language.
@@ -1386,7 +1386,7 @@ var yygo = {};
             var gameslist = yygo.data.gameslist || {};
 
             if (isEmpty(gameslist)) {
-                jsonRequest('model.php?list', function (data) {
+                jsonRequest('gameslist', function (data) {
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
@@ -1429,9 +1429,9 @@ var yygo = {};
          * Login/logout and parameters of the user.
          */
         clickUser: function () {
-            jsonRequest('model.php?nickname', function (data) {
-                if (data !== '') {
-                    yygo.events.nickname = data;
+            jsonRequest('session', function (data) {
+                if (data.nickname !== '') {
+                    yygo.events.nickname = data.nickname;
                     yygo.events.screen = 'param';
                     yygo.view.changeScreen();
                 } else {
