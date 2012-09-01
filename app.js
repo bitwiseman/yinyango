@@ -35,7 +35,8 @@ app.configure(function () {
  */
 
 app.get('/', function (req, res) {
-    res.render('index', { title: 'Yin yan go' });
+    var nickname = req.session.nickname || '';
+    res.render('index', { title: 'Yin yan go', nickname: nickname });
 });
 
 app.get('/session', function (req, res) {

@@ -1003,16 +1003,13 @@ var yygo = {};
                             'en').substr(0, 2).toLowerCase();
 
             // Get user session if it still exist.
-            jsonRequest('session', function (data) {
-                if (data.nickname !== '') {
-                    yygo.events.nickname = data.nickname;
-                }
-                // Define language.
-                yygo.data.setLang(navlang, function () {
-                    // Callback to be sure we have the locale data.
-                    yygo.events.makeBinds();
-                    yygo.events.loadIntro();
-                });
+            yygo.events.nickname = user.nickname;
+
+            // Define language.
+            yygo.data.setLang(navlang, function () {
+                // Callback to be sure we have the locale data.
+                yygo.events.makeBinds();
+                yygo.events.loadIntro();
             });
         },
         /*}}}*/
@@ -1429,9 +1426,10 @@ var yygo = {};
          * Login/logout and parameters of the user.
          */
         clickUser: function () {
+            // Check if session expired of if user try to steal identity.
             jsonRequest('session', function (data) {
-                if (data.nickname !== '') {
-                    yygo.events.nickname = data.nickname;
+                if (yygo.events.nickname !== '' &&
+                        yygo.events.nickname === data.nickname) {
                     yygo.events.screen = 'param';
                     yygo.view.changeScreen();
                 } else {
