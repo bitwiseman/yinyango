@@ -18,5 +18,5 @@ general.
 
 ## LICENSE
 
->[![License](http://creativecommons.org/licenses/by-nc-sa/3.0/)][image]
-[image]: http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png
+>[![License](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)][link]
+[link]: http://creativecommons.org/licenses/by-nc-sa/3.0/
