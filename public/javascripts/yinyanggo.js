@@ -534,12 +534,12 @@ var yygo = {};
             document.getElementById('logpass').textContent = locale.password;
             document.getElementById('regpass').textContent = locale.password;
             document.getElementById('regmail').textContent = locale.email;
-            document.getElementById('reglink').textContent = locale.register;
-            // Forms submit buttons.
+            // Forms buttons.
+            document.getElementById('reglink').value =  locale.register;
             document.getElementById('register').value = locale.register;
             document.getElementById('sendfile').value = locale.sendfile;
-            document.getElementById('login').value = locale.login;
-            document.getElementById('logout').value = locale.logout;
+            document.getElementById('login').value =    locale.login;
+            document.getElementById('logout').value =   locale.logout;
 
             if (!isEmpty(yygo.data.game)) {
                 this.makeInfos(); // Remake infos as it depends on locale.
