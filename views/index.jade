@@ -40,7 +40,7 @@ block content
         form#loginform(target='resframe', enctype='multipart/form-data',
             action='', method='POST')
             p: label#logname
-            p: input#nickname(type='text', name='logname', maxlength='15')
+            p: input#username(type='text', name='logname', maxlength='15')
             p: label#logpass
             p: input(type='password', name='logpass')
             p: input#login(type='submit', name='login')
@@ -61,6 +61,6 @@ block content
         p#serverresponse
     script
         user = {};
-        user.nickname = '#{nickname}';
+        user.username = '#{username}';
     script(src='/javascripts/yinyanggo.js')
     

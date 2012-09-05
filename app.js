@@ -35,18 +35,18 @@ app.configure(function () {
  */
 
 app.get('/', function (req, res) {
-    var nickname = req.session.nickname || '';
-    res.render('index', { title: 'Yin yan go', nickname: nickname });
+    var username = req.session.username || '';
+    res.render('index', { title: 'Yin yan go', username: username });
 });
 
 app.get('/session', function (req, res) {
-    var nickname = req.session.nickname || '';
-    res.send({ nickname: nickname });
+    var username = req.session.username || '';
+    res.send({ username: username });
 });
 
 app.get('/session/:id', function (req, res) {
-    req.session.nickname = req.params.id;
-    res.send(req.session.nickname);
+    req.session.username = req.params.id;
+    res.send(req.session.username);
 });
 /**
  * Server init.

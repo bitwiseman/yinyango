@@ -463,7 +463,7 @@ var yygo = {};
                 optbuttons.style.display = 'block';
                 game.style.display = 'block';
                 // Consider user login status.
-                if (yygo.events.nickname === '') {
+                if (yygo.events.username === '') {
                     sendsgf.style.display = 'none';
                     userstatus.style.backgroundColor = '#cf142b';
                 } else {
@@ -529,8 +529,8 @@ var yygo = {};
             document.getElementById('refresh').title =  locale.refresh;
 
             // Forms labels.
-            document.getElementById('logname').textContent = locale.nickname;
-            document.getElementById('regname').textContent = locale.nickname;
+            document.getElementById('logname').textContent = locale.username;
+            document.getElementById('regname').textContent = locale.username;
             document.getElementById('logpass').textContent = locale.password;
             document.getElementById('regpass').textContent = locale.password;
             document.getElementById('regmail').textContent = locale.email;
@@ -980,7 +980,7 @@ var yygo = {};
      * Events part of the yygo namespace.
      *
      * @property {String}   mode        Goban mode: replay, play, modify...
-     * @property {String}   nickname    Nickname of user.
+     * @property {String}   username    User name.
      * @property {String}   screen      Actual screen to show.
      */
     yygo.events = {
@@ -988,7 +988,7 @@ var yygo = {};
         // Properties.
 
         mode:           'replay',
-        nickname:       '',
+        username:       '',
         screen:         'goban',
 
         // Methods.
@@ -1003,7 +1003,7 @@ var yygo = {};
                             'en').substr(0, 2).toLowerCase();
 
             // Get user session if it still exist.
-            yygo.events.nickname = user.nickname;
+            yygo.events.username = user.username;
 
             // Define language.
             yygo.data.setLang(navlang, function () {
@@ -1428,8 +1428,8 @@ var yygo = {};
         clickUser: function () {
             // Check if session expired of if user try to steal identity.
             jsonRequest('session', function (data) {
-                if (yygo.events.nickname !== '' &&
-                        yygo.events.nickname === data.nickname) {
+                if (yygo.events.username !== '' &&
+                        yygo.events.username === data.username) {
                     yygo.events.screen = 'param';
                     yygo.view.changeScreen();
                 } else {
@@ -1469,7 +1469,7 @@ var yygo = {};
             } else if (response === 'wrong') {
                 serverresponse.textContent = locale.wrong;
             } else if (response === 'login') {
-                this.nickname = document.getElementById('nickname').value;
+                this.username = document.getElementById('username').value;
                 this.screen = 'options';
                 yygo.view.changeScreen();
             } else if (response === 'logout') {
