@@ -42,7 +42,7 @@ body {
     overflow: auto;
     text-align: center;
 }
-#responseframe {
+#resframe {
     display: none;
 }
 #reglink {
