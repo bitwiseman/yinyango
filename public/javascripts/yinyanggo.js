@@ -1117,7 +1117,7 @@ var yygo = {};
                 langfr =        document.getElementById('langfr'),
                 user =          document.getElementById('user'),
                 sendsgf =       document.getElementById('sendsgf'),
-                responseframe = document.getElementById('responseframe'),
+                resframe =      document.getElementById('resframe'),
                 reglink =       document.getElementById('reglink'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
@@ -1198,7 +1198,7 @@ var yygo = {};
             }, false);
 
             // Load response after sending sgf file, login or registering.
-            responseframe.addEventListener('load', function () {
+            resframe.addEventListener('load', function () {
                 yygo.events.serverResponse();
             }, false);
 
@@ -1449,7 +1449,7 @@ var yygo = {};
                 serverresponse =    document.getElementById('serverresponse'),
                 response;
 
-            response = frames.responseframe
+            response = frames.resframe
                 .document.getElementsByTagName("body")[0].innerHTML;
 
             if (response === 'invalidsgf') {
