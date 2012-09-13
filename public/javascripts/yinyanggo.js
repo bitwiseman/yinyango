@@ -17,7 +17,7 @@ var yygo = {};
     // Utilities functions.
 
     /** jsonRequest {{{
-     * Simple ajax request expecting json in answer.
+     * Simple ajax request expecting json in response.
      *
      * @param {String} url Destination url.
      * @param {Function} callback Callback function.
@@ -117,7 +117,7 @@ var yygo = {};
             var table = document.getElementById('gameslist'),
                 id =    table.rows[index].cells[0].textContent;
 
-            jsonRequest('model.php?game=' + id, function (data) {
+            jsonRequest('games/' + id, function (data) {
                 yygo.data.game = data;
 
                 yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
@@ -166,7 +166,7 @@ var yygo = {};
             }
 
             // Get language json file and translate elements.
-            jsonRequest('lang/' + this.lang + '.json', function (data) {
+            jsonRequest('langs/' + this.lang + '.json', function (data) {
                 yygo.data.locale = data;
                 yygo.view.changeLang();
                 if (callback !== undefined) {
@@ -463,7 +463,7 @@ var yygo = {};
                 optbuttons.style.display = 'block';
                 game.style.display = 'block';
                 // Consider user login status.
-                if (yygo.events.nickname === '') {
+                if (yygo.events.username === '') {
                     sendsgf.style.display = 'none';
                     userstatus.style.backgroundColor = '#cf142b';
                 } else {
@@ -529,17 +529,17 @@ var yygo = {};
             document.getElementById('refresh').title =  locale.refresh;
 
             // Forms labels.
-            document.getElementById('logname').textContent = locale.nickname;
-            document.getElementById('regname').textContent = locale.nickname;
+            document.getElementById('logname').textContent = locale.username;
+            document.getElementById('regname').textContent = locale.username;
             document.getElementById('logpass').textContent = locale.password;
             document.getElementById('regpass').textContent = locale.password;
             document.getElementById('regmail').textContent = locale.email;
-            document.getElementById('reglink').textContent = locale.register;
-            // Forms submit buttons.
+            // Forms buttons.
+            document.getElementById('reglink').value =  locale.register;
             document.getElementById('register').value = locale.register;
             document.getElementById('sendfile').value = locale.sendfile;
-            document.getElementById('login').value = locale.login;
-            document.getElementById('logout').value = locale.logout;
+            document.getElementById('login').value =    locale.login;
+            document.getElementById('logout').value =   locale.logout;
 
             if (!isEmpty(yygo.data.game)) {
                 this.makeInfos(); // Remake infos as it depends on locale.
@@ -980,7 +980,7 @@ var yygo = {};
      * Events part of the yygo namespace.
      *
      * @property {String}   mode        Goban mode: replay, play, modify...
-     * @property {String}   nickname    Nickname of user.
+     * @property {String}   username    User name.
      * @property {String}   screen      Actual screen to show.
      */
     yygo.events = {
@@ -988,7 +988,7 @@ var yygo = {};
         // Properties.
 
         mode:           'replay',
-        nickname:       '',
+        username:       '',
         screen:         'goban',
 
         // Methods.
@@ -1003,16 +1003,13 @@ var yygo = {};
                             'en').substr(0, 2).toLowerCase();
 
             // Get user session if it still exist.
-            jsonRequest('model.php?nickname', function (data) {
-                if (data !== '') {
-                    yygo.events.nickname = data;
-                }
-                // Define language.
-                yygo.data.setLang(navlang, function () {
-                    // Callback to be sure we have the locale data.
-                    yygo.events.makeBinds();
-                    yygo.events.loadIntro();
-                });
+            yygo.events.username = user.username;
+
+            // Define language.
+            yygo.data.setLang(navlang, function () {
+                // Callback to be sure we have the locale data.
+                yygo.events.makeBinds();
+                yygo.events.loadIntro();
             });
         },
         /*}}}*/
@@ -1120,7 +1117,7 @@ var yygo = {};
                 langfr =        document.getElementById('langfr'),
                 user =          document.getElementById('user'),
                 sendsgf =       document.getElementById('sendsgf'),
-                responseframe = document.getElementById('responseframe'),
+                resframe =      document.getElementById('resframe'),
                 reglink =       document.getElementById('reglink'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
@@ -1201,7 +1198,7 @@ var yygo = {};
             }, false);
 
             // Load response after sending sgf file, login or registering.
-            responseframe.addEventListener('load', function () {
+            resframe.addEventListener('load', function () {
                 yygo.events.serverResponse();
             }, false);
 
@@ -1386,7 +1383,7 @@ var yygo = {};
             var gameslist = yygo.data.gameslist || {};
 
             if (isEmpty(gameslist)) {
-                jsonRequest('model.php?list', function (data) {
+                jsonRequest('gameslist', function (data) {
                     yygo.data.gameslist = data;
                     yygo.view.makeGamesList();
                     yygo.events.makeListBinds();
@@ -1429,9 +1426,10 @@ var yygo = {};
          * Login/logout and parameters of the user.
          */
         clickUser: function () {
-            jsonRequest('model.php?nickname', function (data) {
-                if (data !== '') {
-                    yygo.events.nickname = data;
+            // Check if session expired of if user try to steal identity.
+            jsonRequest('session', function (data) {
+                if (yygo.events.username !== '' &&
+                        yygo.events.username === data.username) {
                     yygo.events.screen = 'param';
                     yygo.view.changeScreen();
                 } else {
@@ -1451,7 +1449,7 @@ var yygo = {};
                 serverresponse =    document.getElementById('serverresponse'),
                 response;
 
-            response = frames.responseframe
+            response = frames.resframe
                 .document.getElementsByTagName("body")[0].innerHTML;
 
             if (response === 'invalidsgf') {
@@ -1471,7 +1469,7 @@ var yygo = {};
             } else if (response === 'wrong') {
                 serverresponse.textContent = locale.wrong;
             } else if (response === 'login') {
-                this.nickname = document.getElementById('nickname').value;
+                this.username = document.getElementById('username').value;
                 this.screen = 'options';
                 yygo.view.changeScreen();
             } else if (response === 'logout') {

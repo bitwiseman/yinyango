@@ -1,6 +1,0 @@
-- Translate game to SGF.
-- Make different modes: play, edition...
-- Make a better Sgf class.
-- Calculate the score.
-- Treat other keys like 'pass'.
-- Save user parameters.

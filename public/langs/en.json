@@ -24,7 +24,7 @@
     "place":        "Place",
     "rules":        "Rules",
 
-    "nickname":     "Nickname",
+    "username":     "User name",
     "password":     "Password",
     "email":        "Email",
     "register":     "Register",
