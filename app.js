@@ -42,16 +42,20 @@ app.configure('production', function () {
  */
 
 app.get('/', function (req, res) {
-    var username =      req.session.username || 'guest',
-        browserlang =   req.headers["accept-language"].substr(0, 2) || 'en',
-        locale =        req.session.locale ||
-                        require(app.get('locales') + '/' + browserlang);
+    var username =  req.session.username || 'guest',
+        lang =      req.session.lang ||
+                    req.headers["accept-language"].substr(0, 2) || 'en',
+        locale =    require(app.get('locales') + '/' + lang);
 
-    res.render('index', { 
-        title: 'Yin yang go',
-        username: username,
-        locale: locale
-    });
+    req.session.lang = lang;
+    if (username === 'guest') {
+        res.render('index', { 
+            title: 'Yin yang go',
+            locale: locale
+        });
+    } else {
+        res.redirect('/yygo');
+    }
 });
 
 app.get('/session', function (req, res) {
@@ -65,6 +69,17 @@ app.get('/session/:id', function (req, res) {
     res.send(req.session.username);
 });
 
+app.get('/yygo', function (req, res) {
+    var username =  req.session.username,
+        locale =    require(app.get('locales') + '/' + req.session.lang);
+
+    console.log(req.session.lang);
+    res.render('yygo', { 
+        title: 'Yin yang go',
+        username: username,
+        locale: locale
+    });
+});
 /**
  * Server init.
  */

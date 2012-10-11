@@ -9,6 +9,7 @@ body {
     background: #ccaa66;
     color: #000;
     margin: 0;
+    text-align: center;
 }
 #loadlist {/*{{{*/
     display: none;

@@ -37,15 +37,6 @@ block content
             action='', method='POST')
             p: input(type='file', name='sgf')
             p: input#sendfile(type='submit')
-        form#loginform(target='resframe', enctype='multipart/form-data',
-            action='', method='POST')
-            p: label#logname
-            p: input#username(type='text', name='logname', maxlength='15')
-            p: label#logpass
-            p: input(type='password', name='logpass')
-            p
-                input#login(type='submit', name='login')
-                input#reglink(type='button', name='reglink')
         form#registerform(target='resframe', enctype='multipart/form-data',
             action='', method='POST')
             p: label#regname
