@@ -5,13 +5,10 @@ block content
     h2= locale.register
     form(name='form', method='post', action='/register')
         p: label= locale.username
-        p: input(type='text', name='username', maxlength='15')
+        p: input(type='text', name='username', autofocus, autocomplete,
+            maxlength='15')
         p: label= locale.password
         p: input(type='password', name='password')
         p: label= locale.email
-        p: input(type='email', name='email')
-        p: a.linkbutton(href='javascript: submit()')= locale.register
-    script
-        function submit() {
-            document.form.submit();
-        }
+        p: input(type='email', autocomplete, name='email')
+        p: input.linkbutton(type='submit', value= locale.registe)r

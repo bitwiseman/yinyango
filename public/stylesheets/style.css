@@ -16,6 +16,7 @@ body {
     color: #fff;
     padding: 6px 12px;
     margin: 4px;
+    border: 1px solid #000;
     border-radius: 19px;
     font: bold 18px sans-serif;
     text-decoration: none;
