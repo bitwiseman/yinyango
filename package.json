@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "express": "*",
-    "jade": "*",
-    "locale": "*"
+    "jade": "*"
   }
 }
