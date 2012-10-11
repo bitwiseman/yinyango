@@ -1332,7 +1332,7 @@ var yygo = {};
                     //yygo.events.screen = 'param';
                     //yygo.view.changeScreen();
                 } else {
-                    window.location.href = '/';
+                    window.location.href = '/login';
                     //yygo.events.screen = 'login';
                     //yygo.view.changeScreen();
                 }

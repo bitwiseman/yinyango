@@ -42,25 +42,41 @@ app.configure('production', function () {
  */
 
 app.get('/', function (req, res) {
-    var username =  req.session.username || 'guest',
-        lang =      req.session.lang ||
-                    req.headers["accept-language"].substr(0, 2) || 'en',
-        locale =    require(app.get('locales') + '/' + lang);
+    var username =  req.session.username,
+        locale;
 
-    if (username === 'guest') {
-        res.render('index', { 
+    if (typeof(username) !== 'undefined') {
+        locale = require(app.get('locales') + '/' + req.session.lang);
+        res.render('yygo', { 
             title: 'Yin yang go',
+            username: username,
             locale: locale
         });
     } else {
-        res.redirect('/yygo');
+        res.redirect('/login');
     }
 });
 
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
     req.session.lang = req.headers["accept-language"].substr(0, 2) || 'en';
-    res.redirect('/yygo');
+    res.redirect('/');
+});
+
+app.get('/login', function (req, res) {
+    var username =  req.session.username || 'guest',
+        lang =      req.session.lang ||
+                    req.headers["accept-language"].substr(0, 2) || 'en',
+        locale =    require(app.get('locales') + '/' + lang);
+
+    if (username === 'guest') {
+        res.render('login', { 
+            title: 'Yin yang go',
+            locale: locale
+        });
+    } else {
+        res.redirect('/');
+    }
 });
 
 app.get('/session', function (req, res) {
@@ -74,21 +90,6 @@ app.get('/session/:id', function (req, res) {
     res.send(req.session.username);
 });
 
-app.get('/yygo', function (req, res) {
-    var username =  req.session.username,
-        locale;
-
-    if (typeof(username) !== 'undefined') {
-        locale = require(app.get('locales') + '/' + req.session.lang);
-        res.render('yygo', { 
-            title: 'Yin yang go',
-            username: username,
-            locale: locale
-        });
-    } else {
-        res.redirect('/');
-    }
-});
 /**
  * Server init.
  */
