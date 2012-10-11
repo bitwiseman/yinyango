@@ -21,6 +21,7 @@ var app = express();
 app.configure(function () {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
+    app.set('locales', __dirname + '/locales');
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
@@ -41,11 +42,16 @@ app.configure('production', function () {
  */
 
 app.get('/', function (req, res) {
-    var username =  req.session.username || 'guest',
-        locale =    req.session.locale ||
-                    req.headers["accept-language"].substr(0, 2) || 'en';
+    var username =      req.session.username || 'guest',
+        browserlang =   req.headers["accept-language"].substr(0, 2) || 'en',
+        locale =        req.session.locale ||
+                        require(app.get('locales') + '/' + browserlang);
 
-    res.render('index', { title: 'Yin yang go', username: username });
+    res.render('index', { 
+        title: 'Yin yang go',
+        username: username,
+        locale: locale
+    });
 });
 
 app.get('/session', function (req, res) {
