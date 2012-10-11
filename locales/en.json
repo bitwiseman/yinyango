@@ -30,6 +30,7 @@
     "register":     "Register",
     "sendfile":     "Send file",
     "login":        "Login",
+    "guestlogin":   "Login as guest",
     "logout":       "Logout",
 
     "loading":      "Sending data, please be patient...",

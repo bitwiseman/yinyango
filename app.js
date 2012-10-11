@@ -47,7 +47,6 @@ app.get('/', function (req, res) {
                     req.headers["accept-language"].substr(0, 2) || 'en',
         locale =    require(app.get('locales') + '/' + lang);
 
-    req.session.lang = lang;
     if (username === 'guest') {
         res.render('index', { 
             title: 'Yin yang go',
@@ -58,8 +57,14 @@ app.get('/', function (req, res) {
     }
 });
 
+app.get('/guest', function (req, res) {
+    req.session.username = 'guest';
+    req.session.lang = req.headers["accept-language"].substr(0, 2) || 'en';
+    res.redirect('/yygo');
+});
+
 app.get('/session', function (req, res) {
-    var username = req.session.username || '';
+    var username = req.session.username || 'guest';
 
     res.send({ username: username });
 });
@@ -71,14 +76,18 @@ app.get('/session/:id', function (req, res) {
 
 app.get('/yygo', function (req, res) {
     var username =  req.session.username,
-        locale =    require(app.get('locales') + '/' + req.session.lang);
+        locale;
 
-    console.log(req.session.lang);
-    res.render('yygo', { 
-        title: 'Yin yang go',
-        username: username,
-        locale: locale
-    });
+    if (typeof(username) !== 'undefined') {
+        locale = require(app.get('locales') + '/' + req.session.lang);
+        res.render('yygo', { 
+            title: 'Yin yang go',
+            username: username,
+            locale: locale
+        });
+    } else {
+        res.redirect('/');
+    }
 });
 /**
  * Server init.

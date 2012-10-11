@@ -55,10 +55,8 @@ var yygo = {};
      * Data part of the yygo namespace, where we store the game and the actual
      * state.
      *
-     * @property {String[]} langs       Actually supported languages.
      * @property {Object}   game        All the game data.
      * @property {Object}   gameslist   Loadable games.
-     * @property {String}   lang        Language set by the user.
      * @property {Number}   branchs     Total number of branchs (variations).
      * @property {Number}   size        Size of the goban (9, 13, 19).
      * @property {Number}   curbranch   Current branch (variation) navigated.
@@ -70,12 +68,8 @@ var yygo = {};
 
         // Properties.
 
-        langs:          ['en', 'fr'],
-
         game:           {},
         gameslist:      {},
-
-        lang:           'en',
 
         branchs:        0,
         size:           0,
@@ -147,33 +141,6 @@ var yygo = {};
             }
             this.lastnode = lastnode;
         },
-        /*}}}*/
-
-        /** yygo.data.setLang {{{
-         * Define the current language to use.
-         *
-         * @param {String}      lang        Language to use.
-         * @param {Function}    callback    Callback function.
-         */
-        setLang: function (lang, callback) {
-            var langs = this.langs,
-                i;
-
-            for (i in langs) {
-                if (langs[i] === lang) {
-                    this.lang = lang;
-                }
-            }
-
-            // Get language json file and translate elements.
-            jsonRequest('langs/' + this.lang + '.json', function (data) {
-                yygo.data.locale = data;
-                yygo.view.changeLang();
-                if (callback !== undefined) {
-                    callback();
-                }
-            });
-        }
         /*}}}*/
 
     };
@@ -463,7 +430,7 @@ var yygo = {};
                 optbuttons.style.display = 'block';
                 game.style.display = 'block';
                 // Consider user login status.
-                if (yygo.events.username === '') {
+                if (yygo.events.username === 'guest') {
                     sendsgf.style.display = 'none';
                     userstatus.style.backgroundColor = '#cf142b';
                 } else {
@@ -500,62 +467,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.changeLang {{{
-         * Change elements showing informations based on language.
-         */
-        changeLang: function () {
-            var locale =        yygo.data.locale,
-                lang =          yygo.data.lang,
-                buttonlang =    document.getElementsByClassName('buttonlang'),
-                cl =            buttonlang.length,
-                l;
-
-            // Buttons labels.
-            document.getElementById('comment').title =  locale.comment;
-            document.getElementById('border').title =   locale.border;
-            document.getElementById('load').title =     locale.load;
-            document.getElementById('lang').title =     locale.language;
-            document.getElementById('start').title =    locale.start;
-            document.getElementById('prev').title =     locale.prev;
-            document.getElementById('fastprev').title = locale.fastprev;
-            document.getElementById('next').title =     locale.next;
-            document.getElementById('fastnext').title = locale.fastnext;
-            document.getElementById('end').title =      locale.end;
-            document.getElementById('game').title =     locale.game;
-            document.getElementById('options').title =  locale.options;
-            document.getElementById('sendsgf').title =  locale.sendsgf;
-            document.getElementById('downsgf').title =  locale.downsgf;
-            document.getElementById('user').title =     locale.user;
-            document.getElementById('refresh').title =  locale.refresh;
-
-            // Forms labels.
-            document.getElementById('logname').textContent = locale.username;
-            document.getElementById('regname').textContent = locale.username;
-            document.getElementById('logpass').textContent = locale.password;
-            document.getElementById('regpass').textContent = locale.password;
-            document.getElementById('regmail').textContent = locale.email;
-            // Forms buttons.
-            document.getElementById('reglink').value =  locale.register;
-            document.getElementById('register').value = locale.register;
-            document.getElementById('sendfile').value = locale.sendfile;
-            document.getElementById('login').value =    locale.login;
-            document.getElementById('logout').value =   locale.logout;
-
-            if (!isEmpty(yygo.data.game)) {
-                this.makeInfos(); // Remake infos as it depends on locale.
-            }
-
-            // Change button shape to reflect the actual language.
-            document.getElementById('lang').className = 'button' + lang;
-
-            // Hide current language button in the languages list.
-            for (l = 0; l < cl; l++) {
-                buttonlang[l].style.display = 'block';
-            }
-            document.getElementById('lang' + lang).style.display = 'none';
-        },
-        /*}}}*/
-
         /** yygo.view.changeScreen {{{
          * Change the elements to display depending on the actual screen.
          */
@@ -569,7 +480,6 @@ var yygo = {};
                 serverforms =       document.getElementById('serverforms'),
                 serverresponse =    document.getElementById('serverresponse'),
                 sendsgfform =       document.getElementById('sendsgfform'),
-                loginform =         document.getElementById('loginform'),
                 registerform =      document.getElementById('registerform'),
                 paramform =         document.getElementById('paramform'),
                 loadlist =          document.getElementById('loadlist');
@@ -582,7 +492,6 @@ var yygo = {};
             infos.style.display = 'none';
             serverforms.style.display = 'none';
             sendsgfform.style.display = 'none';
-            loginform.style.display = 'none';
             registerform.style.display = 'none';
             paramform.style.display = 'none';
             loadlist.style.display = 'none';
@@ -610,7 +519,6 @@ var yygo = {};
             } else if (screen === 'login') {
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
-                loginform.style.display = 'block';
             } else if (screen === 'register') {
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
@@ -997,20 +905,14 @@ var yygo = {};
          * This is where we start.
          */
         init: function () {
-            var navlang =   (navigator.language ||
-                            navigator.systemLanguage ||
-                            navigator.userLanguage ||
-                            'en').substr(0, 2).toLowerCase();
-
             // Get user session if it still exist.
             yygo.events.username = user.username;
 
-            // Define language.
-            yygo.data.setLang(navlang, function () {
-                // Callback to be sure we have the locale data.
-                yygo.events.makeBinds();
-                yygo.events.loadIntro();
-            });
+            // Bind buttons to functions.
+            yygo.events.makeBinds();
+            // TODO: Ask user what to load, previous session ?
+            // Load intro screen for guest and new users.
+            yygo.events.loadIntro();
         },
         /*}}}*/
 
@@ -1159,9 +1061,6 @@ var yygo = {};
             }, false);
             user.addEventListener('click', function () {
                 yygo.events.clickUser();
-            }, false);
-            reglink.addEventListener('click', function () {
-                yygo.events.clickRegister();
             }, false);
             sendsgf.addEventListener('click', function () {
                 yygo.events.clickSendSgf();
@@ -1428,13 +1327,14 @@ var yygo = {};
         clickUser: function () {
             // Check if session expired of if user try to steal identity.
             jsonRequest('session', function (data) {
-                if (yygo.events.username !== '' &&
+                if (yygo.events.username !== 'guest' &&
                         yygo.events.username === data.username) {
-                    yygo.events.screen = 'param';
-                    yygo.view.changeScreen();
+                    //yygo.events.screen = 'param';
+                    //yygo.view.changeScreen();
                 } else {
-                    yygo.events.screen = 'login';
-                    yygo.view.changeScreen();
+                    window.location.href = '/';
+                    //yygo.events.screen = 'login';
+                    //yygo.view.changeScreen();
                 }
             });
         },

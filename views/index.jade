@@ -1,6 +1,8 @@
 extends layout
 
 block content
+    h1= title
+    a.linkbutton(href='/guest')= locale.guestlogin
     form(method='post', action='/login')
         p: label= locale.username
         p: input(type='text', name='username', maxlength='15')

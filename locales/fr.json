@@ -30,6 +30,7 @@
     "register":     "S'enregistrer",
     "sendfile":     "Envoyer le fichier",
     "login":        "Connexion",
+    "guestlogin":   "Connexion en tant qu'invité",
     "logout":       "Déconnexion",
 
     "loading":      "Envoi des données, veuillez patienter...",
