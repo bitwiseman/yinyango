@@ -1,5 +1,5 @@
 /**
- * Yin yan go Node.js application.
+ * Yin yang go Node.js application.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
@@ -41,12 +41,16 @@ app.configure('production', function () {
  */
 
 app.get('/', function (req, res) {
-    var username = req.session.username || '';
-    res.render('index', { title: 'Yin yan go', username: username });
+    var username =  req.session.username || 'guest',
+        locale =    req.session.locale ||
+                    req.headers["accept-language"].substr(0, 2) || 'en';
+
+    res.render('index', { title: 'Yin yang go', username: username });
 });
 
 app.get('/session', function (req, res) {
     var username = req.session.username || '';
+
     res.send({ username: username });
 });
 
@@ -54,6 +58,7 @@ app.get('/session/:id', function (req, res) {
     req.session.username = req.params.id;
     res.send(req.session.username);
 });
+
 /**
  * Server init.
  */
