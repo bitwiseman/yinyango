@@ -2,7 +2,7 @@
     "comment":      "Comments",
     "border":       "Borders",
     "load":         "Load a game from list",
-    "language":     "Language",
+    "lang":         "Language",
     "start":        "Back to start",
     "prev":         "Previous",
     "fastprev":     "Fast rewind",

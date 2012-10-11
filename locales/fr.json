@@ -2,7 +2,7 @@
     "comment":      "Commentaires",
     "border":       "Bordures",
     "load":         "Charger une partie de la liste",
-    "language":     "Langue",
+    "lang":         "Langue",
     "start":        "Revenir au début",
     "prev":         "Précédent",
     "fastprev":     "Retour rapide",
