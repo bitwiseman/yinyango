@@ -11,6 +11,19 @@ body {
     margin: 0;
     text-align: center;
 }
+.linkbutton {
+    background: #000;
+    color: #fff;
+    padding: 6px 12px;
+    margin: 4px;
+    border-radius: 19px;
+    font: bold 18px sans-serif;
+    text-decoration: none;
+}
+.linkbutton:hover {
+    background: #fff;
+    color: #000;
+}
 #loadlist {/*{{{*/
     display: none;
     position: absolute;

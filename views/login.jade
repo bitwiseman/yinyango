@@ -4,11 +4,14 @@ block content
     h1= title
     h2= locale.login
     a.linkbutton(href='/guest')= locale.guestlogin
-    a.linkbutton(href='/register')= locale.register
-    form(method='post', action='/login')
+    form(name='form', method='post', action='/login')
         p: label= locale.username
         p: input(type='text', name='username', maxlength='15')
         p: label= locale.password
         p: input(type='password', name='password')
-        p
-            input(type='submit', value= locale.login)
+        p: a.linkbutton(href='javascript: submit()')= locale.login
+        p: a.linkbutton(href='/register')= locale.register
+    script
+        function submit() {
+            document.form.submit();
+        }
