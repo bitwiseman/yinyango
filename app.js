@@ -45,6 +45,11 @@ app.get('/', function (req, res) {
     var username =  req.session.username,
         locale;
 
+    // Set session language to the user browser one.
+    if (typeof(req.session.lang) === 'undefined') {
+        req.session.lang = req.headers["accept-language"].substr(0, 2) || 'en';
+    }
+    // Check if user session still exist.
     if (typeof(username) !== 'undefined') {
         locale = require(app.get('locales') + '/' + req.session.lang);
         res.render('yygo', { 
@@ -59,24 +64,25 @@ app.get('/', function (req, res) {
 
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
-    req.session.lang = req.headers["accept-language"].substr(0, 2) || 'en';
     res.redirect('/');
 });
 
 app.get('/login', function (req, res) {
     var username =  req.session.username || 'guest',
-        lang =      req.session.lang ||
-                    req.headers["accept-language"].substr(0, 2) || 'en',
-        locale =    require(app.get('locales') + '/' + lang);
+        locale;
 
     if (username === 'guest') {
-        res.render('login', { 
-            title: 'Yin yang go',
-            locale: locale
-        });
+        locale = require(app.get('locales') + '/' + req.session.lang);
+        res.render('login', { title: 'Yin yang go', locale: locale });
     } else {
         res.redirect('/');
     }
+});
+
+app.get('/register', function (req, res) {
+    var locale = require(app.get('locales') + '/' + req.session.lang);
+
+    res.render('register', { title: 'Yin yang go', locale: locale });
 });
 
 app.get('/session', function (req, res) {

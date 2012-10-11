@@ -37,15 +37,6 @@ block content
             action='', method='POST')
             p: input(type='file', name='sgf')
             p: input#sendfile(type='submit')
-        form#registerform(target='resframe', enctype='multipart/form-data',
-            action='', method='POST')
-            p: label#regname
-            p: input(type='text', name='regname', maxlength='15')
-            p: label#regpass
-            p: input(type='password', name='regpass')
-            p: label#regmail
-            p: input(type='email', name='regmail')
-            p: input#register(type='submit', name='register')
         form#paramform(target='resframe', enctype='multipart/form-data',
             action='', method='POST')
             p: input#changepass(type='submit', name='changepass')

@@ -480,7 +480,6 @@ var yygo = {};
                 serverforms =       document.getElementById('serverforms'),
                 serverresponse =    document.getElementById('serverresponse'),
                 sendsgfform =       document.getElementById('sendsgfform'),
-                registerform =      document.getElementById('registerform'),
                 paramform =         document.getElementById('paramform'),
                 loadlist =          document.getElementById('loadlist');
 
@@ -492,7 +491,6 @@ var yygo = {};
             infos.style.display = 'none';
             serverforms.style.display = 'none';
             sendsgfform.style.display = 'none';
-            registerform.style.display = 'none';
             paramform.style.display = 'none';
             loadlist.style.display = 'none';
 
@@ -522,7 +520,6 @@ var yygo = {};
             } else if (screen === 'register') {
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
-                registerform.style.display = 'block';
             } else if (screen === 'param') {
                 buttonsbar.style.display = 'block';
                 serverforms.style.display = 'block';
@@ -1329,12 +1326,9 @@ var yygo = {};
             jsonRequest('session', function (data) {
                 if (yygo.events.username !== 'guest' &&
                         yygo.events.username === data.username) {
-                    //yygo.events.screen = 'param';
-                    //yygo.view.changeScreen();
+                    // TODO: User parameters.
                 } else {
                     window.location.href = '/login';
-                    //yygo.events.screen = 'login';
-                    //yygo.view.changeScreen();
                 }
             });
         },

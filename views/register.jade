@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+    h2= locale.register
+    form(method='post', action='/register')
+        p: label= locale.username
+        p: input(type='text', name='username', maxlength='15')
+        p: label= locale.password
+        p: input(type='password', name='password')
+        p: label= locale.email
+        p: input(type='email', name='email')
+        p: input(type='submit', value= locale.register)

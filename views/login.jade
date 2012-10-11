@@ -2,7 +2,9 @@ extends layout
 
 block content
     h1= title
+    h2= locale.login
     a.linkbutton(href='/guest')= locale.guestlogin
+    a.linkbutton(href='/register')= locale.register
     form(method='post', action='/login')
         p: label= locale.username
         p: input(type='text', name='username', maxlength='15')
