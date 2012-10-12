@@ -1035,6 +1035,7 @@ var yygo = {};
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
                 menuload =      document.getElementById('menuload'),
+                menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
                 menumask =      document.getElementById('menumask'),
                 options =       document.getElementById('options'),
@@ -1067,6 +1068,11 @@ var yygo = {};
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
+            menuload.addEventListener('click', function () {
+            }, false);
+            menulogout.addEventListener('click', function () {
+                yygo.events.clickMenuLogout();
+            }, false);
             menuback.addEventListener('click', function () {
                 yygo.events.clickMenuBack();
             }, false);
@@ -1075,8 +1081,6 @@ var yygo = {};
             }, false);
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
-            }, false);
-            menuload.addEventListener('click', function () {
             }, false);
             refresh.addEventListener('click', function () {
                 yygo.data.gameslist = [];
@@ -1274,22 +1278,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.clickMenuBack {{{
-         * Show the current game.
-         */
-        clickMenuBack: function () {
-            yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuMask {{{
-         * Show the current game.
-         */
-        clickMenuMask: function () {
-            yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
         /** yygo.events.clickLoadList {{{
          * Load and show the games list.
          */
@@ -1306,6 +1294,30 @@ var yygo = {};
 
             this.screen = 'list';
             yygo.view.changeScreen();
+        },
+        /*}}}*/
+        
+        /** yygo.events.clickMenuLogout {{{
+         * Logout from game.
+         */
+        clickMenuLogout: function () {
+            window.location.href = '/logout';
+        },
+        /*}}}*/
+
+        /** yygo.events.clickMenuBack {{{
+         * Get back to game.
+         */
+        clickMenuBack: function () {
+            yygo.view.toggleMenu();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickMenuMask {{{
+         * Show the current game.
+         */
+        clickMenuMask: function () {
+            yygo.view.toggleMenu();
         },
         /*}}}*/
 

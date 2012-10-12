@@ -79,6 +79,13 @@ app.get('/login', function (req, res) {
     }
 });
 
+app.get('/logout', function (req, res) {
+    // Destroy session.
+    req.session.destroy(function (err) { 
+        res.redirect('/');
+    });
+});
+
 app.get('/register', function (req, res) {
     var locale; 
 
