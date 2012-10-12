@@ -3,12 +3,12 @@ extends layout
 block content
     h1= title
     h2= locale.register
-    form(name='form', method='post', action='/register')
+    form.box(name='form', method='post', action='/register')
         p: label= locale.username
-        p: input(type='text', name='username', autofocus, autocomplete,
+        p: input.input(type='text', name='username', autofocus, autocomplete,
             maxlength='15')
         p: label= locale.password
-        p: input(type='password', name='password')
+        p: input.input(type='password', name='password')
         p: label= locale.email
-        p: input(type='email', autocomplete, name='email')
-        p: input.linkbutton(type='submit', value= locale.registe)r
+        p: input.input(type='email', autocomplete, name='email')
+        p: input.linkbutton(type='submit', value= locale.register)

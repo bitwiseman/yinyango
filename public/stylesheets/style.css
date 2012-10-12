@@ -11,6 +11,21 @@ body {
     margin: 0;
     text-align: center;
 }
+.box {
+    display: inline-block;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    background: #eecc88;
+    padding: 0px 20px;
+    margin: 10px;
+    border-radius: 19px;
+}
+.input {
+    background: #f9f0ca;
+    border: 1px solid #000;
+    font: bold 18px sans-serif;
+}
 .linkbutton {
     background: #000;
     color: #f9f0ca;
