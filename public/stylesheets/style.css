@@ -27,11 +27,10 @@ body {
 .box {
     display: inline-block;
     width: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     background: #eecc88;
-    padding: 0px 20px;
-    border-radius: 19px;
+    padding: 0.1em 1em;
+    border-radius: 1em;
 }
 .input {
     background: #f9f0ca;
@@ -42,9 +41,9 @@ body {
     width: 100%;
     background: #000;
     color: #f9f0ca;
-    padding: 6px 12px;
-    border: 1px solid #000;
-    border-radius: 999px; /* Make sure it's all rounded. */
+    padding: 0.3em 0.6em;
+    border: 1px solid #000;/* Avoid ugly buttons borders. */
+    border-radius: 2em;/* Make sure its all rounded. */
     font: bold 1em sans-serif;
     text-decoration: none;
 }
@@ -72,23 +71,6 @@ body {
 }
 #gameslist tr:hover {
     background: #ddbb77;
-    cursor: pointer;
-}
-/*}}}*/
-#serverforms {/*{{{*/
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 5px;
-    bottom: 5px;
-    left: 5px;
-    overflow: auto;
-    text-align: center;
-}
-#resframe {
-    display: none;
-}
-#reglink {
     cursor: pointer;
 }
 /*}}}*/
