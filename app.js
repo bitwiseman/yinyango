@@ -71,7 +71,7 @@ app.get('/login', function (req, res) {
     var username =  req.session.username || 'guest',
         locale;
 
-    if (username === 'guest') {
+    if (username === 'guest' && typeof(req.session.lang) !== 'undefined') {
         locale = require(app.get('locales') + '/' + req.session.lang);
         res.render('login', { title: 'Yin yang go', locale: locale });
     } else {
@@ -80,9 +80,14 @@ app.get('/login', function (req, res) {
 });
 
 app.get('/register', function (req, res) {
-    var locale = require(app.get('locales') + '/' + req.session.lang);
+    var locale; 
 
-    res.render('register', { title: 'Yin yang go', locale: locale });
+    if (typeof(req.session.lang) !== 'undefined') {
+        locale = require(app.get('locales') + '/' + req.session.lang);
+        res.render('register', { title: 'Yin yang go', locale: locale });
+    } else {
+        res.redirect('/');
+    }
 });
 
 app.get('/session', function (req, res) {
@@ -94,6 +99,10 @@ app.get('/session', function (req, res) {
 app.get('/session/:id', function (req, res) {
     req.session.username = req.params.id;
     res.send(req.session.username);
+});
+
+app.get('/test', function (req, res) {
+    res.render('test', { title: 'Yin yang go' });
 });
 
 /**

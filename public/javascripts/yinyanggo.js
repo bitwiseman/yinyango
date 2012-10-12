@@ -154,6 +154,7 @@ var yygo = {};
      * @property {Boolean}  redraw          We need to redraw the goban.
      * @property {Boolean}  showborders     We must show the goban borders.
      * @property {Boolean}  showcomments    We must show the comments.
+     * @property {Boolean}  showmenu        We must show the options menu.
      * @property {Number}   sizecell        Size of a goban cell in pixels.
      * @property {Number}   sizegoban       Size of goban in pixels.
      */
@@ -167,6 +168,7 @@ var yygo = {};
         redraw:         false,
         showborders:    false,
         showcomments:   true,
+        showmenu:       false,
 
         sizecell:       0,
         sizegoban:      0,
@@ -798,6 +800,25 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.view.setMenuPosition {{{
+         * Define the position of options menu.
+         */
+        setMenuPosition: function () {
+            var winw = window.innerWidth,
+                winh = window.innerHeight,
+                menu = document.getElementById('menu'),
+                menuw = menu.offsetWidth,
+                menuh = menu.offsetHeight,
+                menuleft, menutop;
+
+            menuleft = (winw / 2) - (menuw / 2);
+            menutop = (winh / 2) - (menuh / 2);
+            menu.style.position = 'absolute';
+            menu.style.left = menuleft + 'px';
+            menu.style.top = menutop + 'px';
+        },
+        /*}}}*/
+
         /** yygo.view.toggleBorders {{{
          * Alternate the display of the goban borders.
          */
@@ -874,6 +895,23 @@ var yygo = {};
                 comment.className = 'button';
             } else {
                 comment.className = 'buttond';
+            }
+        },
+        /*}}}*/
+
+        /** yygo.view.toggleMenu {{{
+         * Alternate the display of the options menu.
+         */
+        toggleMenu: function () {
+            var menu =  document.getElementById('menu');
+
+            if (!this.showmenu) {
+                menu.style.display = 'inline-block';
+                yygo.view.setMenuPosition();
+                this.showmenu = true;
+            } else {
+                menu.style.display = 'none';
+                this.showmenu = false;
             }
         }
         /*}}}*/
@@ -1028,6 +1066,9 @@ var yygo = {};
             // Window resize.
             window.addEventListener('resize', function () {
                 yygo.view.setGobanSize();
+                if (yygo.view.showmenu === true) {
+                    yygo.view.setMenuPosition();
+                }
             }, false);
 
             // Clicks.
@@ -1295,8 +1336,7 @@ var yygo = {};
          * Show the options.
          */
         clickOptions: function () {
-            this.screen = 'options';
-            yygo.view.changeScreen();
+            yygo.view.toggleMenu();
         },
         /*}}}*/
 

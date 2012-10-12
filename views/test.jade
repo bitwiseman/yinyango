@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    #menu.box
+        p: input.linkbutton(type='button', value='anticonstitutionnellement')
+        p: input.linkbutton(type='button', value='petit')
+        p: input.linkbutton(type='button', value='mqlkfjqjfm qmlfk d')
+        p: input.linkbutton(type='button', value='$$$')
+        p: input.linkbutton(type='button', value='...')
+        p: input.linkbutton(type='button', value='...')
+    script
+        function menuPosition() {
+            var winw = window.innerWidth,
+                winh = window.innerHeight,
+                menu = document.getElementById('menu'),
+                menuw = menu.offsetWidth,
+                menuh = menu.offsetHeight,
+                menuleft, menutop;
+
+            menuleft = (winw / 2) - (menuw / 2);
+            menutop = (winh / 2) - (menuh / 2);
+            menu.style.position = 'absolute';
+            menu.style.left = menuleft + 'px';
+            menu.style.top = menutop + 'px';
+        }
+        window.addEventListener('resize', function () {
+            menuPosition();
+        }, false);

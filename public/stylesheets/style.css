@@ -11,6 +11,9 @@ body {
     margin: 0;
     text-align: center;
 }
+#menu {
+    display: none;
+}
 .box {
     display: inline-block;
     width: auto;
@@ -18,7 +21,6 @@ body {
     margin-right: auto;
     background: #eecc88;
     padding: 0px 20px;
-    margin: 10px;
     border-radius: 19px;
 }
 .input {
@@ -27,10 +29,10 @@ body {
     font: bold 18px sans-serif;
 }
 .linkbutton {
+    width: 100%;
     background: #000;
     color: #f9f0ca;
     padding: 6px 12px;
-    margin: 4px;
     border: 1px solid #000;
     border-radius: 19px;
     font: bold 18px sans-serif;
