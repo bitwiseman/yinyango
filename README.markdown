@@ -13,8 +13,6 @@ general.
 - Calculate the score.
 - Treat other keys like 'pass'.
 - Save user parameters.
-- Experiment a new server using node.js.
-- Make more views (forms for example).
 
 ## LICENSE
 
