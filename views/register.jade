@@ -5,10 +5,10 @@ block content
     h2= locale.register
     form.box(name='form', method='post', action='/register')
         p: label= locale.username
-        p: input.input(type='text', name='username', autofocus, autocomplete,
-            maxlength='15')
+        p: input.input(type='text', name='username', autocomplete='on',
+            autofocus, maxlength='15')
         p: label= locale.password
         p: input.input(type='password', name='password')
         p: label= locale.email
-        p: input.input(type='email', autocomplete, name='email')
+        p: input.input(type='email', autocomplete='on', name='email')
         p: input.linkbutton(type='submit', value= locale.register)

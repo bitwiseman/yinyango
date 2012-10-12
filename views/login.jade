@@ -6,8 +6,8 @@ block content
     p: a.linkbutton(href='/guest')= locale.guestlogin
     form.box(name='form', method='post', action='/login')
         p: label= locale.username
-        p: input.input(type='text', name='username', autocomplete, autofocus,
-            maxlength='15')
+        p: input.input(type='text', name='username', autocomplete='on',
+            autofocus, maxlength='15')
         p: label= locale.password
         p: input.input(type='password', name='password')
         p: input.linkbutton(type='submit', value= locale.login)
