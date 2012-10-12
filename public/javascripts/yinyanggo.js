@@ -888,17 +888,17 @@ var yygo = {};
          * Alternate the display of the options menu.
          */
         toggleMenu: function () {
-            var menu =  document.getElementById('menu'),
-                mask =  document.getElementById('mask');
+            var menu =      document.getElementById('menu'),
+                menumask =  document.getElementById('menumask');
 
             if (!this.showmenu) {
                 menu.style.display = 'inline-block';
-                mask.style.display = 'block';
+                menumask.style.display = 'block';
                 yygo.view.setMenuPosition();
                 this.showmenu = true;
             } else {
                 menu.style.display = 'none';
-                mask.style.display = 'none';
+                menumask.style.display = 'none';
                 this.showmenu = false;
             }
         }
@@ -1034,10 +1034,10 @@ var yygo = {};
         makeBinds: function () {
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
-                back =          document.getElementById('back'),
-                mask =          document.getElementById('mask'),
+                menuload =      document.getElementById('menuload'),
+                menuback =      document.getElementById('menuback'),
+                menumask =      document.getElementById('menumask'),
                 options =       document.getElementById('options'),
-                load =          document.getElementById('load'),
                 refresh =       document.getElementById('refresh'),
                 langen =        document.getElementById('langen'),
                 langfr =        document.getElementById('langfr'),
@@ -1067,17 +1067,16 @@ var yygo = {};
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
-            back.addEventListener('click', function () {
-                yygo.events.clickBack();
+            menuback.addEventListener('click', function () {
+                yygo.events.clickMenuBack();
             }, false);
-            mask.addEventListener('click', function () {
-                yygo.events.clickMask();
+            menumask.addEventListener('click', function () {
+                yygo.events.clickMenuMask();
             }, false);
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
             }, false);
-            load.addEventListener('click', function () {
-                yygo.events.clickLoadList();
+            menuload.addEventListener('click', function () {
             }, false);
             refresh.addEventListener('click', function () {
                 yygo.data.gameslist = [];
@@ -1275,18 +1274,18 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.clickBack {{{
+        /** yygo.events.clickMenuBack {{{
          * Show the current game.
          */
-        clickBack: function () {
+        clickMenuBack: function () {
             yygo.view.toggleMenu();
         },
         /*}}}*/
 
-        /** yygo.events.clickMask {{{
+        /** yygo.events.clickMenuMask {{{
          * Show the current game.
          */
-        clickMask: function () {
+        clickMenuMask: function () {
             yygo.view.toggleMenu();
         },
         /*}}}*/
@@ -1315,15 +1314,6 @@ var yygo = {};
          */
         clickOptions: function () {
             yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickRegister {{{
-         * Registration of the user.
-         */
-        clickRegister: function () {
-            this.screen = 'register';
-            yygo.view.changeScreen();
         },
         /*}}}*/
 

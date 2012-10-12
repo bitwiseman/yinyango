@@ -30,11 +30,11 @@ block content
     #variations
     #goban
     #comments
-    #mask
+    #menumask
     #menu.box
-        p: input.linkbutton#load(type='button', value= locale.load)
-        p: input.linkbutton#logout(type='button', value= locale.logout)
-        p: input.linkbutton#back(type='button', value= locale.back)
+        p: input.linkbutton#menuload(type='button', value= locale.load)
+        p: input.linkbutton#menulogout(type='button', value= locale.logout)
+        p: input.linkbutton#menuback(type='button', value= locale.back)
     script
         user = {};
         user.username = '#{username}';
