@@ -241,9 +241,6 @@ body {
     display: none;
     position: relative;
     margin: auto;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
 }
 #btop {
     position: absolute;
