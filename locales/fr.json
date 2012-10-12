@@ -1,7 +1,6 @@
 {
     "comment":      "Commentaires",
     "border":       "Bordures",
-    "load":         "Charger une partie de la liste",
     "lang":         "Langue",
     "start":        "Revenir au début",
     "prev":         "Précédent",
@@ -9,8 +8,11 @@
     "next":         "Suivant",
     "fastnext":     "Avance rapide",
     "end":          "Aller à la fin",
-    "game":         "Retour à la partie",
     "options":      "Menu des options",
+
+    "load":         "Charger une partie de la liste",
+    "back":         "Retour",
+
     "sendsgf":      "Envoyer fichier SGF",
     "downsgf":      "Télécharger au format SGF",
     "user":         "Utilisateur",

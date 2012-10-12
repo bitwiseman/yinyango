@@ -479,10 +479,6 @@ var yygo = {};
                 goban =             document.getElementById('goban'),
                 comments =          document.getElementById('comments'),
                 infos =             document.getElementById('infos'),
-                serverforms =       document.getElementById('serverforms'),
-                serverresponse =    document.getElementById('serverresponse'),
-                sendsgfform =       document.getElementById('sendsgfform'),
-                paramform =         document.getElementById('paramform'),
                 loadlist =          document.getElementById('loadlist');
 
             // Hide all elements.
@@ -491,12 +487,7 @@ var yygo = {};
             goban.style.display = 'none';
             comments.style.display = 'none';
             infos.style.display = 'none';
-            serverforms.style.display = 'none';
-            sendsgfform.style.display = 'none';
-            paramform.style.display = 'none';
             loadlist.style.display = 'none';
-
-            serverresponse.textContent = ''; // Empty the server response.
 
             this.changeButtons(); // Change the buttons to display.
 
@@ -514,18 +505,12 @@ var yygo = {};
                 loadlist.style.display = 'block';
             } else if (screen === 'sendsgf') {
                 buttonsbar.style.display = 'block';
-                serverforms.style.display = 'block';
-                sendsgfform.style.display = 'block';
             } else if (screen === 'login') {
                 buttonsbar.style.display = 'block';
-                serverforms.style.display = 'block';
             } else if (screen === 'register') {
                 buttonsbar.style.display = 'block';
-                serverforms.style.display = 'block';
             } else if (screen === 'param') {
                 buttonsbar.style.display = 'block';
-                serverforms.style.display = 'block';
-                paramform.style.display = 'block';
             }
         },
         /*}}}*/
@@ -1049,7 +1034,8 @@ var yygo = {};
         makeBinds: function () {
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
-                game =          document.getElementById('game'),
+                back =          document.getElementById('back'),
+                mask =          document.getElementById('mask'),
                 options =       document.getElementById('options'),
                 load =          document.getElementById('load'),
                 refresh =       document.getElementById('refresh'),
@@ -1081,8 +1067,11 @@ var yygo = {};
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
-            game.addEventListener('click', function () {
-                yygo.events.clickGame();
+            back.addEventListener('click', function () {
+                yygo.events.clickBack();
+            }, false);
+            mask.addEventListener('click', function () {
+                yygo.events.clickMask();
             }, false);
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
@@ -1135,16 +1124,6 @@ var yygo = {};
                 if (yygo.data.curnode < yygo.data.lastnode) {
                     yygo.events.navigateNode(999999);
                 }
-            }, false);
-
-            // Load response after sending sgf file, login or registering.
-            resframe.addEventListener('load', function () {
-                yygo.events.serverResponse();
-            }, false);
-
-            // Show a message when submiting data to server.
-            window.addEventListener('submit', function () {
-                yygo.events.submitData();
             }, false);
         },
         /*}}}*/
@@ -1266,17 +1245,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.submitData {{{
-         * Show message while sending data to server and waiting for answer.
-         */
-        submitData: function () {
-            var locale =            yygo.data.locale,
-                serverresponse =    document.getElementById('serverresponse');
-
-            serverresponse.textContent = locale.loading;
-        },
-        /*}}}*/
-
         /** yygo.events.clickBorders {{{
          * Toggle display state of the goban borders.
          */
@@ -1307,12 +1275,19 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.clickGame {{{
+        /** yygo.events.clickBack {{{
          * Show the current game.
          */
-        clickGame: function () {
-            this.screen = 'goban';
-            yygo.view.changeScreen();
+        clickBack: function () {
+            yygo.view.toggleMenu();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickMask {{{
+         * Show the current game.
+         */
+        clickMask: function () {
+            yygo.view.toggleMenu();
         },
         /*}}}*/
 
