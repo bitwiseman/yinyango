@@ -903,14 +903,17 @@ var yygo = {};
          * Alternate the display of the options menu.
          */
         toggleMenu: function () {
-            var menu =  document.getElementById('menu');
+            var menu =  document.getElementById('menu'),
+                mask =  document.getElementById('mask');
 
             if (!this.showmenu) {
                 menu.style.display = 'inline-block';
+                mask.style.display = 'block';
                 yygo.view.setMenuPosition();
                 this.showmenu = true;
             } else {
                 menu.style.display = 'none';
+                mask.style.display = 'none';
                 this.showmenu = false;
             }
         }
