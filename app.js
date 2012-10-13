@@ -23,6 +23,7 @@ app.configure(function () {
     app.set('view engine', 'jade');
     app.set('locales', __dirname + '/locales');
     app.use(express.logger('dev'));
+    app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser());
