@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1= title
+    h2= locale.settings
+    form.box(method='post', action='/settings')
+        p
+            label= locale.lang + ': '
+            select.input(name='langselect')
+                option#en(value='en') English
+                option#fr(value='fr') Français
+        p: input.linkbutton(type='submit', value= locale.apply)
+    p: a.linkbutton(href='/')= locale.back
+    script
+        function initSettings() {
+            document.getElementById('#{lang}').selected = true;
+        }
+        document.addEventListener('DOMContentLoaded', initSettings(), false);

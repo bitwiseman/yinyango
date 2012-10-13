@@ -34,6 +34,8 @@
     "login":        "Login",
     "guestlogin":   "Login as guest",
     "logout":       "Logout",
+    "settings":     "Settings",
+    "apply":        "Apply",
 
     "loading":      "Sending data, please be patient...",
     "invalidsgf":   "Invalid SGF file.",

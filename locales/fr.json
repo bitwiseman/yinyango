@@ -34,6 +34,8 @@
     "login":        "Connexion",
     "guestlogin":   "Connexion en tant qu'invité",
     "logout":       "Déconnexion",
+    "settings":     "Paramètres",
+    "apply":        "Appliquer",
 
     "loading":      "Envoi des données, veuillez patienter...",
     "invalidsgf":   "Fichier SGF non valide.",

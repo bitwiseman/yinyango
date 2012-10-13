@@ -1035,6 +1035,7 @@ var yygo = {};
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
                 menuload =      document.getElementById('menuload'),
+                menusettings =  document.getElementById('menusettings'),
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
                 menumask =      document.getElementById('menumask'),
@@ -1069,6 +1070,9 @@ var yygo = {};
                 yygo.events.clickBorders();
             }, false);
             menuload.addEventListener('click', function () {
+            }, false);
+            menusettings.addEventListener('click', function () {
+                yygo.events.clickMenuSettings();
             }, false);
             menulogout.addEventListener('click', function () {
                 yygo.events.clickMenuLogout();
@@ -1297,6 +1301,14 @@ var yygo = {};
         },
         /*}}}*/
         
+        /** yygo.events.clickMenuSettings {{{
+         * User settings.
+         */
+        clickMenuSettings: function () {
+            window.location.href = '/settings';
+        },
+        /*}}}*/
+
         /** yygo.events.clickMenuLogout {{{
          * Logout from game.
          */

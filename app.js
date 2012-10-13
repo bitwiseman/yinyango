@@ -103,8 +103,32 @@ app.get('/session/:id', function (req, res) {
     res.send(req.session.username);
 });
 
+app.get('/settings', function (req, res) {
+    var lang =      req.session.lang || getBrowserLang(req), 
+        locale =    require(app.get('locales') + '/' + lang); 
+
+    res.render('settings', {
+        title: 'Yin yang go',
+        locale: locale,
+        lang: lang
+    });
+});
+
 app.get('/test', function (req, res) {
-    res.render('test', { title: 'Yin yang go' });
+    var lang =      req.session.lang || getBrowserLang(req), 
+        locale =    require(app.get('locales') + '/' + lang); 
+
+    res.render('settings', {
+        title: 'Yin yang go',
+        locale: locale,
+        lang: lang
+    });
+});
+
+app.post('/settings', function (req, res) {
+    req.session.lang = req.body.langselect;
+
+    res.redirect('/settings');
 });
 
 /**
