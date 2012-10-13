@@ -50,7 +50,6 @@ body {
 .linkbutton:hover {
     background: #f9f0ca;
     color: #000;
-    border: 1px solid #f9f0ca;
 }
 #loadlist {/*{{{*/
     display: none;
