@@ -2,7 +2,7 @@
  * Yin yang go Node.js application.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
- * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
+ * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyanggo
  */
 
@@ -59,7 +59,7 @@ app.get('/', function (req, res) {
         lang =      req.session.lang || getBrowserLang(req),
         locale =    require(app.get('locales') + '/' + lang);
 
-    // Login if user session still exist.
+    // Login if user session exist.
     if (typeof(username) !== 'undefined') {
         // Save session lang.
         req.session.lang = lang;
