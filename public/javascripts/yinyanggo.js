@@ -140,7 +140,7 @@ var yygo = {};
                 lastnode++;
             }
             this.lastnode = lastnode;
-        },
+        }
         /*}}}*/
 
     };
@@ -794,7 +794,8 @@ var yygo = {};
                 menu = document.getElementById('menu'),
                 menuw = menu.offsetWidth,
                 menuh = menu.offsetHeight,
-                menuleft, menutop;
+                menuleft,
+                menutop;
 
             menuleft = (winw / 2) - (menuw / 2);
             menutop = (winh / 2) - (menuh / 2);
@@ -1045,8 +1046,6 @@ var yygo = {};
                 langfr =        document.getElementById('langfr'),
                 user =          document.getElementById('user'),
                 sendsgf =       document.getElementById('sendsgf'),
-                resframe =      document.getElementById('resframe'),
-                reglink =       document.getElementById('reglink'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
                 prev =          document.getElementById('prev'),
@@ -1300,7 +1299,7 @@ var yygo = {};
             yygo.view.changeScreen();
         },
         /*}}}*/
-        
+
         /** yygo.events.clickMenuSettings {{{
          * User settings.
          */
