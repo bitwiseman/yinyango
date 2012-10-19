@@ -58,6 +58,9 @@ function getBrowserLang(req) {
 
 /** checkSgf {{{
  * Check if a sgf file is valid with sgfc.
+ *
+ * @param {String}      sgf         Path to sgf file.
+ * @param {Function}    callback    Callback(valid). valid: 1 or 0.
  */
 function checkSgf(sgf, callback) {
 	exec('bin/sgfc ' + sgf, function(error, stdout, stderr) {
