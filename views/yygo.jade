@@ -33,6 +33,9 @@ block content
     #menumask
     #menu.box
         p: input.linkbutton#menuload(type='button', value= locale.load)
+        if username !== 'guest'
+            p: input.linkbutton#menusendsgf(type='button',
+                value= locale.sendsgf)
         p: input.linkbutton#menusettings(type='button', value= locale.settings)
         p: input.linkbutton#menulogout(type='button', value= locale.logout)
         p: input.linkbutton#menuback(type='button', value= locale.back)
