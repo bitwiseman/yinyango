@@ -7,12 +7,12 @@
  */
 
 /**
- * Modules.
+ * Modules & globals.
  */
 
-var express = require('express');
-
-var app = express();
+var express =   require('express'),
+    app =       express(),
+    title =     'yinyango';
 
 /**
  * Configuration.
@@ -65,12 +65,12 @@ app.get('/', function (req, res) {
         req.session.lang = lang;
 
         res.render('yygo', { 
-            title: 'yinyango',
+            title: title,
             username: username,
             locale: locale
         });
     } else {
-        res.render('login', { title: 'yinyango', locale: locale });
+        res.render('login', { title: title, locale: locale });
     }
 });
 
@@ -90,7 +90,7 @@ app.get('/register', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + '/' + lang); 
 
-    res.render('register', { title: 'yinyango', locale: locale });
+    res.render('register', { title: title, locale: locale });
 });
 
 app.get('/session', function (req, res) {
@@ -109,7 +109,7 @@ app.get('/settings', function (req, res) {
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('settings', {
-        title: 'yinyango',
+        title: title,
         locale: locale,
         lang: lang
     });
@@ -120,7 +120,7 @@ app.get('/test', function (req, res) {
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('settings', {
-        title: 'yinyango',
+        title: title,
         locale: locale,
         lang: lang
     });
