@@ -11,6 +11,8 @@
  */
 
 var express =   require('express'),
+	sys =       require('sys'),
+	exec =      require('child_process').exec,
     app =       express(),
     title =     'yinyango';
 
@@ -42,6 +44,9 @@ app.configure('production', function () {
  * Functions.
  */
 
+/** getBrowserLang {{{
+ * Get the browser language if set, else default to english.
+ */
 function getBrowserLang(req) {
     if (typeof(req.headers["accept-language"]) !== 'undefined') {
         return req.headers["accept-language"].substr(0, 2);
@@ -49,6 +54,23 @@ function getBrowserLang(req) {
         return 'en';
     }
 }
+/*}}}*/
+
+/** checkSgf {{{
+ * Check if a sgf file is valid with sgfc.
+ */
+function checkSgf(sgf, callback) {
+	exec('bin/sgfc ' + sgf, function(error, stdout, stderr) {
+        var check = stdout.replace(/\s+$/,'').slice(-2);
+
+        if (check === 'OK') {
+            callback(1);
+        } else {
+            callback(0);
+        }
+    });
+}
+/*}}}*/
 
 /**
  * Routes.
