@@ -1,9 +1,9 @@
 /**
- * User interface of yinyanggo.
+ * User interface of yinyango.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
- * @link     https://github.com/hickop/yinyanggo
+ * @link     https://github.com/hickop/yinyango
  */
 
 /**

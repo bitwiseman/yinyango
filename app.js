@@ -1,9 +1,9 @@
 /**
- * Yin yang go Node.js application.
+ * yinyango Node.js application.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
- * @link     https://github.com/hickop/yinyanggo
+ * @link     https://github.com/hickop/yinyango
  */
 
 /**
@@ -65,12 +65,12 @@ app.get('/', function (req, res) {
         req.session.lang = lang;
 
         res.render('yygo', { 
-            title: 'Yin yang go',
+            title: 'yinyango',
             username: username,
             locale: locale
         });
     } else {
-        res.render('login', { title: 'Yin yang go', locale: locale });
+        res.render('login', { title: 'yinyango', locale: locale });
     }
 });
 
@@ -90,7 +90,7 @@ app.get('/register', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + '/' + lang); 
 
-    res.render('register', { title: 'Yin yang go', locale: locale });
+    res.render('register', { title: 'yinyango', locale: locale });
 });
 
 app.get('/session', function (req, res) {
@@ -109,7 +109,7 @@ app.get('/settings', function (req, res) {
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('settings', {
-        title: 'Yin yang go',
+        title: 'yinyango',
         locale: locale,
         lang: lang
     });
@@ -120,7 +120,7 @@ app.get('/test', function (req, res) {
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('settings', {
-        title: 'Yin yang go',
+        title: 'yinyango',
         locale: locale,
         lang: lang
     });

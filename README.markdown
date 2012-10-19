@@ -1,4 +1,4 @@
-# Yin yang go
+# yinyango
 
 A small project that aims at making a Go player in Javascript.
 
