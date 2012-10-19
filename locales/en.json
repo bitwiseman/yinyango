@@ -13,7 +13,7 @@
     "load":         "Load a game from list",
     "back":         "Back",
     
-    "sendsgf":      "Send SGF file",
+    "sendsgf":      "Send a SGF file",
     "downsgf":      "Download with SGF format",
     "user":         "User",
     "listprev":     "Previous page",

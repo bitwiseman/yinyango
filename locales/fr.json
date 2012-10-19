@@ -13,7 +13,7 @@
     "load":         "Charger une partie de la liste",
     "back":         "Retour",
 
-    "sendsgf":      "Envoyer fichier SGF",
+    "sendsgf":      "Envoyer un fichier SGF",
     "downsgf":      "Télécharger au format SGF",
     "user":         "Utilisateur",
     "listprev":     "Page précédente",
