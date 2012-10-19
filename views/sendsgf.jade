@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1= title
+    h2= locale.sendsgf
+    form.box(name='form', method='post', action='/sendsgf')
+        p: label= locale.selectfile
+        p: input.input(type='file', name='sgffile')
+        p: label= locale.selectcategory
+        p
+            select.input(name='categoryselect')
+                option(value='game')= locale.game
+                option(value='lesson')= locale.lesson
+                option(value='problem')= locale.problem
+        p: input.linkbutton(type='submit', value= locale.sendfile)
+    p: a.linkbutton(href='/')= locale.back

@@ -1035,6 +1035,7 @@ var yygo = {};
             var comment =       document.getElementById('comment'),
                 border =        document.getElementById('border'),
                 menuload =      document.getElementById('menuload'),
+                menusendsgf =   document.getElementById('menusendsgf'),
                 menusettings =  document.getElementById('menusettings'),
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
@@ -1067,6 +1068,12 @@ var yygo = {};
             border.addEventListener('click', function () {
                 yygo.events.clickBorders();
             }, false);
+            // Only registered users.
+            if (yygo.events.username !== 'guest') {
+                menusendsgf.addEventListener('click', function () {
+                    yygo.events.clickMenuSendSgf();
+                }, false);
+            }
             menuload.addEventListener('click', function () {
             }, false);
             menusettings.addEventListener('click', function () {
@@ -1296,6 +1303,14 @@ var yygo = {};
 
             this.screen = 'list';
             yygo.view.changeScreen();
+        },
+        /*}}}*/
+
+        /** yygo.events.clickMenuSendSgf {{{
+         * Registered user to send SGF file to server.
+         */
+        clickMenuSendSgf: function () {
+            window.location.href = '/sendsgf';
         },
         /*}}}*/
 

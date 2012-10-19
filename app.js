@@ -93,6 +93,13 @@ app.get('/register', function (req, res) {
     res.render('register', { title: title, locale: locale });
 });
 
+app.get('/sendsgf', function (req, res) {
+    var lang =      req.session.lang || getBrowserLang(req), 
+        locale =    require(app.get('locales') + '/' + lang); 
+
+    res.render('sendsgf', { title: title, locale: locale });
+});
+
 app.get('/session', function (req, res) {
     var username = req.session.username || 'guest';
 
