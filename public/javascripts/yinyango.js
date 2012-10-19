@@ -1005,7 +1005,6 @@ var yygo = {};
                         "jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn,ko,lb," +
                         "lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
                 },
-                "LB": "ch:Y,dh:I,eh:N,gh:Y,hh:A,ih:N,jh:G,nl:G,ol:O"
             } } };
 
             yygo.data.size = 19;
