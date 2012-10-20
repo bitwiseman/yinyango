@@ -1,12 +1,6 @@
-#menumask
-#menu.box
-    p: input.linkbutton.black#menuload(type='button', value= locale.load)
-    if username !== 'guest'
-        p: input.linkbutton.black#menusendsgf(type='button',
-            value= locale.sendsgf)
-    p: input.linkbutton.black#menusettings(type='button',
-        value= locale.settings)
-    p: input.linkbutton.black#menulogout(type='button',
-        value= locale.logout)
-    p: input.linkbutton.black#menuback(type='button',
-        value= locale.back)
+p: input.linkbutton.black#menuload(type='button', value= locale.load)
+if username !== 'guest'
+    p: input.linkbutton.black#menusendsgf(type='button', value= locale.sendsgf)
+p: input.linkbutton.black#menusettings(type='button', value= locale.settings)
+p: input.linkbutton.black#menulogout(type='button', value= locale.logout)
+p: input.linkbutton.black#menuback(type='button', value= locale.back)

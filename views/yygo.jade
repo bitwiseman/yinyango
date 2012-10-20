@@ -3,11 +3,14 @@ extends layout
 block content
     #loadlist
     #infos
-    include includes/buttonsbar
+    #buttonsbar
+        include includes/buttonsbar
     #variations
     #goban
     #comments
-    include includes/menu
+    #menumask
+    #menu.box
+        include includes/menu
     script
         user = {};
         user.username = '#{username}';
