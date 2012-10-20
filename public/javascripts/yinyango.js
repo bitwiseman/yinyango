@@ -525,7 +525,7 @@ var yygo = {};
                 cellelems =     document.getElementsByClassName('cell'),
                 cc =            cellelems.length,
                 fontsize =      this.sizecell / 1.5,
-                comtop =        70,
+                comtop =        60,
                 c;
 
             if (this.redraw) { // Redraw only when needed.
@@ -749,7 +749,7 @@ var yygo = {};
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
-                heightleft =    winh - 70,
+                heightleft =    winh - 60,
                 oldsizegoban =  this.sizegoban,
                 smaller;
 
