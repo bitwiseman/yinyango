@@ -148,14 +148,7 @@ app.get('/settings', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + '/' + lang); 
-
-    res.render('settings', {
-        title: title,
-        locale: locale,
-        lang: lang
-    });
+    res.render('test', { title: title });
 });
 
 app.post('/settings', function (req, res) {

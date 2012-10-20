@@ -1,28 +1,68 @@
-extends layout
-
-block content
-    #menu.box
-        p: input.linkbutton(type='button', value='anticonstitutionnellement')
-        p: input.linkbutton(type='button', value='petit')
-        p: input.linkbutton(type='button', value='mqlkfjqjfm qmlfk d')
-        p: input.linkbutton(type='button', value='$$$')
-        p: input.linkbutton(type='button', value='...')
-        p: input.linkbutton(type='button', value='...')
-    script
-        function menuPosition() {
-            var winw = window.innerWidth,
-                winh = window.innerHeight,
-                menu = document.getElementById('menu'),
-                menuw = menu.offsetWidth,
-                menuh = menu.offsetHeight,
-                menuleft, menutop;
-
-            menuleft = (winw / 2) - (menuw / 2);
-            menutop = (winh / 2) - (menuh / 2);
-            menu.style.position = 'absolute';
-            menu.style.left = menuleft + 'px';
-            menu.style.top = menutop + 'px';
-        }
-        window.addEventListener('resize', function () {
-            menuPosition();
-        }, false);
+!!!
+html
+    head
+        title= title
+        meta(charset='UTF-8')
+        link(rel='stylesheet', type='text/css', href='/stylesheets/test.css')
+        link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
+    body
+        #buttons-bar
+            .button
+                .bubble.black
+                .bubble-tail.circle.black
+                .bubble-line.white
+                .bubble-line.white.move
+                .bubble-line.white.move2
+            .button.left
+                .medium-arrow
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+                .arrow-rect.black
+            .button.left
+                .small-arrow
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+                .small-arrow2
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+            .button.left
+                .arrow-top.circle.black
+                .arrow-bottom.circle.black
+                .arrow-back.circle.black
+                .arrow-fill.black
+            .button
+                .arrow-top.circle.black
+                .arrow-bottom.circle.black
+                .arrow-back.circle.black
+                .arrow-fill.black
+            .button
+                .small-arrow
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+                .small-arrow2
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+            .button
+                .medium-arrow
+                    .arrow-top.circle.black
+                    .arrow-bottom.circle.black
+                    .arrow-back.circle.black
+                    .arrow-fill.black
+                .arrow-rect.black
+            .button
+                .yinyang-bg.circle.black
+                .yinyang-left.white
+                .yinyang-top.circle.white
+                .yinyang-bottom.circle.black
+                .yinyang-top-dot.circle.black
+                .yinyang-bottom-dot.circle.white
