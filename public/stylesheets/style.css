@@ -73,132 +73,188 @@ body {
     cursor: pointer;
 }
 /*}}}*/
-#buttonsbar {/*{{{*/
-    display: none;
+
+#buttons-bar {
     position: relative;
-    margin: auto;
-    width: 500px;
-    height: 50px;
+    display: inline-block;
 }
-[class^="button"] {
-    position: absolute;
-    background: url(../images/buttons.png);
-    width: 50px;
-    height: 50px;
+.button {
+    position: relative;
+    float: left;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
 }
-.buttond {
+.disabled {
     opacity: 0.2;
     cursor: default;
 }
-/** navbuttons {{{
- * Nagivation buttons.
- */
-#start {
-    left: 100px;
-    background-position: 0px 0px;
+.black {
+    background: #000;
 }
-#fastprev {
-    left: 150px;
-    background-position: -50px 0px;
+.white {
+    background: #fff;
 }
-#prev {
-    left: 200px;
-    background-position: -100px 0px;
-}
-#next {
-    left: 250px;
-    background-position: -150px 0px;
-}
-#fastnext {
-    left: 300px;
-    background-position: -200px 0px;
-}
-#end {
-    left: 350px;
-    background-position: -250px 0px;
-}
-/*}}}*/
-/** gobbuttons {{{
- * Buttons specific to goban.
- */
-#comment {
-    left: 0;
-    background-position: -300px 0px;
-}
-#border {
-    left: 50px;
-    background-position: -550px 0px;
-}
-/*}}}*/
-/** optbuttons {{{
- * Buttons specific to the options menu.
- */
-#load {
-    left: 100px;
-    background-position: -600px 0px;
-}
-#lang {
-    left: 150px;
-}
-#langen,.buttonen {
-    background-position: -750px 0px;
-}
-#langfr,.buttonfr {
-    background-position: -800px 0px;
-}
-#lang ul {
-    display: none;
-    position: absolute;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    top: 50px;
-    left: 0;
-}
-#lang:hover > ul {
-    display: block;
-}
-#lang li {
-    position: relative;
-}
-#user {
-    left: 200px;
-    background-position: -650px 0px;
-}
-#userstatus {
-    width: 18px;
-    height: 18px;
-    margin: 10px 16px 22px 16px;
-    background-color: #cf142b;
+.circle {
     border-radius: 50%;
 }
-#sendsgf {
-    left: 250px;
-    background-position: -450px 0px;
+
+/* arrows buttons *//*{{{*/
+.rotate180 {
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
-#downsgf {
-    left: 300px;
-    background-position: -500px 0px;
+.small-arrow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-transform: translate(-18%) scaleX(0.6);
+    -o-transform: translate(-18%) scaleX(0.6);
+    transform: translate(-18%) scaleX(0.6);
+}
+.small-arrow2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-transform: translate(18%) scaleX(0.6);
+    -o-transform: translate(18%) scaleX(0.6);
+    transform: translate(18%) scaleX(0.6);
+}
+.medium-arrow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-transform: translate(-5%) scaleX(0.9);
+    -o-transform: translate(-5%) scaleX(0.9);
+    transform: translate(-5%) scaleX(0.9);
+}
+.arrow-top {
+    position: absolute;
+    top: 20%;
+    left: 13%;
+    width: 80%;
+    height: 25%;
+    -webkit-transform: rotate(30deg);
+    -o-transform: rotate(30deg);
+    transform: rotate(30deg);
+}
+.arrow-bottom {
+    position: absolute;
+    top: 55%;
+    left: 13%;
+    width: 80%;
+    height: 25%;
+    -webkit-transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+}
+.arrow-back {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 25%;
+    height: 80%;
+}
+.arrow-fill {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    width: 40%;
+    height: 40%;
+}
+.arrow-rect {
+    position: absolute;
+    top: 10%;
+    left: 75%;
+    width: 15%;
+    height: 80%;
+    border-radius: 20%/5%;
 }
 /*}}}*/
-/** listbuttons {{{
- * Buttons specific to the games list.
- */
-#refresh {
-    left: 250px;
-    background-position: -700px 0px;
+
+/* yinyang button *//*{{{*/
+.yinyang-bg {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+}
+.yinyang-left {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 40%;
+    height: 80%;
+    border-top-left-radius: 100% 50%;
+    border-bottom-left-radius: 100% 50%;
+}
+.yinyang-top {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 40%;
+    height: 40%;
+}
+.yinyang-bottom {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    width: 40%;
+    height: 40%;
+}
+.yinyang-top-dot {
+    position: absolute;
+    top: 26%;
+    left: 45%;
+    width: 10%;
+    height: 10%;
+}
+.yinyang-bottom-dot {
+    position: absolute;
+    top: 64%;
+    left: 45%;
+    width: 10%;
+    height: 10%;
 }
 /*}}}*/
-#options {
-    left: 450px;
-    background-position: -400px 0px;
+
+/* bubble button *//*{{{*/
+.bubble {
+    position: relative;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 60%;
+    border-radius: 20%/30%;
 }
-#game {
-    left: 350px;
-    background-position: -350px 0px;
+.bubble-tail {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 15%;
+    height: 80%;
+}
+.bubble-line {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    width: 40%;
+    height: 5%;
+}
+.move {
+    -webkit-transform: translateY(250%);
+    -o-transform: translateY(250%);
+    transform: translateY(250%);
+}
+.move2 {
+    -webkit-transform: translateY(500%);
+    -o-transform: translateY(500%);
+    transform: translateY(500%);
 }
 /*}}}*/
+
 #variations {/*{{{*/
     display: none;
     text-align: center;

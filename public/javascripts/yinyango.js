@@ -489,28 +489,28 @@ var yygo = {};
             infos.style.display = 'none';
             loadlist.style.display = 'none';
 
-            this.changeButtons(); // Change the buttons to display.
+            //this.changeButtons(); // Change the buttons to display.
 
             // Show the elements we need for the actual screen.
             if (screen === 'goban') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
                 variations.style.display = 'block';
                 goban.style.display = 'block';
                 this.toggleComments();
             } else if (screen === 'options') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
                 infos.style.display = 'block';
             } else if (screen === 'list') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
                 loadlist.style.display = 'block';
             } else if (screen === 'sendsgf') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
             } else if (screen === 'login') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
             } else if (screen === 'register') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
             } else if (screen === 'param') {
-                buttonsbar.style.display = 'block';
+                buttonsbar.style.display = 'inline-block';
             }
         },
         /*}}}*/
@@ -842,24 +842,24 @@ var yygo = {};
                 end =       document.getElementById('end');
 
             // Activate all buttons.
-            start.className = 'button';
-            prev.className = 'button';
-            fastprev.className = 'button';
-            next.className = 'button';
-            fastnext.className = 'button';
-            end.className = 'button';
+            start.classList.remove('disabled');
+            prev.classList.remove('disabled');
+            fastprev.classList.remove('disabled');
+            next.classList.remove('disabled');
+            fastnext.classList.remove('disabled');
+            end.classList.remove('disabled');
 
             // We are at the start, make rewind buttons inactive.
             if (curnode === 0) {
-                start.className = 'buttond';
-                prev.className = 'buttond';
-                fastprev.className = 'buttond';
+                start.classList.add('disabled');
+                prev.classList.add('disabled');
+                fastprev.classList.add('disabled');
             }
             // We are at the end, make forward buttons inactive.
             if (curnode === lastnode) {
-                next.className = 'buttond';
-                fastnext.className = 'buttond';
-                end.className = 'buttond';
+                next.classList.add('disabled');
+                fastnext.classList.add('disabled');
+                end.classList.add('disabled');
             }
         },
         /*}}}*/
@@ -878,9 +878,9 @@ var yygo = {};
             }
 
             if (this.comtoshow) {
-                comment.className = 'button';
+                comment.classList.remove('disabled');
             } else {
-                comment.className = 'buttond';
+                comment.classList.add('disabled');
             }
         },
         /*}}}*/
@@ -1065,9 +1065,9 @@ var yygo = {};
             comment.addEventListener('click', function () {
                 yygo.events.clickComments();
             }, false);
-            border.addEventListener('click', function () {
-                yygo.events.clickBorders();
-            }, false);
+            //border.addEventListener('click', function () {
+                //yygo.events.clickBorders();
+            //}, false);
             // Only registered users.
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
@@ -1090,22 +1090,6 @@ var yygo = {};
             }, false);
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
-            }, false);
-            refresh.addEventListener('click', function () {
-                yygo.data.gameslist = [];
-                yygo.events.clickLoadList();
-            }, false);
-            langen.addEventListener('click', function () {
-                yygo.data.setLang('en');
-            }, false);
-            langfr.addEventListener('click', function () {
-                yygo.data.setLang('fr');
-            }, false);
-            user.addEventListener('click', function () {
-                yygo.events.clickUser();
-            }, false);
-            sendsgf.addEventListener('click', function () {
-                yygo.events.clickSendSgf();
             }, false);
             start.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
