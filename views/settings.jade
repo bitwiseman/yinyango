@@ -9,8 +9,8 @@ block content
             select.input(name='langselect')
                 option#en(value='en') English
                 option#fr(value='fr') Français
-        p: input.linkbutton(type='submit', value= locale.apply)
-    p: a.linkbutton(href='/')= locale.back
+        p: input.linkbutton.black(type='submit', value= locale.apply)
+    p: a.linkbutton.black(href='/')= locale.back
     script
         function initSettings() {
             document.getElementById('#{lang}').selected = true;

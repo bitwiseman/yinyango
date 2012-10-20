@@ -11,6 +11,15 @@ body {
     margin: 0;
     text-align: center;
 }
+.black {
+    background: #000;
+    color: #f9f0ca;
+}
+.white {
+    background: #f9f0ca;
+    color: #000;
+}
+
 #menumask {
     display: none;
     position: absolute;
@@ -39,17 +48,12 @@ body {
 }
 .linkbutton {
     width: 100%;
-    background: #000;
-    color: #f9f0ca;
     padding: 0.3em 0.6em;
     border: 1px solid #000;/* Avoid ugly buttons borders. */
     border-radius: 2em;/* Make sure its all rounded. */
     font: bold 1em sans-serif;
     text-decoration: none;
-}
-.linkbutton:hover {
-    background: #f9f0ca;
-    color: #000;
+    cursor: pointer;
 }
 #loadlist {/*{{{*/
     display: none;
@@ -74,9 +78,12 @@ body {
 }
 /*}}}*/
 
-#buttons-bar {
-    position: relative;
+/** buttonsbar {{{
+ * CSS for top buttons bar.
+ */
+#buttonsbar {
     display: inline-block;
+    position: relative;
 }
 .button {
     position: relative;
@@ -88,12 +95,6 @@ body {
 .disabled {
     opacity: 0.2;
     cursor: default;
-}
-.black {
-    background: #000;
-}
-.white {
-    background: #fff;
 }
 .circle {
     border-radius: 50%;
@@ -172,7 +173,6 @@ body {
     border-radius: 20%/5%;
 }
 /*}}}*/
-
 /* yinyang button *//*{{{*/
 .yinyang-bg {
     position: absolute;
@@ -219,7 +219,6 @@ body {
     height: 10%;
 }
 /*}}}*/
-
 /* bubble button *//*{{{*/
 .bubble {
     position: relative;
@@ -253,6 +252,7 @@ body {
     -o-transform: translateY(500%);
     transform: translateY(500%);
 }
+/*}}}*/
 /*}}}*/
 
 #variations {/*{{{*/

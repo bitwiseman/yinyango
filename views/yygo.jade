@@ -4,42 +4,10 @@ block content
     #loadlist
     #infos
     include includes/buttonsbar
-    //-#buttonsbar
-        //-#gobbuttons
-            //-.button#comment(title= locale.comment)
-            //-.button#border(title= locale.border)
-        //-#listbuttons
-            //-.button#refresh(title= locale.refresh)
-        //-#optbuttons
-            //-.button#lang(title= locale.lang)
-                //-ul
-                    //-li.buttonlang#langen(title='English')
-                    //-li.buttonlang#langfr(title='Français')
-            //-.button#user(title= locale.user)
-                //-#userstatus
-            //-.button#sendsgf(title= locale.sendsgf)
-            //-.button#downsgf(title= locale.downsgf)
-        //-#navbuttons
-            //-.button#start(title= locale.start)
-            //-.button#fastprev(title= locale.fastprev)
-            //-.button#prev(title= locale.prev)
-            //-.button#next(title= locale.next)
-            //-.button#fastnext(title= locale.fastnext)
-            //-.button#end(title= locale.end)
-        //-.button#options(title= locale.options)
-        //-.button#game(title= locale.game)
     #variations
     #goban
     #comments
-    #menumask
-    #menu.box
-        p: input.linkbutton#menuload(type='button', value= locale.load)
-        if username !== 'guest'
-            p: input.linkbutton#menusendsgf(type='button',
-                value= locale.sendsgf)
-        p: input.linkbutton#menusettings(type='button', value= locale.settings)
-        p: input.linkbutton#menulogout(type='button', value= locale.logout)
-        p: input.linkbutton#menuback(type='button', value= locale.back)
+    include includes/menu
     script
         user = {};
         user.username = '#{username}';
