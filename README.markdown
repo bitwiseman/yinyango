@@ -8,7 +8,6 @@ general.
 ## TODO
 
 - Clean unused js.
-- Clean unused locales.
 - Translate game to SGF.
 - Make different modes: play, edition...
 - Make a better Sgf class.
