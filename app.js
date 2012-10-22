@@ -13,6 +13,7 @@
 var express =   require('express'),
 	sys =       require('sys'),
 	exec =      require('child_process').exec,
+    gorules =   require('./shared/gorules'),
     app =       express(),
     title =     'yinyango';
 
@@ -164,4 +165,5 @@ app.post('/settings', function (req, res) {
 
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
+    gorules.playMove('b','aa',9,{'stones':{'b':'bb,cc','w':'dd,ee'},'ko':''});
 });
