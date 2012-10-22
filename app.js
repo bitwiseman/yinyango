@@ -32,6 +32,7 @@ app.configure(function () {
     app.use(express.session({ secret: 'Not a vegetable' }));
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
+    app.use(express.static(__dirname + '/shared'));
 });
 app.configure('development', function () {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
