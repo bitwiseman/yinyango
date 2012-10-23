@@ -165,5 +165,11 @@ app.post('/settings', function (req, res) {
 
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
-    gorules.playMove('b','aa',9,{'stones':{'b':'bb,cc','w':'dd,ee'},'ko':''});
+    var test = gorules.playMove(
+        'b',
+        'ac',
+        9,
+        {'b':['ba','bb'],'w':['aa','ab'],'k':[]}
+    );
+    console.log(test);
 });

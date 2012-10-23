@@ -14,6 +14,9 @@ general.
 - Calculate the score.
 - Treat other keys like 'pass'.
 - Save user parameters.
+- Add suicide rule.
+- Add ko rules.
+- Add other rules.
 
 ## LICENSE
 

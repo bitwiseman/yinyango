@@ -16,24 +16,60 @@
  *      var gorules = require(./shared/gorules);
  *      console.log(gorules.function(params));
  */
-(function(exports) {
+(function (exports) {
 
-    /** stateToArray {{{
-     * Transform game state to an array.
+    /**
+     * Private functions.
+     */
+
+    /** gobanToStones {{{
+     * Transform goban array to stones list.
+     *
+     * @param {Integer} size    Goban size.
+     * @param {Array}   goban   Goban to convert.
+     *
+     * @return {Object} { 'b':{String} (black stones on goban),
+     *                    'w':{String} (white stones on goban),
+     *                    'k':{String} (kos on goban) }
+     */
+    var gobanToStones = function (size, goban) {
+        var stones =    { 'b':[], 'w':[], 'k':[] },
+            letters =   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                         'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+            coord, x, y;
+
+        for (x = 0; x < size; x++) {
+            for (y = 0; y < size; y++) {
+                coord = letters[x] + letters[y];
+                if (goban[x] !== undefined && goban[x][y] !== undefined) {
+                    if (goban[x][y] === 'b') {
+                        stones.b.push(coord);
+                    } else if (goban[x][y] === 'w') {
+                        stones.w.push(coord);
+                    } else if (goban[x][y] === 'k') {
+                        stones.k.push(coord);
+                    }
+                }
+            }
+        }
+
+        return stones;
+    };
+    /*}}}*/
+
+    /** stonesToGoban {{{
+     * Transform stones list to a goban array.
      * b: black, w: white, k: ko. 
      *
      * @param {Integer} size    Goban size.
-     * @param {Object}  state   Game state to convert.
+     * @param {Object}  stones  Stones list.
      *
-     * @return {Array} Array representing the goban of that state.
+     * @return {Array} Array representing the goban.
      */
-    var stateToArray = function (size, state) {
-        var barr = state.stones.b.split(','),
-            warr = state.stones.w.split(','),
-            karr = state.ko.split(','),
-            blen = barr.length,
-            wlen = warr.length,
-            klen = karr.length,
+    var stonesToGoban = function (size, stones) {
+        var blen = stones.b.length,
+            wlen = stones.w.length,
+            klen = stones.k.length,
             i, j, b, w, k,
             goban = [];
 
@@ -46,30 +82,30 @@
         }
 
         // Add black stones.
-        if (barr[0] !== '') {
+        if (stones.b[0] !== '') {
             for (b = 0; b < blen; b++) {
-                var x = barr[b].charCodeAt(0) - 97,
-                    y = barr[b].charCodeAt(1) - 97;
+                var x = stones.b[b].charCodeAt(0) - 97,
+                    y = stones.b[b].charCodeAt(1) - 97;
 
                 goban[x][y] = 'b';
             }
         }
 
         // Add white stones.
-        if (warr[0] !== '') {
+        if (stones.w[0] !== '') {
             for (w = 0; w < wlen; w++) {
-                var x = warr[w].charCodeAt(0) - 97,
-                    y = warr[w].charCodeAt(1) - 97;
+                var x = stones.w[w].charCodeAt(0) - 97,
+                    y = stones.w[w].charCodeAt(1) - 97;
 
                 goban[x][y] = 'w';
             }
         }
 
         // Add kos.
-        if (karr[0] !== '') {
+        if (stones.k[0] !== '') {
             for (k = 0; k < klen; k++) {
-                var x = karr[k].charCodeAt(0) - 97,
-                    y = karr[k].charCodeAt(1) - 97;
+                var x = stones.k[k].charCodeAt(0) - 97,
+                    y = stones.k[k].charCodeAt(1) - 97;
 
                 goban[x][y] = 'k';
             }
@@ -79,28 +115,170 @@
     };
     /*}}}*/
 
+    /** testCaptures {{{
+     * Test if played stone will capture stone(s).
+     *
+     * @param {String}  color Played color.
+     * @param {Integer} x     X coordinate of played stone.
+     * @param {Integer} y     Y coordinate of played stone.
+     * @param {Array}   goban Goban to test.
+     *
+     * @return {Object} { 'goban':{Array} (goban after eventual captures),
+     *                    'prisonners':{Integer} (number of prisonners) }.
+     */
+    var testCaptures = function (color, x, y, goban) {
+        var result = { 'goban':[], 'prisonners':0 },
+            test = [],
+            prisonners = 0;
+
+        // Test each direction.
+        test = testLiberties(color, x-1, y, goban, []);
+        if (test[0] === 0) { // No liberties found.
+            goban = removePrisonners(goban, test[1]);
+            prisonners += test[1].length;
+        }
+
+        test = testLiberties(color, x, y-1, goban, []);
+        if (test[0] === 0) { // No liberties found.
+            goban = removePrisonners(goban, test[1]);
+            prisonners += test[1].length;
+        }
+
+        test = testLiberties(color, x+1, y, goban, []);
+        if (test[0] === 0) { // No liberties found.
+            goban = removePrisonners(goban, test[1]);
+            prisonners += test[1].length;
+        }
+
+        test = testLiberties(color, x, y+1, goban, []);
+        if (test[0] === 0) { // No liberties found.
+            goban = removePrisonners(goban, test[1]);
+            prisonners += test[1].length;
+        }
+
+        result.goban = goban;
+        result.prisonners = prisonners;
+
+        return result;
+    }
+    /*}}}*/
+
+    /** testLiberties {{{
+     * Test liberties of a stone or a group of stones recursively.
+     * Inspired by eidogo algorithm.
+     *
+     * @param {String}  color       Color of the played stone.
+     * @param {Integer} x           X coordinate to test.
+     * @param {Integer} y           Y coordinate to test.
+     * @param {Array}   goban       Goban state to test.
+     * @param {Array}   prisonners  Potential prisonners.
+     *
+     * @return {Array} [ {Integer}
+     *                   (0: No liberties or already in prisonners list.
+     *                    1: Has liberties.
+     *                    2: Same color or goban border.),
+     *                   {Array} (Potential prisonners) ]
+     */
+    var testLiberties = function (color, x, y, goban, prisonners) {
+        var ennemy = (color === 'b') ? 'w' : 'b',
+            prilen = prisonners.length,
+            stone, i; 
+
+        if (goban[x] !== undefined && goban[x][y] !== undefined) {
+            if (goban[x][y] === '') {
+                return 1; // Liberty.
+            }
+            if (goban[x][y] === ennemy) { // Ennemy stone.
+                stone = x + ':' + y;
+                // Check if we already have this prisonner.
+                for (i = 0; i < prilen; i++) {
+                    if (prisonners[i] === stone) {
+                        return 0;
+                    }
+                }
+
+                prisonners.push(stone); // Add stone to prisonners.
+
+                // Test recursively coordinates around the prisonner.
+                if (testLiberties(color, x-1, y, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x, y-1, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x+1, y, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x, y+1, goban, prisonners) === 1) {
+                    return 1;
+                }
+                // If we reached here then we found no liberties.
+                return [ 0, prisonners ];
+            }
+            return 2; // Same color as played stone.
+        } else {
+            return 2; // Goban border.
+        }
+    }
+    /*}}}*/
+
+    /** removePrisonners {{{
+     * Remove captured stone(s) from the state.
+     *
+     * @param {Array}   goban       Goban to remove stones from.
+     * @param {Array}   prisonners  Prisonners list to remove from goban.
+     *
+     * @return {Array} Goban after removing prisonners.
+     */
+    var removePrisonners = function (goban, prisonners) {
+        var prilen =    prisonners.length,
+            coord =     [],
+            i;
+
+        for (i = 0; i < prilen; i++) {
+            coord = prisonners[i].split(':');
+            // Remove stone from goban.
+            goban[coord[0]][coord[1]] = '';
+        }
+
+        return goban;
+    }
+    /*}}}*/
+
+    /**
+     * Public functions.
+     */
+
     /** playMove {{{
-     * Play a stone and return new goban state based on previous state.
+     * Play a stone, apply rules and return new stones list and number of
+     * prisonners.
      *
      * @param {String}  color   Color of played stone.
      * @param {String}  coord   Coordinate of played stone in letters.
      * @param {Integer} size    Goban size.
-     * @param {Object}  state   Previous goban state before playing the stone.
+     * @param {Object}  stones  Stones list.
      *
-     * @return {Object} New goban state after playing the stone and applying
-     *                  rules.
+     * @return {Object} { 'stones':{Object} (new stones list after playing the
+     *                                       stone and applying rules),
+     *                    'prisonners':{Integer} (number of prisonners made) }
      */
-    exports.playMove = function (color, coord, size, state) {
-        var x =         coord.charCodeAt(0) - 97, // Coord to Integer.
-            y =         coord.charCodeAt(1) - 97,
-            goban =     stateToArray(size, state);
-            newstate =  {};
+    exports.playMove = function (color, coord, size, stones) {
+        var x =             coord.charCodeAt(0) - 97, // Coord to Integer.
+            y =             coord.charCodeAt(1) - 97,
+            goban =         stonesToGoban(size, stones),
+            captureresult = {},
+            newstate =      {};
 
         // Add played stone to goban.
         goban[x][y] = color;
+
         // Test if that makes captures and get new state if so.
-        //state = testCaptures(color, x, y, state);
-        // TODO Calculate KO.
+        captureresult = testCaptures(color, x, y, goban);
+
+        newstate = {
+            'stones': gobanToStones(size, captureresult.goban),
+            'prisonners': captureresult.prisonners
+        };
 
         return newstate;
     };
