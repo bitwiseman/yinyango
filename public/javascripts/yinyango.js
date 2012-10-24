@@ -968,7 +968,7 @@ var yygo = {};
                 yygo.events.mode = 'replay';
                 yygo.events.screen = 'goban';
 
-                yygo.view.changeScreen();
+                //yygo.view.changeScreen();
 
                 yygo.view.toggleBorders();
                 yygo.view.toggleNavButtons();
@@ -1018,7 +1018,7 @@ var yygo = {};
             this.mode = 'replay';
             this.screen = 'goban';
 
-            yygo.view.changeScreen();
+            //yygo.view.changeScreen();
 
             yygo.view.toggleBorders();
             yygo.view.toggleNavButtons();
@@ -1286,7 +1286,7 @@ var yygo = {};
             }
 
             this.screen = 'list';
-            yygo.view.changeScreen();
+            //yygo.view.changeScreen();
         },
         /*}}}*/
 
@@ -1343,7 +1343,7 @@ var yygo = {};
          */
         clickSendSgf: function () {
             this.screen = 'sendsgf';
-            yygo.view.changeScreen();
+            //yygo.view.changeScreen();
         },
         /*}}}*/
 
@@ -1394,7 +1394,7 @@ var yygo = {};
             } else if (response === 'login') {
                 this.username = document.getElementById('username').value;
                 this.screen = 'options';
-                yygo.view.changeScreen();
+                //yygo.view.changeScreen();
             } else if (response === 'logout') {
                 // Reload page after logout.
                 window.location.reload();

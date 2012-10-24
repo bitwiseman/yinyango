@@ -90,11 +90,9 @@ body {
     float: left;
     width: 40px;
     height: 40px;
-    cursor: pointer;
 }
 .disabled {
-    opacity: 0.2;
-    cursor: default;
+    display: none;
 }
 .circle {
     border-radius: 50%;
@@ -256,7 +254,7 @@ body {
 /*}}}*/
 
 #variations {/*{{{*/
-    display: none;
+    /*display: none;*/
     text-align: center;
     height: 20px;
 }
@@ -275,7 +273,7 @@ body {
 }
 /*}}}*/
 #goban {/*{{{*/
-    display: none;
+    /*display: none;*/
     position: relative;
     margin: auto;
 }
