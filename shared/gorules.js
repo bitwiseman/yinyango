@@ -128,33 +128,21 @@
      */
     var testCaptures = function (color, x, y, goban) {
         var result = { 'goban':[], 'prisonners':0 },
-            test = [],
             prisonners = 0;
 
+        function checkDirection(x, y) {
+            var test = testLiberties(color, x, y, goban, []);
+
+            if (test[0] === 0) { // No liberties found.
+                goban = removePrisonners(goban, test[1]);
+                prisonners += test[1].length;
+            }
+        }
         // Test each direction.
-        test = testLiberties(color, x-1, y, goban, []);
-        if (test[0] === 0) { // No liberties found.
-            goban = removePrisonners(goban, test[1]);
-            prisonners += test[1].length;
-        }
-
-        test = testLiberties(color, x, y-1, goban, []);
-        if (test[0] === 0) { // No liberties found.
-            goban = removePrisonners(goban, test[1]);
-            prisonners += test[1].length;
-        }
-
-        test = testLiberties(color, x+1, y, goban, []);
-        if (test[0] === 0) { // No liberties found.
-            goban = removePrisonners(goban, test[1]);
-            prisonners += test[1].length;
-        }
-
-        test = testLiberties(color, x, y+1, goban, []);
-        if (test[0] === 0) { // No liberties found.
-            goban = removePrisonners(goban, test[1]);
-            prisonners += test[1].length;
-        }
+        checkDirection(x-1, y);
+        checkDirection(x, y-1);
+        checkDirection(x+1, y);
+        checkDirection(x, y+1);
 
         result.goban = goban;
         result.prisonners = prisonners;
