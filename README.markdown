@@ -7,6 +7,7 @@ general.
 
 ## TODO
 
+- Use CSS flex, inline-flex when available on current browsers.
 - Clean unused js.
 - Translate game to SGF.
 - Make different modes: play, edition...
