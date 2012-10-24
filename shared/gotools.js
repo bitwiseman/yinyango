@@ -1,5 +1,5 @@
 /**
- * Shared client/node module to apply go rules after a player move.
+ * Tools to manipulate goban and SGF files.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -9,12 +9,12 @@
 /**
  * Exports are public functions available for client and node.
  * To call in client:
- *      <script src="gorules.js">
- *          console.log(gorules.function(params));
+ *      <script src="gotools.js">
+ *          console.log(gotools.function(params));
  *      </script>
  * To call in node:
- *      var gorules = require(./shared/gorules);
- *      console.log(gorules.function(params));
+ *      var gotools = require(./shared/gotools);
+ *      console.log(gotools.function(params));
  */
 (function (exports) {
 
@@ -272,5 +272,5 @@
     };
     /*}}}*/
 
-})(typeof exports === 'undefined' ? this['gorules'] = {} : exports);
+})(typeof exports === 'undefined' ? this['gotools'] = {} : exports);
 
