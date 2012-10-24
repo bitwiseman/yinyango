@@ -237,6 +237,59 @@
      * Public functions.
      */
 
+    /** addStones {{{
+     * Add stones to goban.
+     *
+     * @param {String}  color   Color of the stone(s) (empty to remove).
+     * @param {Array}   add     Stone list to add/remove. 
+     * @param {Object}  stones  Stones to modify.
+     *
+     * @return {Object} New stones after adding/removing stones.
+     */
+    exports.addStones = function (color, add, stones) {
+        var addlen = add.length,
+            blen = stones.b.length,
+            wlen = stones.w.length,
+            exist, i, b, w;
+        
+        for (i = 0; i < addlen; i++) {
+            exist = 0;
+            if (color === 'w') {
+                for (w = 0; w < wlen; w++) {
+                    if (add[i] === stones.w[w]) {
+                        exist = 1;
+                    }
+                }
+                if (exist === 0) {
+                    stones.w.push(add[i]);
+                }
+            } else if (color === 'b') {
+                for (b = 0; b < blen; b++) {
+                    if (add[i] === stones.b[b]) {
+                        exist = 1;
+                    }
+                }
+                if (exist === 0) {
+                    stones.b.push(add[i]);
+                }
+            } else { // Remove stones.
+                for (b = 0; b < blen; b++) {
+                    if (add[i] === stones.b[b]) {
+                        stones.b.splice(b, 1);
+                    }
+                }
+                for (w = 0; w < wlen; w++) {
+                    if (add[i] === stones.w[w]) {
+                        stones.w.splice(w, 1);
+                    }
+                }
+            }
+        }
+
+        return stones;
+    }
+    /*}}}*/
+
     /** playMove {{{
      * Play a stone, apply rules and return new stones list and number of
      * prisonners.

@@ -13,7 +13,7 @@
 var express =   require('express'),
 	sys =       require('sys'),
 	exec =      require('child_process').exec,
-    gorules =   require('./shared/gorules'),
+    gotools =   require('./shared/gotools'),
     app =       express(),
     title =     'yinyango';
 
@@ -165,11 +165,18 @@ app.post('/settings', function (req, res) {
 
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
-    var test = gorules.playMove(
+    // Tests.
+    var play = gotools.playMove(
         'b',
         'ac',
         9,
         {'b':['ba','bb'],'w':['aa','ab'],'k':[]}
     );
-    console.log(test);
+    console.log(play);
+    var add = gotools.addStones(
+        '',
+        ['bb','dd','ad'],
+        {'b':['ba','bb','cc'],'w':['aa','ab','ee','bb','dd'],'k':[]}
+    );
+    console.log(add);
 });
