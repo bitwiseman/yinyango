@@ -7,6 +7,7 @@ general.
 
 ## TODO
 
+- CSS for symbols.
 - Use CSS flex, inline-flex when available on current browsers.
 - Clean unused js.
 - Translate game to SGF.

@@ -11,8 +11,8 @@
  */
 
 var express =   require('express'),
-	sys =       require('sys'),
-	exec =      require('child_process').exec,
+    sys =       require('sys'),
+    exec =      require('child_process').exec,
     gotools =   require('./shared/gotools'),
     app =       express(),
     title =     'yinyango';
@@ -81,6 +81,9 @@ function checkSgf(sgf, callback) {
  * Routes.
  */
 
+/** get / {{{
+ * Application start.
+ */
 app.get('/', function (req, res) {
     var username =  req.session.username,
         lang =      req.session.lang || getBrowserLang(req),
@@ -100,44 +103,72 @@ app.get('/', function (req, res) {
         res.render('login', { title: title, locale: locale });
     }
 });
+/*}}}*/
 
+/** get /guest {{{
+ * Guest login.
+ */
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
     res.redirect('/');
 });
+/*}}}*/
 
+/** get /logout {{{
+ * User logout.
+ */
 app.get('/logout', function (req, res) {
     // Destroy session.
     req.session.destroy(function (err) { 
         res.redirect('/');
     });
 });
+/*}}}*/
 
+/** get /register {{{
+ * Registration page.
+ */
 app.get('/register', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('register', { title: title, locale: locale });
 });
+/*}}}*/
 
+/** get /sendsgf {{{
+ * Page to send sgf file.
+ */
 app.get('/sendsgf', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + '/' + lang); 
 
     res.render('sendsgf', { title: title, locale: locale });
 });
+/*}}}*/
 
+/** get /session {{{
+ * Return username.
+ */
 app.get('/session', function (req, res) {
     var username = req.session.username || 'guest';
 
     res.send({ username: username });
 });
+/*}}}*/
 
+/** get /session/:id {{{
+ * Set username (debugging).
+ */
 app.get('/session/:id', function (req, res) {
     req.session.username = req.params.id;
     res.send(req.session.username);
 });
+/*}}}*/
 
+/** get /settings {{{
+ * User parameters page.
+ */
 app.get('/settings', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + '/' + lang); 
@@ -148,15 +179,20 @@ app.get('/settings', function (req, res) {
         lang: lang
     });
 });
+/*}}}*/
 
-app.get('/test', function (req, res) {
-    res.render('test', { title: title });
-});
-
+/** post /settings {{{
+ * Apply user parameters.
+ */
 app.post('/settings', function (req, res) {
     req.session.lang = req.body.langselect;
 
     res.redirect('/settings');
+});
+/*}}}*/
+
+app.get('/test', function (req, res) {
+    res.render('test', { title: title });
 });
 
 /**
@@ -166,17 +202,17 @@ app.post('/settings', function (req, res) {
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
     // Tests.
-    var play = gotools.playMove(
-        'b',
-        'ac',
-        9,
-        {'b':['ba','bb'],'w':['aa','ab'],'k':[]}
-    );
-    console.log(play);
-    var add = gotools.addStones(
-        '',
-        ['bb','dd','ad'],
-        {'b':['ba','bb','cc'],'w':['aa','ab','ee','bb','dd'],'k':[]}
-    );
-    console.log(add);
+    //var play = gotools.playMove(
+        //'b',
+        //'ac',
+        //9,
+        //{'b':['ba','bb'],'w':['aa','ab'],'k':[]}
+    //);
+    //console.log(play);
+    //var add = gotools.addStones(
+        //'',
+        //['bb','dd','ad'],
+        //{'b':['ba','bb','cc'],'w':['aa','ab','ee','bb','dd'],'k':[]}
+    //);
+    //console.log(add);
 });

@@ -5,12 +5,17 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+
 body {
     background: #ccaa66;
     color: #000;
     margin: 0;
     text-align: center;
 }
+
+/** general {{{
+ * General use CSS.
+ */
 .black {
     background: #000;
     color: #f9f0ca;
@@ -19,19 +24,8 @@ body {
     background: #f9f0ca;
     color: #000;
 }
-
-#menumask {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: #000;
-    opacity: 0.7;
-}
-#menu {
-    display: none;
+.brown {
+    background: #ccaa66;
 }
 .box {
     display: inline-block;
@@ -54,6 +48,21 @@ body {
     font: bold 1em sans-serif;
     text-decoration: none;
     cursor: pointer;
+}
+/*}}}*/
+
+#menu {
+    display: none;
+}
+#menumask {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.7;
 }
 #loadlist {/*{{{*/
     display: none;
@@ -97,8 +106,7 @@ body {
 .circle {
     border-radius: 50%;
 }
-
-/* arrows buttons *//*{{{*/
+/* arrows buttons {{{*/
 .rotate180 {
     -webkit-transform: rotate(180deg);
     -o-transform: rotate(180deg);
@@ -171,7 +179,7 @@ body {
     border-radius: 20%/5%;
 }
 /*}}}*/
-/* yinyang button *//*{{{*/
+/* yinyang button {{{*/
 .yinyang-bg {
     position: absolute;
     top: 10%;
@@ -217,7 +225,7 @@ body {
     height: 10%;
 }
 /*}}}*/
-/* bubble button *//*{{{*/
+/* bubble button {{{*/
 .bubble {
     position: relative;
     top: 10%;
@@ -305,16 +313,6 @@ body {
 }
 .vcell {
     float: none;
-}
-.cellb {
-    background: #000;
-    color: #fff;
-}
-.cellw {
-    background: #f9f0ca;
-}
-.celle {
-    background: #ccaa66;
 }
 /*}}}*/
 #comments {/*{{{*/

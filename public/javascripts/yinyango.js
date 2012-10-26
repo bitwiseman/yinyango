@@ -615,7 +615,7 @@ var yygo = {};
             }
 
             if (color === 'b') { // Stone is black make symbol color white.
-                svg += ' stroke="#fff"/></svg>';
+                svg += ' stroke="#f9f0ca"/></svg>';
             } else {
                 svg += ' stroke="#000"/></svg>';
             }
@@ -643,13 +643,13 @@ var yygo = {};
             for (b = 0; b < cb; b++) {
                 if (bstones[b] !== '') {
                     cell = document.getElementById(bstones[b]);
-                    cell.className += ' cellb';
+                    cell.classList.add('white');
                 }
             }
             for (w = 0; w < cw; w++) {
                 if (wstones[w] !== '') {
                     cell = document.getElementById(wstones[w]);
-                    cell.className += ' cellw';
+                    cell.classList.add('black');
                 }
             }
         },
@@ -719,7 +719,7 @@ var yygo = {};
                     color = cell.className.substr(9);
                     if (color === '') {
                         // Empty cell background for better visibility.
-                        cell.className += ' celle';
+                        cell.classList.add('brown');
                     }
                     cell.title = label[1];
                     cell.textContent = label[1];
