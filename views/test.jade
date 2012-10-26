@@ -5,18 +5,33 @@ html
         meta(charset='UTF-8')
         link(rel='stylesheet', type='text/css', href='/stylesheets/test.css')
         link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
-    body
+    body.bg
         #buttonsbar
             .button
         #goban
+            table#grid
+                tr
+                    td.white
+                    td
+                    td
+                tr
+                    td.white
+                    td
+                    td.black
+                tr
+                    td.black
+                    td.white
+                    td
         #comment
     script
         function init() {
             var winh = window.innerHeight - 40,
+                winw = window.innerWidth - 40,
+                right = winw - winh,
                 gobanelem = document.getElementById('goban');
 
-            gobanelem.style.width = winh + 'px';
-            gobanelem.style.height = winh + 'px';
+            gobanelem.style.right = right + 'px';
+            //-gobanelem.style.height = winh + 'px';
         }
         
         document.addEventListener('DOMContentLoaded', init(), false);
