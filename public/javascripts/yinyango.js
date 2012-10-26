@@ -643,13 +643,13 @@ var yygo = {};
             for (b = 0; b < cb; b++) {
                 if (bstones[b] !== '') {
                     cell = document.getElementById(bstones[b]);
-                    cell.classList.add('white');
+                    cell.classList.add('black');
                 }
             }
             for (w = 0; w < cw; w++) {
                 if (wstones[w] !== '') {
                     cell = document.getElementById(wstones[w]);
-                    cell.classList.add('black');
+                    cell.classList.add('white');
                 }
             }
         },
