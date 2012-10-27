@@ -6,32 +6,50 @@ html
         link(rel='stylesheet', type='text/css', href='/stylesheets/test.css')
         link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
     body.bg
-        #buttonsbar
-            .button
         #goban
-            table#grid
-                tr
-                    td.white
-                    td
-                    td
-                tr
-                    td.white
-                    td
-                    td.black
-                tr
-                    td.black
-                    td.white
-                    td
+            div
+                .cell.white
+                .cell
+                .cell.white
+            div
+                .cell.black
+                .cell.black
+                .cell
+            div
+                .cell.white
+                .cell
+                .cell
         #comment
+            #buttonsbar
+                .button
     script
         function init() {
-            var winh = window.innerHeight - 40,
-                winw = window.innerWidth - 40,
-                right = winw - winh,
-                gobanelem = document.getElementById('goban');
+            var winh = window.innerHeight,
+                winw = window.innerWidth,
+                goban = document.getElementById('goban'),
+                com = document.getElementById('comment'),
+                cells = document.getElementsByClassName('cell'),
+                cellcount = cells.length,
+                i, gobansize, comwidth, comheight, cellsize;
 
-            gobanelem.style.right = right + 'px';
-            //-gobanelem.style.height = winh + 'px';
+            if (winh < winw) { // Horizontal mode.
+                gobansize = winh;
+                comwidth = winw - winh;
+                comheight = winh;
+            } else { // Vertical mode.
+                gobansize = winw;
+                comwidth = winw;
+                comheight = winh - winw;
+            }
+            cellsize = gobansize / 3;
+            goban.style.width = gobansize + 'px';
+            goban.style.height = gobansize + 'px';
+            com.style.width = comwidth + 'px';
+            com.style.height = comheight + 'px';
+            for (i = 0; i < cellcount; i++) {
+                cells[i].style.width = cellsize + 'px';
+                cells[i].style.height = cellsize + 'px';
+            }
         }
         
         document.addEventListener('DOMContentLoaded', init(), false);
