@@ -7,12 +7,13 @@ block content
         p
             label= locale.lang + ': '
             select.input(name='langselect')
-                option#en(value='en') English
-                option#fr(value='fr') Français
+                if lang == 'en'
+                    option#en(value='en', selected) English
+                else
+                    option#en(value='en') English
+                if lang == 'fr'
+                    option#fr(value='fr', selected) Français
+                else
+                    option#fr(value='fr') Français
         p: input.linkbutton.black(type='submit', value= locale.apply)
     p: a.linkbutton.black(href='/')= locale.back
-    script
-        function initSettings() {
-            document.getElementById('#{lang}').selected = true;
-        }
-        document.addEventListener('DOMContentLoaded', initSettings(), false);

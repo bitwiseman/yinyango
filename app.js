@@ -181,6 +181,20 @@ app.get('/settings', function (req, res) {
 });
 /*}}}*/
 
+/** post /register {{{
+ * Register new user.
+ */
+app.post('/register', function (req, res) {
+    var username =  req.body.username,
+        password =  req.body.password,
+        email =     req.body.email,
+        lang =      req.session.lang || getBrowserLang(req),
+        valid =     /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/;
+
+    res.redirect('/');
+});
+/*}}}*/
+
 /** post /settings {{{
  * Apply user parameters.
  */
