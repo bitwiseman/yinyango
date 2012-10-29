@@ -215,9 +215,42 @@ app.post('/register', function (req, res) {
         password =  req.body.password,
         email =     req.body.email,
         lang =      req.session.lang || getBrowserLang(req),
-        valid =     /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/;
+        valid =     /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
+        checkname = username.match(valid);
 
-    res.redirect('/');
+    // Check if username is valid.
+    if (checkname !== null && checkname[0] === username) {
+        db.open(function (err, db) {
+            if (!err) {
+                db.collection('users', function (err, collection) {
+                    // Check if name is already taken.
+                    collection.findOne({ name: username }, 
+                            function (err, result) {
+                        if (result) {
+                            db.close();
+                            res.redirect('/register');
+                        } else {
+                            // Generate hash and salt and insert in database.
+                            hash(password, function (err, salt, hash) {
+                                collection.insert({
+                                    name:  username,
+                                    email: email,
+                                    salt:  salt,
+                                    hash:  hash,
+                                    lang:  lang
+                                }, function (err, result) {
+                                    db.close();
+                                    res.redirect('/');
+                                });
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    } else {
+        res.redirect('/register');
+    }
 });
 /*}}}*/
 
