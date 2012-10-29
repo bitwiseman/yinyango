@@ -16,6 +16,7 @@ var express =   require('express'),
     app =       express(),
     Server =    mongo.Server,
     Db =        mongo.Db,
+    ObjectID =  mongo.ObjectID,
     server =    new Server('localhost', 27017, { auto_reconnect: true }),
     db =        new Db('yinyango', server, { safe: true }),
     title =     'yinyango';
@@ -207,6 +208,41 @@ app.get('/settings', function (req, res) {
 });
 /*}}}*/
 
+/** post /login {{{
+ * User login.
+ */
+app.post('/login', function (req, res) {
+    var username = req.body.username,
+        password = req.body.password;
+
+    db.open(function (err, db) {
+        db.collection('users', function (err, collection) {
+            collection.findOne({ name: username }, function (err, result) {
+                if (result) {
+                    // Hash password with user salt.
+                    hash(password, result.salt, function (err, hash) {
+                        if (hash === result.hash) {
+                            // All ok save session and reload.
+                            req.session.username = username;
+                            req.session.lang = result.lang;
+                            req.session.userid = result._id;
+                            db.close();
+                            res.redirect('/');
+                        } else {
+                            db.close();
+                            res.redirect('/');
+                        }
+                    });
+                } else {
+                    db.close();
+                    res.redirect('/');
+                }
+            });
+        });
+    });
+});
+/*}}}*/
+
 /** post /register {{{
  * Register new user.
  */
@@ -256,9 +292,24 @@ app.post('/register', function (req, res) {
 
 /** post /settings {{{
  * Apply user parameters.
+ * Use _id for faster database access as it's indexed.
  */
 app.post('/settings', function (req, res) {
-    req.session.lang = req.body.langselect;
+    var userid =    new ObjectID(req.session.userid),
+        lang =      req.body.langselect;
+
+    if (userid) {
+        db.open(function (err, db) {
+            db.collection('users', function (err, collection) {
+                collection.update({ _id: userid }, { $set:{ lang: lang }},
+                        function (err, result) {
+                    db.close();
+                });
+            });
+        });
+    }
+
+    req.session.lang = lang;
 
     res.redirect('/settings');
 });
