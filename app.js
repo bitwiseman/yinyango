@@ -12,9 +12,15 @@
 
 var express =   require('express'),
     sys =       require('sys'),
+    crypto =    require('crypto'),
     exec =      require('child_process').exec,
+    mongo =     require('mongodb'),
     gotools =   require('./shared/gotools'),
     app =       express(),
+    Server =    mongo.Server,
+    Db =        mongo.Db,
+    server =    new Server('localhost', 27017, { auto_reconnect: true }),
+    db =        new Db('yinyango', server, { safe: true }),
     title =     'yinyango';
 
 /**
@@ -22,9 +28,9 @@ var express =   require('express'),
  */
 
 app.configure(function () {
-    app.set('views', __dirname + '/views');
+    app.set('views', __dirname + '/views/');
     app.set('view engine', 'jade');
-    app.set('locales', __dirname + '/locales');
+    app.set('locales', __dirname + '/locales/');
     app.use(express.logger('dev'));
     app.use(express.compress());
     app.use(express.bodyParser());
@@ -49,7 +55,7 @@ app.configure('production', function () {
 /** getBrowserLang {{{
  * Get the browser language if set, else default to english.
  */
-function getBrowserLang(req) {
+var getBrowserLang = function (req) {
     if (typeof(req.headers["accept-language"]) !== 'undefined') {
         return req.headers["accept-language"].substr(0, 2);
     } else {
@@ -61,20 +67,49 @@ function getBrowserLang(req) {
 /** checkSgf {{{
  * Check if a sgf file is valid with sgfc.
  *
- * @param {String}      sgf         Path to sgf file.
- * @param {Function}    callback    Callback(valid). valid: 1 or 0.
+ * @param {String}      sgf     Path to sgf file.
+ * @param {Function}    fn      Callback(valid). valid: 1 or 0.
  */
-function checkSgf(sgf, callback) {
+var checkSgf = function (sgf, fn) {
 	exec('bin/sgfc ' + sgf, function(error, stdout, stderr) {
         var check = stdout.replace(/\s+$/,'').slice(-2);
 
         if (check === 'OK') {
-            callback(1);
+            fn(1);
         } else {
-            callback(0);
+            fn(0);
         }
     });
 }
+/*}}}*/
+
+/** hash {{{
+ * Hashes a password with optional salt, otherwise generate a salt for 
+ * password and return both salt and hash.
+ * Taken from express auth example.
+ *
+ * @param {String}      pwd     Password to hash.
+ * @param {String}      salt    Optional salt.
+ * @param {Function}    fn      Callback function. 
+ */
+var hash = function (pwd, salt, fn) {
+    var len =           128,
+        iterations =    12000;
+
+    if (arguments.length === 3) {
+        crypto.pbkdf2(pwd, salt, iterations, len, fn);
+    } else {
+        fn = salt;
+        crypto.randomBytes(len, function (err, salt) {
+            if (err) return fn(err);
+            salt = salt.toString('base64');
+            crypto.pbkdf2(pwd, salt, iterations, len, function (err, hash) {
+                if (err) return fn(err);
+                fn(null, salt, hash);
+            });
+        });
+    }
+};
 /*}}}*/
 
 /**
@@ -87,10 +122,10 @@ function checkSgf(sgf, callback) {
 app.get('/', function (req, res) {
     var username =  req.session.username,
         lang =      req.session.lang || getBrowserLang(req),
-        locale =    require(app.get('locales') + '/' + lang);
+        locale =    require(app.get('locales') + lang);
 
     // Login if user session exist.
-    if (typeof(username) !== 'undefined') {
+    if (username) {
         // Save session lang.
         req.session.lang = lang;
 
@@ -130,7 +165,7 @@ app.get('/logout', function (req, res) {
  */
 app.get('/register', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + '/' + lang); 
+        locale =    require(app.get('locales') + lang); 
 
     res.render('register', { title: title, locale: locale });
 });
@@ -141,7 +176,7 @@ app.get('/register', function (req, res) {
  */
 app.get('/sendsgf', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + '/' + lang); 
+        locale =    require(app.get('locales') + lang); 
 
     res.render('sendsgf', { title: title, locale: locale });
 });
@@ -171,7 +206,7 @@ app.get('/session/:id', function (req, res) {
  */
 app.get('/settings', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + '/' + lang); 
+        locale =    require(app.get('locales') + lang); 
 
     res.render('settings', {
         title: title,
