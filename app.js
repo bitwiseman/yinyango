@@ -6,10 +6,7 @@
  * @link     https://github.com/hickop/yinyango
  */
 
-/**
- * Modules & globals.
- */
-
+/* Modules & globals. {{{*/
 var express =   require('express'),
     sys =       require('sys'),
     crypto =    require('crypto'),
@@ -22,11 +19,9 @@ var express =   require('express'),
     server =    new Server('localhost', 27017, { auto_reconnect: true }),
     db =        new Db('yinyango', server, { safe: true }),
     title =     'yinyango';
+/*}}}*/
 
-/**
- * Configuration.
- */
-
+/* Configuration. {{{*/
 app.configure(function () {
     app.set('views', __dirname + '/views/');
     app.set('view engine', 'jade');
@@ -47,11 +42,9 @@ app.configure('development', function () {
 app.configure('production', function () {
     app.use(express.errorHandler());
 });
+/*}}}*/
 
-/**
- * Functions.
- */
-
+/* Functions. {{{*/
 /** getBrowserLang {{{
  * Get the browser language if set, else default to english.
  */
@@ -111,11 +104,9 @@ var hash = function (pwd, salt, fn) {
     }
 };
 /*}}}*/
+/*}}}*/
 
-/**
- * Routes.
- */
-
+/* Routes. {{{*/
 /** get / {{{
  * Application start.
  */
@@ -243,6 +234,7 @@ app.post('/settings', function (req, res) {
 app.get('/test', function (req, res) {
     res.render('test', { title: title });
 });
+/*}}}*/
 
 /**
  * Server init.
