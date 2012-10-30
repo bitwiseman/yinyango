@@ -46,6 +46,7 @@ app.configure('production', function () {
 });
 /*}}}*/
 
+/* Prototypes {{{*/
 Validator.prototype.error = function (msg) {
     this._errors.push(msg);
     return this;
@@ -54,6 +55,7 @@ Validator.prototype.error = function (msg) {
 Validator.prototype.getErrors = function () {
     return this._errors;
 }
+/*}}}*/
 
 /* Functions. {{{*/
 /** getBrowserLang {{{
