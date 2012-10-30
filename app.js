@@ -12,6 +12,7 @@ var express =   require('express'),
     crypto =    require('crypto'),
     exec =      require('child_process').exec,
     mongo =     require('mongodb'),
+    Validator = require('validator').Validator,
     gotools =   require('./shared/gotools'),
     app =       express(),
     Server =    mongo.Server,
@@ -44,6 +45,15 @@ app.configure('production', function () {
     app.use(express.errorHandler());
 });
 /*}}}*/
+
+Validator.prototype.error = function (msg) {
+    this._errors.push(msg);
+    return this;
+}
+
+Validator.prototype.getErrors = function () {
+    return this._errors;
+}
 
 /* Functions. {{{*/
 /** getBrowserLang {{{
@@ -251,18 +261,21 @@ app.post('/register', function (req, res) {
         password =  req.body.password,
         email =     req.body.email,
         lang =      req.session.lang || getBrowserLang(req),
-        valid =     /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
-        checkname = username.match(valid);
+        validname = /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
+        validator = new Validator();
 
-    // Check if username is valid.
-    if (checkname !== null && checkname[0] === username) {
+    // Always check received data before using it.
+    validator.check(username).len(2,15).is(validname);
+    validator.check(email).len(6,64).isEmail();
+    validator.check(password).len(1,64);
+
+    if (validator.getErrors().length === 0) {
         db.open(function (err, db) {
             if (!err) {
                 db.collection('users', function (err, collection) {
-                    // Check if name is already taken.
                     collection.findOne({ name: username }, 
                             function (err, result) {
-                        if (result) {
+                        if (result) { // Name already exist.
                             db.close();
                             res.redirect('/register');
                         } else {
@@ -296,9 +309,13 @@ app.post('/register', function (req, res) {
  */
 app.post('/settings', function (req, res) {
     var userid =    new ObjectID(req.session.userid),
-        lang =      req.body.langselect;
+        lang =      req.body.langselect,
+        validator = new Validator();
 
-    if (userid) {
+    // Always check received data before using it.
+    validator.check(lang).len(2,2).isAlpha(); 
+
+    if (userid && validator.getErrors().length === 0) {
         db.open(function (err, db) {
             db.collection('users', function (err, collection) {
                 collection.update({ _id: userid }, { $set:{ lang: lang }},
@@ -309,7 +326,9 @@ app.post('/settings', function (req, res) {
         });
     }
 
-    req.session.lang = lang;
+    if (validator.getErrors().length === 0) {
+        req.session.lang = lang;
+    }
 
     res.redirect('/settings');
 });
