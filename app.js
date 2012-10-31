@@ -128,11 +128,8 @@ app.get('/', function (req, res) {
         lang =      req.session.lang || getBrowserLang(req),
         locale =    require(app.get('locales') + lang);
 
-    // Login if user session exist.
+    // Login if user session is set.
     if (username) {
-        // Save session lang.
-        req.session.lang = lang;
-
         res.render('yygo', { 
             title: title,
             username: username,
@@ -309,9 +306,13 @@ app.post('/register', function (req, res) {
  * Use _id for faster database access as it's indexed.
  */
 app.post('/settings', function (req, res) {
-    var userid =    new ObjectID(req.session.userid),
-        lang =      req.body.langselect,
-        validator = new Validator();
+    var lang =      req.body.langselect,
+        validator = new Validator(),
+        userid;
+
+    if (req.session.userid) {
+        userid = new ObjectID(req.session.userid);
+    }
 
     // Always check received data before using it.
     validator.check(lang).len(2,2).isAlpha(); 
