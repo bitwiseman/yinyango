@@ -224,34 +224,42 @@ app.get('/settings', function (req, res) {
  * User login.
  */
 app.post('/login', function (req, res) {
-    var username = req.body.username,
-        password = req.body.password;
+    var username =  req.body.username,
+        password =  req.body.password,
+        validname = /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
+        validator = new Validator();
 
-    db.open(function (err, db) {
-        db.collection('users', function (err, collection) {
-            collection.findOne({ name: username }, function (err, result) {
-                if (result) {
-                    // Hash password with user salt.
-                    hash(password, result.salt, function (err, hash) {
-                        if (hash === result.hash) {
-                            // All ok save session and reload.
-                            req.session.username = username;
-                            req.session.lang = result.lang;
-                            req.session.userid = result._id;
-                            db.close();
-                            res.redirect('/');
-                        } else {
-                            db.close();
-                            res.redirect('/');
-                        }
-                    });
-                } else {
-                    db.close();
-                    res.redirect('/');
-                }
+    // Always check received data before using it.
+    validator.check(username).len(2,15).is(validname);
+    validator.check(password).len(1,64);
+
+    if (validator.getErrors().length === 0) {
+        db.open(function (err, db) {
+            db.collection('users', function (err, collection) {
+                collection.findOne({ name: username }, function (err, result) {
+                    if (result) {
+                        // Hash password with user salt.
+                        hash(password, result.salt, function (err, hash) {
+                            if (hash === result.hash) {
+                                // All ok save session and reload.
+                                req.session.username = username;
+                                req.session.lang = result.lang;
+                                req.session.userid = result._id;
+                                db.close();
+                                res.redirect('/');
+                            } else {
+                                db.close();
+                                res.redirect('/');
+                            }
+                        });
+                    } else {
+                        db.close();
+                        res.redirect('/');
+                    }
+                });
             });
         });
-    });
+    }
 });
 /*}}}*/
 
