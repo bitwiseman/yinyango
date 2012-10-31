@@ -196,15 +196,6 @@ app.get('/session', function (req, res) {
 });
 /*}}}*/
 
-/** get /session/:id {{{
- * Set username (debugging).
- */
-app.get('/session/:id', function (req, res) {
-    req.session.username = req.params.id;
-    res.send(req.session.username);
-});
-/*}}}*/
-
 /** get /settings {{{
  * User parameters page.
  */
