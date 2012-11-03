@@ -7,7 +7,7 @@ block content
         p= locale.username
         input.input(type='text', name='username', autocomplete='on',
                 autofocus, maxlength='15', required)
-        .inputhelp.yellow 2 à 15 lettres ou chiffres
+        .inputhelp.yellow= locale.helpname 
         p= locale.password
         input.input(type='password', name='password', required)
         p= locale.email
