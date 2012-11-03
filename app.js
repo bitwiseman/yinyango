@@ -259,7 +259,7 @@ app.post('/register', function (req, res) {
         password =  req.body.password,
         email =     req.body.email,
         lang =      req.session.lang || getBrowserLang(req),
-        validname = /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
+        validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
 
     // Always check received data before using it.
