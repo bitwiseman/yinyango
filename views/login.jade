@@ -4,11 +4,16 @@ block content
     h1= title
     h2= locale.login
     p: a.linkbutton.black(href='/guest')= locale.guestlogin
-    form.box.brown2(name='form', method='post', action='/login')
-        p= locale.username
-        input.input(type='text', name='username', autocomplete='on',
-            autofocus, maxlength='15', required)
-        p= locale.password
-        input.input(type='password', name='password', required)
-        p: input.linkbutton.black(type='submit', value= locale.login)
+    if error == 'login'
+        .box.red
+            p= locale.errorlogin
+            p: a.linkbutton.black(href='/')= locale.back
+    else
+        form.box.brown2(name='form', method='post', action='/login')
+            p= locale.username
+            input.input(type='text', name='username', autocomplete='on',
+                autofocus, maxlength='15', required)
+            p= locale.password
+            input.input(type='password', name='password', required)
+            p: input.linkbutton.black(type='submit', value= locale.login)
     p: a.linkbutton.black(href='/register')= locale.register

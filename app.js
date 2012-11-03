@@ -136,7 +136,7 @@ app.get('/', function (req, res) {
             locale: locale
         });
     } else {
-        res.render('login', { title: title, locale: locale });
+        res.render('login', { title: title, locale: locale, error: '' });
     }
 });
 /*}}}*/
@@ -214,6 +214,8 @@ app.get('/settings', function (req, res) {
 app.post('/login', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
+        lang =      req.session.lang || getBrowserLang(req),
+        locale =    require(app.get('locales') + lang), 
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
 
@@ -237,12 +239,20 @@ app.post('/login', function (req, res) {
                                 res.redirect('/');
                             } else {
                                 db.close();
-                                res.redirect('/');
+                                res.render('login', {
+                                    title: title,
+                                    locale: locale,
+                                    error: 'login'
+                                });
                             }
                         });
                     } else {
                         db.close();
-                        res.redirect('/');
+                        res.render('login', {
+                            title: title,
+                            locale: locale,
+                            error: 'login'
+                        });
                     }
                 });
             });
