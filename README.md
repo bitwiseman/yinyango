@@ -19,6 +19,7 @@ general.
 - Add suicide rule.
 - Add ko rules.
 - Add other rules.
+- Validation link sent by mail.
 
 ## LICENSE
 
