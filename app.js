@@ -214,11 +214,11 @@ app.get('/settings', function (req, res) {
 app.post('/login', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
-        validname = /^[a-zA-Z0-9]+[-_]?[a-zA-Z0-9]+$/,
+        validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
 
     // Always check received data before using it.
-    validator.check(username).len(2,15).is(validname);
+    validator.check(username).len(1,15).is(validname);
     validator.check(password).len(1,64);
 
     if (validator.getErrors().length === 0) {
