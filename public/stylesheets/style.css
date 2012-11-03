@@ -27,18 +27,37 @@ body {
 .brown {
     background: #ccaa66;
 }
+.brown2 {
+    background: #eecc88;
+}
+.yellow {
+    background: #ffeeaa;
+}
+.red {
+    background: #d44343;
+}
 .box {
     display: inline-block;
     width: auto;
     margin: auto;
-    background: #eecc88;
-    padding: 0.1em 1em;
+    padding: 0 1em;
     border-radius: 1em;
 }
 .input {
-    background: #f9f0ca;
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
     border: 1px solid #000;
     font: bold 1em sans-serif;
+}
+.inputhelp {
+    display: none;
+    padding: 0.5em;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+}
+.input:focus + .inputhelp {
+    display: block;
 }
 .linkbutton {
     width: 100%;

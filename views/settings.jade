@@ -3,7 +3,7 @@ extends layout
 block content
     h1= title
     h2= locale.settings
-    form.box(method='post', action='/settings')
+    form.box.brown2(method='post', action='/settings')
         p= locale.lang
         select.input(name='langselect')
             if lang == 'en'
