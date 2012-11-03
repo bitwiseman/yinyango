@@ -3,14 +3,29 @@ extends layout
 block content
     h1= title
     h2= locale.register
-    form.box.brown2(name='form', method='post', action='/register')
-        p= locale.username
-        input.input(type='text', name='username', autocomplete='on',
-                autofocus, maxlength='15', required)
-        .inputhelp.yellow= locale.helpname 
-        p= locale.password
-        input.input(type='password', name='password', required)
-        p= locale.email
-        input.input(type='email', autocomplete='on', name='email', required)
-        p: input.linkbutton.black(type='submit', value= locale.register)
-    p: a.linkbutton.black(href='/')= locale.back
+    if error == 'exist'
+        .box.red
+            p= locale.errorexist
+            p: a.linkbutton.black(href='/register')= locale.back
+    else if error == 'name'
+        .box.red
+            p= locale.errorname
+            p: a.linkbutton.black(href='/register')= locale.back
+    else if error == 'success'
+        .box.green
+            p= locale.regsuccess
+            p: a.linkbutton.black(href='/')= locale.back
+    else
+        form.box.brown2(name='form', method='post', action='/register')
+            p= locale.username
+            input.input(type='text', name='username', autocomplete='on',
+                    autofocus, maxlength='15', required)
+            .inputhelp.yellow= locale.helpname 
+            p= locale.password
+            input.input(type='password', name='password', maxlength='64',
+                    required)
+            p= locale.email
+            input.input(type='email', autocomplete='on', name='email',
+                    maxlength='64', required)
+            p: input.linkbutton.black(type='submit', value= locale.register)
+        p: a.linkbutton.black(href='/')= locale.back

@@ -168,7 +168,7 @@ app.get('/register', function (req, res) {
     var lang =      req.session.lang || getBrowserLang(req), 
         locale =    require(app.get('locales') + lang); 
 
-    res.render('register', { title: title, locale: locale });
+    res.render('register', { title: title, locale: locale, error: '' });
 });
 /*}}}*/
 
@@ -259,15 +259,20 @@ app.post('/register', function (req, res) {
         password =  req.body.password,
         email =     req.body.email,
         lang =      req.session.lang || getBrowserLang(req),
+        locale =    require(app.get('locales') + lang), 
         validname = /^[a-zA-Z0-9]+$/,
-        validator = new Validator();
+        validator = new Validator(),
+        error =     '',
+        errors, errorslen, i;
 
     // Always check received data before using it.
-    validator.check(username).len(2,15).is(validname);
+    validator.check(username).len(1,15).is(validname);
     validator.check(email).len(6,64).isEmail();
     validator.check(password).len(1,64);
+    errors = validator.getErrors();
+    errorslen = errors.length;
 
-    if (validator.getErrors().length === 0) {
+    if (errorslen === 0) {
         db.open(function (err, db) {
             if (!err) {
                 db.collection('users', function (err, collection) {
@@ -275,7 +280,11 @@ app.post('/register', function (req, res) {
                             function (err, result) {
                         if (result) { // Name already exist.
                             db.close();
-                            res.redirect('/register');
+                            res.render('register', {
+                                title: title,
+                                locale: locale,
+                                error: 'exist'
+                            });
                         } else {
                             // Generate hash and salt and insert in database.
                             hash(password, function (err, salt, hash) {
@@ -287,7 +296,11 @@ app.post('/register', function (req, res) {
                                     lang:  lang
                                 }, function (err, result) {
                                     db.close();
-                                    res.redirect('/');
+                                    res.render('register', {
+                                        title: title,
+                                        locale: locale,
+                                        error: 'success'
+                                    });
                                 });
                             });
                         }
@@ -296,7 +309,16 @@ app.post('/register', function (req, res) {
             }
         });
     } else {
-        res.redirect('/register');
+        for (i = 0; i < errorslen; i++) {
+            if (errors[i] === 'Invalid characters') {
+                error = 'name';
+            }
+        }
+        res.render('register', {
+            title: title,
+            locale: locale,
+            error: error
+        });
     }
 });
 /*}}}*/
