@@ -8,7 +8,7 @@
     "error":            "Error happened.",
     "game":             "Game",
     "guestlogin":       "Login as guest",
-    "helpname":         "2 to 15 letters or digits.", 
+    "helpname":         "2 to 15 letters and/or digits.", 
     "invalidmail":      "Invalid email address.",
     "invalidnick":      "Nickname must contain only alphanumeric characters.",
     "invalidsgf":       "Invalid SGF file.",

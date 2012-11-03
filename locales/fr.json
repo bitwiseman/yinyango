@@ -8,7 +8,7 @@
     "error":            "Une erreur est survenue.",
     "game":             "Partie",
     "guestlogin":       "Connexion en tant qu'invité",
-    "helpname":         "2 à 15 lettres ou chiffres.", 
+    "helpname":         "2 à 15 lettres et/ou chiffres.", 
     "invalidmail":      "Addresse email non valide.",
     "invalidnick":      "Le pseudonyme ne doit contenir que des caractères alphanumériques",
     "invalidsgf":       "Fichier SGF non valide.",
