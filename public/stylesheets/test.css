@@ -19,10 +19,10 @@ body {
     border-radius: 50%;
 }
 #buttonsbar {
-    /*width: 100%;*/
     background: #0c0;
 }
 .button {
+    display: inline-block;
     position: relative;
     margin: auto;
     width: 30px;

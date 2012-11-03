@@ -20,6 +20,8 @@ general.
 - Add ko rules.
 - Add other rules.
 - Validation link sent by mail.
+- Draw goban using CSS.
+- Generate goban html with jade.
 
 ## LICENSE
 

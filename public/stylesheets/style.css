@@ -107,7 +107,7 @@ body {
 /*}}}*/
 
 /** buttonsbar {{{
- * CSS for top buttons bar.
+ * CSS for buttons bar.
  */
 #buttonsbar {
     display: inline-block;
@@ -116,11 +116,13 @@ body {
 .button {
     position: relative;
     float: left;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 .disabled {
-    display: none;
+    /*display: none;*/
+    opacity: 0.2;
+    cursor: default;
 }
 .circle {
     border-radius: 50%;
@@ -332,6 +334,13 @@ body {
 }
 .vcell {
     float: none;
+}
+/*}}}*/
+#panel {/*{{{*/
+    position: absolute;
+    bottom: 0;
+    padding: 5px;
+    overflow: auto;
 }
 /*}}}*/
 #comments {/*{{{*/

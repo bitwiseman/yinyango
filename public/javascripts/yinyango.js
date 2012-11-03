@@ -164,9 +164,9 @@ var yygo = {};
 
         orientation:    '',
 
-        comtoshow:      false,
+        comtoshow:      true,
         redraw:         false,
-        showborders:    false,
+        showborders:    true,
         showcomments:   true,
         showmenu:       false,
 
@@ -515,24 +515,23 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.drawGoban {{{
-         * Draw the goban and the comments.
+        /** yygo.view.drawInterface {{{
+         * Draw the goban and the panel.
          */
-        drawGoban: function () {
-            var commentselem =  document.getElementById('comments'),
-                gobanelem =     document.getElementById('goban'),
+        drawInterface: function () {
+            var panel =         document.getElementById('panel'),
+                goban =         document.getElementById('goban'),
                 gridelem =      document.getElementById('grid'),
                 cellelems =     document.getElementsByClassName('cell'),
                 cc =            cellelems.length,
                 fontsize =      this.sizecell / 1.5,
-                comtop =        60,
                 c;
 
             if (this.redraw) { // Redraw only when needed.
                 this.redraw = false;
                 // Resize goban.
-                gobanelem.style.height = this.sizegoban + 'px';
-                gobanelem.style.width = this.sizegoban + 'px';
+                goban.style.height = this.sizegoban + 'px';
+                goban.style.width = this.sizegoban + 'px';
                 // Center grid into goban.
                 gridelem.style.top = this.sizecell + 'px';
                 gridelem.style.right = this.sizecell + 'px';
@@ -550,19 +549,19 @@ var yygo = {};
             if (this.orientation === 'horizontal') {
                 // Move goban on left side and place comments on the right.
                 if (this.showcomments && this.comtoshow) {
-                    gobanelem.style.margin = 0;
+                    goban.style.margin = 0;
                 } else {
-                    gobanelem.style.margin = 'auto';
+                    goban.style.margin = 'auto';
                 }
-                commentselem.style.top = comtop + 'px';
-                commentselem.style.right = 0;
-                commentselem.style.left = this.sizegoban + 'px';
+                panel.style.top = 0;
+                panel.style.right = 0;
+                panel.style.left = this.sizegoban + 'px';
             } else {
                 // Keep goban centered and comments at bottom.
-                gobanelem.style.margin = 'auto';
-                commentselem.style.top =  this.sizegoban + comtop + 'px';
-                commentselem.style.right = 0;
-                commentselem.style.left = 0;
+                goban.style.margin = 'auto';
+                panel.style.top =  this.sizegoban + 'px';
+                panel.style.right = 0;
+                panel.style.left = 0;
             }
         },
         /*}}}*/
@@ -749,25 +748,24 @@ var yygo = {};
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
-                heightleft =    winh - 60,
                 oldsizegoban =  this.sizegoban,
                 smaller;
 
-            if (winw < heightleft) {
+            if (winw < winh) {
                 this.orientation = 'vertical';
                 if (this.showcomments && this.comtoshow &&
-                        heightleft - 150 <= winw) {
-                    smaller = heightleft - 150;
+                        winh - 150 <= winw) {
+                    smaller = winh - 150;
                 } else {
                     smaller = winw;
                 }
             } else {
                 this.orientation = 'horizontal';
                 if (this.showcomments && this.comtoshow &&
-                        winw - 200 <= heightleft) {
-                    smaller = winw - 200;
+                        winw - 220 <= winh) {
+                    smaller = winw - 220;
                 } else {
-                    smaller = heightleft;
+                    smaller = winh;
                 }
             }
 
@@ -781,7 +779,7 @@ var yygo = {};
             if (this.sizegoban !== oldsizegoban || this.redraw) {
                 this.redraw = true;
             }
-            this.drawGoban();
+            this.drawInterface();
         },
         /*}}}*/
 
@@ -1062,9 +1060,9 @@ var yygo = {};
             }, false);
 
             // Clicks.
-            comment.addEventListener('click', function () {
-                yygo.events.clickComments();
-            }, false);
+            //comment.addEventListener('click', function () {
+                //yygo.events.clickComments();
+            //}, false);
             //border.addEventListener('click', function () {
                 //yygo.events.clickBorders();
             //}, false);
