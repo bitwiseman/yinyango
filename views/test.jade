@@ -5,59 +5,55 @@ html
         meta(charset='UTF-8')
         link(rel='stylesheet', type='text/css', href='/stylesheets/test.css')
         link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
-    body.bg
+    body.brown
         #goban
             div
-                .cell.white
                 .cell
-                .cell.white
+                    .g.gtl1.black
+                    .g.gtl2.black
+                .cell
+                    .g.gt1.black
+                    .g.gt2.black
+                .cell
+                    .g.gtr1.black
+                    .g.gtr2.black
             div
-                .cell.black
-                .cell.black
                 .cell
+                    .g.gl1.black
+                    .g.gl2.black
+                .cell
+                    .g.g1.black
+                    .g.g2.black
+                    .g.h.black
+                .cell
+                    .g.gr1.black
+                    .g.gr2.black
             div
-                .cell.white
                 .cell
+                    .g.gbl1.black
+                    .g.gbl2.black
+                    .stone.black
                 .cell
-        #comment
-            #buttonsbar
-                .button
-                .button
-                .button
-                .button
-                .button
-                .button
-            div text
+                    .g.gb1.black
+                    .g.gb2.black
+                    .stone.white
+                .cell
+                    .g.gbr1.black
+                    .g.gbr2.black
+                    .stone.white
     script
         function init() {
-            var winh = window.innerHeight,
-                winw = window.innerWidth,
-                goban = document.getElementById('goban'),
-                com = document.getElementById('comment'),
+            var goban = document.getElementById('goban'),
                 cells = document.getElementsByClassName('cell'),
-                cellcount = cells.length,
-                i, gobansize, comwidth, comheight, cellsize;
-
-            if (winh < winw) { // Horizontal mode.
-                gobansize = winh;
-                comwidth = winw - winh;
-                comheight = winh;
-            } else { // Vertical mode.
-                gobansize = winw;
-                comwidth = winw;
-                comheight = winh - winw;
-            }
-            cellsize = gobansize / 3;
-            goban.style.width = gobansize + 'px';
-            goban.style.height = gobansize + 'px';
-            com.style.width = comwidth + 'px';
-            com.style.height = comheight + 'px';
-            for (i = 0; i < cellcount; i++) {
+                winh = window.innerHeight,
+                cellslen = cells.length,
+                cellsize = winh / 3,
+                i;
+            goban.style.width = winh + 'px';
+            goban.style.height = winh + 'px';
+            for (i = 0; i < cellslen; i++) {
                 cells[i].style.width = cellsize + 'px';
                 cells[i].style.height = cellsize + 'px';
             }
         }
-        
         document.addEventListener('DOMContentLoaded', init(), false);
-        // Window resize.
-        window.addEventListener('resize', init(), false);
