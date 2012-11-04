@@ -17,6 +17,7 @@
  *      console.log(gotools.function(params));
  */
 (function (exports) {
+    'use strict';
 
     /**
      * Private functions.

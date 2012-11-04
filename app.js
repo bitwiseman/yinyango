@@ -6,6 +6,8 @@
  * @link     https://github.com/hickop/yinyango
  */
 
+'use strict';
+
 /* Modules & globals. {{{*/
 var express =   require('express'),
     sys =       require('sys'),
