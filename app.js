@@ -52,11 +52,11 @@ app.configure('production', function () {
 Validator.prototype.error = function (msg) {
     this._errors.push(msg);
     return this;
-}
+};
 
 Validator.prototype.getErrors = function () {
     return this._errors;
-}
+};
 /*}}}*/
 
 /* Functions. {{{*/
@@ -64,12 +64,15 @@ Validator.prototype.getErrors = function () {
  * Get the browser language if set, else default to english.
  */
 var getBrowserLang = function (req) {
-    if (typeof(req.headers["accept-language"]) !== 'undefined') {
-        return req.headers["accept-language"].substr(0, 2);
+    var lang;
+
+    if (req.headers["accept-language"] !== undefined) {
+        lang = req.headers["accept-language"].substr(0, 2);
     } else {
-        return 'en';
+        lang = 'en';
     }
-}
+    return lang;
+};
 /*}}}*/
 
 /** checkSgf {{{
@@ -79,8 +82,8 @@ var getBrowserLang = function (req) {
  * @param {Function}    fn      Callback(valid). valid: 1 or 0.
  */
 var checkSgf = function (sgf, fn) {
-	exec('bin/sgfc ' + sgf, function(error, stdout, stderr) {
-        var check = stdout.replace(/\s+$/,'').slice(-2);
+	exec('bin/sgfc ' + sgf, function (error, stdout, stderr) {
+        var check = stdout.replace(/\s+$/, '').slice(-2);
 
         if (check === 'OK') {
             fn(1);
@@ -88,7 +91,7 @@ var checkSgf = function (sgf, fn) {
             fn(0);
         }
     });
-}
+};
 /*}}}*/
 
 /** hash {{{
@@ -104,15 +107,19 @@ var hash = function (pwd, salt, fn) {
     var len =           128,
         iterations =    12000;
 
-    if (arguments.length === 3) {
+    if (fn !== undefined) {
         crypto.pbkdf2(pwd, salt, iterations, len, fn);
     } else {
         fn = salt;
         crypto.randomBytes(len, function (err, salt) {
-            if (err) return fn(err);
+            if (err) {
+                return fn(err);
+            }
             salt = salt.toString('base64');
             crypto.pbkdf2(pwd, salt, iterations, len, function (err, hash) {
-                if (err) return fn(err);
+                if (err) {
+                    return fn(err);
+                }
                 fn(null, salt, hash);
             });
         });
@@ -132,7 +139,7 @@ app.get('/', function (req, res) {
 
     // Login if user session is set.
     if (username) {
-        res.render('yygo', { 
+        res.render('yygo', {
             title: title,
             username: username,
             locale: locale
@@ -157,7 +164,7 @@ app.get('/guest', function (req, res) {
  */
 app.get('/logout', function (req, res) {
     // Destroy session.
-    req.session.destroy(function (err) { 
+    req.session.destroy(function (err) {
         res.redirect('/');
     });
 });
@@ -167,8 +174,8 @@ app.get('/logout', function (req, res) {
  * Registration page.
  */
 app.get('/register', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + lang); 
+    var lang =      req.session.lang || getBrowserLang(req),
+        locale =    require(app.get('locales') + lang);
 
     res.render('register', { title: title, locale: locale, error: '' });
 });
@@ -178,8 +185,8 @@ app.get('/register', function (req, res) {
  * Page to send sgf file.
  */
 app.get('/sendsgf', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + lang); 
+    var lang =      req.session.lang || getBrowserLang(req),
+        locale =    require(app.get('locales') + lang);
 
     res.render('sendsgf', { title: title, locale: locale });
 });
@@ -199,8 +206,8 @@ app.get('/session', function (req, res) {
  * User parameters page.
  */
 app.get('/settings', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req), 
-        locale =    require(app.get('locales') + lang); 
+    var lang =      req.session.lang || getBrowserLang(req),
+        locale =    require(app.get('locales') + lang);
 
     res.render('settings', {
         title: title,
@@ -217,13 +224,13 @@ app.post('/login', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
         lang =      req.session.lang || getBrowserLang(req),
-        locale =    require(app.get('locales') + lang), 
+        locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
 
     // Always check received data before using it.
-    validator.check(username).len(1,15).is(validname);
-    validator.check(password).len(1,64);
+    validator.check(username).len(1, 15).is(validname);
+    validator.check(password).len(1, 64);
 
     if (validator.getErrors().length === 0) {
         db.open(function (err, db) {
@@ -271,16 +278,18 @@ app.post('/register', function (req, res) {
         password =  req.body.password,
         email =     req.body.email,
         lang =      req.session.lang || getBrowserLang(req),
-        locale =    require(app.get('locales') + lang), 
+        locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator(),
         error =     '',
-        errors, errorslen, i;
+        errors,
+        errorslen,
+        i;
 
     // Always check received data before using it.
-    validator.check(username).len(1,15).is(validname);
-    validator.check(email).len(6,64).isEmail();
-    validator.check(password).len(1,64);
+    validator.check(username).len(1, 15).is(validname);
+    validator.check(email).len(6, 64).isEmail();
+    validator.check(password).len(1, 64);
     errors = validator.getErrors();
     errorslen = errors.length;
 
@@ -288,35 +297,35 @@ app.post('/register', function (req, res) {
         db.open(function (err, db) {
             if (!err) {
                 db.collection('users', function (err, collection) {
-                    collection.findOne({ name: username }, 
-                            function (err, result) {
-                        if (result) { // Name already exist.
-                            db.close();
-                            res.render('register', {
-                                title: title,
-                                locale: locale,
-                                error: 'exist'
-                            });
-                        } else {
-                            // Generate hash and salt and insert in database.
-                            hash(password, function (err, salt, hash) {
-                                collection.insert({
-                                    name:  username,
-                                    email: email,
-                                    salt:  salt,
-                                    hash:  hash,
-                                    lang:  lang
-                                }, function (err, result) {
-                                    db.close();
-                                    res.render('register', {
-                                        title: title,
-                                        locale: locale,
-                                        error: 'success'
+                    collection.findOne({ name: username },
+                        function (err, result) {
+                            if (result) { // Name already exist.
+                                db.close();
+                                res.render('register', {
+                                    title: title,
+                                    locale: locale,
+                                    error: 'exist'
+                                });
+                            } else {
+                                // Generate hash and salt and insert in db.
+                                hash(password, function (err, salt, hash) {
+                                    collection.insert({
+                                        name:  username,
+                                        email: email,
+                                        salt:  salt,
+                                        hash:  hash,
+                                        lang:  lang
+                                    }, function (err, result) {
+                                        db.close();
+                                        res.render('register', {
+                                            title: title,
+                                            locale: locale,
+                                            error: 'success'
+                                        });
                                     });
                                 });
-                            });
-                        }
-                    });
+                            }
+                        });
                 });
             }
         });
@@ -349,15 +358,15 @@ app.post('/settings', function (req, res) {
     }
 
     // Always check received data before using it.
-    validator.check(lang).len(2,2).isAlpha(); 
+    validator.check(lang).len(2, 2).isAlpha();
 
     if (userid && validator.getErrors().length === 0) {
         db.open(function (err, db) {
             db.collection('users', function (err, collection) {
-                collection.update({ _id: userid }, { $set:{ lang: lang }},
+                collection.update({ _id: userid }, { $set: { lang: lang }},
                         function (err, result) {
-                    db.close();
-                });
+                        db.close();
+                    });
             });
         });
     }
