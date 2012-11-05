@@ -1030,20 +1030,13 @@ var yygo = {};
          * Bind events to the elements.
          */
         makeBinds: function () {
-            var comment =       document.getElementById('comment'),
-                border =        document.getElementById('border'),
-                menuload =      document.getElementById('menuload'),
+            var menuload =      document.getElementById('menuload'),
                 menusendsgf =   document.getElementById('menusendsgf'),
                 menusettings =  document.getElementById('menusettings'),
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
                 menumask =      document.getElementById('menumask'),
                 options =       document.getElementById('options'),
-                refresh =       document.getElementById('refresh'),
-                langen =        document.getElementById('langen'),
-                langfr =        document.getElementById('langfr'),
-                user =          document.getElementById('user'),
-                sendsgf =       document.getElementById('sendsgf'),
                 start =         document.getElementById('start'),
                 fastprev =      document.getElementById('fastprev'),
                 prev =          document.getElementById('prev'),
@@ -1059,19 +1052,13 @@ var yygo = {};
                 }
             }, false);
 
-            // Clicks.
-            //comment.addEventListener('click', function () {
-                //yygo.events.clickComments();
-            //}, false);
-            //border.addEventListener('click', function () {
-                //yygo.events.clickBorders();
-            //}, false);
             // Only registered users.
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
                     yygo.events.clickMenuSendSgf();
                 }, false);
             }
+            // Menu buttons.
             menuload.addEventListener('click', function () {
             }, false);
             menusettings.addEventListener('click', function () {
@@ -1086,6 +1073,7 @@ var yygo = {};
             menumask.addEventListener('click', function () {
                 yygo.events.clickMenuMask();
             }, false);
+            // Buttons bar.
             options.addEventListener('click', function () {
                 yygo.events.clickOptions();
             }, false);
@@ -1342,22 +1330,6 @@ var yygo = {};
         clickSendSgf: function () {
             this.screen = 'sendsgf';
             //yygo.view.changeScreen();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickUser {{{
-         * Login/logout and parameters of the user.
-         */
-        clickUser: function () {
-            // Check if session expired of if user try to steal identity.
-            jsonRequest('session', function (data) {
-                if (yygo.events.username !== 'guest' &&
-                        yygo.events.username === data.username) {
-                    // TODO: User parameters.
-                } else {
-                    window.location.href = '/login';
-                }
-            });
         },
         /*}}}*/
 
