@@ -68,19 +68,25 @@ Validator.prototype.getErrors = function () {
 /*}}}*/
 
 /* Functions. {{{*/
-/** getBrowserLang {{{
- * Get the browser language if set, else default to english.
+/** getLang {{{
+ * Return language of browser if set and supported, else default to english.
  */
-var getBrowserLang = function (req) {
-    var lang;
+function getLang(req) {
+    var supported = [ 'en', 'fr' ],
+        supplen = supported.length,
+        lang,
+        i;
 
     if (req.headers["accept-language"] !== undefined) {
         lang = req.headers["accept-language"].substr(0, 2);
-    } else {
-        lang = 'en';
+        for (i = 0; i < supplen; i++) {
+            if (lang === supported[i]) {
+                return req.headers["accept-language"].substr(0, 2);
+            }
+        }
     }
-    return lang;
-};
+    return 'en';
+}
 /*}}}*/
 
 /** checkSgf {{{
@@ -89,7 +95,7 @@ var getBrowserLang = function (req) {
  * @param {String}      sgf     Path to sgf file.
  * @param {Function}    fn      Callback(valid). valid: 1 or 0.
  */
-var checkSgf = function (sgf, fn) {
+function checkSgf(sgf, fn) {
 	exec('bin/sgfc ' + sgf, function (error, stdout, stderr) {
         var check = stdout.replace(/\s+$/, '').slice(-2);
 
@@ -106,7 +112,7 @@ var checkSgf = function (sgf, fn) {
             console.log('sgfc error: ' + stderr);
         }
     });
-};
+}
 /*}}}*/
 
 /** hash {{{
@@ -118,7 +124,7 @@ var checkSgf = function (sgf, fn) {
  * @param {String}      salt    Optional salt.
  * @param {Function}    fn      Callback function. 
  */
-var hash = function (pwd, salt, fn) {
+function hash(pwd, salt, fn) {
     var len =           128,
         iterations =    12000;
 
@@ -139,7 +145,7 @@ var hash = function (pwd, salt, fn) {
             });
         });
     }
-};
+}
 /*}}}*/
 /*}}}*/
 
@@ -149,7 +155,7 @@ var hash = function (pwd, salt, fn) {
  */
 app.get('/', function (req, res) {
     var username =  req.session.username,
-        lang =      req.session.lang || getBrowserLang(req),
+        lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
     // Login if user session is set.
@@ -189,7 +195,7 @@ app.get('/logout', function (req, res) {
  * Registration page.
  */
 app.get('/register', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req),
+    var lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
     res.render('register', { title: title, locale: locale, error: '' });
@@ -200,7 +206,7 @@ app.get('/register', function (req, res) {
  * Page to send sgf file.
  */
 app.get('/sendsgf', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req),
+    var lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
     res.render('sendsgf', { title: title, locale: locale });
@@ -221,7 +227,7 @@ app.get('/session', function (req, res) {
  * User parameters page.
  */
 app.get('/settings', function (req, res) {
-    var lang =      req.session.lang || getBrowserLang(req),
+    var lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
     res.render('settings', {
@@ -238,7 +244,7 @@ app.get('/settings', function (req, res) {
 app.post('/login', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
-        lang =      req.session.lang || getBrowserLang(req),
+        lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
@@ -293,7 +299,7 @@ app.post('/register', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
         email =     req.body.email,
-        lang =      req.session.lang || getBrowserLang(req),
+        lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator(),
