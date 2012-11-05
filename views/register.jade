@@ -11,7 +11,7 @@ block content
         .box.red
             p= locale.errorname
             p: a.linkbutton.black(href='/register')= locale.back
-    else if error == 'success'
+    else if error == 'none'
         .box.brown2
             p= locale.regsuccess
             p: a.linkbutton.black(href='/')= locale.back

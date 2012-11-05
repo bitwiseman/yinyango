@@ -13,16 +13,23 @@ var express =   require('express'),
     sys =       require('sys'),
     crypto =    require('crypto'),
     exec =      require('child_process').exec,
-    mongo =     require('mongodb'),
+    mongoose =  require('mongoose'),
     Validator = require('validator').Validator,
     gotools =   require('./shared/gotools'),
     app =       express(),
-    Server =    mongo.Server,
-    Db =        mongo.Db,
-    ObjectID =  mongo.ObjectID,
-    server =    new Server('localhost', 27017, { auto_reconnect: true }),
-    db =        new Db('yinyango', server, { safe: true }),
+    db =        mongoose.createConnection('localhost', 'yinyango'),
     title =     'yinyango';
+/*}}}*/
+
+/* Mongoose Schemas & models {{{*/
+var userSchema = new mongoose.Schema({
+    name:   String,
+    email:  String,
+    salt:   String,
+    hash:   String,
+    lang:   String
+});
+var User = db.model('user', userSchema);
 /*}}}*/
 
 /* Configuration. {{{*/
@@ -46,6 +53,7 @@ app.configure('development', function () {
 app.configure('production', function () {
     app.use(express.errorHandler());
 });
+db.on('error', console.error.bind(console, 'db connection error:'));
 /*}}}*/
 
 /* Prototypes {{{*/
@@ -89,6 +97,13 @@ var checkSgf = function (sgf, fn) {
             fn(1);
         } else {
             fn(0);
+        }
+
+        if (error) {
+            console.log('checkSgf exec error: ' + error);
+        }
+        if (stderr) {
+            console.log('sgfc error: ' + stderr);
         }
     });
 };
@@ -164,7 +179,7 @@ app.get('/guest', function (req, res) {
  */
 app.get('/logout', function (req, res) {
     // Destroy session.
-    req.session.destroy(function (err) {
+    req.session.destroy(function () {
         res.redirect('/');
     });
 });
@@ -233,30 +248,25 @@ app.post('/login', function (req, res) {
     validator.check(password).len(1, 64);
 
     if (validator.getErrors().length === 0) {
-        db.open(function (err, db) {
-            db.collection('users', function (err, collection) {
-                collection.findOne({ name: username }, function (err, result) {
-                    if (result) {
-                        // Hash password with user salt.
-                        hash(password, result.salt, function (err, hash) {
-                            if (hash === result.hash) {
-                                // All ok save session and reload.
-                                req.session.username = username;
-                                req.session.lang = result.lang;
-                                req.session.userid = result._id;
-                                db.close();
-                                res.redirect('/');
-                            } else {
-                                db.close();
-                                res.render('login', {
-                                    title: title,
-                                    locale: locale,
-                                    error: 'login'
-                                });
-                            }
-                        });
+        User.findOne({ name: username }, function (err, user) {
+            if (err) {
+                console.error('User.findOne error: ' + err);
+                return;
+            }
+            if (user) {
+                // Compare hashs.
+                hash(password, user.salt, function (err, hash) {
+                    if (err) {
+                        console.error('hash error: ' + err);
+                        return;
+                    }
+                    if (hash === user.hash) {
+                        // Save in session and reload.
+                        req.session.userid =    user._id;
+                        req.session.username =  user.name;
+                        req.session.lang =      user.lang;
+                        res.redirect('/');
                     } else {
-                        db.close();
                         res.render('login', {
                             title: title,
                             locale: locale,
@@ -264,7 +274,13 @@ app.post('/login', function (req, res) {
                         });
                     }
                 });
-            });
+            } else {
+                res.render('login', {
+                    title: title,
+                    locale: locale,
+                    error: 'login'
+                });
+            }
         });
     }
 });
@@ -294,42 +310,48 @@ app.post('/register', function (req, res) {
     errorslen = errors.length;
 
     if (errorslen === 0) {
-        db.open(function (err, db) {
-            if (!err) {
-                db.collection('users', function (err, collection) {
-                    collection.findOne({ name: username },
-                        function (err, result) {
-                            if (result) { // Name already exist.
-                                db.close();
-                                res.render('register', {
-                                    title: title,
-                                    locale: locale,
-                                    error: 'exist'
-                                });
-                            } else {
-                                // Generate hash and salt and insert in db.
-                                hash(password, function (err, salt, hash) {
-                                    collection.insert({
-                                        name:  username,
-                                        email: email,
-                                        salt:  salt,
-                                        hash:  hash,
-                                        lang:  lang
-                                    }, function (err, result) {
-                                        db.close();
-                                        res.render('register', {
-                                            title: title,
-                                            locale: locale,
-                                            error: 'success'
-                                        });
-                                    });
-                                });
-                            }
+        User.findOne({ name: username }, function (err, user) {
+            if (err) {
+                console.error('User.findOne error: ' + err);
+                return;
+            }
+            if (user) { // User name already exist.
+                res.render('register', {
+                    title: title,
+                    locale: locale,
+                    error: 'exist'
+                });
+            } else { // Generate salt and hash and insert in database.
+                hash(password, function (err, salt, hash) {
+                    if (err) {
+                        console.error('hash error: ' + err);
+                        return;
+                    }
+
+                    var user = new User({
+                        name: username,
+                        email: email,
+                        salt: salt,
+                        hash: hash,
+                        lang: lang
+                    });
+
+                    user.save(function (err) {
+                        if (err) {
+                            console.error('user.save error: ' + err);
+                            return;
+                        }
+                        // Registration successful.
+                        res.render('register', {
+                            title: title,
+                            locale: locale,
+                            error: 'none'
                         });
+                    });
                 });
             }
         });
-    } else {
+    } else { // Errors in validator.
         for (i = 0; i < errorslen; i++) {
             if (errors[i] === 'Invalid characters') {
                 error = 'name';
@@ -350,27 +372,20 @@ app.post('/register', function (req, res) {
  */
 app.post('/settings', function (req, res) {
     var lang =      req.body.langselect,
+        userid =    req.session.userid,
         validator = new Validator(),
-        userid;
-
-    if (req.session.userid) {
-        userid = new ObjectID(req.session.userid);
-    }
+        settings;
 
     // Always check received data before using it.
     validator.check(lang).len(2, 2).isAlpha();
 
+    // Update user settings in database.
     if (userid && validator.getErrors().length === 0) {
-        db.open(function (err, db) {
-            db.collection('users', function (err, collection) {
-                collection.update({ _id: userid }, { $set: { lang: lang }},
-                        function (err, result) {
-                        db.close();
-                    });
-            });
-        });
+        settings = { lang: lang };
+        User.findByIdAndUpdate(userid, settings, function () {});
     }
 
+    // Update cookie.
     if (validator.getErrors().length === 0) {
         req.session.lang = lang;
     }
