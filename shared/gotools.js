@@ -33,11 +33,13 @@
      *                    'w':{String} (white stones on goban),
      *                    'k':{String} (kos on goban) }
      */
-    var gobanToStones = function (size, goban) {
-        var stones =    { 'b':[], 'w':[], 'k':[] },
+    function gobanToStones(size, goban) {
+        var stones =    { 'b': [], 'w': [], 'k': [] },
             letters =   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                          'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-            coord, x, y;
+            coord,
+            x,
+            y;
 
         for (x = 0; x < size; x++) {
             for (y = 0; y < size; y++) {
@@ -53,9 +55,8 @@
                 }
             }
         }
-
         return stones;
-    };
+    }
     /*}}}*/
 
     /** stonesToGoban {{{
@@ -67,88 +68,51 @@
      *
      * @return {Array} Array representing the goban.
      */
-    var stonesToGoban = function (size, stones) {
+    function stonesToGoban(size, stones) {
         var blen = stones.b.length,
             wlen = stones.w.length,
             klen = stones.k.length,
-            i, j, b, w, k,
-            goban = [];
+            goban = [],
+            i,
+            j,
+            b,
+            w,
+            x,
+            y,
+            k;
 
         // Generate empty goban.
         for (i = 0; i < size; i++) {
-            goban[i] = []; 
+            goban[i] = [];
             for (j = 0; j < size; j++) {
-                goban[i][j] = ''; 
+                goban[i][j] = '';
             }
         }
-
         // Add black stones.
         if (stones.b[0] !== '') {
             for (b = 0; b < blen; b++) {
-                var x = stones.b[b].charCodeAt(0) - 97,
-                    y = stones.b[b].charCodeAt(1) - 97;
-
+                x = stones.b[b].charCodeAt(0) - 97;
+                y = stones.b[b].charCodeAt(1) - 97;
                 goban[x][y] = 'b';
             }
         }
-
         // Add white stones.
         if (stones.w[0] !== '') {
             for (w = 0; w < wlen; w++) {
-                var x = stones.w[w].charCodeAt(0) - 97,
-                    y = stones.w[w].charCodeAt(1) - 97;
-
+                x = stones.w[w].charCodeAt(0) - 97;
+                y = stones.w[w].charCodeAt(1) - 97;
                 goban[x][y] = 'w';
             }
         }
-
         // Add kos.
         if (stones.k[0] !== '') {
             for (k = 0; k < klen; k++) {
-                var x = stones.k[k].charCodeAt(0) - 97,
-                    y = stones.k[k].charCodeAt(1) - 97;
-
+                x = stones.k[k].charCodeAt(0) - 97;
+                y = stones.k[k].charCodeAt(1) - 97;
                 goban[x][y] = 'k';
             }
         }
-
         return goban;
-    };
-    /*}}}*/
-
-    /** testCaptures {{{
-     * Test if played stone will capture stone(s).
-     *
-     * @param {String}  color Played color.
-     * @param {Integer} x     X coordinate of played stone.
-     * @param {Integer} y     Y coordinate of played stone.
-     * @param {Array}   goban Goban to test.
-     *
-     * @return {Object} { 'goban':{Array} (goban after eventual captures),
-     *                    'prisonners':{Integer} (number of prisonners) }.
-     */
-    var testCaptures = function (color, x, y, goban) {
-        var result = { 'goban':[], 'prisonners':0 },
-            prisonners = 0;
-
-        function checkDirection(x, y) {
-            var test = testLiberties(color, x, y, goban, []);
-
-            if (test[0] === 0) { // No liberties found.
-                goban = removePrisonners(goban, test[1]);
-                prisonners += test[1].length;
-            }
-        }
-        // Test each direction.
-        checkDirection(x-1, y);
-        checkDirection(x, y-1);
-        checkDirection(x+1, y);
-        checkDirection(x, y+1);
-
-        result.goban = goban;
-        result.prisonners = prisonners;
-
-        return result;
     }
     /*}}}*/
 
@@ -168,10 +132,11 @@
      *                    2: Same color or goban border.),
      *                   {Array} (Potential prisonners) ]
      */
-    var testLiberties = function (color, x, y, goban, prisonners) {
+    function testLiberties(color, x, y, goban, prisonners) {
         var ennemy = (color === 'b') ? 'w' : 'b',
             prilen = prisonners.length,
-            stone, i; 
+            stone,
+            i;
 
         if (goban[x] !== undefined && goban[x][y] !== undefined) {
             if (goban[x][y] === '') {
@@ -189,25 +154,23 @@
                 prisonners.push(stone); // Add stone to prisonners.
 
                 // Test recursively coordinates around the prisonner.
-                if (testLiberties(color, x-1, y, goban, prisonners) === 1) {
+                if (testLiberties(color, x - 1, y, goban, prisonners) === 1) {
                     return 1;
                 }
-                if (testLiberties(color, x, y-1, goban, prisonners) === 1) {
+                if (testLiberties(color, x, y - 1, goban, prisonners) === 1) {
                     return 1;
                 }
-                if (testLiberties(color, x+1, y, goban, prisonners) === 1) {
+                if (testLiberties(color, x + 1, y, goban, prisonners) === 1) {
                     return 1;
                 }
-                if (testLiberties(color, x, y+1, goban, prisonners) === 1) {
+                if (testLiberties(color, x, y + 1, goban, prisonners) === 1) {
                     return 1;
                 }
                 // If we reached here then we found no liberties.
                 return [ 0, prisonners ];
             }
-            return 2; // Same color as played stone.
-        } else {
-            return 2; // Goban border.
         }
+        return 2; // Same color or goban border.
     }
     /*}}}*/
 
@@ -219,7 +182,7 @@
      *
      * @return {Array} Goban after removing prisonners.
      */
-    var removePrisonners = function (goban, prisonners) {
+    function removePrisonners(goban, prisonners) {
         var prilen =    prisonners.length,
             coord =     [],
             i;
@@ -229,8 +192,43 @@
             // Remove stone from goban.
             goban[coord[0]][coord[1]] = '';
         }
-
         return goban;
+    }
+    /*}}}*/
+
+    /** testCaptures {{{
+     * Test if played stone will capture stone(s).
+     *
+     * @param {String}  color Played color.
+     * @param {Integer} x     X coordinate of played stone.
+     * @param {Integer} y     Y coordinate of played stone.
+     * @param {Array}   goban Goban to test.
+     *
+     * @return {Object} { 'goban':{Array} (goban after eventual captures),
+     *                    'prisonners':{Integer} (number of prisonners) }.
+     */
+    function testCaptures(color, x, y, goban) {
+        var result = { 'goban': [], 'prisonners': 0 },
+            prisonners = 0;
+
+        function checkDirection(x, y) {
+            var test = testLiberties(color, x, y, goban, []);
+
+            if (test[0] === 0) { // No liberties found.
+                goban = removePrisonners(goban, test[1]);
+                prisonners += test[1].length;
+            }
+        }
+        // Test each direction.
+        checkDirection(x - 1, y);
+        checkDirection(x, y - 1);
+        checkDirection(x + 1, y);
+        checkDirection(x, y + 1);
+
+        result.goban = goban;
+        result.prisonners = prisonners;
+
+        return result;
     }
     /*}}}*/
 
@@ -251,8 +249,11 @@
         var addlen = add.length,
             blen = stones.b.length,
             wlen = stones.w.length,
-            exist, i, b, w;
-        
+            exist,
+            i,
+            b,
+            w;
+
         for (i = 0; i < addlen; i++) {
             exist = 0;
             if (color === 'w') {
@@ -288,7 +289,7 @@
         }
 
         return stones;
-    }
+    };
     /*}}}*/
 
     /** playMove {{{
@@ -326,5 +327,5 @@
     };
     /*}}}*/
 
-})(typeof exports === 'undefined' ? this['gotools'] = {} : exports);
+}(exports === undefined ? this.gotools = {} : exports));
 
