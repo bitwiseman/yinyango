@@ -80,8 +80,8 @@
                 goban[i][j] = '';
             }
         }
-        // Add stones to goban.
-        function addStones(stones, color) {
+        // Put stones on goban.
+        function putStones(stones, color) {
             var stoneslen = stones.length,
                 i,
                 x,
@@ -95,9 +95,9 @@
                 }
             }
         }
-        addStones(stones.b, 'b');
-        addStones(stones.w, 'w');
-        addStones(stones.k, 'k');
+        putStones(stones.b, 'b');
+        putStones(stones.w, 'w');
+        putStones(stones.k, 'k');
         return goban;
     }
     /*}}}*/
