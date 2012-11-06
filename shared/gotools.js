@@ -340,88 +340,88 @@
         for (i = 0; i < sgflen; i++) {
             chr = sgf.charAt(i);
             switch (chr) {
-                case '\\': // Escape character.
-                    if (isescaped) {
-                        value += '\\';
-                        isescaped = false;
+            case '\\': // Escape character.
+                if (isescaped) {
+                    value += '\\';
+                    isescaped = false;
+                } else {
+                    isescaped = true;
+                }
+                break;
+            case '(': // Value, start of branch or mark ?
+                if (isvalue) {
+                    value += '(';
+                } else if (isstart) {
+                    branch++;
+                    node = nodemark[mark];
+                    isstart = false;
+                } else {
+                    mark++;
+                    nodemark[mark] = node;
+                }
+                break;
+            case ')': // Value or end of branch ?
+                if (isvalue) {
+                    value += ')';
+                } else if (isstart) {
+                    mark--;
+                } else {
+                    isstart = true;
+                }
+                break;
+            case ';': // Value or new node ?
+                if (isvalue) {
+                    value += ';';
+                } else {
+                    node++;
+                }
+                break;
+            case '[': // Value or start of value ?
+                if (isvalue) {
+                    value += '[';
+                } else {
+                    isvalue = true;
+                }
+                break;
+            case ']': // Value or end of value ?
+                if (isescaped) {
+                    value += ']';
+                    isescaped = false;
+                } else {
+                    // End of value. Save it to the corresponding key.
+                    if (key === '') {
+                        // Key was unset, save it into the previous key.
+                        sgfobj[node][branch][prevkey].push(value);
                     } else {
-                        isescaped = true;
-                    }
-                    break;
-                case '(': // Value, start of branch or mark ?
-                    if (isvalue) {
-                        value += '(';
-                    } else if (isstart) {
-                        branch++;
-                        node = nodemark[mark];
-                        isstart = false;
-                    } else {
-                        mark++;
-                        nodemark[mark] = node;
-                    }
-                    break;
-                case ')': // Value or end of branch ?
-                    if (isvalue) {
-                        value += ')';
-                    } else if (isstart) {
-                        mark--;
-                    } else {
-                        isstart = true;
-                    }
-                    break;
-                case ';': // Value or new node ?
-                    if (isvalue) {
-                        value += ';';
-                    } else {
-                        node++; 
-                    }
-                    break;
-                case '[': // Value or start of value ?
-                    if (isvalue) {
-                        value += '[';
-                    } else {
-                        isvalue = true;
-                    }
-                    break;
-                case ']': // Value or end of value ?
-                    if (isescaped) {
-                        value += ']';
-                        isescaped = false;
-                    } else {
-                        // End of value. Save it to the corresponding key.
-                        if (key === '') {
-                            // Key was unset, save it into the previous key.
-                            sgfobj[node][branch][prevkey].push(value);
-                        } else {
-                            // Key changed, save it in and unset key.
-                            if (sgfobj[node] === undefined) {
-                                sgfobj[node] = {};
-                                if (sgfobj[node][branch] === undefined) {
-                                    sgfobj[node][branch] = {};
-                                }
-                            }
+                        // Key changed, save it in and unset key.
+                        if (sgfobj[node] === undefined) {
+                            sgfobj[node] = {};
                             if (sgfobj[node][branch] === undefined) {
-                                if (sgfobj[node] === undefined) {
-                                    sgfobj[node] = {};
-                                }
                                 sgfobj[node][branch] = {};
                             }
-                            sgfobj[node][branch][key] = [];
-                            sgfobj[node][branch][key].push(value);
-                            prevkey = key;
-                            key = '';
                         }
-                        isvalue = false;
-                        value = ''; // Empty the value register.
+                        if (sgfobj[node][branch] === undefined) {
+                            if (sgfobj[node] === undefined) {
+                                sgfobj[node] = {};
+                            }
+                            sgfobj[node][branch] = {};
+                        }
+                        sgfobj[node][branch][key] = [];
+                        sgfobj[node][branch][key].push(value);
+                        prevkey = key;
+                        key = '';
                     }
-                    break;
-                default:
-                    if (isvalue) {
-                        value += chr;
-                    } else if (chr !== '\n') {
-                        // Do not save the carriages returns in keys.
-                        key += chr;
-                    }
+                    isvalue = false;
+                    value = ''; // Empty the value register.
+                }
+                break;
+            default:
+                if (isvalue) {
+                    value += chr;
+                } else if (chr !== '\n') {
+                    // Do not save the carriages returns in keys.
+                    key += chr;
+                }
             }
         }
         // Save total number of branchs in the tree root for later use.
