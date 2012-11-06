@@ -11,6 +11,7 @@
 /* Modules & globals. {{{*/
 var express =   require('express'),
     sys =       require('sys'),
+    fs =        require('fs'),
     crypto =    require('crypto'),
     exec =      require('child_process').exec,
     mongoose =  require('mongoose'),
@@ -29,7 +30,13 @@ var userSchema = new mongoose.Schema({
     hash:   String,
     lang:   String
 });
+var sgfSchema = new mongoose.Schema({
+    submitter:  String,
+    category:   String,
+    data:       String
+});
 var User = db.model('user', userSchema);
+var Sgf = db.model('sgf', sgfSchema);
 /*}}}*/
 
 /* Configuration. {{{*/
@@ -209,7 +216,7 @@ app.get('/sendsgf', function (req, res) {
     var lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
-    res.render('sendsgf', { title: title, locale: locale });
+    res.render('sendsgf', { title: title, locale: locale, error: '' });
 });
 /*}}}*/
 
@@ -369,6 +376,59 @@ app.post('/register', function (req, res) {
             error: error
         });
     }
+});
+/*}}}*/
+
+/** post /sendsgf {{{
+ * Save sent sgf file to database.
+ */
+app.post('/sendsgf', function (req, res) {
+    var file =      req.files.sgffile.path,
+        category =  req.body.categoryselect,
+        userid =    req.session.userid,
+        username =  req.session.username,
+        lang =      req.session.lang,
+        locale =    require(app.get('locales') + lang),
+        error =     '',
+        sgf;
+
+    // Make sure data comes from registered user.
+    User.findById(userid, function (err, user) {
+        if (err) {
+            console.error('User.findById error: ' + err);
+            return;
+        }
+        if (user) {
+            checkSgf(file, function (valid) {
+                if (valid) {
+                    fs.readFile(file, function (err, data) {
+                        if (err) {
+                            console.error('fs.readFile error: ' + err);
+                            return;
+                        }
+                        sgf = new Sgf({
+                            submitter:  username,
+                            category:   category,
+                            data:       data
+                        });
+                        sgf.save(function () {
+                            res.render('sendsgf', {
+                                title: title,
+                                locale: locale,
+                                error: 'none'
+                            });
+                        });
+                    });
+                } else {
+                    res.render('sendsgf', {
+                        title: title,
+                        locale: locale,
+                        error: 'invalid'
+                    });
+                }
+            });
+        }
+    });
 });
 /*}}}*/
 
