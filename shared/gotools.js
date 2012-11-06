@@ -69,17 +69,9 @@
      * @return {Array} Array representing the goban.
      */
     function stonesToGoban(size, stones) {
-        var blen = stones.b.length,
-            wlen = stones.w.length,
-            klen = stones.k.length,
-            goban = [],
+        var goban = [],
             i,
-            j,
-            b,
-            w,
-            x,
-            y,
-            k;
+            j;
 
         // Generate empty goban.
         for (i = 0; i < size; i++) {
@@ -88,30 +80,24 @@
                 goban[i][j] = '';
             }
         }
-        // Add black stones.
-        if (stones.b[0] !== '') {
-            for (b = 0; b < blen; b++) {
-                x = stones.b[b].charCodeAt(0) - 97;
-                y = stones.b[b].charCodeAt(1) - 97;
-                goban[x][y] = 'b';
+        // Add stones to goban.
+        function addStones(stones, color) {
+            var stoneslen = stones.length,
+                i,
+                x,
+                y;
+
+            if (stones.length !== 0) {
+                for (i = 0; i < stoneslen; i++) {
+                    x = stones[i].charCodeAt(0) - 97;
+                    y = stones[i].charCodeAt(1) - 97;
+                    goban[x][y] = color;
+                }
             }
         }
-        // Add white stones.
-        if (stones.w[0] !== '') {
-            for (w = 0; w < wlen; w++) {
-                x = stones.w[w].charCodeAt(0) - 97;
-                y = stones.w[w].charCodeAt(1) - 97;
-                goban[x][y] = 'w';
-            }
-        }
-        // Add kos.
-        if (stones.k[0] !== '') {
-            for (k = 0; k < klen; k++) {
-                x = stones.k[k].charCodeAt(0) - 97;
-                y = stones.k[k].charCodeAt(1) - 97;
-                goban[x][y] = 'k';
-            }
-        }
+        addStones(stones.b, 'b');
+        addStones(stones.w, 'w');
+        addStones(stones.k, 'k');
         return goban;
     }
     /*}}}*/
