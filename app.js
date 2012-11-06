@@ -31,6 +31,7 @@ var userSchema = new mongoose.Schema({
     lang:   String
 });
 var sgfSchema = new mongoose.Schema({
+    name:       String,
     submitter:  String,
     category:   String,
     data:       String
@@ -385,6 +386,7 @@ app.post('/register', function (req, res) {
 app.post('/sendsgf', function (req, res) {
     var file =      req.files.sgffile.path,
         category =  req.body.categoryselect,
+        name =      req.body.name || req.files.sgffile.name,
         userid =    req.session.userid,
         username =  req.session.username,
         lang =      req.session.lang,
@@ -407,6 +409,7 @@ app.post('/sendsgf', function (req, res) {
                             return;
                         }
                         sgf = new Sgf({
+                            name:       name,
                             submitter:  username,
                             category:   category,
                             data:       data
