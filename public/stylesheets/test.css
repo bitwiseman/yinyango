@@ -71,7 +71,9 @@ body {
 .cell {
     position: relative;
     float: left;
-    border-radius: 50%;
+    /*border-radius: 50%;*/
+    /*border-top-left-radius: 100% 50%;*/
+    /*border-bottom-left-radius: 100% 50%;*/
 }
 .g {
     position: absolute;
@@ -195,6 +197,8 @@ body {
 .stone {
     height: 100%;
     width: 100%;
-    border-radius: 50%;
+    /*border-radius: 50% 0 0 50%;*/
+    border-top-left-radius: 999em;
+    /*border-bottom-left-radius: 999em;*/
     opacity: 0.5;
 }
