@@ -388,22 +388,13 @@
                     value += ']';
                     isescaped = false;
                 } else {
-                    // End of value. Save it to the corresponding key.
                     if (key === '') {
-                        // Key was unset, save it into the previous key.
                         sgfobj[node][branch][prevkey].push(value);
                     } else {
-                        // Key changed, save it in and unset key.
                         if (sgfobj[node] === undefined) {
                             sgfobj[node] = {};
-                            if (sgfobj[node][branch] === undefined) {
-                                sgfobj[node][branch] = {};
-                            }
                         }
                         if (sgfobj[node][branch] === undefined) {
-                            if (sgfobj[node] === undefined) {
-                                sgfobj[node] = {};
-                            }
                             sgfobj[node][branch] = {};
                         }
                         sgfobj[node][branch][key] = [];
@@ -412,14 +403,13 @@
                         key = '';
                     }
                     isvalue = false;
-                    value = ''; // Empty the value register.
+                    value = '';
                 }
                 break;
             default:
                 if (isvalue) {
                     value += chr;
                 } else if (chr !== '\n') {
-                    // Do not save the carriages returns in keys.
                     key += chr;
                 }
             }
