@@ -1,19 +1,19 @@
 extends layout
 
 block content
-    h1= title
-    h2= locale.login
-    p: a.linkbutton.black(href='/guest')= locale.guestlogin
+    h1= lingua.title
+    h2= lingua.login
+    p: a.linkbutton.black(href='/guest')= lingua.guestlogin
     if error == 'login'
         .box.red
-            p= locale.errorlogin
-            p: a.linkbutton.black(href='/')= locale.back
+            p= lingua.errorlogin
+            p: a.linkbutton.black(href='/')= lingua.back
     else
         form.box.brown2(name='form', method='post', action='/login')
-            p= locale.username
+            p= lingua.username
             input.input(type='text', name='username', autocomplete='on',
                 autofocus, maxlength='15', required)
-            p= locale.password
+            p= lingua.password
             input.input(type='password', name='password', required)
-            p: input.linkbutton.black(type='submit', value= locale.login)
-    p: a.linkbutton.black(href='/register')= locale.register
+            p: input.linkbutton.black(type='submit', value= lingua.login)
+    p: a.linkbutton.black(href='/register')= lingua.register

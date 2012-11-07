@@ -1,26 +1,26 @@
 extends layout
 
 block content
-    h1= title
-    h2= locale.sendsgf
+    h1= lingua.title
+    h2= lingua.sendsgf
     if error == 'invalid'
         .box.red
-            p= locale.errorinvalid
-            p: a.linkbutton.black(href='/sendsgf')= locale.back
+            p= lingua.errorinvalid
+            p: a.linkbutton.black(href='/sendsgf')= lingua.back
     else if error == 'none'
         .box.brown2
-            p= locale.sendsuccess
-            p: a.linkbutton.black(href='/sendsgf')= locale.back
+            p= lingua.sendsuccess
+            p: a.linkbutton.black(href='/sendsgf')= lingua.back
     else
         form.box.brown2(name='form', method='post',
                 enctype='multipart/form-data', action='/sendsgf')
-            p: label= locale.selectfile
+            p: label= lingua.selectfile
             p: input.input(type='file', name='sgffile')
-            p: label= locale.selectcategory
+            p: label= lingua.selectcategory
             p
                 select.input(name='categoryselect')
-                    option(value='game')= locale.game
-                    option(value='lesson')= locale.lesson
-                    option(value='problem')= locale.problem
-            p: input.linkbutton.black(type='submit', value= locale.sendfile)
-        p: a.linkbutton.black(href='/')= locale.back
+                    option(value='game')= lingua.game
+                    option(value='lesson')= lingua.lesson
+                    option(value='problem')= lingua.problem
+            p: input.linkbutton.black(type='submit', value= lingua.sendfile)
+        p: a.linkbutton.black(href='/')= lingua.back

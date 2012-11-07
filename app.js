@@ -14,12 +14,12 @@ var express =   require('express'),
     fs =        require('fs'),
     crypto =    require('crypto'),
     exec =      require('child_process').exec,
+    lingua =    require('lingua'),
     mongoose =  require('mongoose'),
     Validator = require('validator').Validator,
     gotools =   require('./shared/gotools'),
     app =       express(),
-    db =        mongoose.createConnection('localhost', 'yinyango'),
-    title =     'yinyango';
+    db =        mongoose.createConnection('localhost', 'yinyango');
 /*}}}*/
 
 /* Mongoose Schemas & models {{{*/
@@ -44,16 +44,16 @@ var Sgf = db.model('sgf', sgfSchema);
 app.configure(function () {
     app.set('views', __dirname + '/views/');
     app.set('view engine', 'jade');
-    app.set('locales', __dirname + '/locales/');
+    app.use(lingua(app, { defaultLocale: 'en', path: __dirname + '/i18n' }));
     app.use(express.logger('dev'));
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser());
     app.use(express.session({ secret: 'Not a vegetable' }));
-    app.use(app.router);
     app.use(express.static(__dirname + '/public'));
     app.use(express.static(__dirname + '/shared'));
+    app.use(app.router);
 });
 app.configure('development', function () {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -174,19 +174,14 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username,
-        lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang);
+    var username =  req.session.username;
 
     // Login if user session is set.
     if (username) {
-        res.render('yygo', {
-            title: title,
-            username: username,
-            locale: locale
-        });
+        res.render('yygo', { username: username });
     } else {
-        res.render('login', { title: title, locale: locale, error: '' });
+        res.render('login', { error: '' });
+        console.log(req.session);
     }
 });
 /*}}}*/
@@ -197,6 +192,16 @@ app.get('/', function (req, res) {
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
     res.redirect('/');
+});
+/*}}}*/
+
+/** get /load {{{
+ * Load game.
+ */
+app.get('/load', function (req, res) {
+    var username = req.session.username;
+
+    res.render('load', { username: username });
 });
 /*}}}*/
 
@@ -215,10 +220,7 @@ app.get('/logout', function (req, res) {
  * Registration page.
  */
 app.get('/register', function (req, res) {
-    var lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang);
-
-    res.render('register', { title: title, locale: locale, error: '' });
+    res.render('register', { error: '' });
 });
 /*}}}*/
 
@@ -226,10 +228,7 @@ app.get('/register', function (req, res) {
  * Page to send sgf file.
  */
 app.get('/sendsgf', restricted, function (req, res) {
-    var lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang);
-
-    res.render('sendsgf', { title: title, locale: locale, error: '' });
+    res.render('sendsgf', { error: '' });
 });
 /*}}}*/
 
@@ -247,14 +246,7 @@ app.get('/session', function (req, res) {
  * User parameters page.
  */
 app.get('/settings', function (req, res) {
-    var lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang);
-
-    res.render('settings', {
-        title: title,
-        locale: locale,
-        lang: lang
-    });
+    res.render('settings');
 });
 /*}}}*/
 
@@ -264,8 +256,6 @@ app.get('/settings', function (req, res) {
 app.post('/login', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
-        lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator();
 
@@ -293,19 +283,11 @@ app.post('/login', function (req, res) {
                         req.session.lang =      user.lang;
                         res.redirect('/');
                     } else {
-                        res.render('login', {
-                            title: title,
-                            locale: locale,
-                            error: 'login'
-                        });
+                        res.render('login', { error: 'login' });
                     }
                 });
             } else {
-                res.render('login', {
-                    title: title,
-                    locale: locale,
-                    error: 'login'
-                });
+                res.render('login', { error: 'login' });
             }
         });
     }
@@ -319,8 +301,6 @@ app.post('/register', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
         email =     req.body.email,
-        lang =      req.session.lang || getLang(req),
-        locale =    require(app.get('locales') + lang),
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator(),
         error =     '',
@@ -342,11 +322,7 @@ app.post('/register', function (req, res) {
                 return;
             }
             if (user) { // User name already exist.
-                res.render('register', {
-                    title: title,
-                    locale: locale,
-                    error: 'exist'
-                });
+                res.render('register', { error: 'exist' });
             } else { // Generate salt and hash and insert in database.
                 hash(password, function (err, salt, hash) {
                     if (err) {
@@ -368,11 +344,7 @@ app.post('/register', function (req, res) {
                             return;
                         }
                         // Registration successful.
-                        res.render('register', {
-                            title: title,
-                            locale: locale,
-                            error: 'none'
-                        });
+                        res.render('register', { error: 'none' });
                     });
                 });
             }
@@ -383,11 +355,7 @@ app.post('/register', function (req, res) {
                 error = 'name';
             }
         }
-        res.render('register', {
-            title: title,
-            locale: locale,
-            error: error
-        });
+        res.render('register', { error: error });
     }
 });
 /*}}}*/
@@ -401,8 +369,6 @@ app.post('/sendsgf', function (req, res) {
         name =      req.body.name || req.files.sgffile.name,
         userid =    req.session.userid,
         username =  req.session.username,
-        lang =      req.session.lang,
-        locale =    require(app.get('locales') + lang),
         error =     '',
         sgf;
 
@@ -428,20 +394,12 @@ app.post('/sendsgf', function (req, res) {
                                 data:       obj
                             });
                             sgf.save(function () {
-                                res.render('sendsgf', {
-                                    title: title,
-                                    locale: locale,
-                                    error: 'none'
-                                });
+                                res.render('sendsgf', { error: 'none' });
                             });
                         });
                     });
                 } else {
-                    res.render('sendsgf', {
-                        title: title,
-                        locale: locale,
-                        error: 'invalid'
-                    });
+                    res.render('sendsgf', { error: 'invalid' });
                 }
             });
         }

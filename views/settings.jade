@@ -1,10 +1,10 @@
 extends layout
 
 block content
-    h1= title
-    h2= locale.settings
+    h1= lingua.title
+    h2= lingua.settings
     form.box.brown2(method='post', action='/settings')
-        p= locale.lang
+        p= lingua.lang
         select.input(name='langselect')
             if lang == 'en'
                 option#en(value='en', selected) English
@@ -14,5 +14,5 @@ block content
                 option#fr(value='fr', selected) Français
             else
                 option#fr(value='fr') Français
-        p: input.linkbutton.black(type='submit', value= locale.apply)
-    p: a.linkbutton.black(href='/')= locale.back
+        p: input.linkbutton.black(type='submit', value= lingua.apply)
+    p: a.linkbutton.black(href='/')= lingua.back
