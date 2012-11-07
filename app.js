@@ -181,7 +181,6 @@ app.get('/', function (req, res) {
         res.render('yygo', { username: username });
     } else {
         res.render('login', { error: '' });
-        console.log(req.session);
     }
 });
 /*}}}*/
@@ -246,7 +245,9 @@ app.get('/session', function (req, res) {
  * User parameters page.
  */
 app.get('/settings', function (req, res) {
-    res.render('settings');
+    var lang = req.cookies.language;
+
+    res.render('settings', { lang: lang });
 });
 /*}}}*/
 
@@ -280,7 +281,6 @@ app.post('/login', function (req, res) {
                         // Save in session and reload.
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
-                        req.session.lang =      user.lang;
                         res.redirect('/');
                     } else {
                         res.render('login', { error: 'login' });
@@ -301,6 +301,7 @@ app.post('/register', function (req, res) {
     var username =  req.body.username,
         password =  req.body.password,
         email =     req.body.email,
+        lang =      req.cookies.language,
         validname = /^[a-zA-Z0-9]+$/,
         validator = new Validator(),
         error =     '',
@@ -428,7 +429,7 @@ app.post('/settings', function (req, res) {
 
     // Update cookie.
     if (validator.getErrors().length === 0) {
-        req.session.lang = lang;
+        res.cookie('language', lang);
     }
 
     res.redirect('/settings');
