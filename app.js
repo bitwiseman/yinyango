@@ -34,7 +34,7 @@ var sgfSchema = new mongoose.Schema({
     name:       String,
     submitter:  String,
     category:   String,
-    data:       String
+    data:       Object
 });
 var User = db.model('user', userSchema);
 var Sgf = db.model('sgf', sgfSchema);
@@ -408,17 +408,19 @@ app.post('/sendsgf', function (req, res) {
                             console.error('fs.readFile error: ' + err);
                             return;
                         }
-                        sgf = new Sgf({
-                            name:       name,
-                            submitter:  username,
-                            category:   category,
-                            data:       data
-                        });
-                        sgf.save(function () {
-                            res.render('sendsgf', {
-                                title: title,
-                                locale: locale,
-                                error: 'none'
+                        gotools.parseSgf(data.toString(), function (obj) {
+                            sgf = new Sgf({
+                                name:       name,
+                                submitter:  username,
+                                category:   category,
+                                data:       obj
+                            });
+                            sgf.save(function () {
+                                res.render('sendsgf', {
+                                    title: title,
+                                    locale: locale,
+                                    error: 'none'
+                                });
                             });
                         });
                     });

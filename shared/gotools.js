@@ -317,11 +317,12 @@
      * Read sgf data and register keys/values, sorting the nodes (moves) 
      * and branchs (variations).
      *
-     * @param {String} sgf Sgf data.
+     * @param {String}      sgf Sgf data.
+     * @param {Function}    fn  Callback.
      *
      * @return {Object} JSON form of sgf.
      */
-    exports.parseSgf = function (sgf) {
+    exports.parseSgf = function (sgf, fn) {
         var sgfobj =        {},
             sgflen =        sgf.length,
             isescaped =     false,
@@ -417,7 +418,7 @@
         // Save total number of branchs in the tree root for later use.
         sgfobj[0][0].branchs = branch + 1;
 
-        return sgfobj;
+        fn(sgfobj);
     };
     /*}}}*/
 
