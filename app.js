@@ -76,6 +76,18 @@ Validator.prototype.getErrors = function () {
 /*}}}*/
 
 /* Functions. {{{*/
+/** restricted {{{
+ * Restrict some pages to registered users.
+ */
+function restricted(req, res, next) {
+    if (req.session.userid) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+/*}}}*/
+
 /** getLang {{{
  * Return language of browser if set and supported, else default to english.
  */
@@ -213,7 +225,7 @@ app.get('/register', function (req, res) {
 /** get /sendsgf {{{
  * Page to send sgf file.
  */
-app.get('/sendsgf', function (req, res) {
+app.get('/sendsgf', restricted, function (req, res) {
     var lang =      req.session.lang || getLang(req),
         locale =    require(app.get('locales') + lang);
 
