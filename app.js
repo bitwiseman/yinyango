@@ -281,6 +281,7 @@ app.post('/login', function (req, res) {
                         // Save in session and reload.
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
+                        res.cookie('language', user.lang);
                         res.redirect('/');
                     } else {
                         res.render('login', { error: 'login' });
