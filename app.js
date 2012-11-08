@@ -278,21 +278,19 @@ app.get('/sendsgf', restricted, function (req, res) {
  */
 app.get('/session', function (req, res) {
     var username =  req.session.username || 'guest',
-        sgfid =     req.session.sgfid,
-        data;
+        sgfid =     req.session.sgfid;
 
     if (sgfid !== '') {
         Sgf.findById(sgfid, function (err, sgf) {
             if (err) { // Game does not exist.
-                data = '';
+                res.send({ username: username, data: '' });
                 return;
             }
-            data = sgf.data;
+            res.send({ username: username, data: sgf.data });
         });
     } else {
-        data = '';
+        res.send({ username: username, data: '' });
     }
-    res.send({ username: username, data: data });
 });
 /*}}}*/
 
