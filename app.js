@@ -33,7 +33,9 @@ var userSchema = new mongoose.Schema({
 var sgfSchema = new mongoose.Schema({
     name:       String,
     submitter:  String,
+    date:       Date,
     category:   String,
+    md5:        { type: String, unique: true },
     data:       Object
 });
 var User = db.model('user', userSchema);
@@ -198,9 +200,13 @@ app.get('/guest', function (req, res) {
  * Load game.
  */
 app.get('/load', function (req, res) {
-    var username = req.session.username;
+    var username = req.session.username,
+        games;
 
-    res.render('load', { username: username });
+    Sgf.find({}, 'name', { limit: 10 }, function (err, sgfs) {
+        console.log(sgfs);
+    });
+    //res.render('load', { username: username });
 });
 /*}}}*/
 
@@ -369,9 +375,11 @@ app.post('/sendsgf', function (req, res) {
     var file =      req.files.sgffile.path,
         category =  req.body.categoryselect,
         name =      req.body.name || req.files.sgffile.name,
+        date =      new Date(),
         userid =    req.session.userid,
         username =  req.session.username,
         error =     '',
+        md5,
         sgf;
 
     // Make sure data comes from registered user.
@@ -388,15 +396,23 @@ app.post('/sendsgf', function (req, res) {
                             console.error('fs.readFile error: ' + err);
                             return;
                         }
+                        md5 = crypto.createHash('md5').update(data)
+                                .digest('hex');
                         gotools.parseSgf(data.toString(), function (obj) {
                             sgf = new Sgf({
                                 name:       name,
                                 submitter:  username,
+                                date:       date,
                                 category:   category,
+                                md5:        md5,
                                 data:       obj
                             });
-                            sgf.save(function () {
-                                res.render('sendsgf', { error: 'none' });
+                            sgf.save(function (err) {
+                                if (err && err.code === 11000) { // duplicate.
+                                    res.render('sendsgf', { error: 'md5' });
+                                } else {
+                                    res.render('sendsgf', { error: 'none' });
+                                }
                             });
                         });
                     });

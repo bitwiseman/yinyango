@@ -9,6 +9,7 @@
     "errorexist":       "Nom d'utilisateur déjà existant.",
     "errorinvalid":     "Fichier SGF non valide.",
     "errorlogin":       "Erreur dans le nom d'utilisateur ou le mot de passe.",
+    "errormd5":         "Ce fichier est déjà dans la base de données.",
     "errorname":        "Le nom d'utilisateur ne doit contenir que des lettres et/ou chiffres.", 
     "game":             "Partie",
     "guestlogin":       "Connexion en tant qu'invité",

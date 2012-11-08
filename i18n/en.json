@@ -9,6 +9,7 @@
     "errorexist":       "User name already exist.",
     "errorinvalid":     "Invalid SGF file.",
     "errorlogin":       "Error in user name or password.",
+    "errormd5":         "This file already exist in database.",
     "errorname":        "User name must contain only letters and/or digits.",
     "game":             "Game",
     "guestlogin":       "Login as guest",

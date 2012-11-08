@@ -7,6 +7,10 @@ block content
         .box.red
             p= lingua.errorinvalid
             p: a.linkbutton.black(href='/sendsgf')= lingua.back
+    else if error == 'md5'
+        .box.red
+            p= lingua.errormd5
+            p: a.linkbutton.black(href='/sendsgf')= lingua.back
     else if error == 'none'
         .box.brown2
             p= lingua.sendsuccess
