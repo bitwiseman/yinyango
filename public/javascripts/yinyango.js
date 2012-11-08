@@ -70,6 +70,7 @@ var yygo = {};
 
         game:           {},
         gameslist:      {},
+        score:          {b: 0, w: 0},
 
         branchs:        0,
         size:           0,
@@ -80,6 +81,73 @@ var yygo = {};
         lastnode:       0,
 
         // Methods.
+
+        /** yygo.data.calcStones {{{
+         * Calculate all the stones present at each goban step.
+         *
+         * @param {Object} data Game data.
+         *
+         * @return {Object} Stones.
+         */
+        calcStones: function (data) {
+            var stones = {},
+                size = yygo.data.size,
+                parentbranch,
+                prevstones,
+                key,
+                node,
+                branch;
+
+            function keyAction(node, branch, key, value, stones) {
+                var play;
+
+                switch (key) {
+                case 'B':
+                    play = gotools.playMove('b', value[0], size, stones); 
+                    stones = play.stones;
+                    yygo.data.score.b += play.prisonners; 
+                    break;
+                case 'W':
+                    play = gotools.playMove('w', value[0], size, stones); 
+                    stones = play.stones;
+                    yygo.data.score.w += play.prisonners; 
+                    break;
+                case 'AB':
+                    stones = gotools.addStones('b', value, size, stones); 
+                    break;
+                case 'AW':
+                    stones = gotools.addStones('w', value, size, stones); 
+                    break;
+                case 'AE':
+                    stones = gotools.addStones('', value, size, stones); 
+                    break;
+                }
+                return stones;
+            }
+
+            for (node in data) {
+                stones[node] = {};
+                for (branch in data[node]) {
+                    stones[node][branch] = {b: [], w: [], k: []};
+                    // Load previous stones.
+                    parentbranch = yygo.data.getParentBranch(node - 1, branch);
+                    if (node > 0) {
+                        prevstones = stones[node - 1][parentbranch];
+                    } else {
+                        prevstones = stones[node][branch];
+                    }
+                    // Treat keys.
+                    for (key in data[node][branch]) {
+                        prevstones = keyAction(node, branch, key,
+                                data[node][branch][key], prevstones);
+                    }
+                    // Save stones.
+                    stones[node][branch] = prevstones;
+                }
+            }
+            return stones;
+        },
+        /*}}}*/
 
         /** yygo.data.getParentBranch {{{
          * Find the branch of which depends a given branch at a given node.
@@ -943,8 +1011,9 @@ var yygo = {};
                 loading = document.getElementById('loading');
 
             yygo.data.game = data;
-
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
+            yygo.data.stones = yygo.data.calcStones(data);
+
             yygo.data.branchs = yygo.data.game[0][0].branchs;
 
             yygo.data.curnode = 0;
@@ -965,7 +1034,7 @@ var yygo = {};
             //yygo.view.makeInfos();
             //yygo.view.makeComments();
 
-            //yygo.view.placeStones();
+            yygo.view.placeStones();
             yygo.view.placeSymbols();
 
             yygo.events.mode = 'replay';
@@ -1246,8 +1315,8 @@ var yygo = {};
 
             yygo.view.toggleNavButtons();
 
-            yygo.view.makeVariations();
-            yygo.view.makeComments();
+            //yygo.view.makeVariations();
+            //yygo.view.makeComments();
 
             yygo.view.emptyGoban();
             yygo.view.placeStones();
