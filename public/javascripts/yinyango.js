@@ -517,8 +517,10 @@ var yygo = {};
 
         /** yygo.view.drawInterface {{{
          * Draw the goban and the panel.
+         *
+         * @param {Function} fn Callback.
          */
-        drawInterface: function () {
+        drawInterface: function (fn) {
             var panel =         document.getElementById('panel'),
                 goban =         document.getElementById('goban'),
                 gridelem =      document.getElementById('grid'),
@@ -563,6 +565,7 @@ var yygo = {};
                 panel.style.right = 0;
                 panel.style.left = 0;
             }
+            fn();
         },
         /*}}}*/
 
@@ -743,8 +746,10 @@ var yygo = {};
         /** yygo.view.setGobanSize {{{
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
+         *
+         * @param {Function} fn Callback.
          */
-        setGobanSize: function () {
+        setGobanSize: function (fn) {
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
@@ -779,7 +784,9 @@ var yygo = {};
             if (this.sizegoban !== oldsizegoban || this.redraw) {
                 this.redraw = true;
             }
-            this.drawInterface();
+            this.drawInterface(function () {
+                fn();
+            });
         },
         /*}}}*/
 
@@ -1032,11 +1039,11 @@ var yygo = {};
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
-            yygo.view.setGobanSize();
-
-            loading.style.display = 'none';
-            goban.style.display = 'block';
-            panel.style.display = 'block';
+            yygo.view.setGobanSize(function () {
+                loading.style.display = 'none';
+                goban.style.display = 'block';
+                panel.style.display = 'block';
+            });
         },
         /*}}}*/
 
