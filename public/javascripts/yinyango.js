@@ -936,7 +936,6 @@ var yygo = {};
         init: function () {
             // Get user session if it still exist.
             jsonRequest('/session', function (session) {
-                console.log(session);
                 yygo.events.username = session.username;
                 // TODO: Ask user what to load, previous session ?
                 // Bind buttons to functions.

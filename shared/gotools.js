@@ -422,5 +422,5 @@
     };
     /*}}}*/
 
-}(exports === undefined ? this.gotools = {} : exports));
+}(typeof exports === 'undefined' ? this.gotools = {} : exports));
 
