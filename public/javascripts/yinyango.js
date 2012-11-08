@@ -410,7 +410,7 @@ var yygo = {};
                 gobbuttons =    document.getElementById('gobbuttons'),
                 listbuttons =   document.getElementById('listbuttons'),
                 game =          document.getElementById('game'),
-                options =       document.getElementById('options');
+                menu =          document.getElementById('menu');
 
             // Hide all buttons.
             navbuttons.style.display = 'none';
@@ -418,12 +418,12 @@ var yygo = {};
             gobbuttons.style.display = 'none';
             listbuttons.style.display = 'none';
             game.style.display = 'none';
-            options.style.display = 'none';
+            menu.style.display = 'none';
 
             // Show the buttons we need for the actual screen.
             if (screen === 'goban') {
                 gobbuttons.style.display = 'block';
-                options.style.display = 'block';
+                menu.style.display = 'block';
                 if (mode === 'replay') {
                     navbuttons.style.display = 'block';
                 }
@@ -830,34 +830,34 @@ var yygo = {};
          * Alternate active state of navigation buttons.
          */
         toggleNavButtons: function () {
-            var curnode =   yygo.data.curnode,
-                lastnode =  yygo.data.lastnode,
-                start =     document.getElementById('start'),
-                prev =      document.getElementById('prev'),
-                fastprev =  document.getElementById('fastprev'),
-                next =      document.getElementById('next'),
-                fastnext =  document.getElementById('fastnext'),
-                end =       document.getElementById('end');
+            var curnode =       yygo.data.curnode,
+                lastnode =      yygo.data.lastnode,
+                butstart =     document.getElementById('butstart'),
+                butprev =      document.getElementById('butprev'),
+                butfastprev =  document.getElementById('butfastprev'),
+                butnext =      document.getElementById('butnext'),
+                butfastnext =  document.getElementById('butfastnext'),
+                butend =       document.getElementById('butend');
 
             // Activate all buttons.
-            start.classList.remove('disabled');
-            prev.classList.remove('disabled');
-            fastprev.classList.remove('disabled');
-            next.classList.remove('disabled');
-            fastnext.classList.remove('disabled');
-            end.classList.remove('disabled');
+            butstart.classList.remove('disabled');
+            butprev.classList.remove('disabled');
+            butfastprev.classList.remove('disabled');
+            butnext.classList.remove('disabled');
+            butfastnext.classList.remove('disabled');
+            butend.classList.remove('disabled');
 
             // We are at the start, make rewind buttons inactive.
             if (curnode === 0) {
-                start.classList.add('disabled');
-                prev.classList.add('disabled');
-                fastprev.classList.add('disabled');
+                butstart.classList.add('disabled');
+                butprev.classList.add('disabled');
+                butfastprev.classList.add('disabled');
             }
             // We are at the end, make forward buttons inactive.
             if (curnode === lastnode) {
-                next.classList.add('disabled');
-                fastnext.classList.add('disabled');
-                end.classList.add('disabled');
+                butnext.classList.add('disabled');
+                butfastnext.classList.add('disabled');
+                butend.classList.add('disabled');
             }
         },
         /*}}}*/
@@ -1050,13 +1050,13 @@ var yygo = {};
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
                 menumask =      document.getElementById('menumask'),
-                options =       document.getElementById('options'),
-                start =         document.getElementById('start'),
-                fastprev =      document.getElementById('fastprev'),
-                prev =          document.getElementById('prev'),
-                next =          document.getElementById('next'),
-                fastnext =      document.getElementById('fastnext'),
-                end =           document.getElementById('end');
+                butmenu =       document.getElementById('butmenu'),
+                butstart =      document.getElementById('butstart'),
+                butfastprev =   document.getElementById('butfastprev'),
+                butprev =       document.getElementById('butprev'),
+                butnext =       document.getElementById('butnext'),
+                butfastnext =   document.getElementById('butfastnext'),
+                butend =        document.getElementById('butend');
 
             // Window resize.
             window.addEventListener('resize', function () {
@@ -1069,54 +1069,55 @@ var yygo = {};
             // Only registered users.
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
-                    yygo.events.clickMenuSendSgf();
+                    window.location.href = '/sendsgf';
                 }, false);
             }
             // Menu buttons.
             menuload.addEventListener('click', function () {
+                window.location.href = '/load';
             }, false);
             menusettings.addEventListener('click', function () {
-                yygo.events.clickMenuSettings();
+                window.location.href = '/settings';
             }, false);
             menulogout.addEventListener('click', function () {
-                yygo.events.clickMenuLogout();
+                window.location.href = '/logout';
             }, false);
             menuback.addEventListener('click', function () {
-                yygo.events.clickMenuBack();
+                yygo.view.toggleMenu();
             }, false);
             menumask.addEventListener('click', function () {
-                yygo.events.clickMenuMask();
+                yygo.view.toggleMenu();
             }, false);
             // Buttons bar.
-            options.addEventListener('click', function () {
-                yygo.events.clickOptions();
+            butmenu.addEventListener('click', function () {
+                yygo.view.toggleMenu();
             }, false);
-            start.addEventListener('click', function () {
+            butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-999999);
                 }
             }, false);
-            fastprev.addEventListener('click', function () {
+            butfastprev.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-10);
                 }
             }, false);
-            prev.addEventListener('click', function () {
+            butprev.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-1);
                 }
             }, false);
-            next.addEventListener('click', function () {
+            butnext.addEventListener('click', function () {
                 if (yygo.data.curnode < yygo.data.lastnode) {
                     yygo.events.navigateNode(1);
                 }
             }, false);
-            fastnext.addEventListener('click', function () {
+            butfastnext.addEventListener('click', function () {
                 if (yygo.data.curnode < yygo.data.lastnode) {
                     yygo.events.navigateNode(10);
                 }
             }, false);
-            end.addEventListener('click', function () {
+            butend.addEventListener('click', function () {
                 if (yygo.data.curnode < yygo.data.lastnode) {
                     yygo.events.navigateNode(999999);
                 }
@@ -1268,82 +1269,6 @@ var yygo = {};
                 yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             }
-        },
-        /*}}}*/
-
-        /** yygo.events.clickLoadList {{{
-         * Load and show the games list.
-         */
-        clickLoadList: function () {
-            var gameslist = yygo.data.gameslist || {};
-
-            if (isEmpty(gameslist)) {
-                jsonRequest('gameslist', function (data) {
-                    yygo.data.gameslist = data;
-                    yygo.view.makeGamesList();
-                    yygo.events.makeListBinds();
-                });
-            }
-
-            this.screen = 'list';
-            //yygo.view.changeScreen();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuSendSgf {{{
-         * Registered user to send SGF file to server.
-         */
-        clickMenuSendSgf: function () {
-            window.location.href = '/sendsgf';
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuSettings {{{
-         * User settings.
-         */
-        clickMenuSettings: function () {
-            window.location.href = '/settings';
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuLogout {{{
-         * Logout from game.
-         */
-        clickMenuLogout: function () {
-            window.location.href = '/logout';
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuBack {{{
-         * Get back to game.
-         */
-        clickMenuBack: function () {
-            yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickMenuMask {{{
-         * Show the current game.
-         */
-        clickMenuMask: function () {
-            yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickOptions {{{
-         * Show the options.
-         */
-        clickOptions: function () {
-            yygo.view.toggleMenu();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickSendSgf {{{
-         * Show the form to send sgf files.
-         */
-        clickSendSgf: function () {
-            this.screen = 'sendsgf';
-            //yygo.view.changeScreen();
         },
         /*}}}*/
 
