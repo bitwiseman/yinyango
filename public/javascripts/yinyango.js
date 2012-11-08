@@ -235,7 +235,7 @@ var yygo = {};
                     this.comtoshow = true;
                     if (this.showcomments) {
                         // Resize if we are showing comments.
-                        this.setGobanSize();
+                        this.setGobanSize(function () {});
                     }
                 }
             } else {
@@ -243,11 +243,11 @@ var yygo = {};
                     this.comtoshow = false;
                     if (this.showcomments) {
                         // Resize if we are showing comments.
-                        this.setGobanSize();
+                        this.setGobanSize(function () {});
                     }
                 }
             }
-            this.toggleComments(); // Show/hide comments if needed.
+            //this.toggleComments(); // Show/hide comments if needed.
         },
         /*}}}*/
 
@@ -627,32 +627,32 @@ var yygo = {};
         /*}}}*/
 
         /** yygo.view.placeStones {{{
-         * Place the stones of the actual state on the goban.
+         * Place the stones and kos of the actual state on the goban.
          */
         placeStones: function () {
             var game =          yygo.data.game,
                 curnode =       yygo.data.curnode,
                 curbranch =     yygo.data.curbranch,
-                stones =        game[curnode][curbranch].stones,
-                bstones =       stones.b.split(','),
-                wstones =       stones.w.split(','),
-                cb =            bstones.length,
-                cw =            wstones.length,
+                stones =        yygo.data.stones[curnode][curbranch],
+                cb =            stones.b.length,
+                cw =            stones.w.length,
+                ck =            stones.k.length,
                 cell,
                 b,
-                w;
+                w,
+                k;
 
             for (b = 0; b < cb; b++) {
-                if (bstones[b] !== '') {
-                    cell = document.getElementById(bstones[b]);
-                    cell.classList.add('black');
-                }
+                cell = document.getElementById(stones.b[b]);
+                cell.classList.add('black');
             }
             for (w = 0; w < cw; w++) {
-                if (wstones[w] !== '') {
-                    cell = document.getElementById(wstones[w]);
-                    cell.classList.add('white');
-                }
+                cell = document.getElementById(stones.w[w]);
+                cell.classList.add('white');
+            }
+            for (k = 0; k < ck; k++) {
+                cell = document.getElementById(stones.k[k]);
+                cell.classList.add('ko');
             }
         },
         /*}}}*/
@@ -683,7 +683,7 @@ var yygo = {};
 
             // Circles.
             if (game[curnode][curbranch].CR !== undefined) {
-                circles = game[curnode][curbranch].CR.split(',');
+                circles = game[curnode][curbranch].CR;
                 cc = circles.length;
                 for (c = 0; c < cc; c++) {
                     cell = document.getElementById(circles[c]);
@@ -693,7 +693,7 @@ var yygo = {};
             }
             // Squares.
             if (game[curnode][curbranch].SQ !== undefined) {
-                squares = game[curnode][curbranch].SQ.split(',');
+                squares = game[curnode][curbranch].SQ;
                 cs = squares.length;
                 for (s = 0; s < cs; s++) {
                     cell = document.getElementById(squares[s]);
@@ -703,7 +703,7 @@ var yygo = {};
             }
             // Triangles.
             if (game[curnode][curbranch].TR !== undefined) {
-                triangles = game[curnode][curbranch].TR.split(',');
+                triangles = game[curnode][curbranch].TR;
                 ct = triangles.length;
                 for (t = 0; t < ct; t++) {
                     cell = document.getElementById(triangles[t]);
@@ -713,7 +713,7 @@ var yygo = {};
             }
             // Labels.
             if (game[curnode][curbranch].LB !== undefined) {
-                labels = game[curnode][curbranch].LB.split(',');
+                labels = game[curnode][curbranch].LB;
                 cl = labels.length;
                 for (l = 0; l < cl; l++) {
                     label = labels[l].split(':');
@@ -804,7 +804,6 @@ var yygo = {};
 
             menuleft = (winw / 2) - (menuw / 2);
             menutop = (winh / 2) - (menuh / 2);
-            menu.style.position = 'absolute';
             menu.style.left = menuleft + 'px';
             menu.style.top = menutop + 'px';
         },
@@ -945,47 +944,63 @@ var yygo = {};
                     yygo.events.loadIntro();
                 } else {
                     // Load game with provided data.
+                    yygo.events.loadGame(session.data);
                 }
             });
 
         },
         /*}}}*/
 
-        /** yygo.events.loadGameFromList {{{
-         * Load a game selected in games list.
+        /** yygo.events.loadGame {{{
+         * Load a game.
          *
-         * @param {Number} index Index of the selected game.
+         * @param {Object} data Game data.
          */
-        loadGameFromList: function (index) {
-            var oldsize = yygo.data.size;
+        loadGame: function (data) {
+            var oldsize = yygo.data.size,
+                goban = document.getElementById('goban'),
+                panel = document.getElementById('panel'),
+                loading = document.getElementById('loading');
 
-            yygo.data.parseDataFromList(index, function () {
-                // Make view when data is acquired.
+            yygo.data.game = data;
 
-                if (yygo.data.size !== oldsize) { // New size remake all.
-                    yygo.view.makeGoban();
-                    yygo.view.changeGridImage();
-                } else { // Empty goban only.
-                    yygo.view.emptyGoban();
-                }
+            yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
+            yygo.data.branchs = yygo.data.game[0][0].branchs;
 
-                yygo.view.makeVariations();
-                yygo.view.makeInfos();
-                yygo.view.makeComments();
+            yygo.data.curnode = 0;
+            yygo.data.curbranch = 0;
+            yygo.data.lastbranch = 0;
 
-                yygo.view.placeStones();
-                yygo.view.placeSymbols();
+            yygo.data.setLastNode();
 
-                yygo.events.mode = 'replay';
-                yygo.events.screen = 'goban';
+            // Make view.
+            if (yygo.data.size !== oldsize) { // New size remake all.
+                yygo.view.makeGoban();
+                yygo.view.changeGridImage();
+            } else { // Empty goban only.
+                yygo.view.emptyGoban();
+            }
 
-                //yygo.view.changeScreen();
+            //yygo.view.makeVariations();
+            //yygo.view.makeInfos();
+            //yygo.view.makeComments();
 
-                yygo.view.toggleBorders();
-                yygo.view.toggleNavButtons();
+            //yygo.view.placeStones();
+            yygo.view.placeSymbols();
 
-                yygo.view.redraw = true;
-                yygo.view.setGobanSize();
+            yygo.events.mode = 'replay';
+            yygo.events.screen = 'goban';
+
+            //yygo.view.changeScreen();
+
+            yygo.view.toggleBorders();
+            yygo.view.toggleNavButtons();
+
+            yygo.view.redraw = true;
+            yygo.view.setGobanSize(function () {
+                loading.style.display = 'none';
+                goban.style.display = 'block';
+                panel.style.display = 'block';
             });
         },
         /*}}}*/
@@ -998,27 +1013,39 @@ var yygo = {};
                 panel = document.getElementById('panel'),
                 loading = document.getElementById('loading');
 
-            yygo.data.game = {0: {0: {
-                "stones": {
-                    "b": "fm,fn,fo,fp,gl,gm,gn,go,gp,gq,hk,hl,hm,hn,ho,hp," +
-                        "hq,hr,ie,if,ik,il,im,in,ip,iq,ir,je,jf,jk,jl,jm," +
-                        "jp,jq,jr,js,ka,kj,kk,kl,km,kp,kq,kr,ks,la,lj,lk," +
-                        "ll,lm,ln,lo,lp,lq,lr,ls,ma,mb,mi,mj,mk,ml,mm,mn," +
-                        "mo,mp,mq,mr,ms,nb,nc,nh,ni,nj,nk,nl,nm,nn,no,np," +
-                        "nq,nr,ob,oc,od,oe,of,og,oh,oi,oj,ok,ol,om,on,oo," +
-                        "op,oq,or,pc,pd,pe,pf,pg,ph,pi,pj,pk,pl,pm,pn,po," +
-                        "pp,pq,qd,qe,qf,qg,qh,qi,qj,qk,ql,qm,qn,qo,qp,re," +
-                        "rf,rg,rh,ri,rj,rk,rl,rm,rn,ro,sg,sh,si,sj,sk,sl,sm",
-                    "w": "ag,ah,ai,aj,ak,al,am,be,bf,bg,bh,bi,bj,bk,bl,bm," +
-                        "bn,bo,cd,ce,cf,cg,ch,ci,cj,ck,cl,cm,cn,co,cp,dc," +
-                        "dd,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,eb,ec," +
-                        "ed,ee,ef,eg,eh,ei,ej,ek,el,em,en,eo,ep,eq,er,fb," +
-                        "fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fq,fr,ga,gb,gc,gd," +
-                        "ge,gf,gg,gh,gi,gj,gk,gr,gs,ha,hb,hc,hd,he,hf,hg," +
-                        "hh,hi,hj,hs,ia,ib,ic,id,ig,ih,ii,ij,is,ja,jb,jc," +
-                        "jd,jg,jh,ji,jn,jo,kb,kc,kd,kf,kg,kh,ki,kn,ko,lb," +
-                        "lc,ld,le,lf,lg,lh,li,mc,md,me,mf,mg,mh,nd,ne,nf,ng"
-                },
+            yygo.data.game = {0: {0: {} } };
+            yygo.data.stones = {0: {0: {
+                'b': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
+                    'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
+                    'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
+                    'jk', 'jl', 'jm', 'jp', 'jq', 'jr', 'js', 'ka', 'kj', 'kk',
+                    'kl', 'km', 'kp', 'kq', 'kr', 'ks', 'la', 'lj', 'lk', 'll',
+                    'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'ma', 'mb', 'mi',
+                    'mj', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms',
+                    'nb', 'nc', 'nh', 'ni', 'nj', 'nk', 'nl', 'nm', 'nn', 'no',
+                    'np', 'nq', 'nr', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh',
+                    'oi', 'oj', 'ok', 'ol', 'om', 'on', 'oo', 'op', 'oq', 'or',
+                    'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pi', 'pj', 'pk', 'pl',
+                    'pm', 'pn', 'po', 'pp', 'pq', 'qd', 'qe', 'qf', 'qg', 'qh',
+                    'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 're', 'rf',
+                    'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'sg',
+                    'sh', 'si', 'sj', 'sk', 'sl', 'sm'],
+                'w': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
+                    'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'cd',
+                    'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn',
+                    'co', 'cp', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj',
+                    'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dq', 'eb', 'ec', 'ed',
+                    'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek', 'el', 'em', 'en',
+                    'eo', 'ep', 'eq', 'er', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg',
+                    'fh', 'fi', 'fj', 'fk', 'fl', 'fq', 'fr', 'ga', 'gb', 'gc',
+                    'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gj', 'gk', 'gr', 'gs',
+                    'ha', 'hb', 'hc', 'hd', 'he', 'hf', 'hg', 'hh', 'hi', 'hj',
+                    'hs', 'ia', 'ib', 'ic', 'id', 'ig', 'ih', 'ii', 'ij', 'is',
+                    'ja', 'jb', 'jc', 'jd', 'jg', 'jh', 'ji', 'jn', 'jo', 'kb',
+                    'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
+                    'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
+                    'mg', 'mh', 'nd', 'ne', 'nf', 'ng'],
+                'k': []
             } } };
 
             yygo.data.size = 19;
@@ -1066,7 +1093,7 @@ var yygo = {};
 
             // Window resize.
             window.addEventListener('resize', function () {
-                yygo.view.setGobanSize();
+                yygo.view.setGobanSize(function () {});
                 if (yygo.view.showmenu === true) {
                     yygo.view.setMenuPosition();
                 }
@@ -1268,11 +1295,11 @@ var yygo = {};
         clickComments: function () {
             if (yygo.view.showcomments && yygo.view.comtoshow) {
                 yygo.view.showcomments = false;
-                yygo.view.toggleComments();
+                //yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             } else if (yygo.view.comtoshow) {
                 yygo.view.showcomments = true;
-                yygo.view.toggleComments();
+                //yygo.view.toggleComments();
                 yygo.view.setGobanSize();
             }
         },
