@@ -231,13 +231,17 @@ app.get('/load', function (req, res) {
  * Load selected game or navigate in pages.
  */
 app.get('/load/:id', function (req, res) {
-    var id = req.params.id;
+    var id = req.params.id,
+        userid = req.session.userid;
 
     if (id === 'next') {
         console.log('next');
     } else if (id === 'prev') {
         console.log('prev');
     } else {
+        if (userid) {
+            User.findByIdAndUpdate(userid, { sgfid: id }, function (){});
+        }
         req.session.sgfid = id;
         res.redirect('/');
     }
@@ -280,8 +284,8 @@ app.get('/session', function (req, res) {
 
     if (sgfid !== '') {
         Sgf.findById(sgfid, function (err, sgf) {
-            if (err) {
-                console.error('Sgf.findById error: ' + err);
+            if (err) { // Game does not exist.
+                res.send({ username: username, data: '' });
                 return;
             }
             res.send({ username: username, data: sgf.data });
@@ -488,7 +492,7 @@ app.post('/settings', function (req, res) {
     // Update user settings in database.
     if (userid && validator.getErrors().length === 0) {
         settings = { lang: lang };
-        User.findByIdAndUpdate(userid, settings, function () {});
+        User.findByIdAndUpdate(userid, settings, function (){});
     }
 
     // Update cookie.

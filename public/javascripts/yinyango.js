@@ -931,6 +931,9 @@ var yygo = {};
             jsonRequest('/session', function (session) {
                 console.log(session);
                 yygo.events.username = session.username;
+                if (session.data === '') {
+                    window.location.href = '/load';
+                }
 
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
