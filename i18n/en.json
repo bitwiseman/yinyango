@@ -16,7 +16,7 @@
     "helpname":         "Letters and/or digits only.", 
     "lang":             "Language",
     "lesson":           "Lesson",
-    "load":             "Load a game from list",
+    "load":             "Load a game",
     "loading":          "Sending data, please be patient...",
     "login":            "Login",
     "logout":           "Logout",

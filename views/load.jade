@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= lingua.title
+    h2= lingua.load
+    p
+        if page != 0
+            a.linkbutton.black(href='/load/prev')<
+        if next == true
+            a.linkbutton.black(href='/load/next')>
+        for sgf in sgfs
+            p: a.linkbutton.brown2(href='/load/' + sgf._id)= sgf.name
+    p: a.linkbutton.black(href='/')= lingua.back

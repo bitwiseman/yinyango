@@ -928,13 +928,17 @@ var yygo = {};
          */
         init: function () {
             // Get user session if it still exist.
-            yygo.events.username = user.username;
+            jsonRequest('/session', function (session) {
+                console.log(session);
+                yygo.events.username = session.username;
 
-            // Bind buttons to functions.
-            yygo.events.makeBinds();
-            // TODO: Ask user what to load, previous session ?
-            // Load intro screen for guest and new users.
-            yygo.events.loadIntro();
+                // Bind buttons to functions.
+                yygo.events.makeBinds();
+                // TODO: Ask user what to load, previous session ?
+                // Load intro screen for guest and new users.
+                yygo.events.loadIntro();
+            });
+
         },
         /*}}}*/
 

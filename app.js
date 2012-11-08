@@ -9,17 +9,18 @@
 'use strict';
 
 /* Modules & globals. {{{*/
-var express =   require('express'),
-    sys =       require('sys'),
-    fs =        require('fs'),
-    crypto =    require('crypto'),
-    exec =      require('child_process').exec,
-    lingua =    require('lingua'),
-    mongoose =  require('mongoose'),
-    Validator = require('validator').Validator,
-    gotools =   require('./shared/gotools'),
-    app =       express(),
-    db =        mongoose.createConnection('localhost', 'yinyango');
+var express =       require('express'),
+    sys =           require('sys'),
+    fs =            require('fs'),
+    crypto =        require('crypto'),
+    exec =          require('child_process').exec,
+    lingua =        require('lingua'),
+    mongoose =      require('mongoose'),
+    Validator =     require('validator').Validator,
+    gotools =       require('./shared/gotools'),
+    app =           express(),
+    db =            mongoose.createConnection('localhost', 'yinyango'),
+    introsgfid =    '509b8db3b8faa2580b000001';
 /*}}}*/
 
 /* Mongoose Schemas & models {{{*/
@@ -28,6 +29,7 @@ var userSchema = new mongoose.Schema({
     email:  String,
     salt:   String,
     hash:   String,
+    sgfid:  String,
     lang:   String
 });
 var sgfSchema = new mongoose.Schema({
@@ -176,7 +178,8 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username;
+    var username =  req.session.username,
+        sgfid =     req.session.sgfid;
 
     // Login if user session is set.
     if (username) {
@@ -192,6 +195,7 @@ app.get('/', function (req, res) {
  */
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
+    req.session.sgfid = introsgfid; 
     res.redirect('/');
 });
 /*}}}*/
@@ -200,13 +204,43 @@ app.get('/guest', function (req, res) {
  * Load game.
  */
 app.get('/load', function (req, res) {
-    var username = req.session.username,
+    var page = 0,
+        next,
+        filters,
+        options,
         games;
 
-    Sgf.find({}, 'name', { limit: 10 }, function (err, sgfs) {
-        console.log(sgfs);
+    filters = 'name';
+    options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
+    Sgf.find({}, filters, options, function (err, sgfs) {
+        if (sgfs.length === 11) { // More than one page.
+            next = true;
+        } else {
+            next = false;
+        }
+        res.render('load', {
+            page: page,
+            next: next,
+            sgfs: sgfs
+        });
     });
-    //res.render('load', { username: username });
+});
+/*}}}*/
+
+/** get /load/:id {{{
+ * Load selected game or navigate in pages.
+ */
+app.get('/load/:id', function (req, res) {
+    var id = req.params.id;
+
+    if (id === 'next') {
+        console.log('next');
+    } else if (id === 'prev') {
+        console.log('prev');
+    } else {
+        req.session.sgfid = id;
+        res.redirect('/');
+    }
 });
 /*}}}*/
 
@@ -238,12 +272,23 @@ app.get('/sendsgf', restricted, function (req, res) {
 /*}}}*/
 
 /** get /session {{{
- * Return username.
+ * Return user session infos and game data.
  */
 app.get('/session', function (req, res) {
-    var username = req.session.username || 'guest';
+    var username =  req.session.username || 'guest',
+        sgfid =     req.session.sgfid;
 
-    res.send({ username: username });
+    if (sgfid !== '') {
+        Sgf.findById(sgfid, function (err, sgf) {
+            if (err) {
+                console.error('Sgf.findById error: ' + err);
+                return;
+            }
+            res.send({ username: username, data: sgf.data });
+        });
+    } else {
+        res.send({ username: username, data: '' });
+    }
 });
 /*}}}*/
 
@@ -287,6 +332,7 @@ app.post('/login', function (req, res) {
                         // Save in session and reload.
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
+                        req.session.sgfid =     user.sgfid;
                         res.cookie('language', user.lang);
                         res.redirect('/');
                     } else {
@@ -343,6 +389,7 @@ app.post('/register', function (req, res) {
                         email: email,
                         salt: salt,
                         hash: hash,
+                        sgfid: introsgfid,
                         lang: lang
                     });
 
