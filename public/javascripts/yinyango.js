@@ -661,84 +661,64 @@ var yygo = {};
          * Place the symbols of the actual state on the goban.
          */
         placeSymbols: function () {
-            var curbranch =     yygo.data.curbranch,
-                curnode =       yygo.data.curnode,
-                game =          yygo.data.game,
-                circles =       [],
-                squares =       [],
-                triangles =     [],
-                labels =        [],
-                label =         [],
-                playedstone =   [],
-                color,
-                cell,
-                c,
-                cc,
-                s,
-                cs,
-                t,
-                ct,
-                l,
-                cl;
+            var branch =        yygo.data.curbranch,
+                node =          yygo.data.curnode,
+                game =          yygo.data.game[node][branch];
 
-            // Circles.
-            if (game[curnode][curbranch].CR !== undefined) {
-                circles = game[curnode][curbranch].CR;
-                cc = circles.length;
-                for (c = 0; c < cc; c++) {
-                    cell = document.getElementById(circles[c]);
-                    color = cell.className.substr(9);
-                    this.insertSymbolSvg('CR', circles[c], color);
-                }
-            }
-            // Squares.
-            if (game[curnode][curbranch].SQ !== undefined) {
-                squares = game[curnode][curbranch].SQ;
-                cs = squares.length;
-                for (s = 0; s < cs; s++) {
-                    cell = document.getElementById(squares[s]);
-                    color = cell.className.substr(9);
-                    this.insertSymbolSvg('SQ', squares[s], color);
-                }
-            }
-            // Triangles.
-            if (game[curnode][curbranch].TR !== undefined) {
-                triangles = game[curnode][curbranch].TR;
-                ct = triangles.length;
-                for (t = 0; t < ct; t++) {
-                    cell = document.getElementById(triangles[t]);
-                    color = cell.className.substr(9);
-                    this.insertSymbolSvg('TR', triangles[t], color);
-                }
-            }
-            // Labels.
-            if (game[curnode][curbranch].LB !== undefined) {
-                labels = game[curnode][curbranch].LB;
-                cl = labels.length;
-                for (l = 0; l < cl; l++) {
-                    label = labels[l].split(':');
-                    cell = document.getElementById(label[0]);
-                    color = cell.className.substr(9);
-                    if (color === '') {
-                        // Empty cell background for better visibility.
+            function insertSymbols(symbol, list) {//{{{
+                var ci = list.length,
+                    cell,
+                    color,
+                    label,
+                    i;
+
+                for (i = 0; i < ci; i++) {
+                    if (symbol === 'LB') {
+                        label = list[i].split(':');
+                        cell = document.getElementById(label[0]);
+                    } else {
+                        cell = document.getElementById(list[i]);
+                    }
+                    if (cell.classList.contains('white')) {
+                        color = 'white';
+                    } else if (cell.classList.contains('black')) {
+                        color = 'black';
+                    } else {
+                        color = '';
+                    }
+                    if (color === '' && symbol === 'LB') {
                         cell.classList.add('brown');
                     }
-                    cell.title = label[1];
-                    cell.textContent = label[1];
+                    if (symbol === 'LB') {
+                        cell.textContent = label[1];
+                    } else {
+                        yygo.view.insertSymbolSvg(symbol, list[i], color);
+                    }
                 }
             }
+            //}}}
 
+            // Circles.
+            if (game.CR !== undefined) {
+                insertSymbols('CR', game.CR);
+            }
+            // Squares.
+            if (game.SQ !== undefined) {
+                insertSymbols('SQ', game.SQ);
+            }
+            // Triangles.
+            if (game.TR !== undefined) {
+                insertSymbols('TR', game.TR);
+            }
+            // Labels.
+            if (game.LB !== undefined) {
+                insertSymbols('LB', game.LB);
+            }
             // Circle to indicate the last played stone.
-            if (game[curnode][curbranch].W !== undefined) {
-                playedstone = game[curnode][curbranch].W;
-                if (playedstone !== '') { // If player did no pass.
-                    this.insertSymbolSvg('CR', playedstone, 'w');
-                }
-            } else if (game[curnode][curbranch].B !== undefined) {
-                playedstone = game[curnode][curbranch].B;
-                if (playedstone !== '') { // If player did no pass.
-                    this.insertSymbolSvg('CR', playedstone, 'b');
-                }
+            if (game.W !== undefined && game.W.length !== 0) {
+                insertSymbols('CR', game.W);
+            } else if (game.B !== undefined && game.B.length !== 0) {
+                insertSymbols('CR', game.B);
             }
         },
         /*}}}*/
