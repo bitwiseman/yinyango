@@ -931,15 +931,15 @@ var yygo = {};
             jsonRequest('/session', function (session) {
                 console.log(session);
                 yygo.events.username = session.username;
-                if (session.data === '') {
-                    window.location.href = '/load';
-                }
-
+                // TODO: Ask user what to load, previous session ?
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
-                // TODO: Ask user what to load, previous session ?
-                // Load intro screen for guest and new users.
-                yygo.events.loadIntro();
+                if (session.data === '') {
+                    // Load intro screen for guest and new users.
+                    yygo.events.loadIntro();
+                } else {
+                    // Load game with provided data.
+                }
             });
 
         },
@@ -988,6 +988,9 @@ var yygo = {};
          * Load introductive goban data and show it.
          */
         loadIntro: function () {
+            var goban = document.getElementById('goban'),
+                panel = document.getElementById('panel'),
+                loading = document.getElementById('loading');
 
             yygo.data.game = {0: {0: {
                 "stones": {
@@ -1030,6 +1033,10 @@ var yygo = {};
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize();
+
+            loading.style.display = 'none';
+            goban.style.display = 'block';
+            panel.style.display = 'block';
         },
         /*}}}*/
 

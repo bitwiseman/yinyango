@@ -17,7 +17,7 @@
     "lang":             "Language",
     "lesson":           "Lesson",
     "load":             "Load a game",
-    "loading":          "Sending data, please be patient...",
+    "loading":          "Loading...",
     "login":            "Login",
     "logout":           "Logout",
     "nextpage":         "Next page",

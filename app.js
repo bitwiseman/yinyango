@@ -19,8 +19,7 @@ var express =       require('express'),
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
     app =           express(),
-    db =            mongoose.createConnection('localhost', 'yinyango'),
-    introsgfid =    '509b8db3b8faa2580b000001';
+    db =            mongoose.createConnection('localhost', 'yinyango');
 /*}}}*/
 
 /* Mongoose Schemas & models {{{*/
@@ -178,8 +177,7 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username,
-        sgfid =     req.session.sgfid;
+    var username =  req.session.username;
 
     // Login if user session is set.
     if (username) {
@@ -195,7 +193,7 @@ app.get('/', function (req, res) {
  */
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
-    req.session.sgfid = introsgfid; 
+    req.session.sgfid = ''; 
     res.redirect('/');
 });
 /*}}}*/
@@ -280,19 +278,21 @@ app.get('/sendsgf', restricted, function (req, res) {
  */
 app.get('/session', function (req, res) {
     var username =  req.session.username || 'guest',
-        sgfid =     req.session.sgfid;
+        sgfid =     req.session.sgfid,
+        data;
 
     if (sgfid !== '') {
         Sgf.findById(sgfid, function (err, sgf) {
             if (err) { // Game does not exist.
-                res.send({ username: username, data: '' });
+                data = '';
                 return;
             }
-            res.send({ username: username, data: sgf.data });
+            data = sgf.data;
         });
     } else {
-        res.send({ username: username, data: '' });
+        data = '';
     }
+    res.send({ username: username, data: data });
 });
 /*}}}*/
 
@@ -393,7 +393,7 @@ app.post('/register', function (req, res) {
                         email: email,
                         salt: salt,
                         hash: hash,
-                        sgfid: introsgfid,
+                        sgfid: '',
                         lang: lang
                     });
 
