@@ -103,14 +103,18 @@ var yygo = {};
 
                 switch (key) {
                 case 'B':
-                    play = gotools.playMove('b', value[0], size, stones); 
-                    stones = play.stones;
-                    yygo.data.score.b += play.prisonners; 
+                    if (value[0] !== '') { // Did not pass.
+                        play = gotools.playMove('b', value[0], size, stones); 
+                        stones = play.stones;
+                        yygo.data.score.b += play.prisonners; 
+                    }
                     break;
                 case 'W':
-                    play = gotools.playMove('w', value[0], size, stones); 
-                    stones = play.stones;
-                    yygo.data.score.w += play.prisonners; 
+                    if (value[0] !== '') { // Did not pass.
+                        play = gotools.playMove('w', value[0], size, stones); 
+                        stones = play.stones;
+                        yygo.data.score.w += play.prisonners; 
+                    }
                     break;
                 case 'AB':
                     stones = gotools.addStones('b', value, size, stones); 
@@ -748,9 +752,9 @@ var yygo = {};
                         cell = document.getElementById(list[i]);
                     }
                     if (cell.classList.contains('white')) {
-                        color = 'white';
+                        color = 'w';
                     } else if (cell.classList.contains('black')) {
-                        color = 'black';
+                        color = 'b';
                     } else {
                         color = '';
                     }
@@ -1013,6 +1017,7 @@ var yygo = {};
             yygo.data.game = data;
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
             yygo.data.stones = yygo.data.calcStones(data);
+            console.log(yygo.data.stones);
 
             yygo.data.branchs = yygo.data.game[0][0].branchs;
 

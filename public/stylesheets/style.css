@@ -130,9 +130,9 @@ body {
     height: 30px;
 }
 .disabled {
-    display: none;
-    /*opacity: 0.2;*/
-    /*cursor: default;*/
+    /*display: none;*/
+    opacity: 0.2;
+    cursor: default;
 }
 .circle {
     border-radius: 50%;
