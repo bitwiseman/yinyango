@@ -292,13 +292,16 @@ var yygo = {};
         makeComments: function () {
             var node =      yygo.data.curnode,
                 branch =    yygo.data.curbranch,
-                comment =   yygo.data.game[node][branch].C[0],
                 comments =  document.getElementById('comments'),
                 html =      '',
+                comment,
                 clen,
                 chr,
                 i;
 
+            if (yygo.data.game[node][branch].C !== undefined) {
+                comment = yygo.data.game[node][branch].C[0];
+            }
             if (comment !== undefined) {
                 clen = comment.length;
                 for (i = 0; i < clen; i++) {
@@ -309,8 +312,8 @@ var yygo = {};
                         html += chr;
                     }
                 }
-                comments.innerHTML = html; // Insert html.
             }
+            comments.innerHTML = html; // Insert html.
         },
         /*}}}*/
 
