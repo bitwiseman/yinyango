@@ -290,36 +290,27 @@ var yygo = {};
          * Create and insert comments html code.
          */
         makeComments: function () {
-            var game =          yygo.data.game,
-                curnode =       yygo.data.curnode,
-                curbranch =     yygo.data.curbranch,
-                commentselem =  document.getElementById('comments'),
-                html =          '';
+            var node =      yygo.data.curnode,
+                branch =    yygo.data.curbranch,
+                comment =   yygo.data.game[node][branch].C[0],
+                comments =  document.getElementById('comments'),
+                html =      '',
+                clen,
+                chr,
+                i;
 
-            if (game[curnode][curbranch].C !== undefined) {
-                html = '<p>';
-                html += game[curnode][curbranch].C;
-                html += '</p>';
-
-                commentselem.innerHTML = html; // Insert html.
-
-                if (this.comtoshow === false) {
-                    this.comtoshow = true;
-                    if (this.showcomments) {
-                        // Resize if we are showing comments.
-                        this.setGobanSize(function () {});
+            if (comment !== undefined) {
+                clen = comment.length;
+                for (i = 0; i < clen; i++) {
+                    chr = comment.charAt(i);
+                    if (chr === '\n') { // Translate carriage returns to html.
+                        html += '</br>';
+                    } else {
+                        html += chr;
                     }
                 }
-            } else {
-                if (this.comtoshow === true) {
-                    this.comtoshow = false;
-                    if (this.showcomments) {
-                        // Resize if we are showing comments.
-                        this.setGobanSize(function () {});
-                    }
-                }
+                comments.innerHTML = html; // Insert html.
             }
-            //this.toggleComments(); // Show/hide comments if needed.
         },
         /*}}}*/
 
@@ -1017,7 +1008,6 @@ var yygo = {};
             yygo.data.game = data;
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
             yygo.data.stones = yygo.data.calcStones(data);
-            console.log(yygo.data.stones);
 
             yygo.data.branchs = yygo.data.game[0][0].branchs;
 
@@ -1037,7 +1027,7 @@ var yygo = {};
 
             yygo.view.makeVariations();
             //yygo.view.makeInfos();
-            //yygo.view.makeComments();
+            yygo.view.makeComments();
 
             yygo.view.placeStones();
             yygo.view.placeSymbols();
@@ -1247,7 +1237,6 @@ var yygo = {};
             function varbutClick(id) {
                 return function () {
                     var branch = parseInt(id.substr(6), 10);
-                    console.log(branch);
 
                     yygo.data.curbranch = branch;
                     yygo.data.lastbranch = branch;
@@ -1257,7 +1246,7 @@ var yygo = {};
                     yygo.view.toggleNavButtons();
 
                     yygo.view.makeVariations();
-                    //yygo.view.makeComments();
+                    yygo.view.makeComments();
 
                     yygo.view.emptyGoban();
                     yygo.view.placeStones();
@@ -1322,7 +1311,7 @@ var yygo = {};
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
-            //yygo.view.makeComments();
+            yygo.view.makeComments();
 
             yygo.view.emptyGoban();
             yygo.view.placeStones();
