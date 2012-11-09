@@ -293,7 +293,6 @@ body {
 /*}}}*/
 
 #variations {/*{{{*/
-    /*display: none;*/
     text-align: center;
     height: 20px;
 }
@@ -351,13 +350,11 @@ body {
     position: absolute;
     bottom: 0;
     padding: 5px;
-    overflow: auto;
 }
 /*}}}*/
 #comments {/*{{{*/
-    /*display: none;*/
     position: absolute;
-    top: 100px;
+    top: 70px;
     bottom: 0;
     padding: 0.5em;
     text-align: left;

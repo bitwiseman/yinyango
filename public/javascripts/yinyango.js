@@ -610,7 +610,7 @@ var yygo = {};
                     cellelems[c].style.fontSize = fontsize + 'px';
                 }
             }
-            // Place comments depending on orientation.
+            // Place panel depending on orientation.
             if (this.orientation === 'horizontal') {
                 // Move goban on left side and place comments on the right.
                 if (this.showcomments && this.comtoshow) {
