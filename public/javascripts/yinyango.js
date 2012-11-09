@@ -304,7 +304,7 @@ var yygo = {};
                 for (i = 0; i < clen; i++) {
                     chr = comment.charAt(i);
                     if (chr === '\n') { // Translate new line.
-                        html += '</br>';
+                        html += '<br />';
                     } else {
                         html += chr;
                     }
