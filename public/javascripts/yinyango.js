@@ -787,9 +787,9 @@ var yygo = {};
                 insertSymbols('LB', game.LB);
             }
             // Circle to indicate the last played stone.
-            if (game.W !== undefined && game.W.length !== 0) {
+            if (game.W !== undefined && game.W[0] !== '') {
                 insertSymbols('CR', game.W);
-            } else if (game.B !== undefined && game.B.length !== 0) {
+            } else if (game.B !== undefined && game.B[0] !== '') {
                 insertSymbols('CR', game.B);
             }
         },
@@ -1035,7 +1035,7 @@ var yygo = {};
                 yygo.view.emptyGoban();
             }
 
-            //yygo.view.makeVariations();
+            yygo.view.makeVariations();
             //yygo.view.makeInfos();
             //yygo.view.makeComments();
 
@@ -1247,6 +1247,7 @@ var yygo = {};
             function varbutClick(id) {
                 return function () {
                     var branch = parseInt(id.substr(6), 10);
+                    console.log(branch);
 
                     yygo.data.curbranch = branch;
                     yygo.data.lastbranch = branch;
@@ -1256,7 +1257,7 @@ var yygo = {};
                     yygo.view.toggleNavButtons();
 
                     yygo.view.makeVariations();
-                    yygo.view.makeComments();
+                    //yygo.view.makeComments();
 
                     yygo.view.emptyGoban();
                     yygo.view.placeStones();
@@ -1320,7 +1321,7 @@ var yygo = {};
 
             yygo.view.toggleNavButtons();
 
-            //yygo.view.makeVariations();
+            yygo.view.makeVariations();
             //yygo.view.makeComments();
 
             yygo.view.emptyGoban();
