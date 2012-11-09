@@ -805,8 +805,8 @@ var yygo = {};
             if (winw < winh) {
                 this.orientation = 'vertical';
                 if (this.showcomments && this.comtoshow &&
-                        winh - 150 <= winw) {
-                    smaller = winh - 150;
+                        winh - 200 <= winw) {
+                    smaller = winh - 200;
                 } else {
                     smaller = winw;
                 }
