@@ -14,10 +14,16 @@ html
                 cells = document.getElementsByClassName('cell'),
                 winh = window.innerHeight,
                 cellslen = cells.length,
-                cellsize = winh / 3,
+                size = 11,
+                cellsize = Math.floor(winh / size),
+                gobansize,
                 i;
-            goban.style.width = winh + 'px';
-            goban.style.height = winh + 'px';
+            if (cellsize / 2 !== Math.round(cellsize / 2)) {
+                cellsize--;
+            }
+            gobansize = cellsize * size;
+            goban.style.width = gobansize + 'px';
+            goban.style.height = gobansize + 'px';
             for (i = 0; i < cellslen; i++) {
                 cells[i].style.width = cellsize + 'px';
                 cells[i].style.height = cellsize + 'px';

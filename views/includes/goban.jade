@@ -1,37 +1,97 @@
-div
-    .cell
-        .g.gtl1.black
-        .g.gtl2.black
-        .stone.white
-    .cell
-        .g.gt1.black
-        .g.gt2.black
-        .stone.white
-    .cell
-        .g.gtr1.black
-        .g.gtr2.black
-        .stone.white
-div
-    .cell
-        .g.gl1.black
-        .g.gl2.black
-    .cell
-        .g.g1.black
-        .g.g2.black
-        .g.h.black
-    .cell
-        .g.gr1.black
-        .g.gr2.black
-div
-    .cell
-        .g.gbl1.black
-        .g.gbl2.black
-        .stone.black
-    .cell
-        .g.gb1.black
-        .g.gb2.black
-        .stone.white
-    .cell
-        .g.gbr1.black
-        .g.gbr2.black
-        .stone.white
+- var size = 11, i, j;
+- for (i = 0; i < size; i++)
+    div
+        - for (j = 0; j < size; j++)
+            - if (i == 1) //- top
+                - if (j == 1) //- top left
+                    .cell
+                        .g.gtl1.black
+                        .g.gtl2.black
+                        .stone.white
+                - else if (j == size -2) //- top right
+                    .cell
+                        .g.gtr1.black
+                        .g.gtr2.black
+                        .stone.white
+                - else if (j != 0 && j != size - 1)
+                    .cell
+                        .g.gt1.black
+                        .g.gt2.black
+                        .stone.white
+                - else
+                    .cell
+                        .stone.white
+            - else if (i == size - 2) //- bottom
+                - if (j == 1) //- bottom left
+                    .cell
+                        .g.gbl1.black
+                        .g.gbl2.black
+                        .stone.white
+                - else if (j == size -2) //- bottom right
+                    .cell
+                        .g.gbr1.black
+                        .g.gbr2.black
+                        .stone.white
+                - else if (j != 0 && j != size - 1)
+                    .cell
+                        .g.gb1.black
+                        .g.gb2.black
+                        .stone.white
+                - else
+                    .cell
+                        .stone.white
+            - else if (j == 1 && i != 0 && i != size - 1)
+                .cell
+                    .g.gl1.black
+                    .g.gl2.black
+                    .stone.white
+            - else if (j == size - 2 && i != 0 && i != size - 1)
+                .cell
+                    .g.gr1.black
+                    .g.gr2.black
+                    .stone.white
+            - else if (i != 0 && i != size - 1 && j != 0 && j != size - 1)
+                .cell
+                    .g.g1.black
+                    .g.g2.black
+                    .stone.white
+            - else
+                .cell
+                    .stone.white
+//-div
+    //-.cell
+        //-.g.gtl1.black
+        //-.g.gtl2.black
+        //-.stone.white
+    //-.cell
+        //-.g.gt1.black
+        //-.g.gt2.black
+        //-.stone.white
+    //-.cell
+        //-.g.gtr1.black
+        //-.g.gtr2.black
+        //-.stone.white
+//-div
+    //-.cell
+        //-.g.gl1.black
+        //-.g.gl2.black
+    //-.cell
+        //-.g.g1.black
+        //-.g.g2.black
+        //-.g.h.black
+    //-.cell
+        //-.g.gr1.black
+        //-.g.gr2.black
+//-div
+    //-.cell
+        //-.g.gbl1.black
+        //-.g.gbl2.black
+        //-.stone.black
+    //-.cell
+        //-.g.gb1.black
+        //-.g.gb2.black
+        //-.stone.white
+    //-.cell
+        //-.g.gbr1.black
+        //-.g.gbr2.black
+        //-.stone.white
