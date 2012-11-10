@@ -24,12 +24,13 @@ var express =       require('express'),
 
 /* Mongoose Schemas & models {{{*/
 var userSchema = new mongoose.Schema({
-    name:   String,
-    email:  String,
-    salt:   String,
-    hash:   String,
-    sgfid:  String,
-    lang:   String
+    name:       String,
+    email:      String,
+    salt:       String,
+    hash:       String,
+    sgfid:      String,
+    gobansize:  Number,
+    lang:       String
 });
 var sgfSchema = new mongoose.Schema({
     name:       String,
@@ -37,6 +38,7 @@ var sgfSchema = new mongoose.Schema({
     date:       Date,
     category:   String,
     md5:        { type: String, unique: true },
+    size:       Number,
     data:       Object
 });
 var User = db.model('user', userSchema);
@@ -177,11 +179,12 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username;
+    var username =  req.session.username,
+        gobansize = req.session.gobansize;
 
     // Login if user session is set.
     if (username) {
-        res.render('yygo', { username: username });
+        res.render('yygo', { username: username, gobansize: gobansize });
     } else {
         res.render('login', { error: '' });
     }
@@ -194,6 +197,7 @@ app.get('/', function (req, res) {
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
     req.session.sgfid = ''; 
+    req.session.gobansize = 19;
     res.redirect('/');
 });
 /*}}}*/
@@ -237,11 +241,19 @@ app.get('/load/:id', function (req, res) {
     } else if (id === 'prev') {
         console.log('prev');
     } else {
-        if (userid) {
-            User.findByIdAndUpdate(userid, { sgfid: id }, function (){});
-        }
-        req.session.sgfid = id;
-        res.redirect('/');
+        Sgf.findById(id, function (err, sgf) {
+            var settings = { sgfid: id, gobansize: sgf.size };
+            if (err) {
+                console.error('Sgf.findById error: ' + err);
+                return;
+            }
+            if (userid) {
+                User.findByIdAndUpdate(userid, settings, function (){});
+            }
+            req.session.gobansize = sgf.size;
+            req.session.sgfid = id;
+            res.redirect('/');
+        });
     }
 });
 /*}}}*/
@@ -335,6 +347,7 @@ app.post('/login', function (req, res) {
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
                         req.session.sgfid =     user.sgfid;
+                        req.session.gobansize = user.gobansize;
                         res.cookie('language', user.lang);
                         res.redirect('/');
                     } else {
@@ -392,6 +405,7 @@ app.post('/register', function (req, res) {
                         salt: salt,
                         hash: hash,
                         sgfid: '',
+                        gobansize: 19,
                         lang: lang
                     });
 
@@ -448,12 +462,14 @@ app.post('/sendsgf', function (req, res) {
                         md5 = crypto.createHash('md5').update(data)
                                 .digest('hex');
                         gotools.parseSgf(data.toString(), function (obj) {
+                            var size = parseInt(obj[0][0].SZ[0], 10);
                             sgf = new Sgf({
                                 name:       name,
                                 submitter:  username,
                                 date:       date,
                                 category:   category,
                                 md5:        md5,
+                                size:       size,
                                 data:       obj
                             });
                             sgf.save(function (err) {
@@ -503,7 +519,7 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 
 app.get('/test', function (req, res) {
-    res.render('test');
+    res.render('test', { gobansize: 9 });
 });
 /*}}}*/
 

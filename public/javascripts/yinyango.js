@@ -589,9 +589,8 @@ var yygo = {};
         drawInterface: function (fn) {
             var panel =         document.getElementById('panel'),
                 goban =         document.getElementById('goban'),
-                gridelem =      document.getElementById('grid'),
-                cellelems =     document.getElementsByClassName('cell'),
-                cc =            cellelems.length,
+                cells =         document.getElementsByClassName('cell'),
+                cc =            cells.length,
                 fontsize =      this.sizecell / 1.5,
                 c;
 
@@ -600,17 +599,12 @@ var yygo = {};
                 // Resize goban.
                 goban.style.height = this.sizegoban + 'px';
                 goban.style.width = this.sizegoban + 'px';
-                // Center grid into goban.
-                gridelem.style.top = this.sizecell + 'px';
-                gridelem.style.right = this.sizecell + 'px';
-                gridelem.style.bottom = this.sizecell + 'px';
-                gridelem.style.left = this.sizecell + 'px';
                 // Resize the cells.
                 for (c = 0; c < cc; c++) {
-                    cellelems[c].style.height = this.sizecell + 'px';
-                    cellelems[c].style.width = this.sizecell + 'px';
-                    cellelems[c].style.lineHeight = this.sizecell + 'px';
-                    cellelems[c].style.fontSize = fontsize + 'px';
+                    cells[c].style.height = this.sizecell + 'px';
+                    cells[c].style.width = this.sizecell + 'px';
+                    cells[c].style.lineHeight = this.sizecell + 'px';
+                    cells[c].style.fontSize = fontsize + 'px';
                 }
             }
             // Place panel depending on orientation.
@@ -642,7 +636,7 @@ var yygo = {};
             var size =  yygo.data.size,
                 coord = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-                cell,
+                stone,
                 id,
                 i,
                 j;
@@ -650,10 +644,9 @@ var yygo = {};
             for (i = 0; i < size; i++) {
                 for (j = 0; j < size; j++) {
                     id = coord[j] + coord[i];
-                    cell = document.getElementById(id);
-                    cell.className = 'cell';
-                    cell.title = '';
-                    cell.innerHTML = '';
+                    stone = document.getElementById(id);
+                    stone.className = 'stone';
+                    stone.innerHTML = '';
                 }
             }
         },
@@ -667,7 +660,7 @@ var yygo = {};
          * @param {String} color    Color of the stone in cell.
          */
         insertSymbolSvg: function (symbol, id, color) {
-            var cell =  document.getElementById(id),
+            var stone =  document.getElementById(id),
                 svg =   '<svg xmlns="http://www.w3.org/2000/svg"' +
                         'version="1.1" viewBox="0 0 10 10">';
 
@@ -688,7 +681,7 @@ var yygo = {};
                 svg += ' stroke="#000"/></svg>';
             }
 
-            cell.innerHTML = svg;
+            stone.innerHTML = svg;
         },
         /*}}}*/
 
@@ -703,22 +696,22 @@ var yygo = {};
                 cb =            stones.b.length,
                 cw =            stones.w.length,
                 ck =            stones.k.length,
-                cell,
+                stone,
                 b,
                 w,
                 k;
 
             for (b = 0; b < cb; b++) {
-                cell = document.getElementById(stones.b[b]);
-                cell.classList.add('black');
+                stone = document.getElementById(stones.b[b]);
+                stone.classList.add('black');
             }
             for (w = 0; w < cw; w++) {
-                cell = document.getElementById(stones.w[w]);
-                cell.classList.add('white');
+                stone = document.getElementById(stones.w[w]);
+                stone.classList.add('white');
             }
             for (k = 0; k < ck; k++) {
-                cell = document.getElementById(stones.k[k]);
-                cell.classList.add('ko');
+                stone = document.getElementById(stones.k[k]);
+                stone.classList.add('ko');
             }
         },
         /*}}}*/
@@ -820,10 +813,11 @@ var yygo = {};
                 }
             }
 
-            // Calculate the size of the goban in pixels to be a multiple of
-            // his size in intersections. This avoid bad display with svg and
-            // minimize redraws.
+            // Calculate the size of the goban and avoid bad display.
             this.sizecell = Math.floor(smaller / (size + 2));
+            if (this.sizecell / 2 !== Math.round(this.sizecell / 2)) {
+                this.sizecell--;
+            }
             this.sizegoban = this.sizecell * (size + 2);
 
             // Redraw if size changed or if asked.
@@ -1021,12 +1015,12 @@ var yygo = {};
             yygo.data.setLastNode();
 
             // Make view.
-            if (yygo.data.size !== oldsize) { // New size remake all.
-                yygo.view.makeGoban();
-                yygo.view.changeGridImage();
-            } else { // Empty goban only.
-                yygo.view.emptyGoban();
-            }
+            //if (yygo.data.size !== oldsize) { // New size remake all.
+                //yygo.view.makeGoban();
+                //yygo.view.changeGridImage();
+            //} else { // Empty goban only.
+                //yygo.view.emptyGoban();
+            //}
 
             yygo.view.makeVariations();
             //yygo.view.makeInfos();
@@ -1040,7 +1034,7 @@ var yygo = {};
 
             //yygo.view.changeScreen();
 
-            yygo.view.toggleBorders();
+            //yygo.view.toggleBorders();
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
@@ -1097,8 +1091,8 @@ var yygo = {};
 
             yygo.data.size = 19;
 
-            yygo.view.makeGoban();
-            yygo.view.changeGridImage();
+            //yygo.view.makeGoban();
+            //yygo.view.changeGridImage();
 
             yygo.view.placeStones();
             yygo.view.placeSymbols();
@@ -1108,7 +1102,7 @@ var yygo = {};
 
             //yygo.view.changeScreen();
 
-            yygo.view.toggleBorders();
+            //yygo.view.toggleBorders();
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;

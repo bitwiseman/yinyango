@@ -335,8 +335,9 @@ body {
     position: absolute;
 }
 .cell {
+    position: relative;
     float: left;
-    border-radius: 50%;
+    /*border-radius: 50%;*/
     text-align: center;
     font-family: serif;
     overflow: hidden;
@@ -344,6 +345,154 @@ body {
 .vcell {
     float: none;
 }
+.stone {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+.g {/*{{{*/
+    position: absolute;
+    z-index: -999;
+    opacity: 0.3;
+}
+.h {
+    position: absolute;
+    z-index: -999;
+    top: 50%;
+    left: 50%;
+    height: 6px;
+    width: 6px;
+    margin-top: -3px;
+    margin-left: -3px;
+    border-radius: 50%;
+}
+.gtl1 {
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gtl2 {
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gt1 {
+    top: 50%;
+    left: 0%;
+    width: 100%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gt2 {
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gtr1 {
+    top: 50%;
+    right: 50%;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gtr2 {
+    top: 50%;
+    right: 50%;
+    width: 2px;
+    height: 50%;
+    margin-right: -1px;
+}
+.gl1 {
+    top: 0%;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    margin-left: -1px;
+}
+.gl2 {
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+.g1 {
+    top: 0%;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    margin-left: -1px;
+}
+.g2 {
+    top: 50%;
+    left: 0%;
+    width: 100%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gr1 {
+    top: 0%;
+    right: 50%;
+    width: 2px;
+    height: 100%;
+    margin-right: -1px;
+}
+.gr2 {
+    top: 50%;
+    right: 50%;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gbl1 {
+    bottom: 50%;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gbl2 {
+    bottom: 50%;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    margin-bottom: -1px;
+}
+.gb1 {
+    bottom: 50%;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gb2 {
+    bottom: 50%;
+    left: 0%;
+    width: 100%;
+    height: 2px;
+    margin-bottom: -1px;
+}
+.gbr1 {
+    bottom: 50%;
+    right: 50%;
+    width: 2px;
+    height: 50%;
+    margin-right: -1px;
+}
+.gbr2 {
+    bottom: 50%;
+    right: 50%;
+    width: 50%;
+    height: 2px;
+    margin-bottom: -1px;
+}
+/*}}}*/
 /*}}}*/
 #panel {/*{{{*/
     display: none;

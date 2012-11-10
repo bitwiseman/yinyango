@@ -14,7 +14,7 @@ html
                 cells = document.getElementsByClassName('cell'),
                 winh = window.innerHeight,
                 cellslen = cells.length,
-                size = 9,
+                size = #{gobansize} + 2,
                 cellsize = Math.floor(winh / size),
                 gobansize,
                 i;
