@@ -7,8 +7,6 @@
  */
 
 body {
-    background: #ccaa66;
-    color: #000;
     margin: 0;
     font-size: 100%;
     text-align: center;
@@ -17,6 +15,7 @@ body {
 /** general {{{
  * General use CSS.
  */
+/* Colors {{{*/
 .black {
     background: #000;
     color: #f9f0ca;
@@ -27,6 +26,7 @@ body {
 }
 .brown {
     background: #ccaa66;
+    color: #000;
 }
 .brown2 {
     background: #eecc88;
@@ -38,6 +38,7 @@ body {
 .red {
     background: #d44343;
 }
+/*}}}*/
 .box {
     display: inline-block;
     width: auto;
