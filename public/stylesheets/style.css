@@ -131,7 +131,6 @@ body {
     height: 30px;
 }
 .disabled {
-    /*display: none;*/
     opacity: 0.2;
     cursor: default;
 }
@@ -315,34 +314,12 @@ body {
     position: relative;
     margin: auto;
 }
-#btop {
-    position: absolute;
-    top: 0;
-}
-#bright {
-    position: absolute;
-    right: 0;
-}
-#bbottom {
-    position: absolute;
-    bottom: 0;
-}
-#bleft {
-    position: absolute;
-    left: 0;
-}
-#grid {
-    position: absolute;
-}
 .cell {
     position: relative;
     float: left;
     text-align: center;
     font-family: serif;
     overflow: hidden;
-}
-.vcell {
-    float: none;
 }
 .stone {
     position: absolute;
@@ -356,7 +333,8 @@ body {
 .stone.white {
     border-color: #000;
 }
-.g {/*{{{*/
+/* Grid {{{*/
+.g {
     position: absolute;
     z-index: -999;
     opacity: 0.3;
