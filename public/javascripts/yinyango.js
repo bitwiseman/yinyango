@@ -438,10 +438,11 @@ var yygo = {};
                         variations++;
                         if (i === curbranch) {
                             // This is our branch show a plain radio button.
-                            html += '<div id="varbua' + i + '"></div>';
+                            html += '<div class="varbutton plain black"></div>';
                         } else {
                             // Show a clickable empty radio button.
-                            html += '<div id="varbut' + i + '"></div>';
+                            html += '<div id="var' + i + 
+                                '" class="varbutton"></div>';
                             binds.push(i); // Add variation to the binds.
                         }
                     }
@@ -1233,7 +1234,7 @@ var yygo = {};
 
             function varbutClick(id) {
                 return function () {
-                    var branch = parseInt(id.substr(6), 10);
+                    var branch = parseInt(id.substr(3), 10);
 
                     yygo.data.curbranch = branch;
                     yygo.data.lastbranch = branch;
@@ -1252,7 +1253,7 @@ var yygo = {};
             }
 
             for (i = 0; i < ci; i++) {
-                varbut = document.getElementById('varbut' + binds[i]);
+                varbut = document.getElementById('var' + binds[i]);
                 varbut.addEventListener('click', varbutClick(varbut.id),
                     false);
             }
