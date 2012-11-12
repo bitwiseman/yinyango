@@ -206,7 +206,7 @@ app.get('/guest', function (req, res) {
  * Load game.
  */
 app.get('/load', function (req, res) {
-    var page = 0,
+    var page = req.session.page || 0,
         next,
         filters,
         options,
@@ -217,6 +217,7 @@ app.get('/load', function (req, res) {
     Sgf.find({}, filters, options, function (err, sgfs) {
         if (sgfs.length === 11) { // More than one page.
             next = true;
+            sgfs.pop(); // Remove last one to show only 10.
         } else {
             next = false;
         }
@@ -237,9 +238,11 @@ app.get('/load/:id', function (req, res) {
         userid = req.session.userid;
 
     if (id === 'next') {
-        console.log('next');
+        req.session.page = req.session.page + 1 || 1;
+        res.redirect('/load');
     } else if (id === 'prev') {
-        console.log('prev');
+        req.session.page = req.session.page - 1;
+        res.redirect('/load');
     } else {
         Sgf.findById(id, function (err, sgf) {
             var settings = { sgfid: id, gobansize: sgf.size };
