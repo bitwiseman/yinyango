@@ -361,6 +361,8 @@ app.post('/login', function (req, res) {
                 res.render('login', { error: 'login' });
             }
         });
+    } else {
+        res.render('login', { error: 'login' });
     }
 });
 /*}}}*/
