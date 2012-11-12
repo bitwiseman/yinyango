@@ -26,7 +26,7 @@
     /** gobanToStones {{{
      * Transform goban array to stones list.
      *
-     * @param {Integer} size    Goban size.
+     * @param {Number}  size    Goban size.
      * @param {Array}   goban   Goban to convert.
      *
      * @return {Object} { 'b':{String} (black stones on goban),
@@ -63,7 +63,7 @@
      * Transform stones list to a goban array.
      * b: black, w: white, k: ko. 
      *
-     * @param {Integer} size    Goban size.
+     * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones list.
      *
      * @return {Array} Array representing the goban.
@@ -107,12 +107,12 @@
      * Inspired by eidogo algorithm.
      *
      * @param {String}  color       Color of the played stone.
-     * @param {Integer} x           X coordinate to test.
-     * @param {Integer} y           Y coordinate to test.
+     * @param {Number}  x           X coordinate to test.
+     * @param {Number}  y           Y coordinate to test.
      * @param {Array}   goban       Goban state to test.
      * @param {Array}   prisonners  Potential prisonners.
      *
-     * @return {Array} [ {Integer}
+     * @return {Array} [ {Number}
      *                   (0: No liberties or already in prisonners list.
      *                    1: Has liberties.
      *                    2: Same color or goban border.),
@@ -186,12 +186,12 @@
      * Test if played stone will capture stone(s).
      *
      * @param {String}  color Played color.
-     * @param {Integer} x     X coordinate of played stone.
-     * @param {Integer} y     Y coordinate of played stone.
+     * @param {Number}  x     X coordinate of played stone.
+     * @param {Number}  y     Y coordinate of played stone.
      * @param {Array}   goban Goban to test.
      *
      * @return {Object} { 'goban':{Array} (goban after eventual captures),
-     *                    'prisonners':{Integer} (number of prisonners) }.
+     *                    'prisonners':{Number} (number of prisonners) }.
      */
     function testCaptures(color, x, y, goban) {
         var result = { 'goban': [], 'prisonners': 0 },
@@ -227,7 +227,7 @@
      *
      * @param {String}  color   Color of the stone(s) (empty to remove).
      * @param {Array}   add     Stone list to add/remove. 
-     * @param {Integer} size    Goban size.
+     * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones to modify.
      *
      * @return {Object} New stones after adding/removing stones.
@@ -256,15 +256,15 @@
      *
      * @param {String}  color   Color of played stone.
      * @param {String}  coord   Coordinate of played stone in letters.
-     * @param {Integer} size    Goban size.
+     * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones list.
      *
      * @return {Object} { 'stones':{Object} (new stones list after playing the
      *                                       stone and applying rules),
-     *                    'prisonners':{Integer} (number of prisonners made) }
+     *                    'prisonners':{Number} (number of prisonners made) }
      */
     exports.playMove = function (color, coord, size, stones) {
-        var x =             coord.charCodeAt(0) - 97, // Coord to Integer.
+        var x =             coord.charCodeAt(0) - 97, // Coord to Number.
             y =             coord.charCodeAt(1) - 97,
             goban =         stonesToGoban(size, stones),
             captureresult = {},
