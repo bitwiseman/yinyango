@@ -12,16 +12,13 @@ general.
 - Clean unused js.
 - Translate game to SGF.
 - Make different modes: play, edition...
-- Make a better Sgf class.
 - Calculate the score.
 - Treat other keys like 'pass'.
-- Save user parameters.
 - Add suicide rule.
 - Add ko rules.
 - Add other rules.
 - Validation link sent by mail.
-- Draw goban using CSS.
-- Generate goban html with jade.
+- Make ajax load, sendsgf, settings included into yygo.
 
 ## LICENSE
 
