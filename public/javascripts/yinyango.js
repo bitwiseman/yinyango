@@ -910,16 +910,16 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.toggleMenu {{{
+        /** yygo.view.showMenu {{{
          * Alternate the display of the options menu.
          *
-         * @param {String} action hide or show menu.
+         * @param {Boolean} show Show menu.
          */
-        toggleMenu: function (action) {
+        showMenu: function (show) {
             var menucontainer = document.getElementById('menucontainer'),
                 menumask =      document.getElementById('menumask');
 
-            if (action === 'show') {
+            if (show) {
                 menucontainer.style.display = 'block';
                 menumask.style.display = 'block';
             } else {
@@ -1135,17 +1135,17 @@ var yygo = {};
                 window.location.href = '/logout';
             }, false);
             menuback.addEventListener('click', function () {
-                yygo.view.toggleMenu('hide');
+                yygo.view.showMenu(false);
             }, false);
             menucontainer.addEventListener('click', function () {
-                yygo.view.toggleMenu('hide');
+                yygo.view.showMenu(false);
             }, false);
             menu.addEventListener('click', function (event) {
                 event.stopPropagation();
             }, false);
             // Buttons bar.
             butmenu.addEventListener('click', function () {
-                yygo.view.toggleMenu('show');
+                yygo.view.showMenu(true);
             }, false);
             butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
