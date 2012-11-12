@@ -39,6 +39,13 @@ body {
     background: #d44343;
 }
 /*}}}*/
+.screen {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 .box {
     display: inline-block;
     width: auto;
@@ -73,7 +80,7 @@ body {
 }
 /*}}}*/
 
-#menu {
+#menucontainer {
     display: none;
     position: absolute;
 }
@@ -94,14 +101,14 @@ body {
     width: 100%;
     margin-top: -0.5em;
 }
-#loadlist {/*{{{*/
+#sendsgf {
     display: none;
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
-    overflow: auto;
+}
+#settings {
+    display: none;
+}
+#load {/*{{{*/
+    display: none;
 }
 #gameslist {
     border-collapse: collapse;

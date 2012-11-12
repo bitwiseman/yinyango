@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    //-#loadlist
     //-#infos
     #loading= lingua.loading
     #goban
@@ -12,7 +11,13 @@ block content
         #variations
         #comments
     #menumask
-    #menu.box.brown2
-        include includes/menu
+    #menucontainer.screen
+        p: div.box.black
+            h1= lingua.title
+        p: div#menu.box.brown2
+            include includes/menu
+    #load.screen.brown
+    #sendsgf.screen.brown
+    #settings.screen.brown
     script(src='gotools.js')
     script(src='javascripts/yinyango.js')

@@ -240,7 +240,6 @@ var yygo = {};
         redraw:         false,
         showborders:    true,
         showcomments:   true,
-        showmenu:       false,
 
         sizecell:       0,
         sizegoban:      0,
@@ -831,25 +830,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.setMenuPosition {{{
-         * Define the position of options menu.
-         */
-        setMenuPosition: function () {
-            var winw = window.innerWidth,
-                winh = window.innerHeight,
-                menu = document.getElementById('menu'),
-                menuw = menu.offsetWidth,
-                menuh = menu.offsetHeight,
-                menuleft,
-                menutop;
-
-            menuleft = (winw / 2) - (menuw / 2);
-            menutop = (winh / 2) - (menuh / 2);
-            menu.style.left = menuleft + 'px';
-            menu.style.top = menutop + 'px';
-        },
-        /*}}}*/
-
         /** yygo.view.toggleBorders {{{
          * Alternate the display of the goban borders.
          */
@@ -932,20 +912,19 @@ var yygo = {};
 
         /** yygo.view.toggleMenu {{{
          * Alternate the display of the options menu.
+         *
+         * @param {String} action hide or show menu.
          */
-        toggleMenu: function () {
-            var menu =      document.getElementById('menu'),
-                menumask =  document.getElementById('menumask');
+        toggleMenu: function (action) {
+            var menucontainer = document.getElementById('menucontainer'),
+                menumask =      document.getElementById('menumask');
 
-            if (!this.showmenu) {
-                menu.style.display = 'inline-block';
+            if (action === 'show') {
+                menucontainer.style.display = 'block';
                 menumask.style.display = 'block';
-                yygo.view.setMenuPosition();
-                this.showmenu = true;
             } else {
-                menu.style.display = 'none';
+                menucontainer.style.display = 'none';
                 menumask.style.display = 'none';
-                this.showmenu = false;
             }
         }
         /*}}}*/
@@ -1119,12 +1098,13 @@ var yygo = {};
          * Bind events to the elements.
          */
         makeBinds: function () {
-            var menuload =      document.getElementById('menuload'),
+            var menu =          document.getElementById('menu'),
+                menucontainer = document.getElementById('menucontainer'),
+                menuload =      document.getElementById('menuload'),
                 menusendsgf =   document.getElementById('menusendsgf'),
                 menusettings =  document.getElementById('menusettings'),
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
-                menumask =      document.getElementById('menumask'),
                 butmenu =       document.getElementById('butmenu'),
                 butstart =      document.getElementById('butstart'),
                 butfastprev =   document.getElementById('butfastprev'),
@@ -1136,9 +1116,6 @@ var yygo = {};
             // Window resize.
             window.addEventListener('resize', function () {
                 yygo.view.setGobanSize(function () {});
-                if (yygo.view.showmenu === true) {
-                    yygo.view.setMenuPosition();
-                }
             }, false);
 
             // Only registered users.
@@ -1158,14 +1135,17 @@ var yygo = {};
                 window.location.href = '/logout';
             }, false);
             menuback.addEventListener('click', function () {
-                yygo.view.toggleMenu();
+                yygo.view.toggleMenu('hide');
             }, false);
-            menumask.addEventListener('click', function () {
-                yygo.view.toggleMenu();
+            menucontainer.addEventListener('click', function () {
+                yygo.view.toggleMenu('hide');
+            }, false);
+            menu.addEventListener('click', function (event) {
+                event.stopPropagation();
             }, false);
             // Buttons bar.
             butmenu.addEventListener('click', function () {
-                yygo.view.toggleMenu();
+                yygo.view.toggleMenu('show');
             }, false);
             butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
