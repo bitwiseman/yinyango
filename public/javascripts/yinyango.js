@@ -926,6 +926,22 @@ var yygo = {};
                 menucontainer.style.display = 'none';
                 menumask.style.display = 'none';
             }
+        },
+        /*}}}*/
+
+        /** yygo.view.showLoad {{{
+         * Alternate the display of the page to load a game.
+         *
+         * @param {Boolean} show Show page.
+         */
+        showLoad: function (show) {
+            var load = document.getElementById('load');
+
+            if (show) {
+                load.style.display = 'block';
+            } else {
+                load.style.display = 'none';
+            }
         }
         /*}}}*/
 
@@ -1105,6 +1121,7 @@ var yygo = {};
                 menusettings =  document.getElementById('menusettings'),
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
+                exitload =      document.getElementById('exitload'),
                 butmenu =       document.getElementById('butmenu'),
                 butstart =      document.getElementById('butstart'),
                 butfastprev =   document.getElementById('butfastprev'),
@@ -1126,7 +1143,8 @@ var yygo = {};
             }
             // Menu buttons.
             menuload.addEventListener('click', function () {
-                window.location.href = '/load';
+                yygo.view.showLoad(true);
+                //window.location.href = '/load';
             }, false);
             menusettings.addEventListener('click', function () {
                 window.location.href = '/settings';
@@ -1142,6 +1160,10 @@ var yygo = {};
             }, false);
             menu.addEventListener('click', function (event) {
                 event.stopPropagation();
+            }, false);
+            // Exit various pages.
+            exitload.addEventListener('click', function () {
+                yygo.view.showLoad(false);
             }, false);
             // Buttons bar.
             butmenu.addEventListener('click', function () {
