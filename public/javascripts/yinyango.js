@@ -261,6 +261,12 @@ var yygo = {};
                             'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 border =    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
                             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
+                gt =        '<div class="g gt black"></div>',
+                gr =        '<div class="g gr black"></div>',
+                gb =        '<div class="g gb black"></div>',
+                gl =        '<div class="g gl black"></div>',
+                sto =       '<div class="stone" id="',
+                stc =       '"></div>',
                 html =      '',
                 content,
                 id,
@@ -307,55 +313,31 @@ var yygo = {};
                     id = coord[j] + coord[i];
                     if (i === 1) {
                         if (j === 1) {
-                            content = '<div class="g gr black"></div>' +
-                                '<div class="g gb black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gr + gb + sto + id + stc;
                         } else if (j === size -2) {
-                            content = '<div class="g gb black"></div>' +
-                                '<div class="g gl black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gb + gl + sto + id + stc;
                         } else if (j !== 0 && j !== size - 1) {
-                            content = '<div class="g gr black"></div>' +
-                                '<div class="g gb black"></div>' +
-                                '<div class="g gl black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gr + gb + gl + sto + id + stc;
                         } else {
                             content = size - i - 1;
                         }
                     } else if (i === size - 2) {
                         if (j === 1) {
-                            content = '<div class="g gt black"></div>' +
-                                '<div class="g gr black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gt + gr + sto + id + stc;
                         } else if (j === size -2) {
-                            content = '<div class="g gt black"></div>' +
-                                '<div class="g gl black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gt + gl + sto + id + stc;
                         } else if (j !== 0 && j !== size - 1) {
-                            content = '<div class="g gt black"></div>' +
-                                '<div class="g gr black"></div>' +
-                                '<div class="g gl black"></div>' +
-                                '<div class="stone" id="' + id + '"></div>';
+                            content = gt + gr + gl + sto + id + stc;
                         } else {
                             content = size - i - 1;
                         }
                     } else if (j === 1 && i !== 0 && i !== size - 1) {
-                        content = '<div class="g gt black"></div>' +
-                            '<div class="g gr black"></div>' +
-                            '<div class="g gb black"></div>' +
-                            '<div class="stone" id="' + id + '"></div>';
+                        content = gt + gr + gb + sto + id + stc;
                     } else if (j === size - 2 && i !== 0 && i !== size - 1) {
-                        content = '<div class="g gt black"></div>' +
-                            '<div class="g gb black"></div>' +
-                            '<div class="g gl black"></div>' +
-                            '<div class="stone" id="' + id + '"></div>';
+                        content = gt + gb + gl + sto + id + stc;
                     } else if (i !== 0 && i !== size - 1 && j !== 0 &&
                             j !== size - 1) {
-                        content = '<div class="g gt black"></div>' +
-                            '<div class="g gr black"></div>' +
-                            '<div class="g gb black"></div>' +
-                            '<div class="g gl black"></div>' +
-                            '<div class="stone" id="' + id + '"></div>';
+                        content = gt + gr + gb + gl + sto + id + stc;
                         if (isHoshi(i, j)) {
                             content += '<div class="h black"></div>';
                         }
