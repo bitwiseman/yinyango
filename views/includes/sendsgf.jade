@@ -1,0 +1,17 @@
+h1= lingua.title
+h2= lingua.sendsgf
+form.box.brown2(onsubmit='return false;')
+    p: label= lingua.selectfile
+    p: input.input(type='file', name='sgffile')
+    p: label= lingua.selectcategory
+    p
+        select.input(name='categoryselect')
+            option(value='game')= lingua.game
+            option(value='lesson')= lingua.lesson
+            option(value='problem')= lingua.problem
+    p: input#submitsgf.linkbutton.black(type='submit', value= lingua.sendfile)
+p: div#errorsendsgf.box.red
+    p#errorinvalid= lingua.errorinvalid
+    p#errormd5= lingua.errormd5
+p#sendsuccess= lingua.sendsuccess
+p: a#exitsendsgf.linkbutton.black(href='#')= lingua.back

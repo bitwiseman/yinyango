@@ -104,6 +104,18 @@ body {
 #sendsgf {
     display: none;
 }
+#errorsendsgf {
+    display: none;
+}
+#errorinvalid {
+    display: none;
+}
+#errormd5 {
+    display: none;
+}
+#sendsuccess {
+    display: none;
+}
 #settings {
     display: none;
 }

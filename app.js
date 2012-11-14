@@ -259,14 +259,6 @@ app.get('/register', function (req, res) {
 });
 /*}}}*/
 
-/** get /sendsgf {{{
- * Page to send sgf file.
- */
-app.get('/sendsgf', restricted, function (req, res) {
-    res.render('sendsgf', { error: '' });
-});
-/*}}}*/
-
 /** get /session {{{
  * Return user session infos and game data.
  */
@@ -446,15 +438,15 @@ app.post('/sendsgf', function (req, res) {
                             });
                             sgf.save(function (err) {
                                 if (err && err.code === 11000) { // duplicate.
-                                    res.render('sendsgf', { error: 'md5' });
+                                    res.send({ answer: 'md5' });
                                 } else {
-                                    res.render('sendsgf', { error: 'none' });
+                                    res.send({ answer: 'success' });
                                 }
                             });
                         });
                     });
                 } else {
-                    res.render('sendsgf', { error: 'invalid' });
+                    res.send({ answer: 'invalid' });
                 }
             });
         }

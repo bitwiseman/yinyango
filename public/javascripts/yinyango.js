@@ -1067,6 +1067,25 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.view.showSendSgf {{{
+         * Alternate the display of the page to send sgf files.
+         *
+         * @param {Boolean} show Show page.
+         */
+        showSendSgf: function (show) {
+            var sendsgf = document.getElementById('sendsgf');
+
+            if (show) {
+                yygo.view.showGoban(false);
+                yygo.view.showMenu(false);
+                sendsgf.style.display = 'block';
+            } else {
+                sendsgf.style.display = 'none';
+                yygo.view.showGoban(true);
+            }
+        },
+        /*}}}*/
+
         /** yygo.view.showSettings {{{
          * Alternate the display of the user settings.
          *
@@ -1085,6 +1104,7 @@ var yygo = {};
             }
         }
         /*}}}*/
+
     };
     /*}}}*/
 
@@ -1254,6 +1274,8 @@ var yygo = {};
                 nextpage =          document.getElementById('nextpage'),
                 exitsettings =      document.getElementById('exitsettings'),
                 submitsettings =    document.getElementById('submitsettings'),
+                exitsendsgf =       document.getElementById('exitsendsgf'),
+                submitsgf =         document.getElementById('submitsgf'),
                 butmenu =           document.getElementById('butmenu'),
                 butstart =          document.getElementById('butstart'),
                 butfastprev =       document.getElementById('butfastprev'),
@@ -1270,7 +1292,7 @@ var yygo = {};
             // Only registered users.
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
-                    window.location.href = '/sendsgf';
+                    yygo.view.showSendSgf(true);
                 }, false);
             }
             // Menu buttons.
@@ -1317,6 +1339,33 @@ var yygo = {};
                 jsonRequest('/settings', 'POST', settings, function (data) {
                     if (data) {
                         settingssaved.style.display = 'block';
+                    }
+                });
+            }, false);
+            // Send sgf specific.
+            exitsendsgf.addEventListener('click', function () {
+                yygo.view.showSendSgf(false);
+            }, false);
+            submitsgf.addEventListener('click', function () {
+                var errorsendsgf =  document.getElementById('errorsendsgf'),
+                    errorinvalid =  document.getElementById('errorinvalid'),
+                    errormd5 =      document.getElementById('errormd5'),
+                    sendsuccess =   document.getElementById('sendsuccess'),
+                    file =          new FormData(this.form);
+
+                errorsendsgf.style.display = 'none';
+                errorinvalid.style.display = 'none';
+                errormd5.style.display = 'none';
+                sendsuccess.style.display = 'none';
+                jsonRequest('/sendsgf', 'POST', file, function (data) {
+                    if (data.answer === 'invalid') {
+                        errorsendsgf.style.display = 'inline-block';
+                        errorinvalid.style.display = 'block';
+                    } else if (data.answer === 'md5') {
+                        errorsendsgf.style.display = 'inline-block';
+                        errormd5.style.display = 'block';
+                    } else if (data.answer === 'success') {
+                        sendsuccess.style.display = 'block';
                     }
                 });
             }, false);
