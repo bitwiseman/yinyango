@@ -1364,18 +1364,12 @@ var yygo = {};
                 jsonRequest('/sendsgf', 'POST', file, function (data) {
                     if (data.answer === 'invalid') {
                         answersendsgf.style.display = 'inline-block';
-                        answersendsgf.classList.add('red');
-                        answersendsgf.classList.remove('brown2');
                         errorinvalid.style.display = 'block';
                     } else if (data.answer === 'md5') {
                         answersendsgf.style.display = 'inline-block';
-                        answersendsgf.classList.add('red');
-                        answersendsgf.classList.remove('brown2');
                         errormd5.style.display = 'block';
                     } else if (data.answer === 'success') {
                         answersendsgf.style.display = 'inline-block';
-                        answersendsgf.classList.add('brown2');
-                        answersendsgf.classList.remove('red');
                         sendsuccess.style.display = 'block';
                     }
                 });

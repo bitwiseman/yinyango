@@ -10,8 +10,9 @@ form.box.brown2(onsubmit='return false;')
             option(value='lesson')= lingua.lesson
             option(value='problem')= lingua.problem
     p: input#submitsgf.linkbutton.black(type='submit', value= lingua.sendfile)
-p: div#answersendsgf.box
-    p#errorinvalid= lingua.errorinvalid
-    p#errormd5= lingua.errormd5
-    p#sendsuccess= lingua.sendsuccess
+br
+#answersendsgf
+    #errorinvalid.box.red= lingua.errorinvalid
+    #errormd5.box.red= lingua.errormd5
+    #sendsuccess.box.brown2= lingua.sendsuccess
 p: a#exitsendsgf.linkbutton.black(href='#')= lingua.back
