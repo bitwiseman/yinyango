@@ -29,7 +29,6 @@ var userSchema = new mongoose.Schema({
     salt:       String,
     hash:       String,
     sgfid:      String,
-    gobansize:  Number,
     lang:       String
 });
 var sgfSchema = new mongoose.Schema({
@@ -179,12 +178,11 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username,
-        gobansize = req.session.gobansize;
+    var username =  req.session.username;
 
     // Login if user session is set.
     if (username) {
-        res.render('yygo', { username: username, gobansize: gobansize });
+        res.render('yygo', { username: username });
     } else {
         res.render('login', { error: '' });
     }
@@ -197,7 +195,6 @@ app.get('/', function (req, res) {
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
     req.session.sgfid = ''; 
-    req.session.gobansize = 19;
     res.redirect('/');
 });
 /*}}}*/
@@ -227,27 +224,19 @@ app.get('/load/:id', function (req, res) {
     var id = req.params.id,
         userid = req.session.userid;
 
-    if (id === 'next') {
-        req.session.page = req.session.page + 1 || 1;
-        res.redirect('/load');
-    } else if (id === 'prev') {
-        req.session.page = req.session.page - 1;
-        res.redirect('/load');
-    } else {
-        Sgf.findById(id, function (err, sgf) {
-            var settings = { sgfid: id, gobansize: sgf.size };
-            if (err) {
-                console.error('Sgf.findById error: ' + err);
-                return;
-            }
-            if (userid) {
-                User.findByIdAndUpdate(userid, settings, function (){});
-            }
-            req.session.gobansize = sgf.size;
-            req.session.sgfid = id;
-            res.redirect('/');
-        });
-    }
+    Sgf.findById(id, function (err, sgf) {
+        var settings = { sgfid: id };
+
+        if (err) {
+            console.error('Sgf.findById error: ' + err);
+            return;
+        }
+        if (userid) {
+            User.findByIdAndUpdate(userid, settings, function () {});
+        }
+        req.session.sgfid = id;
+        res.send(sgf.data);
+    });
 });
 /*}}}*/
 
@@ -340,7 +329,6 @@ app.post('/login', function (req, res) {
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
                         req.session.sgfid =     user.sgfid;
-                        req.session.gobansize = user.gobansize;
                         res.cookie('language', user.lang);
                         res.redirect('/');
                     } else {
@@ -400,7 +388,6 @@ app.post('/register', function (req, res) {
                         salt: salt,
                         hash: hash,
                         sgfid: '',
-                        gobansize: 19,
                         lang: lang
                     });
 
@@ -501,7 +488,7 @@ app.post('/settings', function (req, res) {
     // Update user settings in database.
     if (userid && validator.getErrors().length === 0) {
         settings = { lang: lang };
-        User.findByIdAndUpdate(userid, settings, function (){});
+        User.findByIdAndUpdate(userid, settings, function () {});
     }
 
     // Update cookie.

@@ -389,30 +389,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.makeGrid {{{
-         * Create grid to be inserted in goban element.
-         *
-         * @return {String} Grid html code.
-         */
-        makeGrid: function () {
-            var size =      yygo.data.size,
-                html =      '',
-                cell,
-                i,
-                j;
-
-            for (i = 0; i < size; i++) {
-                html += '<div>'; // Row start.
-                for (j = 0; j < size; j++) {
-                    cell = coord[j] + coord[i];
-                    html += '<div class="cell" id="' + cell + '"></div>';
-                }
-                html += '</div>'; // Row end.
-            }
-            return html;
-        },
-        /*}}}*/
-
         /** yygo.view.makeGamesList {{{
          * Create and insert games list html code.
          */
@@ -593,16 +569,6 @@ var yygo = {};
                 game.style.display = 'block';
                 options.style.display = 'block';
             }
-        },
-        /*}}}*/
-
-        /** yygo.view.changeGridImage {{{
-         * Change the background svg image depending on the goban size.
-         */
-        changeGridImage: function () {
-            var grid = document.getElementById('grid');
-
-            grid.style.background = 'url(images/' + yygo.data.size + '.svg)';
         },
         /*}}}*/
 
@@ -1019,6 +985,22 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.view.showLoading {{{
+         * Alternate the display of Loading...
+         *
+         * @param {Boolean} show Loading...
+         */
+        showLoading: function (show) {
+            var loading = document.getElementById('loading');
+
+            if (show) {
+                loading.style.display = 'block';
+            } else {
+                loading.style.display = 'none';
+            }
+        },
+        /*}}}*/
+
         /** yygo.view.showLoad {{{
          * Alternate the display of the page to load a game.
          *
@@ -1040,13 +1022,16 @@ var yygo = {};
             if (show) {
                 if (isEmpty(list) || refresh) { // Get fresh list from server.
                     jsonRequest('/gameslist/' + page, function (data) {
+                        var ids = [];
                         yygo.data.gameslist = data;
                         for (i = 0; i < 10; i++) {
-                            html += '<p><a class="linkbutton brown2"' +
-                                    'href="/load/' + data[i]._id +
-                                    '">' + data[i].name + '</a></p>';
+                            html += '<tr><td><a class="linkbutton brown2" ' +
+                                'href="#">' + data[i].name + '</a></td></tr>';
+                            ids.push(data[i]._id);
                         }
                         gameslist.innerHTML = html;
+                        // Bind click events to list.
+                        yygo.events.makeListBinds(ids);
                     });
                 }
                 yygo.view.showGoban(false);
@@ -1086,7 +1071,6 @@ var yygo = {};
             // Get user session if it still exist.
             jsonRequest('/session', function (session) {
                 yygo.events.username = session.username;
-                // TODO: Ask user what to load, previous session ?
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
                 if (session.data === '') {
@@ -1107,8 +1091,7 @@ var yygo = {};
          * @param {Object} data Game data.
          */
         loadGame: function (data) {
-            var oldsize = yygo.data.size,
-                loading = document.getElementById('loading');
+            var oldsize = yygo.data.size;
 
             yygo.data.game = data;
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
@@ -1122,11 +1105,10 @@ var yygo = {};
 
             yygo.data.setLastNode();
 
-            // Make view.
-            if (yygo.data.size !== oldsize) { // New size remake all.
+            // Generate goban grid if necessary.
+            if (yygo.data.size !== oldsize) {
                 yygo.view.makeGoban();
-                //yygo.view.changeGridImage();
-            } else { // Empty goban only.
+            } else {
                 yygo.view.emptyGoban();
             }
 
@@ -1147,7 +1129,7 @@ var yygo = {};
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize(function () {
-                loading.style.display = 'none';
+                yygo.view.showLoading(false);
                 yygo.view.showGoban(true);
             });
         },
@@ -1157,8 +1139,6 @@ var yygo = {};
          * Load introductive goban data and show it.
          */
         loadIntro: function () {
-            var loading = document.getElementById('loading');
-
             yygo.data.game = {0: {0: {} } };
             yygo.data.stones = {0: {0: {
                 'b': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
@@ -1197,7 +1177,6 @@ var yygo = {};
             yygo.data.size = 19;
 
             yygo.view.makeGoban();
-            //yygo.view.changeGridImage();
 
             yygo.view.placeStones();
             yygo.view.placeSymbols();
@@ -1212,7 +1191,7 @@ var yygo = {};
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize(function () {
-                loading.style.display = 'none';
+                yygo.view.showLoading(false);
                 yygo.view.showGoban(true);
             });
         },
@@ -1313,22 +1292,28 @@ var yygo = {};
         /** yygo.events.makeListBinds {{{
          * Assign a click event to each row in games list to load the proper
          * game index.
+         *
+         * @param {Array} ids Identifiers for database reference.
          */
-        makeListBinds: function () {
+        makeListBinds: function (ids) {
             var table =     document.getElementById('gameslist'),
                 rows =      table.getElementsByTagName('tr'),
                 rl =        rows.length,
                 r;
 
-            function rowClick(rowindex) {
-                return function () {
-                    yygo.events.loadGameFromList(rowindex);
-                };
-            }
-
             for (r = 0; r < rl; r++) {
-                rows[r].addEventListener('click', rowClick(rows[r].rowIndex),
-                    false);
+                rows[r].addEventListener('click', function () {
+                    var row = this.rowIndex;
+
+                    // Show loading screen.
+                    yygo.view.showLoading(true);
+                    yygo.view.showLoad(false);
+                    yygo.view.showGoban(false);
+                    // Get data of game corresponding clicked row.
+                    jsonRequest('/load/' + ids[row], function (data) {
+                        yygo.events.loadGame(data);
+                    });
+                }, false);
             }
         },
         /*}}}*/
