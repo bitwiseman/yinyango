@@ -1008,10 +1008,12 @@ var yygo = {};
          * @param {Boolean} refresh Force list refresh.
          */
         showLoad: function (show, refresh) {
-            var load = document.getElementById('load'),
+            var load =      document.getElementById('load'),
+                prevpage =  document.getElementById('prevpage'),
+                nextpage =  document.getElementById('nextpage'),
                 gameslist = document.getElementById('gameslist'),
-                page = yygo.data.listpage,
-                list = yygo.data.gameslist,
+                page =      yygo.data.listpage,
+                list =      yygo.data.gameslist,
                 html = '',
                 i;
 
@@ -1020,11 +1022,26 @@ var yygo = {};
             }
 
             if (show) {
+                if (page === 0) {
+                    prevpage.style.display = 'none';
+                } else {
+                    prevpage.style.display = 'inline';
+                }
                 if (isEmpty(list) || refresh) { // Get fresh list from server.
                     jsonRequest('/gameslist/' + page, function (data) {
-                        var ids = [];
+                        var datalen = data.length,
+                            ids = [];
+
+                        // More than one page.
+                        if (datalen === 11) {
+                            nextpage.style.display = 'inline';
+                            datalen--;
+                            data.pop();
+                        } else {
+                            nextpage.style.display = 'none';
+                        }
                         yygo.data.gameslist = data;
-                        for (i = 0; i < 10; i++) {
+                        for (i = 0; i < datalen; i++) {
                             html += '<tr><td><a class="linkbutton brown2" ' +
                                 'href="#">' + data[i].name + '</a></td></tr>';
                             ids.push(data[i]._id);
@@ -1209,6 +1226,8 @@ var yygo = {};
                 menulogout =    document.getElementById('menulogout'),
                 menuback =      document.getElementById('menuback'),
                 exitload =      document.getElementById('exitload'),
+                prevpage =      document.getElementById('prevpage'),
+                nextpage =      document.getElementById('nextpage'),
                 butmenu =       document.getElementById('butmenu'),
                 butstart =      document.getElementById('butstart'),
                 butfastprev =   document.getElementById('butfastprev'),
@@ -1248,9 +1267,17 @@ var yygo = {};
             menu.addEventListener('click', function (event) {
                 event.stopPropagation();
             }, false);
-            // Exit various pages.
+            // Load page specific.
             exitload.addEventListener('click', function () {
                 yygo.view.showLoad(false);
+            }, false);
+            prevpage.addEventListener('click', function () {
+                yygo.data.listpage--;
+                yygo.view.showLoad(true, true);
+            }, false);
+            nextpage.addEventListener('click', function () {
+                yygo.data.listpage++;
+                yygo.view.showLoad(true, true);
             }, false);
             // Buttons bar.
             butmenu.addEventListener('click', function () {
