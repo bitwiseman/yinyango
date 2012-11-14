@@ -21,7 +21,7 @@ var yygo = {};
      *
      * @param {String} url Destination url.
      * @param {String} method Method to send data.
-     * @param {String} data Data to be sent by a POST.
+     * @param {Object} data FormData Object to be sent by a POST.
      * @param {Function} callback Callback function.
      */
     function jsonRequest(url, method, data, callback) {
@@ -39,10 +39,6 @@ var yygo = {};
         };
 
         xhr.open(method, url, true);
-        if (method === 'POST') {
-            xhr.setRequestHeader('Content-type',
-                    'application/x-www-form-urlencoded');
-        }
         xhr.send(data);
     }
     /*}}}*/
@@ -1315,17 +1311,12 @@ var yygo = {};
             }, false);
             submitsettings.addEventListener('click', function () {
                 var settingssaved = document.getElementById('settingssaved'),
-                    submit =        this,
-                    lang =          submit.form.langselect.value,
-                    settings =      'lang=' + lang;
+                    settings =      new FormData(this.form);
 
-                // Hide submit button to avoid sending form twice.
                 settingssaved.style.display = 'none';
-                submit.style.display = 'none';
                 jsonRequest('/settings', 'POST', settings, function (data) {
                     if (data) {
                         settingssaved.style.display = 'block';
-                        submit.style.display = 'block';
                     }
                 });
             }, false);
