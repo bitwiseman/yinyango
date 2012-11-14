@@ -72,6 +72,8 @@ var yygo = {};
         gameslist:      {},
         score:          {b: 0, w: 0},
 
+        listpage:       0,
+
         branchs:        0,
         size:           0,
 
@@ -253,35 +255,124 @@ var yygo = {};
          * the grid.
          */
         makeGoban: function () {
-            var size = yygo.data.size,
-                gobanelem = document.getElementById('goban'),
-                letters =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
+            var size =      yygo.data.size + 2,
+                goban =     document.getElementById('goban'),
+                coord =     ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                            'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                border =    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
                             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
-                btop =      '<div id="btop"><div class="cell"></div>',
-                bright =    '<div id="bright"><div class="cell vcell"></div>',
-                bbottom =   '<div id="bbottom"><div class="cell"></div>',
-                bleft =     '<div id="bleft"><div class="cell vcell"></div>',
-                html,
-                i;
+                html =      '',
+                content,
+                id,
+                i,
+                j;
 
-            // Make borders.
-            for (i = 0; i < size; i++) {
-                btop += '<div class="cell">' + letters[i] + '</div>';
-                bright += '<div class="cell vcell">' + (size - i) + '</div>';
-                bbottom += '<div class="cell">' + letters[i] + '</div>';
-                bleft += '<div class="cell vcell">' + (size - i) + '</div>';
+            /** isHoshi {{{
+             * Test if a coord should be diplayed as hoshi.
+             *
+             * @param {Number} x X coord.
+             * @param {Number} y Y coord.
+             *
+             * @return {Boolean}
+             */
+            function isHoshi(x, y) {
+                var m = (size - 1) / 2,
+                    r = size - 5;
+
+                if (size === 11 && ((x === 3 && y === 3) ||
+                        (x === 5 && y === 3) || (x === 7 && y === 3) ||
+                        (x === 3 && y === 5) || (x === 5 && y === 5) ||
+                        (x === 7 && y === 5) || (x === 3 && y === 7) ||
+                        (x === 5 && y === 7) || (x === 7 && y === 7))) {
+                    return true;
+                } else if (size > 11) {
+                    if (size / 2 !== Math.round(size / 2) &&
+                            ((x === 4 && y === m) || (x === m && y === 4) ||
+                            (x === m && y === m) || (x === m && y === r) ||
+                            (x === r && y === m))) {
+                        return true;
+                    } else if ((x === 4 && y === 4) || (x === 4 && y === r) ||
+                            (x === r && y === 4) || (x === r && y === r)) {
+                        return true;
+                    }
+                }
+                return false;
             }
+            /*}}}*/
 
-            btop += '</div>';
-            bright += '</div>';
-            bbottom += '</div>';
-            bleft += '</div>';
-
-            // Make grid and insert it with borders in goban element.
-            html = btop + bright + bbottom + bleft +
-                   '<div id="grid">' + this.makeGrid()  + '</div>';
-
-            gobanelem.innerHTML = html;
+            // Make grid and insert it in goban element.
+            for (i = 0; i < size; i++) {
+                html += '<div>'; // Row start.
+                for (j = 0; j < size; j++) {
+                    id = coord[j] + coord[i];
+                    if (i === 1) {
+                        if (j === 1) {
+                            content = '<div class="g gr black"></div>' +
+                                '<div class="g gb black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else if (j === size -2) {
+                            content = '<div class="g gb black"></div>' +
+                                '<div class="g gl black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else if (j !== 0 && j !== size - 1) {
+                            content = '<div class="g gr black"></div>' +
+                                '<div class="g gb black"></div>' +
+                                '<div class="g gl black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else {
+                            content = size - i - 1;
+                        }
+                    } else if (i === size - 2) {
+                        if (j === 1) {
+                            content = '<div class="g gt black"></div>' +
+                                '<div class="g gr black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else if (j === size -2) {
+                            content = '<div class="g gt black"></div>' +
+                                '<div class="g gl black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else if (j !== 0 && j !== size - 1) {
+                            content = '<div class="g gt black"></div>' +
+                                '<div class="g gr black"></div>' +
+                                '<div class="g gl black"></div>' +
+                                '<div class="stone" id="' + id + '"></div>';
+                        } else {
+                            content = size - i - 1;
+                        }
+                    } else if (j === 1 && i !== 0 && i !== size - 1) {
+                        content = '<div class="g gt black"></div>' +
+                            '<div class="g gr black"></div>' +
+                            '<div class="g gb black"></div>' +
+                            '<div class="stone" id="' + id + '"></div>';
+                    } else if (j === size - 2 && i !== 0 && i !== size - 1) {
+                        content = '<div class="g gt black"></div>' +
+                            '<div class="g gb black"></div>' +
+                            '<div class="g gl black"></div>' +
+                            '<div class="stone" id="' + id + '"></div>';
+                    } else if (i !== 0 && i !== size - 1 && j !== 0 &&
+                            j !== size - 1) {
+                        content = '<div class="g gt black"></div>' +
+                            '<div class="g gr black"></div>' +
+                            '<div class="g gb black"></div>' +
+                            '<div class="g gl black"></div>' +
+                            '<div class="stone" id="' + id + '"></div>';
+                        if (isHoshi(i, j)) {
+                            content += '<div class="h black"></div>';
+                        }
+                    } else if ((i === 0 || i === size - 1) && j !== size - 1 &&
+                            j !== 0) {
+                        content = border[j - 1];
+                    } else if ((j === 0 || j === size - 1) && i !== size - 1 &&
+                            i !== 0) {
+                        content = size - i - 1;
+                    } else {
+                        content = '';
+                    }
+                    html += '<div class="cell">' + content + '</div>';
+                }
+                html += '</div>'; // Row end.
+            }
+            goban.innerHTML = html;
         },
         /*}}}*/
 
@@ -323,8 +414,6 @@ var yygo = {};
          */
         makeGrid: function () {
             var size =      yygo.data.size,
-                coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-                            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 html =      '',
                 cell,
                 i,
@@ -910,6 +999,25 @@ var yygo = {};
         },
         /*}}}*/
 
+        /** yygo.view.showGoban {{{
+         * Alternate the display of the goban and panel.
+         *
+         * @param {Boolean} show Show goban and panel.
+         */
+        showGoban: function (show) {
+            var goban = document.getElementById('goban'),
+                panel = document.getElementById('panel');
+
+            if (show) {
+                goban.style.display = 'block';
+                panel.style.display = 'block';
+            } else {
+                goban.style.display = 'none';
+                panel.style.display = 'none';
+            }
+        },
+        /*}}}*/
+
         /** yygo.view.showMenu {{{
          * Alternate the display of the options menu.
          *
@@ -933,14 +1041,38 @@ var yygo = {};
          * Alternate the display of the page to load a game.
          *
          * @param {Boolean} show Show page.
+         * @param {Boolean} refresh Force list refresh.
          */
-        showLoad: function (show) {
-            var load = document.getElementById('load');
+        showLoad: function (show, refresh) {
+            var load = document.getElementById('load'),
+                gameslist = document.getElementById('gameslist'),
+                page = yygo.data.listpage,
+                list = yygo.data.gameslist,
+                html = '',
+                i;
+
+            if (refresh === undefined) {
+                refresh = false;
+            }
 
             if (show) {
+                if (isEmpty(list) || refresh) { // Get fresh list from server.
+                    jsonRequest('/gameslist/' + page, function (data) {
+                        yygo.data.gameslist = data;
+                        for (i = 0; i < 10; i++) {
+                            html += '<p><a class="linkbutton brown2"' +
+                                    'href="/load/' + data[i]._id +
+                                    '">' + data[i].name + '</a></p>';
+                        }
+                        gameslist.innerHTML = html;
+                    });
+                }
+                yygo.view.showGoban(false);
+                yygo.view.showMenu(false);
                 load.style.display = 'block';
             } else {
                 load.style.display = 'none';
+                yygo.view.showGoban(true);
             }
         }
         /*}}}*/
@@ -994,8 +1126,6 @@ var yygo = {};
          */
         loadGame: function (data) {
             var oldsize = yygo.data.size,
-                goban = document.getElementById('goban'),
-                panel = document.getElementById('panel'),
                 loading = document.getElementById('loading');
 
             yygo.data.game = data;
@@ -1011,12 +1141,12 @@ var yygo = {};
             yygo.data.setLastNode();
 
             // Make view.
-            //if (yygo.data.size !== oldsize) { // New size remake all.
-                //yygo.view.makeGoban();
+            if (yygo.data.size !== oldsize) { // New size remake all.
+                yygo.view.makeGoban();
                 //yygo.view.changeGridImage();
-            //} else { // Empty goban only.
-                //yygo.view.emptyGoban();
-            //}
+            } else { // Empty goban only.
+                yygo.view.emptyGoban();
+            }
 
             yygo.view.makeVariations();
             //yygo.view.makeInfos();
@@ -1036,8 +1166,7 @@ var yygo = {};
             yygo.view.redraw = true;
             yygo.view.setGobanSize(function () {
                 loading.style.display = 'none';
-                goban.style.display = 'block';
-                panel.style.display = 'block';
+                yygo.view.showGoban(true);
             });
         },
         /*}}}*/
@@ -1046,9 +1175,7 @@ var yygo = {};
          * Load introductive goban data and show it.
          */
         loadIntro: function () {
-            var goban = document.getElementById('goban'),
-                panel = document.getElementById('panel'),
-                loading = document.getElementById('loading');
+            var loading = document.getElementById('loading');
 
             yygo.data.game = {0: {0: {} } };
             yygo.data.stones = {0: {0: {
@@ -1087,7 +1214,7 @@ var yygo = {};
 
             yygo.data.size = 19;
 
-            //yygo.view.makeGoban();
+            yygo.view.makeGoban();
             //yygo.view.changeGridImage();
 
             yygo.view.placeStones();
@@ -1104,8 +1231,7 @@ var yygo = {};
             yygo.view.redraw = true;
             yygo.view.setGobanSize(function () {
                 loading.style.display = 'none';
-                goban.style.display = 'block';
-                panel.style.display = 'block';
+                yygo.view.showGoban(true);
             });
         },
         /*}}}*/

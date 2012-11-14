@@ -202,30 +202,20 @@ app.get('/guest', function (req, res) {
 });
 /*}}}*/
 
-/** get /load {{{
- * Load game.
+/** get /gameslist/:page {{{
+ * Send games corresponding to a page.
  */
-app.get('/load', function (req, res) {
-    var page = req.session.page || 0,
-        next,
+app.get('/gameslist/:page', function (req, res) {
+    var page = req.params.page,
         filters,
         options,
         games;
 
+    // TODO validator.
     filters = 'name';
     options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
-    Sgf.find({}, filters, options, function (err, sgfs) {
-        if (sgfs.length === 11) { // More than one page.
-            next = true;
-            sgfs.pop(); // Remove last one to show only 10.
-        } else {
-            next = false;
-        }
-        res.render('load', {
-            page: page,
-            next: next,
-            sgfs: sgfs
-        });
+    Sgf.find({}, filters, options, function (err, games) {
+        res.send(games);
     });
 });
 /*}}}*/
