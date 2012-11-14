@@ -29,6 +29,8 @@
     "register":         "S'enregistrer",
     "regsuccess":       "Enregistrement réussi.",
     "rules":            "Règles",
+    "save":             "Enregistrer",
+    "settingssaved":    "Paramètres enregistrés. Ils seront pris en compte au prochain lancement.",
     "selectcategory":   "Sélectionnez une catégorie",
     "selectfile":       "Sélectionnez un fichier SGF",
     "sendfile":         "Envoyer le fichier",

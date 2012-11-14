@@ -178,11 +178,12 @@ function hash(pwd, salt, fn) {
  * Application start.
  */
 app.get('/', function (req, res) {
-    var username =  req.session.username;
+    var username =  req.session.username,
+        lang =      req.cookies.language;
 
     // Login if user session is set.
     if (username) {
-        res.render('yygo', { username: username });
+        res.render('yygo', { username: username, lang: lang });
     } else {
         res.render('login', { error: '' });
     }
@@ -208,7 +209,6 @@ app.get('/gameslist/:page', function (req, res) {
         options,
         games;
 
-    // TODO validator.
     filters = 'name';
     options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
     Sgf.find({}, filters, options, function (err, games) {
@@ -285,16 +285,6 @@ app.get('/session', function (req, res) {
     } else {
         res.send({ username: username, data: '' });
     }
-});
-/*}}}*/
-
-/** get /settings {{{
- * User parameters page.
- */
-app.get('/settings', function (req, res) {
-    var lang = req.cookies.language;
-
-    res.render('settings', { lang: lang });
 });
 /*}}}*/
 
@@ -477,26 +467,31 @@ app.post('/sendsgf', function (req, res) {
  * Use _id for faster database access as it's indexed.
  */
 app.post('/settings', function (req, res) {
-    var lang =      req.body.langselect,
+    var lang =      req.body.lang,
         userid =    req.session.userid,
         validator = new Validator(),
-        settings;
+        settings,
+        errors;
 
     // Always check received data before using it.
     validator.check(lang).len(2, 2).isAlpha();
+    errors = validator.getErrors().length;
 
     // Update user settings in database.
-    if (userid && validator.getErrors().length === 0) {
+    if (userid && errors === 0) {
         settings = { lang: lang };
-        User.findByIdAndUpdate(userid, settings, function () {});
-    }
-
-    // Update cookie.
-    if (validator.getErrors().length === 0) {
+        User.findByIdAndUpdate(userid, settings, function (err) {
+            if (!err) {
+                res.cookie('language', lang);
+                res.send(true);
+            } else {
+                res.send(false);
+            }
+        });
+    } else if (errors === 0) { // Update cookie only as it is guest user.
         res.cookie('language', lang);
+        res.send(true);
     }
-
-    res.redirect('/settings');
 });
 /*}}}*/
 

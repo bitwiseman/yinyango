@@ -29,6 +29,8 @@
     "register":         "Register",
     "regsuccess":       "Registering successfull.",
     "rules":            "Rules",
+    "save":             "Save",
+    "settingssaved":    "Settings saved. They will apply at next launch.",
     "selectcategory":   "Select a category",
     "selectfile":       "Select a SGF file",
     "sendfile":         "Send file",

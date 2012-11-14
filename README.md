@@ -19,6 +19,7 @@ general.
 - Add other rules.
 - Validation link sent by mail.
 - Make ajax load, sendsgf, settings included into yygo.
+- Provide direct link to a game.
 
 ## LICENSE
 

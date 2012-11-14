@@ -107,6 +107,9 @@ body {
 #settings {
     display: none;
 }
+#settingssaved {
+    display: none;
+}
 #load {/*{{{*/
     display: none;
 }

@@ -1,0 +1,16 @@
+h1= lingua.title
+h2= lingua.settings
+form.box.brown2(method='post', action='/settings', onsubmit='return false;')
+    p= lingua.lang
+    select.input(name='langselect')
+        if lang == 'en'
+            option#en(value='en', selected) English
+        else
+            option#en(value='en') English
+        if lang == 'fr'
+            option#fr(value='fr', selected) Français
+        else
+            option#fr(value='fr') Français
+    p: input#submitsettings.linkbutton.black(type='submit', value= lingua.save)
+    p#settingssaved= lingua.settingssaved
+p: a#exitsettings.linkbutton.black(href='#')= lingua.back

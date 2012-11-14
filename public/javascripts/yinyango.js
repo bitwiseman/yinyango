@@ -20,11 +20,17 @@ var yygo = {};
      * Simple ajax request expecting json in response.
      *
      * @param {String} url Destination url.
+     * @param {String} method Method to send data.
+     * @param {String} data Data to be sent by a POST.
      * @param {Function} callback Callback function.
      */
-    function jsonRequest(url, callback) {
-        var xhr = new XMLHttpRequest(); // Ignore old IE.
+    function jsonRequest(url, method, data, callback) {
+        var xhr = new XMLHttpRequest();
 
+        if (callback === undefined) {
+            callback = data;
+            data = null;
+        }
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 &&
                     (xhr.status === 200 || xhr.status === 0)) {
@@ -32,8 +38,12 @@ var yygo = {};
             }
         };
 
-        xhr.open('GET', url, true); // Asynchronous GET.
-        xhr.send(null);
+        xhr.open(method, url, true);
+        if (method === 'POST') {
+            xhr.setRequestHeader('Content-type',
+                    'application/x-www-form-urlencoded');
+        }
+        xhr.send(data);
     }
     /*}}}*/
 
@@ -185,7 +195,7 @@ var yygo = {};
             var table = document.getElementById('gameslist'),
                 id =    table.rows[index].cells[0].textContent;
 
-            jsonRequest('games/' + id, function (data) {
+            jsonRequest('games/' + id, 'GET', function (data) {
                 yygo.data.game = data;
 
                 yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
@@ -1028,7 +1038,7 @@ var yygo = {};
                     prevpage.style.display = 'inline';
                 }
                 if (isEmpty(list) || refresh) { // Get fresh list from server.
-                    jsonRequest('/gameslist/' + page, function (data) {
+                    jsonRequest('/gameslist/' + page, 'GET', function (data) {
                         var datalen = data.length,
                             ids = [];
 
@@ -1058,9 +1068,27 @@ var yygo = {};
                 load.style.display = 'none';
                 yygo.view.showGoban(true);
             }
-        }
+        },
         /*}}}*/
 
+        /** yygo.view.showSettings {{{
+         * Alternate the display of the user settings.
+         *
+         * @param {Boolean} show Show page.
+         */
+        showSettings: function (show) {
+            var settings = document.getElementById('settings');
+
+            if (show) {
+                yygo.view.showGoban(false);
+                yygo.view.showMenu(false);
+                settings.style.display = 'block';
+            } else {
+                settings.style.display = 'none';
+                yygo.view.showGoban(true);
+            }
+        }
+        /*}}}*/
     };
     /*}}}*/
 
@@ -1086,7 +1114,7 @@ var yygo = {};
          */
         init: function () {
             // Get user session if it still exist.
-            jsonRequest('/session', function (session) {
+            jsonRequest('/session', 'GET', function (session) {
                 yygo.events.username = session.username;
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
@@ -1218,23 +1246,25 @@ var yygo = {};
          * Bind events to the elements.
          */
         makeBinds: function () {
-            var menu =          document.getElementById('menu'),
-                menucontainer = document.getElementById('menucontainer'),
-                menuload =      document.getElementById('menuload'),
-                menusendsgf =   document.getElementById('menusendsgf'),
-                menusettings =  document.getElementById('menusettings'),
-                menulogout =    document.getElementById('menulogout'),
-                menuback =      document.getElementById('menuback'),
-                exitload =      document.getElementById('exitload'),
-                prevpage =      document.getElementById('prevpage'),
-                nextpage =      document.getElementById('nextpage'),
-                butmenu =       document.getElementById('butmenu'),
-                butstart =      document.getElementById('butstart'),
-                butfastprev =   document.getElementById('butfastprev'),
-                butprev =       document.getElementById('butprev'),
-                butnext =       document.getElementById('butnext'),
-                butfastnext =   document.getElementById('butfastnext'),
-                butend =        document.getElementById('butend');
+            var menu =              document.getElementById('menu'),
+                menucontainer =     document.getElementById('menucontainer'),
+                menuload =          document.getElementById('menuload'),
+                menusendsgf =       document.getElementById('menusendsgf'),
+                menusettings =      document.getElementById('menusettings'),
+                menulogout =        document.getElementById('menulogout'),
+                menuback =          document.getElementById('menuback'),
+                exitload =          document.getElementById('exitload'),
+                prevpage =          document.getElementById('prevpage'),
+                nextpage =          document.getElementById('nextpage'),
+                exitsettings =      document.getElementById('exitsettings'),
+                submitsettings =    document.getElementById('submitsettings'),
+                butmenu =           document.getElementById('butmenu'),
+                butstart =          document.getElementById('butstart'),
+                butfastprev =       document.getElementById('butfastprev'),
+                butprev =           document.getElementById('butprev'),
+                butnext =           document.getElementById('butnext'),
+                butfastnext =       document.getElementById('butfastnext'),
+                butend =            document.getElementById('butend');
 
             // Window resize.
             window.addEventListener('resize', function () {
@@ -1253,7 +1283,7 @@ var yygo = {};
                 //window.location.href = '/load';
             }, false);
             menusettings.addEventListener('click', function () {
-                window.location.href = '/settings';
+                yygo.view.showSettings(true);
             }, false);
             menulogout.addEventListener('click', function () {
                 window.location.href = '/logout';
@@ -1278,6 +1308,26 @@ var yygo = {};
             nextpage.addEventListener('click', function () {
                 yygo.data.listpage++;
                 yygo.view.showLoad(true, true);
+            }, false);
+            // Settings specific.
+            exitsettings.addEventListener('click', function () {
+                yygo.view.showSettings(false);
+            }, false);
+            submitsettings.addEventListener('click', function () {
+                var settingssaved = document.getElementById('settingssaved'),
+                    submit =        this,
+                    lang =          submit.form.langselect.value,
+                    settings =      'lang=' + lang;
+
+                // Hide submit button to avoid sending form twice.
+                settingssaved.style.display = 'none';
+                submit.style.display = 'none';
+                jsonRequest('/settings', 'POST', settings, function (data) {
+                    if (data) {
+                        settingssaved.style.display = 'block';
+                        submit.style.display = 'block';
+                    }
+                });
             }, false);
             // Buttons bar.
             butmenu.addEventListener('click', function () {
@@ -1337,7 +1387,7 @@ var yygo = {};
                     yygo.view.showLoad(false);
                     yygo.view.showGoban(false);
                     // Get data of game corresponding clicked row.
-                    jsonRequest('/load/' + ids[row], function (data) {
+                    jsonRequest('/load/' + ids[row], 'GET', function (data) {
                         yygo.events.loadGame(data);
                     });
                 }, false);
