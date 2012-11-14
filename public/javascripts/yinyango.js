@@ -1073,12 +1073,14 @@ var yygo = {};
          * @param {Boolean} show Show page.
          */
         showSendSgf: function (show) {
-            var sendsgf = document.getElementById('sendsgf');
+            var sendsgf =       document.getElementById('sendsgf'),
+                answersendsgf = document.getElementById('answersendsgf');
 
             if (show) {
                 yygo.view.showGoban(false);
                 yygo.view.showMenu(false);
                 sendsgf.style.display = 'block';
+                answersendsgf.style.display = 'none';
             } else {
                 sendsgf.style.display = 'none';
                 yygo.view.showGoban(true);
@@ -1092,12 +1094,14 @@ var yygo = {};
          * @param {Boolean} show Show page.
          */
         showSettings: function (show) {
-            var settings = document.getElementById('settings');
+            var settings =      document.getElementById('settings'),
+                settingssaved = document.getElementById('settingssaved');
 
             if (show) {
                 yygo.view.showGoban(false);
                 yygo.view.showMenu(false);
                 settings.style.display = 'block';
+                settingssaved.style.display = 'none';
             } else {
                 settings.style.display = 'none';
                 yygo.view.showGoban(true);
@@ -1347,24 +1351,31 @@ var yygo = {};
                 yygo.view.showSendSgf(false);
             }, false);
             submitsgf.addEventListener('click', function () {
-                var errorsendsgf =  document.getElementById('errorsendsgf'),
+                var answersendsgf = document.getElementById('answersendsgf'),
                     errorinvalid =  document.getElementById('errorinvalid'),
                     errormd5 =      document.getElementById('errormd5'),
                     sendsuccess =   document.getElementById('sendsuccess'),
                     file =          new FormData(this.form);
 
-                errorsendsgf.style.display = 'none';
+                answersendsgf.style.display = 'none';
                 errorinvalid.style.display = 'none';
                 errormd5.style.display = 'none';
                 sendsuccess.style.display = 'none';
                 jsonRequest('/sendsgf', 'POST', file, function (data) {
                     if (data.answer === 'invalid') {
-                        errorsendsgf.style.display = 'inline-block';
+                        answersendsgf.style.display = 'inline-block';
+                        answersendsgf.classList.add('red');
+                        answersendsgf.classList.remove('brown2');
                         errorinvalid.style.display = 'block';
                     } else if (data.answer === 'md5') {
-                        errorsendsgf.style.display = 'inline-block';
+                        answersendsgf.style.display = 'inline-block';
+                        answersendsgf.classList.add('red');
+                        answersendsgf.classList.remove('brown2');
                         errormd5.style.display = 'block';
                     } else if (data.answer === 'success') {
+                        answersendsgf.style.display = 'inline-block';
+                        answersendsgf.classList.add('brown2');
+                        answersendsgf.classList.remove('red');
                         sendsuccess.style.display = 'block';
                     }
                 });

@@ -437,6 +437,7 @@ app.post('/sendsgf', function (req, res) {
                                 data:       obj
                             });
                             sgf.save(function (err) {
+                                if (err) console.log(err);
                                 if (err && err.code === 11000) { // duplicate.
                                     res.send({ answer: 'md5' });
                                 } else {
