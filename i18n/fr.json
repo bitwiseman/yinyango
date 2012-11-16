@@ -14,6 +14,7 @@
     "game":             "Partie",
     "guestlogin":       "Connexion en tant qu'invité",
     "helpname":         "Lettres et/ou chiffres seulement.", 
+    "jsrequired":       "Cette application requiert l'activation de Javascript.",
     "lang":             "Langue",
     "lesson":           "Cours",
     "load":             "Charger une partie",

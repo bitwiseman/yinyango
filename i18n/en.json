@@ -14,6 +14,7 @@
     "game":             "Game",
     "guestlogin":       "Login as guest",
     "helpname":         "Letters and/or digits only.", 
+    "jsrequired":       "Javascript must be activated for application to work.",
     "lang":             "Language",
     "lesson":           "Lesson",
     "load":             "Load a game",
