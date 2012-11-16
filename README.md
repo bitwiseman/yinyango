@@ -7,18 +7,14 @@ general.
 
 ## TODO
 
-- CSS for symbols.
 - Use CSS flex, inline-flex when available on current browsers.
 - Clean unused js.
-- Translate game to SGF.
 - Make different modes: play, edition...
 - Calculate the score.
-- Treat other keys like 'pass'.
 - Add suicide rule.
 - Add ko rules.
 - Add other rules.
 - Validation link sent by mail.
-- Make ajax load, sendsgf, settings included into yygo.
 - Provide direct link to a game.
 
 ## LICENSE
