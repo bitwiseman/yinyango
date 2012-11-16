@@ -92,27 +92,6 @@ function restricted(req, res, next) {
 }
 /*}}}*/
 
-/** getLang {{{
- * Return language of browser if set and supported, else default to english.
- */
-function getLang(req) {
-    var supported = [ 'en', 'fr' ],
-        supplen = supported.length,
-        lang,
-        i;
-
-    if (req.headers["accept-language"] !== undefined) {
-        lang = req.headers["accept-language"].substr(0, 2);
-        for (i = 0; i < supplen; i++) {
-            if (lang === supported[i]) {
-                return req.headers["accept-language"].substr(0, 2);
-            }
-        }
-    }
-    return 'en';
-}
-/*}}}*/
-
 /** checkSgf {{{
  * Check if a sgf file is valid with sgfc.
  *
