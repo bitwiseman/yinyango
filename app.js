@@ -96,16 +96,16 @@ function restricted(req, res, next) {
  * Check if a sgf file is valid with sgfc.
  *
  * @param {String}      sgf     Path to sgf file.
- * @param {Function}    fn      Callback(valid). valid: 1 or 0.
+ * @param {Function}    next    Callback if file is valid.
  */
-function checkSgf(sgf, fn) {
-	exec('bin/sgfc ' + sgf, function (error, stdout, stderr) {
+function checkSgf(sgf, res, next) {
+	exec('bin/sgfc ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
         var check = stdout.replace(/\s+$/, '').slice(-2);
 
         if (check === 'OK') {
-            fn(1);
+            next();
         } else {
-            fn(0);
+            res.send({ answer: 'invalid' });
         }
 
         if (error) {
@@ -395,38 +395,34 @@ app.post('/sendsgf', function (req, res) {
             return;
         }
         if (user) {
-            checkSgf(file, function (valid) {
-                if (valid) {
-                    fs.readFile(file, function (err, data) {
-                        if (err) {
-                            console.error('fs.readFile error: ' + err);
-                            return;
-                        }
-                        md5 = crypto.createHash('md5').update(data)
-                                .digest('hex');
-                        gotools.parseSgf(data.toString(), function (obj) {
-                            var size = parseInt(obj[0][0].SZ[0], 10);
-                            sgf = new Sgf({
-                                name:       name,
-                                submitter:  username,
-                                date:       date,
-                                category:   category,
-                                md5:        md5,
-                                size:       size,
-                                data:       obj
-                            });
-                            sgf.save(function (err) {
-                                if (err && err.code === 11000) { // duplicate.
-                                    res.send({ answer: 'md5' });
-                                } else {
-                                    res.send({ answer: 'success' });
-                                }
-                            });
+            checkSgf(file, res, function () {
+                fs.readFile(file, function (err, data) {
+                    if (err) {
+                        console.error('fs.readFile error: ' + err);
+                        return;
+                    }
+                    md5 = crypto.createHash('md5').update(data)
+                            .digest('hex');
+                    gotools.parseSgf(data.toString(), function (obj) {
+                        var size = parseInt(obj[0][0].SZ[0], 10);
+                        sgf = new Sgf({
+                            name:       name,
+                            submitter:  username,
+                            date:       date,
+                            category:   category,
+                            md5:        md5,
+                            size:       size,
+                            data:       obj
+                        });
+                        sgf.save(function (err) {
+                            if (err && err.code === 11000) { // duplicate.
+                                res.send({ answer: 'md5' });
+                            } else {
+                                res.send({ answer: 'success' });
+                            }
                         });
                     });
-                } else {
-                    res.send({ answer: 'invalid' });
-                }
+                });
             });
         }
     });
@@ -477,4 +473,16 @@ app.get('/test', function (req, res) {
 
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
+    //Sgf.findOne({ name: 'symbols.sgf' }, function (err, sgf) {
+        //gotools.buildSgf(sgf.data, function (string) {
+            //fs.writeFile('sgf.sgf', string, function () {
+                //exec('bin/sgfc sgf.sgf sgf.sgf', function (err, stdout, stderr) {
+                    //fs.readFile('sgf.sgf', function (err, data) {
+                        //var md5 = crypto.createHash('md5').update(data).digest('hex');
+                        //console.log(md5);
+                    //});
+                //});
+            //});
+        //});
+    //});
 });

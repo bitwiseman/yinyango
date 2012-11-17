@@ -8,5 +8,7 @@ html
         link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
         link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
     body.brown
-        noscript.box.red= lingua.jsrequired
+        noscript
+            .alert.red
+                p= lingua.jsrequired
         block content
