@@ -245,13 +245,18 @@ app.get('/session', function (req, res) {
     var username =  req.session.username || 'guest',
         sgfid =     req.session.sgfid;
 
+    console.log(sgfid);
     if (sgfid !== '') {
         Sgf.findById(sgfid, function (err, sgf) {
-            if (err) { // Game does not exist.
-                res.send({ username: username, data: '' });
+            if (err) {
+                console.error('Sgf.findById: ' + err);
                 return;
             }
-            res.send({ username: username, data: sgf.data });
+            if (sgf !== null) {
+                res.send({ username: username, data: sgf.data });
+            } else { // Game have been removed.
+                res.send({ username: username, data: '' });
+            }
         });
     } else {
         res.send({ username: username, data: '' });
