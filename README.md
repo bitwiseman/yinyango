@@ -5,6 +5,11 @@ A small project that aims at making a Go player in Javascript.
 Main goal of this project is to teach myself this language and coding in
 general.
 
+## OBJECTIVES
+
+- Make it simple and fast.
+- Adapt interface to user (screen, fonts).
+
 ## TODO
 
 - Use CSS flex, inline-flex when available on current browsers.
