@@ -99,7 +99,7 @@ function restricted(req, res, next) {
  * @param {Function}    next    Callback if file is valid.
  */
 function checkSgf(sgf, res, next) {
-	exec('bin/sgfc ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
+	exec('bin/sgfc -e ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
         var check = stdout.replace(/\s+$/, '').slice(-2);
 
         if (check === 'OK') {
@@ -245,7 +245,6 @@ app.get('/session', function (req, res) {
     var username =  req.session.username || 'guest',
         sgfid =     req.session.sgfid;
 
-    console.log(sgfid);
     if (sgfid !== '') {
         Sgf.findById(sgfid, function (err, sgf) {
             if (err) {
@@ -254,7 +253,7 @@ app.get('/session', function (req, res) {
             }
             if (sgf !== null) {
                 res.send({ username: username, data: sgf.data });
-            } else { // Game have been removed.
+            } else { // Game has been removed.
                 res.send({ username: username, data: '' });
             }
         });
