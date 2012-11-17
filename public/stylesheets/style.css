@@ -66,7 +66,6 @@ body {
     font: bold 1em sans-serif;
 }
 .inputhelp {
-    display: none;
     padding: 0.5em;
     border-bottom-left-radius: 1em;
     border-bottom-right-radius: 1em;
@@ -85,12 +84,19 @@ body {
 }
 /*}}}*/
 
-#menucontainer {
+/** hide at start {{{
+ * Elements that starts hidden
+ */
+#menucontainer, #menumask, #sendsgf, #errorsendsgf, #errorinvalid, #errormd5,
+#sendsuccess, #settings, #settingssaved, #load, #goban, #panel, .inputhelp {
     display: none;
+}
+/*}}}*/
+
+#menucontainer {
     position: absolute;
 }
 #menumask {
-    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -106,31 +112,7 @@ body {
     width: 100%;
     margin-top: -0.5em;
 }
-#sendsgf {
-    display: none;
-}
-#errorsendsgf {
-    display: none;
-}
-#errorinvalid {
-    display: none;
-}
-#errormd5 {
-    display: none;
-}
-#sendsuccess {
-    display: none;
-}
-#settings {
-    display: none;
-}
-#settingssaved {
-    display: none;
-}
-#load {/*{{{*/
-    display: none;
-}
-#gameslist {
+#gameslist {/*{{{*/
     border-collapse: collapse;
     text-align: center;
     width: 100%;
@@ -337,7 +319,6 @@ body {
 }
 /*}}}*/
 #goban {/*{{{*/
-    display: none;
     position: relative;
     margin: auto;
 }
@@ -408,7 +389,6 @@ body {
 /*}}}*/
 /*}}}*/
 #panel {/*{{{*/
-    display: none;
     position: absolute;
     bottom: 0;
     padding: 5px;
@@ -424,7 +404,6 @@ body {
 }
 /*}}}*/
 #infos {/*{{{*/
-    display: none;
     position: absolute;
     width: 100%;
     top: 50px;
