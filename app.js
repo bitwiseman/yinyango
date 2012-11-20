@@ -465,10 +465,6 @@ app.post('/settings', function (req, res) {
     }
 });
 /*}}}*/
-
-app.get('/test', function (req, res) {
-    res.render('test', { gobansize: 9 });
-});
 /*}}}*/
 
 /**
