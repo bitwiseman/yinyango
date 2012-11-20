@@ -99,7 +99,7 @@ function restricted(req, res, next) {
  * @param {Function}    next    Callback if file is valid.
  */
 function checkSgf(sgf, res, next) {
-	exec('bin/sgfc -e ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
+	exec('bin/sgfc -et ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
         var check = stdout.replace(/\s+$/, '').slice(-2);
 
         if (check === 'OK') {
