@@ -879,29 +879,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.toggleBorders {{{
-         * Alternate the display of the goban borders.
-         */
-        toggleBorders: function () {
-            var btop =      document.getElementById('btop'),
-                bright =    document.getElementById('bright'),
-                bbottom =   document.getElementById('bbottom'),
-                bleft =     document.getElementById('bleft');
-
-            if (this.showborders) {
-                btop.style.display = 'block';
-                bright.style.display = 'block';
-                bbottom.style.display = 'block';
-                bleft.style.display = 'block';
-            } else {
-                btop.style.display = 'none';
-                bright.style.display = 'none';
-                bbottom.style.display = 'none';
-                bleft.style.display = 'none';
-            }
-        },
-        /*}}}*/
-
         /** yygo.view.toggleNavButtons {{{
          * Alternate active state of navigation buttons.
          */
@@ -1195,7 +1172,6 @@ var yygo = {};
 
             //yygo.view.changeScreen();
 
-            //yygo.view.toggleBorders();
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
@@ -1257,7 +1233,6 @@ var yygo = {};
 
             //yygo.view.changeScreen();
 
-            //yygo.view.toggleBorders();
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
@@ -1541,36 +1516,6 @@ var yygo = {};
             yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
-        },
-        /*}}}*/
-
-        /** yygo.events.clickBorders {{{
-         * Toggle display state of the goban borders.
-         */
-        clickBorders: function () {
-            if (yygo.view.showborders) {
-                yygo.view.showborders = false;
-                yygo.view.toggleBorders();
-            } else {
-                yygo.view.showborders = true;
-                yygo.view.toggleBorders();
-            }
-        },
-        /*}}}*/
-
-        /** yygo.events.clickComments {{{
-         * Toggle display state of the comments.
-         */
-        clickComments: function () {
-            if (yygo.view.showcomments && yygo.view.comtoshow) {
-                yygo.view.showcomments = false;
-                //yygo.view.toggleComments();
-                yygo.view.setGobanSize();
-            } else if (yygo.view.comtoshow) {
-                yygo.view.showcomments = true;
-                //yygo.view.toggleComments();
-                yygo.view.setGobanSize();
-            }
         },
         /*}}}*/
 
