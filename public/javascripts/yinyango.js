@@ -77,6 +77,7 @@ var yygo = {};
         game:           {},
         gameslist:      {},
         score:          {b: 0, w: 0},
+        stones:         {},
 
         listpage:       0,
 
@@ -1421,6 +1422,7 @@ var yygo = {};
                                 stone.className === 'stone brown')) {
                             yygo.events.playStone(id);
                         }
+                        // TODO Other modes.
                     }, false);
                 }
             }
@@ -1592,9 +1594,20 @@ var yygo = {};
          * @param {String} coord Coordinate clicked.
          */
         playStone: function (coord) {
-            var turn = yygo.data.playerturn;
+            var turn =      yygo.data.playerturn,
+                game =      yygo.data.game,
+                node =      yygo.data.curnode,
+                branch =    yygo.data.curbranch,
+                stones =    yygo.data.stones[node][branch];
 
-            console.log(turn + ':' + coord);
+            turn = turn === 'white' ? 'W' : 'B';
+            if (game[node + 1] !== undefined &&
+                    game[node + 1][branch] !== undefined &&
+                    game[node + 1][branch][turn] !== undefined &&
+                    game[node + 1][branch][turn][0] === coord) {
+                // That move already exist in game data, just show it.
+                yygo.events.navigateNode(1);
+            }
         },
         /*}}}*/
 
