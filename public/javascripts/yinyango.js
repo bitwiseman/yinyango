@@ -273,6 +273,7 @@ var yygo = {};
                 gl =        '<div class="g gl black"></div>',
                 sto =       '<div class="stone" id="',
                 stc =       '"></div>',
+                a =         '<a href="#" class="none"></a>',
                 html =      '',
                 content,
                 id,
@@ -319,31 +320,31 @@ var yygo = {};
                     id = coord[j] + coord[i];
                     if (i === 1) {
                         if (j === 1) {
-                            content = gr + gb + sto + id + stc;
+                            content = gr + gb + sto + id + stc + a;
                         } else if (j === size -2) {
-                            content = gb + gl + sto + id + stc;
+                            content = gb + gl + sto + id + stc + a;
                         } else if (j !== 0 && j !== size - 1) {
-                            content = gr + gb + gl + sto + id + stc;
+                            content = gr + gb + gl + sto + id + stc + a;
                         } else {
                             content = size - i - 1;
                         }
                     } else if (i === size - 2) {
                         if (j === 1) {
-                            content = gt + gr + sto + id + stc;
+                            content = gt + gr + sto + id + stc + a;
                         } else if (j === size -2) {
-                            content = gt + gl + sto + id + stc;
+                            content = gt + gl + sto + id + stc + a;
                         } else if (j !== 0 && j !== size - 1) {
-                            content = gt + gr + gl + sto + id + stc;
+                            content = gt + gr + gl + sto + id + stc + a;
                         } else {
                             content = size - i - 1;
                         }
                     } else if (j === 1 && i !== 0 && i !== size - 1) {
-                        content = gt + gr + gb + sto + id + stc;
+                        content = gt + gr + gb + sto + id + stc + a;
                     } else if (j === size - 2 && i !== 0 && i !== size - 1) {
-                        content = gt + gb + gl + sto + id + stc;
+                        content = gt + gb + gl + sto + id + stc + a;
                     } else if (i !== 0 && i !== size - 1 && j !== 0 &&
                             j !== size - 1) {
-                        content = gt + gr + gb + gl + sto + id + stc;
+                        content = gt + gr + gb + gl + sto + id + stc + a;
                         if (isHoshi(i, j)) {
                             content += '<div class="h black"></div>';
                         }

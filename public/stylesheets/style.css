@@ -39,6 +39,9 @@ body {
     background: #d44343;
 }
 /*}}}*/
+.none {
+    display: none;
+}
 .alert {
     display: inline-block;
     width: 100%;
@@ -336,6 +339,16 @@ body {
 }
 .stone.white {
     border-color: #000;
+}
+.cell > a:not(.none) {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    opacity: 0;
+}
+.cell:hover > a {
+    opacity: 0.3;
 }
 /* Grid {{{*/
 .g {
