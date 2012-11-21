@@ -22,7 +22,6 @@ general.
 - Validation link sent by mail.
 - Provide direct link to a game.
 - Add refresh button to games list.
-- Make variations buttons act like links for keyboard interaction.
 
 ## LICENSE
 

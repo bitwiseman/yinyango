@@ -312,10 +312,6 @@ body {
     margin: 0px 2px 0px 2px;
     height: 16px;
     width: 16px;
-    cursor: pointer;
-}
-.plain {
-    cursor: default;
 }
 /*}}}*/
 #goban {/*{{{*/

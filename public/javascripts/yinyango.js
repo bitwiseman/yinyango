@@ -490,11 +490,11 @@ var yygo = {};
                         variations++;
                         if (i === curbranch) {
                             // This is our branch show a plain radio button.
-                            html += '<div class="varbutton plain black"></div>';
+                            html += '<div class="varbutton black"></div>';
                         } else {
                             // Show a clickable empty radio button.
-                            html += '<div id="var' + i + 
-                                '" class="varbutton"></div>';
+                            html += '<a href="#" id="var' + i + 
+                                '" class="varbutton"></a>';
                             binds.push(i); // Add variation to the binds.
                         }
                     }
