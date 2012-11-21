@@ -21,7 +21,6 @@ general.
 - Add other rules.
 - Validation link sent by mail.
 - Provide direct link to a game.
-- Add refresh button to games list.
 
 ## LICENSE
 
