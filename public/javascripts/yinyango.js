@@ -1401,24 +1401,26 @@ var yygo = {};
          * Assign each goban intersection a click event.
          */
         makeGobanBinds: function () {
-            var mode =      yygo.data.mode,
-                turn =      yygo.data.playerturn,
-                size =      yygo.data.size,
+            var size =      yygo.data.size,
                 letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                              'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 stone,
-                link,
-                id,
                 i,
                 j;
 
             for (i = 0; i < size; i++) {
                 for (j = 0; j < size; j++) {
-                    id = letter[i] + letter[j];
-                    stone = document.getElementById(id);
+                    stone = document.getElementById(letter[i] + letter[j]);
+                    // Add listener to parent to catch click on <a> also.
                     stone.parentNode.addEventListener('click', function () {
-                        var id = this.getElementsByClassName('stone')[0].id;
-                        console.log(id);
+                        var stone = this.getElementsByClassName('stone')[0],
+                            id =    stone.id,
+                            mode =  yygo.events.mode;
+
+                        if (mode === 'replay' && (stone.className === 'stone' ||
+                                stone.className === 'stone brown')) {
+                            yygo.events.playStone(id);
+                        }
                     }, false);
                 }
             }
@@ -1581,6 +1583,18 @@ var yygo = {};
             yygo.view.emptyGoban();
             yygo.view.placeStones();
             yygo.view.placeSymbols();
+        },
+        /*}}}*/
+
+        /** yygo.events.playStone {{{
+         * User played a move.
+         *
+         * @param {String} coord Coordinate clicked.
+         */
+        playStone: function (coord) {
+            var turn = yygo.data.playerturn;
+
+            console.log(turn + ':' + coord);
         },
         /*}}}*/
 
