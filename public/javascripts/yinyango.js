@@ -1469,44 +1469,80 @@ var yygo = {};
          */
         navigateNode: function (move) {
             var game =          yygo.data.game,
-                curbranch =     yygo.data.curbranch,
-                curnode =       yygo.data.curnode,
+                branch =        yygo.data.curbranch,
+                node =          yygo.data.curnode,
                 lastbranch =    yygo.data.lastbranch,
                 lastnode =      yygo.data.lastnode,
+                prevnode,
+                prevbranch,
                 lastbranchp;
 
             // Define the new current node.
-            if (curnode + move < 0) {
-                curnode = 0;
-            } else if (curnode + move > lastnode) {
-                curnode = lastnode;
+            if (node + move < 0) {
+                node = 0;
+            } else if (node + move > lastnode) {
+                node = lastnode;
             } else {
-                curnode = curnode + move;
+                node = node + move;
             }
 
             // Get the parent of the last branch at new current node.
-            lastbranchp = yygo.data.getParentBranch(curnode, lastbranch);
+            lastbranchp = yygo.data.getParentBranch(node, lastbranch);
 
             // Define the new current branch.
-            if (move < 0 && game[curnode][curbranch] === undefined) {
+            if (move < 0 && game[node][branch] === undefined) {
                 // We are moving back and the current branch is no more so
                 // current branch is now last branch parent.
-                curbranch = lastbranchp;
+                branch = lastbranchp;
             } else if (move > 0) {
                 // We are moving forward.
-                if (game[curnode][lastbranch] !== undefined) {
+                if (game[node][lastbranch] !== undefined) {
                     // Last branch exist at this new current node so make it
                     // the current branch.
-                    curbranch = lastbranch;
+                    branch = lastbranch;
                 } else {
                     // Current branch is the branch that lead to last branch,
                     // that mean last branch parent.
-                    curbranch = lastbranchp;
+                    branch = lastbranchp;
                 }
             }
 
-            yygo.data.curbranch = curbranch;
-            yygo.data.curnode = curnode;
+            // Who plays next ?
+            if (game[node][branch].B !== undefined) { // Black just played.
+                // Check for handicaps stones.
+                if (game[0][0].HA !== undefined) {
+                    if (node > game[0][0].HA[0] - 1) {
+                        yygo.data.playerturn = 'white';
+                    } else {
+                        yygo.data.playerturn = 'black';
+                    }
+                } else {
+                    yygo.data.playerturn = 'white';
+                }
+            } else if (game[node][branch].W !== undefined) { // White did.
+                yygo.data.playerturn = 'black';
+            } else { // Probably some demonstration.
+                prevnode = node - 1;
+                prevbranch = branch;
+                while (prevnode >= 0) {
+                    prevbranch = yygo.data.getParentBranch(prevnode, prevbranch);
+                    if (game[prevnode][prevbranch].B !== undefined) {
+                        yygo.data.playerturn = 'white';
+                        break;
+                    } else if (game[prevnode][prevbranch].W !== undefined) {
+                        yygo.data.playerturn = 'black';
+                        break;
+                    }
+                    if (prevnode === 0) {
+                        yygo.data.playerturn = 'black';
+                        break;
+                    }
+                    prevnode--;
+                }
+            }
+
+            yygo.data.curbranch = branch;
+            yygo.data.curnode = node;
 
             yygo.view.toggleNavButtons();
 
