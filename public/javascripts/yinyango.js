@@ -88,6 +88,8 @@ var yygo = {};
         lastbranch:     0,
         lastnode:       0,
 
+        playerturn:     'black',
+
         // Methods.
 
         /** yygo.data.calcStones {{{
@@ -273,7 +275,7 @@ var yygo = {};
                 gl =        '<div class="g gl black"></div>',
                 sto =       '<div class="stone" id="',
                 stc =       '"></div>',
-                a =         '<a href="#" class="none"></a>',
+                a =         '<a href="#" class="black"></a>',
                 html =      '',
                 content,
                 id,
@@ -678,9 +680,11 @@ var yygo = {};
          */
         emptyGoban: function () {
             var size =  yygo.data.size,
+                turn =  yygo.data.playerturn,
                 coord = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 stone,
+                link,
                 id,
                 i,
                 j;
@@ -691,6 +695,8 @@ var yygo = {};
                     stone = document.getElementById(id);
                     stone.className = 'stone';
                     stone.innerHTML = '';
+                    link = stone.parentNode.getElementsByTagName('a')[0];
+                    link.className = turn;
                 }
             }
         },
@@ -731,32 +737,31 @@ var yygo = {};
 
         /** yygo.view.placeStones {{{
          * Place the stones and kos of the actual state on the goban.
+         * Also remove links of those to make them unplayable moves.
          */
         placeStones: function () {
             var game =          yygo.data.game,
-                curnode =       yygo.data.curnode,
-                curbranch =     yygo.data.curbranch,
-                stones =        yygo.data.stones[curnode][curbranch],
-                cb =            stones.b.length,
-                cw =            stones.w.length,
-                ck =            stones.k.length,
-                stone,
-                b,
-                w,
-                k;
+                node =          yygo.data.curnode,
+                branch =        yygo.data.curbranch,
+                stones =        yygo.data.stones[node][branch];
 
-            for (b = 0; b < cb; b++) {
-                stone = document.getElementById(stones.b[b]);
-                stone.classList.add('black');
+            function placeColor(list, color) {
+                var listlen = list.length,
+                    stone,
+                    link,
+                    i;
+
+                for (i = 0; i < listlen; i++) {
+                    stone = document.getElementById(list[i]);
+                    stone.classList.add(color);
+                    link = stone.parentNode.getElementsByTagName('a')[0];
+                    link.className = 'none';
+                }
             }
-            for (w = 0; w < cw; w++) {
-                stone = document.getElementById(stones.w[w]);
-                stone.classList.add('white');
-            }
-            for (k = 0; k < ck; k++) {
-                stone = document.getElementById(stones.k[k]);
-                stone.classList.add('ko');
-            }
+
+            placeColor(stones.b, 'black');
+            placeColor(stones.w, 'white');
+            placeColor(stones.k, 'ko');
         },
         /*}}}*/
 
