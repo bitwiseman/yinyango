@@ -1276,6 +1276,7 @@ var yygo = {};
                 exitload =          document.getElementById('exitload'),
                 prevpage =          document.getElementById('prevpage'),
                 nextpage =          document.getElementById('nextpage'),
+                refreshlist =       document.getElementById('refreshlist'),
                 exitsettings =      document.getElementById('exitsettings'),
                 submitsettings =    document.getElementById('submitsettings'),
                 exitsendsgf =       document.getElementById('exitsendsgf'),
@@ -1329,6 +1330,9 @@ var yygo = {};
             }, false);
             nextpage.addEventListener('click', function () {
                 yygo.data.listpage++;
+                yygo.view.showLoad(true, true);
+            }, false);
+            refreshlist.addEventListener('click', function () {
                 yygo.view.showLoad(true, true);
             }, false);
             // Settings specific.
