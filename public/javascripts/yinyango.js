@@ -364,6 +364,7 @@ var yygo = {};
                 html += '</div>'; // Row end.
             }
             goban.innerHTML = html;
+            yygo.events.makeGobanBinds();
         },
         /*}}}*/
 
@@ -1393,6 +1394,34 @@ var yygo = {};
                     yygo.events.navigateNode(999999);
                 }
             }, false);
+        },
+        /*}}}*/
+
+        /** yygo.events.makeGobanBinds {{{
+         * Assign each goban intersection a click event.
+         */
+        makeGobanBinds: function () {
+            var mode =      yygo.data.mode,
+                turn =      yygo.data.playerturn,
+                size =      yygo.data.size,
+                letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                             'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                stone,
+                link,
+                id,
+                i,
+                j;
+
+            for (i = 0; i < size; i++) {
+                for (j = 0; j < size; j++) {
+                    id = letter[i] + letter[j];
+                    stone = document.getElementById(id);
+                    stone.parentNode.addEventListener('click', function () {
+                        var id = this.getElementsByClassName('stone')[0].id;
+                        console.log(id);
+                    }, false);
+                }
+            }
         },
         /*}}}*/
 
