@@ -1594,8 +1594,8 @@ var yygo = {};
                 }
             } else if (game[node][branch].W !== undefined) { // White did.
                 yygo.data.playerturn = 'B';
-            } else { // Probably some demonstration.
-                prevnode = node - 1;
+            } else { // Probably some demonstration or we are back to start.
+                prevnode = node - 1 >= 0 ? node - 1 : 0;
                 prevbranch = branch;
                 while (prevnode >= 0) {
                     prevbranch = yygo.data.getParentBranch(prevnode, prevbranch);
