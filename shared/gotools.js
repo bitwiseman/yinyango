@@ -29,12 +29,12 @@
      * @param {Number}  size    Goban size.
      * @param {Array}   goban   Goban to convert.
      *
-     * @return {Object} { 'b':{String} (black stones on goban),
-     *                    'w':{String} (white stones on goban),
-     *                    'k':{String} (kos on goban) }
+     * @return {Object} { 'B':{String} (black stones on goban),
+     *                    'W':{String} (white stones on goban),
+     *                    'K':{String} (kos on goban) }
      */
     function gobanToStones(size, goban) {
-        var stones =    { 'b': [], 'w': [], 'k': [] },
+        var stones =    { 'B': [], 'W': [], 'K': [] },
             letters =   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                          'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
             coord,
@@ -45,12 +45,12 @@
             for (y = 0; y < size; y++) {
                 coord = letters[x] + letters[y];
                 if (goban[x] !== undefined && goban[x][y] !== undefined) {
-                    if (goban[x][y] === 'b') {
-                        stones.b.push(coord);
-                    } else if (goban[x][y] === 'w') {
-                        stones.w.push(coord);
-                    } else if (goban[x][y] === 'k') {
-                        stones.k.push(coord);
+                    if (goban[x][y] === 'B') {
+                        stones.B.push(coord);
+                    } else if (goban[x][y] === 'W') {
+                        stones.W.push(coord);
+                    } else if (goban[x][y] === 'K') {
+                        stones.K.push(coord);
                     }
                 }
             }
@@ -95,9 +95,9 @@
                 }
             }
         }
-        putStones(stones.b, 'b');
-        putStones(stones.w, 'w');
-        putStones(stones.k, 'k');
+        putStones(stones.B, 'B');
+        putStones(stones.W, 'W');
+        putStones(stones.K, 'K');
         return goban;
     }
     /*}}}*/
@@ -119,7 +119,7 @@
      *                   {Array} (Potential prisonners) ]
      */
     function testLiberties(color, x, y, goban, prisonners) {
-        var ennemy = (color === 'b') ? 'w' : 'b',
+        var ennemy = (color === 'B') ? 'W' : 'B',
             prilen = prisonners.length,
             stone,
             i;

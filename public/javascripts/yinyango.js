@@ -76,7 +76,7 @@ var yygo = {};
 
         game:           {},
         gameslist:      {},
-        score:          {b: 0, w: 0},
+        score:          {B: 0, W: 0},
         stones:         {},
 
         listpage:       0,
@@ -89,7 +89,7 @@ var yygo = {};
         lastbranch:     0,
         lastnode:       0,
 
-        playerturn:     'black',
+        playerturn:     'B',
 
         // Methods.
 
@@ -101,16 +101,26 @@ var yygo = {};
         addMove: function (coord) {
             var node =      this.curnode,
                 branch =    this.curbranch,
-                stones =    this.stones,
+                stones =    this.stones[node][branch],
                 size =      this.size,
-                turn =      this.playertun === 'white' ? 'W' : 'B',
+                turn =      this.playerturn,
                 play;
 
-            yygo.game[node + 1] = {};
-            yygo.game[node + 1][branch] = {};
-            yygo.game[node + 1][branch][turn] = coord;
+            yygo.data.game[node + 1] = {};
+            yygo.data.game[node + 1][branch] = {};
+            yygo.data.game[node + 1][branch][turn] = [];
+            yygo.data.game[node + 1][branch][turn].push(coord);
 
             play = gotools.playMove(turn, coord, size, stones); 
+            // Add stones state.
+            yygo.data.stones[node + 1] = {}
+            yygo.data.stones[node + 1][branch] = play.stones;
+            // Add prisonners to player score.
+            yygo.data.score[turn] += play.prisonners;
+            // Move to next node.
+            yygo.data.curnode++;
+            yygo.data.lastnode++;
+            yygo.events.navigateNode(1);
         },
         /*}}}*/
 
@@ -136,23 +146,23 @@ var yygo = {};
                 switch (key) {
                 case 'B':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('b', value[0], size, stones); 
+                        play = gotools.playMove('B', value[0], size, stones); 
                         stones = play.stones;
-                        yygo.data.score.b += play.prisonners; 
+                        yygo.data.score.B += play.prisonners; 
                     }
                     break;
                 case 'W':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('w', value[0], size, stones); 
+                        play = gotools.playMove('W', value[0], size, stones); 
                         stones = play.stones;
-                        yygo.data.score.w += play.prisonners; 
+                        yygo.data.score.W += play.prisonners; 
                     }
                     break;
                 case 'AB':
-                    stones = gotools.addStones('b', value, size, stones); 
+                    stones = gotools.addStones('B', value, size, stones); 
                     break;
                 case 'AW':
-                    stones = gotools.addStones('w', value, size, stones); 
+                    stones = gotools.addStones('W', value, size, stones); 
                     break;
                 case 'AE':
                     stones = gotools.addStones('', value, size, stones); 
@@ -164,7 +174,7 @@ var yygo = {};
             for (node in data) {
                 stones[node] = {};
                 for (branch in data[node]) {
-                    stones[node][branch] = {b: [], w: [], k: []};
+                    stones[node][branch] = {B: [], W: [], K: []};
                     // Load previous stones.
                     parentbranch = yygo.data.getParentBranch(node - 1, branch);
                     if (node > 0) {
@@ -702,10 +712,10 @@ var yygo = {};
          * Empty the goban of all stones, symbols, labels.
          */
         emptyGoban: function () {
-            var size =  yygo.data.size,
-                turn =  yygo.data.playerturn,
-                coord = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-                        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+            var size =      yygo.data.size,
+                classturn = yygo.data.playerturn === 'W' ? 'white' : 'black',
+                coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
                 stone,
                 link,
                 id,
@@ -719,7 +729,7 @@ var yygo = {};
                     stone.className = 'stone';
                     stone.innerHTML = '';
                     link = stone.parentNode.getElementsByTagName('a')[0];
-                    link.className = turn;
+                    link.className = classturn;
                 }
             }
         },
@@ -782,9 +792,9 @@ var yygo = {};
                 }
             }
 
-            placeColor(stones.b, 'black');
-            placeColor(stones.w, 'white');
-            placeColor(stones.k, 'ko');
+            placeColor(stones.B, 'black');
+            placeColor(stones.W, 'white');
+            placeColor(stones.K, 'ko');
         },
         /*}}}*/
 
@@ -1566,29 +1576,29 @@ var yygo = {};
                 // Check for handicaps stones.
                 if (game[0][0].HA !== undefined) {
                     if (node > game[0][0].HA[0] - 1) {
-                        yygo.data.playerturn = 'white';
+                        yygo.data.playerturn = 'W';
                     } else {
-                        yygo.data.playerturn = 'black';
+                        yygo.data.playerturn = 'B';
                     }
                 } else {
-                    yygo.data.playerturn = 'white';
+                    yygo.data.playerturn = 'W';
                 }
             } else if (game[node][branch].W !== undefined) { // White did.
-                yygo.data.playerturn = 'black';
+                yygo.data.playerturn = 'B';
             } else { // Probably some demonstration.
                 prevnode = node - 1;
                 prevbranch = branch;
                 while (prevnode >= 0) {
                     prevbranch = yygo.data.getParentBranch(prevnode, prevbranch);
                     if (game[prevnode][prevbranch].B !== undefined) {
-                        yygo.data.playerturn = 'white';
+                        yygo.data.playerturn = 'W';
                         break;
                     } else if (game[prevnode][prevbranch].W !== undefined) {
-                        yygo.data.playerturn = 'black';
+                        yygo.data.playerturn = 'B';
                         break;
                     }
                     if (prevnode === 0) {
-                        yygo.data.playerturn = 'black';
+                        yygo.data.playerturn = 'B';
                         break;
                     }
                     prevnode--;
@@ -1625,7 +1635,6 @@ var yygo = {};
                 parentbranch,
                 i;
 
-            turn = turn === 'white' ? 'W' : 'B';
             // Browse next node branchs to check if that move exist.
             for (i = branch; i < branchs; i++) {
                 parentbranch = yygo.data.getParentBranch(node, i);
