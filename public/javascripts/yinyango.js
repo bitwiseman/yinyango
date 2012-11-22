@@ -93,6 +93,15 @@ var yygo = {};
 
         // Methods.
 
+        /** yygo.data.addBranch {{{
+         * Player move made a new branch.
+         *
+         * @param {String} coord Move coord.
+         */
+        addBranch: function (coord) {
+        },
+        /*}}}*/
+
         /** yygo.data.addMove {{{
          * Add player move to game data.
          *
@@ -1221,7 +1230,7 @@ var yygo = {};
         loadIntro: function () {
             yygo.data.game = {0: {0: {} } };
             yygo.data.stones = {0: {0: {
-                'b': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
+                'B': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
                     'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
                     'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
                     'jk', 'jl', 'jm', 'jp', 'jq', 'jr', 'js', 'ka', 'kj', 'kk',
@@ -1236,7 +1245,7 @@ var yygo = {};
                     'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 're', 'rf',
                     'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'sg',
                     'sh', 'si', 'sj', 'sk', 'sl', 'sm'],
-                'w': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
+                'W': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
                     'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'cd',
                     'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn',
                     'co', 'cp', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj',
@@ -1251,7 +1260,7 @@ var yygo = {};
                     'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
                     'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
                     'mg', 'mh', 'nd', 'ne', 'nf', 'ng'],
-                'k': []
+                'K': []
             } } };
 
             yygo.data.size = 19;
