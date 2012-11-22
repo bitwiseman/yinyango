@@ -93,6 +93,27 @@ var yygo = {};
 
         // Methods.
 
+        /** yygo.data.addMove {{{
+         * Add player move to game data.
+         *
+         * @param {String} coord Coord of move.
+         */
+        addMove: function (coord) {
+            var node =      this.curnode,
+                branch =    this.curbranch,
+                stones =    this.stones,
+                size =      this.size,
+                turn =      this.playertun === 'white' ? 'W' : 'B',
+                play;
+
+            yygo.game[node + 1] = {};
+            yygo.game[node + 1][branch] = {};
+            yygo.game[node + 1][branch][turn] = coord;
+
+            play = gotools.playMove(turn, coord, size, stones); 
+        },
+        /*}}}*/
+
         /** yygo.data.calcStones {{{
          * Calculate all the stones present at each goban step.
          *
@@ -1600,6 +1621,7 @@ var yygo = {};
                 branch =    yygo.data.curbranch,
                 branchs =   game[0][0].branchs,
                 stones =    yygo.data.stones[node][branch],
+                exist =     false,
                 parentbranch,
                 i;
 
@@ -1613,9 +1635,17 @@ var yygo = {};
                         game[node + 1][i][turn][0] === coord) {
                     // That move already exist in a child branch, change last
                     // branch and show it.
+                    exist = true;
                     yygo.data.lastbranch = i;
                     yygo.events.navigateNode(1);
                     break;
+                }
+            }
+            if (!exist) {
+                if (game[node + 1] === undefined) {
+                    yygo.data.addMove(coord);
+                } else {
+                    yygo.data.addBranch(coord);
                 }
             }
         },
