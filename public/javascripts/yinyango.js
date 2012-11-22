@@ -1660,7 +1660,8 @@ var yygo = {};
                 }
             }
             if (!exist) {
-                if (game[node + 1] === undefined) {
+                if (game[node + 1] === undefined || 
+                        game[node + 1][branch] === undefined) {
                     yygo.data.addMove(coord);
                 } else {
                     yygo.data.addBranch(coord);
