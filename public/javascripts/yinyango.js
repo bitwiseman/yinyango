@@ -81,7 +81,6 @@ var yygo = {};
 
         listpage:       0,
 
-        branchs:        0,
         size:           0,
 
         curbranch:      0,
@@ -99,6 +98,83 @@ var yygo = {};
          * @param {String} coord Move coord.
          */
         addBranch: function (coord) {
+            var node =      this.curnode,
+                branch =    this.curbranch,
+                game =      this.game,
+                stones =    this.stones,
+                lastnode =  this.lastnode,
+                branchs =   game[0][0].branchs,
+                branchid =  0,
+                i,
+                j;
+
+            function increment(id) {
+                var i = 0;
+
+                while (game[i] !== undefined) {
+                    for (j = branchs; j >= id; j--) {
+                        if (game[i][j] !== undefined) {
+                            game[i][j + 1] = game[i][j];
+                            stones[i][j + 1] = stones[i][j];
+                            delete game[i][j];
+                            delete stones[i][j];
+                        }
+                    }
+                    i++;
+                }
+            }
+
+            // Get a branch number for that position so we can insert
+            // a new one with that number and increment the next ones.
+            if (branch === 0) {
+                for (i = node + 1; i >= 0; i--) {
+                    for (j = 1; j < branchs; j++) {
+                        if (game[i] !== undefined && game[i][j] !== undefined) {
+                            branchid = j;
+                            break;
+                        }
+                    }
+                    if (branchid !== 0) {
+                        break;
+                    }
+                }
+            } else {
+                // Go through nodes of current branch to find eventual branch.
+                for (i = node + 1; i <= lastnode; i++) {
+                    for (j = branch + 1; j < branchs; j++) {
+                        if (game[i] !== undefined && game[i][j] !== undefined &&
+                                game[i - 1][j] === undefined &&
+                                this.getParentBranch(i, j) === branch) {
+                            branchid = j + 1;
+                            break;
+                        }
+                    }
+                    if (branchid !== 0) {
+                        break;
+                    }
+                }
+                if (branchid === 0) {
+                    // No branchs encoutered so increase current by 1.
+                    branchid = branch + 1;
+                }
+            }
+            // Increment number of branchs.
+            game[0][0].branchs++;
+            if (branchid === 0) {
+                // We found no suited branchs to be replaced so we just
+                // create a new one.
+                branchid = branchs;
+            } else {
+                // Increment all superior branchs and save new data.
+                increment(branchid);
+                this.game = game;
+            }
+            // Create the new branch.
+            //this.game[node + 1][branchid] = {};
+            // Add the move to the new branch.
+            //this.curbranch = branchid;
+            this.lastbranch = branchid;
+            this.addMove(coord);
         },
         /*}}}*/
 
@@ -108,27 +184,36 @@ var yygo = {};
          * @param {String} coord Coord of move.
          */
         addMove: function (coord) {
-            var node =      this.curnode,
-                branch =    this.curbranch,
-                stones =    this.stones[node][branch],
-                size =      this.size,
-                turn =      this.playerturn,
+            var node =          this.curnode,
+                branch =        this.lastbranch,
+                stones =        this.stones[node][branch],
+                size =          this.size,
+                turn =          this.playerturn,
+                parentbranch,
                 play;
 
-            yygo.data.game[node + 1] = {};
-            yygo.data.game[node + 1][branch] = {};
-            yygo.data.game[node + 1][branch][turn] = [];
-            yygo.data.game[node + 1][branch][turn].push(coord);
+            if (stones === undefined) {
+                parentbranch = this.getParentBranch(node, branch);
+                stones = this.stones[node][parentbranch];
+            }
+            if (this.game[node + 1] === undefined) {
+                this.game[node + 1] = {};
+            }
+            this.game[node + 1][branch] = {};
+            this.game[node + 1][branch][turn] = [];
+            this.game[node + 1][branch][turn].push(coord);
 
             play = gotools.playMove(turn, coord, size, stones); 
             // Add stones state.
-            yygo.data.stones[node + 1] = {}
-            yygo.data.stones[node + 1][branch] = play.stones;
+            if (this.stones[node + 1] === undefined) {
+                this.stones[node + 1] = {}
+            }
+            this.stones[node + 1][branch] = play.stones;
             // Add prisonners to player score.
-            yygo.data.score[turn] += play.prisonners;
+            this.score[turn] += play.prisonners;
             // Move to next node.
-            yygo.data.curnode++;
-            yygo.data.lastnode++;
+            //this.curnode++;
+            this.lastnode = this.curnode + 1;
             yygo.events.navigateNode(1);
         },
         /*}}}*/
@@ -238,7 +323,6 @@ var yygo = {};
                 yygo.data.game = data;
 
                 yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
-                yygo.data.branchs = yygo.data.game[0][0].branchs;
 
                 yygo.data.curnode = 0;
                 yygo.data.curbranch = 0;
@@ -512,7 +596,7 @@ var yygo = {};
             var game =              yygo.data.game,
                 curbranch =         yygo.data.curbranch,
                 curnode =           yygo.data.curnode,
-                branchs =           yygo.data.branchs,
+                branchs =           game[0][0].branchs,
                 variationselem =    document.getElementById('variations'),
                 variations =        0,
                 html =              '',
@@ -1187,8 +1271,6 @@ var yygo = {};
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
             yygo.data.stones = yygo.data.calcStones(data);
 
-            yygo.data.branchs = yygo.data.game[0][0].branchs;
-
             yygo.data.curnode = 0;
             yygo.data.curbranch = 0;
             yygo.data.lastbranch = 0;
@@ -1228,7 +1310,10 @@ var yygo = {};
          * Load introductive goban data and show it.
          */
         loadIntro: function () {
-            yygo.data.game = {0: {0: {} } };
+            yygo.data.game = {0: {0: {
+                'RU': ['Japanese'],
+                'branchs': 1
+            } } };
             yygo.data.stones = {0: {0: {
                 'B': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
                     'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
