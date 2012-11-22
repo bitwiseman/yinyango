@@ -1598,15 +1598,25 @@ var yygo = {};
                 game =      yygo.data.game,
                 node =      yygo.data.curnode,
                 branch =    yygo.data.curbranch,
-                stones =    yygo.data.stones[node][branch];
+                branchs =   game[0][0].branchs,
+                stones =    yygo.data.stones[node][branch],
+                parentbranch,
+                i;
 
             turn = turn === 'white' ? 'W' : 'B';
-            if (game[node + 1] !== undefined &&
-                    game[node + 1][branch] !== undefined &&
-                    game[node + 1][branch][turn] !== undefined &&
-                    game[node + 1][branch][turn][0] === coord) {
-                // That move already exist in game data, just show it.
-                yygo.events.navigateNode(1);
+            // Browse next node branchs to check if that move exist.
+            for (i = branch; i < branchs; i++) {
+                parentbranch = yygo.data.getParentBranch(node, i);
+                if (parentbranch === branch && game[node + 1] !== undefined &&
+                        game[node + 1][i] !== undefined &&
+                        game[node + 1][i][turn] !== undefined &&
+                        game[node + 1][i][turn][0] === coord) {
+                    // That move already exist in a child branch, change last
+                    // branch and show it.
+                    yygo.data.lastbranch = i;
+                    yygo.events.navigateNode(1);
+                    break;
+                }
             }
         },
         /*}}}*/
