@@ -174,7 +174,7 @@ app.get('/', function (req, res) {
  */
 app.get('/guest', function (req, res) {
     req.session.username = 'guest';
-    req.session.sgfid = ''; 
+    req.session.sgfid = '';
     res.redirect('/');
 });
 /*}}}*/
@@ -185,12 +185,15 @@ app.get('/guest', function (req, res) {
 app.get('/gameslist/:page', function (req, res) {
     var page = req.params.page,
         filters,
-        options,
-        games;
+        options;
 
     filters = 'name';
     options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
     Sgf.find({}, filters, options, function (err, games) {
+        if (err) {
+            console.error('Sgf.find: ' + err);
+            return;
+        }
         res.send(games);
     });
 });
@@ -388,7 +391,6 @@ app.post('/sendsgf', function (req, res) {
         date =      new Date(),
         userid =    req.session.userid,
         username =  req.session.username,
-        error =     '',
         md5,
         sgf;
 
@@ -473,16 +475,4 @@ app.post('/settings', function (req, res) {
 
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
-    //Sgf.findOne({ name: 'symbols.sgf' }, function (err, sgf) {
-        //gotools.buildSgf(sgf.data, function (string) {
-            //fs.writeFile('sgf.sgf', string, function () {
-                //exec('bin/sgfc sgf.sgf sgf.sgf', function (err, stdout, stderr) {
-                    //fs.readFile('sgf.sgf', function (err, data) {
-                        //var md5 = crypto.createHash('md5').update(data).digest('hex');
-                        //console.log(md5);
-                    //});
-                //});
-            //});
-        //});
-    //});
 });
