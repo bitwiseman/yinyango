@@ -1397,21 +1397,23 @@ var yygo = {};
                 butfastnext =       document.getElementById('butfastnext'),
                 butend =            document.getElementById('butend');
 
-            // Window resize.
+            // Window resize.{{{
             window.addEventListener('resize', function () {
                 yygo.view.setGobanSize(function () {});
             }, false);
+            //}}}
 
-            // Only registered users.
+            // Only registered users.{{{
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
                     yygo.view.showSendSgf(true);
                 }, false);
             }
-            // Menu buttons.
+            //}}}
+
+            // Menu buttons.{{{
             menuload.addEventListener('click', function () {
                 yygo.view.showLoad(true);
-                //window.location.href = '/load';
             }, false);
             menusettings.addEventListener('click', function () {
                 yygo.view.showSettings(true);
@@ -1428,7 +1430,9 @@ var yygo = {};
             menu.addEventListener('click', function (event) {
                 event.stopPropagation();
             }, false);
-            // Load page specific.
+            //}}}
+
+            // Load page specific.{{{
             exitload.addEventListener('click', function () {
                 yygo.view.showLoad(false);
             }, false);
@@ -1443,7 +1447,9 @@ var yygo = {};
             refreshlist.addEventListener('click', function () {
                 yygo.view.showLoad(true, true);
             }, false);
-            // Settings specific.
+            //}}}
+
+            // Settings specific.{{{
             exitsettings.addEventListener('click', function () {
                 yygo.view.showSettings(false);
             }, false);
@@ -1458,7 +1464,9 @@ var yygo = {};
                     }
                 });
             }, false);
-            // Send sgf specific.
+            //}}}
+
+            // Send sgf specific.{{{
             exitsendsgf.addEventListener('click', function () {
                 yygo.view.showSendSgf(false);
             }, false);
@@ -1486,7 +1494,9 @@ var yygo = {};
                     }
                 });
             }, false);
-            // Buttons bar.
+            //}}}
+
+            // Buttons bar.{{{
             butmenu.addEventListener('click', function () {
                 yygo.view.showMenu(true);
             }, false);
@@ -1520,6 +1530,7 @@ var yygo = {};
                     yygo.events.navigateNode(999999);
                 }
             }, false);
+            //}}}
         },
         /*}}}*/
 
