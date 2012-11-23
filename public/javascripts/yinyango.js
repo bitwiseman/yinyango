@@ -203,10 +203,10 @@ var yygo = {};
             this.game[node + 1][branch][turn] = [];
             this.game[node + 1][branch][turn].push(coord);
 
-            play = gotools.playMove(turn, coord, size, stones); 
+            play = gotools.playMove(turn, coord, size, stones);
             // Add stones state.
             if (this.stones[node + 1] === undefined) {
-                this.stones[node + 1] = {}
+                this.stones[node + 1] = {};
             }
             this.stones[node + 1][branch] = play.stones;
             // Add prisonners to player score.
@@ -226,63 +226,71 @@ var yygo = {};
          * @return {Object} Stones.
          */
         calcStones: function (data) {
-            var stones = {},
-                size = yygo.data.size,
+            var stones =        {},
+                size =          yygo.data.size,
                 parentbranch,
                 prevstones,
                 key,
                 node,
                 branch;
 
-            function keyAction(node, branch, key, value, stones) {
+            function keyAction(key, value, stones) {
                 var play;
 
                 switch (key) {
                 case 'B':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('B', value[0], size, stones); 
+                        play = gotools.playMove('B', value[0], size, stones);
                         stones = play.stones;
-                        yygo.data.score.B += play.prisonners; 
+                        yygo.data.score.B += play.prisonners;
                     }
                     break;
                 case 'W':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('W', value[0], size, stones); 
+                        play = gotools.playMove('W', value[0], size, stones);
                         stones = play.stones;
-                        yygo.data.score.W += play.prisonners; 
+                        yygo.data.score.W += play.prisonners;
                     }
                     break;
                 case 'AB':
-                    stones = gotools.addStones('B', value, size, stones); 
+                    stones = gotools.addStones('B', value, size, stones);
                     break;
                 case 'AW':
-                    stones = gotools.addStones('W', value, size, stones); 
+                    stones = gotools.addStones('W', value, size, stones);
                     break;
                 case 'AE':
-                    stones = gotools.addStones('', value, size, stones); 
+                    stones = gotools.addStones('', value, size, stones);
                     break;
                 }
                 return stones;
             }
 
             for (node in data) {
-                stones[node] = {};
-                for (branch in data[node]) {
-                    stones[node][branch] = {B: [], W: [], K: []};
-                    // Load previous stones.
-                    parentbranch = yygo.data.getParentBranch(node - 1, branch);
-                    if (node > 0) {
-                        prevstones = stones[node - 1][parentbranch];
-                    } else {
-                        prevstones = stones[node][branch];
+                if (data.hasOwnProperty(node)) {
+                    stones[node] = {};
+                    for (branch in data[node]) {
+                        if (data[node].hasOwnProperty(branch)) {
+                            stones[node][branch] = {B: [], W: [], K: []};
+                            // Load previous stones.
+                            parentbranch =
+                                yygo.data.getParentBranch(node - 1, branch);
+                            if (node > 0) {
+                                prevstones = stones[node - 1][parentbranch];
+                            } else {
+                                prevstones = stones[node][branch];
+                            }
+                            // Treat keys.
+                            for (key in data[node][branch]) {
+                                if (data[node][branch].hasOwnProperty(key)) {
+                                    prevstones = keyAction(key,
+                                            data[node][branch][key],
+                                            prevstones);
+                                }
+                            }
+                            // Save stones.
+                            stones[node][branch] = prevstones;
+                        }
                     }
-                    // Treat keys.
-                    for (key in data[node][branch]) {
-                        prevstones = keyAction(node, branch, key,
-                                data[node][branch][key], prevstones);
-                    }
-                    // Save stones.
-                    stones[node][branch] = prevstones;
                 }
             }
             return stones;
@@ -425,13 +433,15 @@ var yygo = {};
                         (x === 7 && y === 5) || (x === 3 && y === 7) ||
                         (x === 5 && y === 7) || (x === 7 && y === 7))) {
                     return true;
-                } else if (size > 11) {
+                }
+                if (size > 11) {
                     if (size / 2 !== Math.round(size / 2) &&
                             ((x === 4 && y === m) || (x === m && y === 4) ||
                             (x === m && y === m) || (x === m && y === r) ||
                             (x === r && y === m))) {
                         return true;
-                    } else if ((x === 4 && y === 4) || (x === 4 && y === r) ||
+                    }
+                    if ((x === 4 && y === 4) || (x === 4 && y === r) ||
                             (x === r && y === 4) || (x === r && y === r)) {
                         return true;
                     }
@@ -448,7 +458,7 @@ var yygo = {};
                     if (i === 1) {
                         if (j === 1) {
                             content = gr + gb + sto + id + stc + a;
-                        } else if (j === size -2) {
+                        } else if (j === size - 2) {
                             content = gb + gl + sto + id + stc + a;
                         } else if (j !== 0 && j !== size - 1) {
                             content = gr + gb + gl + sto + id + stc + a;
@@ -458,7 +468,7 @@ var yygo = {};
                     } else if (i === size - 2) {
                         if (j === 1) {
                             content = gt + gr + sto + id + stc + a;
-                        } else if (j === size -2) {
+                        } else if (j === size - 2) {
                             content = gt + gl + sto + id + stc + a;
                         } else if (j !== 0 && j !== size - 1) {
                             content = gt + gr + gl + sto + id + stc + a;
@@ -622,7 +632,7 @@ var yygo = {};
                             html += '<div class="varbutton black"></div>';
                         } else {
                             // Show a clickable empty radio button.
-                            html += '<a href="#" id="var' + i + 
+                            html += '<a href="#" id="var' + i +
                                 '" class="varbutton"></a>';
                             binds.push(i); // Add variation to the binds.
                         }
@@ -643,115 +653,7 @@ var yygo = {};
         },
         /*}}}*/
 
-        // Display. 
-
-        /** yygo.view.changeButtons {{{
-         * Change the displayed buttons depending on the actual screen.
-         */
-        changeButtons: function () {
-            var mode =          yygo.events.mode,
-                screen =        yygo.events.screen,
-                navbuttons =    document.getElementById('navbuttons'),
-                optbuttons =    document.getElementById('optbuttons'),
-                sendsgf =       document.getElementById('sendsgf'),
-                userstatus =    document.getElementById('userstatus'),
-                gobbuttons =    document.getElementById('gobbuttons'),
-                listbuttons =   document.getElementById('listbuttons'),
-                game =          document.getElementById('game'),
-                menu =          document.getElementById('menu');
-
-            // Hide all buttons.
-            navbuttons.style.display = 'none';
-            optbuttons.style.display = 'none';
-            gobbuttons.style.display = 'none';
-            listbuttons.style.display = 'none';
-            game.style.display = 'none';
-            menu.style.display = 'none';
-
-            // Show the buttons we need for the actual screen.
-            if (screen === 'goban') {
-                gobbuttons.style.display = 'block';
-                menu.style.display = 'block';
-                if (mode === 'replay') {
-                    navbuttons.style.display = 'block';
-                }
-                // TODO Other modes.
-            } else if (screen === 'options') {
-                optbuttons.style.display = 'block';
-                game.style.display = 'block';
-                // Consider user login status.
-                if (yygo.events.username === 'guest') {
-                    sendsgf.style.display = 'none';
-                    userstatus.style.backgroundColor = '#cf142b';
-                } else {
-                    sendsgf.style.display = 'block';
-                    userstatus.style.backgroundColor = '#96b14e';
-                }
-            } else if (screen === 'list') {
-                game.style.display = 'block';
-                listbuttons.style.display = 'block';
-                options.style.display = 'block';
-            } else if (screen === 'sendsgf') {
-                game.style.display = 'block';
-                options.style.display = 'block';
-            } else if (screen === 'login') {
-                game.style.display = 'block';
-                options.style.display = 'block';
-            } else if (screen === 'register') {
-                game.style.display = 'block';
-                options.style.display = 'block';
-            } else if (screen === 'param') {
-                game.style.display = 'block';
-                options.style.display = 'block';
-            }
-        },
-        /*}}}*/
-
-        /** yygo.view.changeScreen {{{
-         * Change the elements to display depending on the actual screen.
-         */
-        changeScreen: function () {
-            var screen =            yygo.events.screen,
-                buttonsbar =        document.getElementById('buttonsbar'),
-                variations =        document.getElementById('variations'),
-                goban =             document.getElementById('goban'),
-                comments =          document.getElementById('comments'),
-                infos =             document.getElementById('infos'),
-                loadlist =          document.getElementById('loadlist');
-
-            // Hide all elements.
-            buttonsbar.style.display = 'none';
-            variations.style.display = 'none';
-            goban.style.display = 'none';
-            comments.style.display = 'none';
-            infos.style.display = 'none';
-            loadlist.style.display = 'none';
-
-            //this.changeButtons(); // Change the buttons to display.
-
-            // Show the elements we need for the actual screen.
-            if (screen === 'goban') {
-                buttonsbar.style.display = 'inline-block';
-                variations.style.display = 'block';
-                goban.style.display = 'block';
-                this.toggleComments();
-            } else if (screen === 'options') {
-                buttonsbar.style.display = 'inline-block';
-                infos.style.display = 'block';
-            } else if (screen === 'list') {
-                buttonsbar.style.display = 'inline-block';
-                loadlist.style.display = 'block';
-            } else if (screen === 'sendsgf') {
-                buttonsbar.style.display = 'inline-block';
-            } else if (screen === 'login') {
-                buttonsbar.style.display = 'inline-block';
-            } else if (screen === 'register') {
-                buttonsbar.style.display = 'inline-block';
-            } else if (screen === 'param') {
-                buttonsbar.style.display = 'inline-block';
-            }
-        },
-        /*}}}*/
+        // Display.
 
         /** yygo.view.drawInterface {{{
          * Draw the goban and the panel.
@@ -866,8 +768,7 @@ var yygo = {};
          * Also remove links of those to make them unplayable moves.
          */
         placeStones: function () {
-            var game =          yygo.data.game,
-                node =          yygo.data.curnode,
+            var node =          yygo.data.curnode,
                 branch =        yygo.data.curbranch,
                 stones =        yygo.data.stones[node][branch];
 
@@ -1294,8 +1195,6 @@ var yygo = {};
             yygo.events.mode = 'replay';
             yygo.events.screen = 'goban';
 
-            //yygo.view.changeScreen();
-
             yygo.view.toggleNavButtons();
 
             yygo.view.redraw = true;
@@ -1357,8 +1256,6 @@ var yygo = {};
 
             this.mode = 'replay';
             this.screen = 'goban';
-
-            //yygo.view.changeScreen();
 
             yygo.view.toggleNavButtons();
 
@@ -1541,25 +1438,29 @@ var yygo = {};
             var size =      yygo.data.size,
                 letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                              'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-                stone,
                 i,
                 j;
 
+            function bindStone(coord) {
+                var stone = document.getElementById(coord);
+
+                // Add listener to parent to catch click on <a> also.
+                stone.parentNode.addEventListener('click', function () {
+                    var stone = this.getElementsByClassName('stone')[0],
+                        id =    stone.id,
+                        mode =  yygo.events.mode;
+
+                    if (mode === 'replay' && (stone.className === 'stone' ||
+                            stone.className === 'stone brown')) {
+                        yygo.events.playStone(id);
+                    }
+                    // TODO Other modes.
+                }, false);
+            }
+
             for (i = 0; i < size; i++) {
                 for (j = 0; j < size; j++) {
-                    stone = document.getElementById(letter[i] + letter[j]);
-                    // Add listener to parent to catch click on <a> also.
-                    stone.parentNode.addEventListener('click', function () {
-                        var stone = this.getElementsByClassName('stone')[0],
-                            id =    stone.id,
-                            mode =  yygo.events.mode;
-
-                        if (mode === 'replay' && (stone.className === 'stone' ||
-                                stone.className === 'stone brown')) {
-                            yygo.events.playStone(id);
-                        }
-                        // TODO Other modes.
-                    }, false);
+                    bindStone(letter[i] + letter[j]);
                 }
             }
         },
@@ -1577,7 +1478,7 @@ var yygo = {};
                 rl =        rows.length,
                 r;
 
-            for (r = 0; r < rl; r++) {
+            function bindRow(r) {
                 rows[r].addEventListener('click', function () {
                     var row = this.rowIndex;
 
@@ -1590,6 +1491,10 @@ var yygo = {};
                         yygo.events.loadGame(data);
                     });
                 }, false);
+            }
+
+            for (r = 0; r < rl; r++) {
+                bindRow(r);
             }
         },
         /*}}}*/
@@ -1694,7 +1599,8 @@ var yygo = {};
                 prevnode = node - 1 >= 0 ? node - 1 : 0;
                 prevbranch = branch;
                 while (prevnode >= 0) {
-                    prevbranch = yygo.data.getParentBranch(prevnode, prevbranch);
+                    prevbranch =
+                        yygo.data.getParentBranch(prevnode, prevbranch);
                     if (game[prevnode][prevbranch].B !== undefined) {
                         yygo.data.playerturn = 'W';
                         break;
@@ -1735,7 +1641,6 @@ var yygo = {};
                 node =      yygo.data.curnode,
                 branch =    yygo.data.curbranch,
                 branchs =   game[0][0].branchs,
-                stones =    yygo.data.stones[node][branch],
                 exist =     false,
                 parentbranch,
                 i;
@@ -1756,7 +1661,7 @@ var yygo = {};
                 }
             }
             if (!exist) {
-                if (game[node + 1] === undefined || 
+                if (game[node + 1] === undefined ||
                         game[node + 1][branch] === undefined) {
                     yygo.data.addMove(coord);
                 } else {
@@ -1797,7 +1702,6 @@ var yygo = {};
             } else if (response === 'login') {
                 this.username = document.getElementById('username').value;
                 this.screen = 'options';
-                //yygo.view.changeScreen();
             } else if (response === 'logout') {
                 // Reload page after logout.
                 window.location.reload();
