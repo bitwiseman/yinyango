@@ -61,7 +61,7 @@
 
     /** stonesToGoban {{{
      * Transform stones list to a goban array.
-     * b: black, w: white, k: ko. 
+     * b: black, w: white, k: ko.
      *
      * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones list.
@@ -246,7 +246,7 @@
      * Add stones to goban.
      *
      * @param {String}  color   Color of the stone(s) (empty to remove).
-     * @param {Array}   add     Stone list to add/remove. 
+     * @param {Array}   add     Stone list to add/remove.
      * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones to modify.
      *
@@ -306,7 +306,7 @@
     /*}}}*/
 
     /** parseSgf {{{
-     * Read sgf data and register keys/values, sorting the nodes (moves) 
+     * Read sgf data and register keys/values, sorting the nodes (moves)
      * and branchs (variations).
      *
      * @param {String}      sgf Sgf data.
@@ -429,7 +429,6 @@
             marks =     {},
             sgf =       '',
             key,
-            keys,
             value,
             valuelen,
             prevfirstnode,
@@ -443,7 +442,9 @@
                 j = 0;
                 if (marks[node] === undefined) {
                     for (i in data[node]) {
-                        if (data[node -1] !== undefined && getParentBranch(data, node - 1, i) === branch) {
+                        if (data[node].hasOwnProperty(i) &&
+                                data[node - 1] !== undefined &&
+                                getParentBranch(data, node - 1, i) === branch) {
                             j++;
                         }
                     }
@@ -455,12 +456,14 @@
                 }
                 sgf += ';';
                 for (key in data[node][branch]) {
-                    value = data[node][branch][key];
-                    valuelen = value.length;
-                    if (key !== 'branchs') {
-                        sgf += key;
-                        for (i = 0; i < valuelen; i++) {
-                            sgf += '[' + value[i] + ']';
+                    if (data[node][branch].hasOwnProperty(key)) {
+                        value = data[node][branch][key];
+                        valuelen = value.length;
+                        if (key !== 'branchs') {
+                            sgf += key;
+                            for (i = 0; i < valuelen; i++) {
+                                sgf += '[' + value[i] + ']';
+                            }
                         }
                     }
                 }
@@ -479,7 +482,7 @@
             }
             if (node < prevfirstnode) {
                 for (i in marks) {
-                    if (i > node) {
+                    if (marks.hasOwnProperty(i) && i > node) {
                         for (j = 0; j < marks[i]; j++) {
                             sgf += ')';
                         }
