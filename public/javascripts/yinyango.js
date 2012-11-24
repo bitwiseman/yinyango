@@ -293,6 +293,7 @@ var yygo = {};
                     }
                 }
             }
+            console.log(stones);
             return stones;
         },
         /*}}}*/

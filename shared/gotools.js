@@ -23,6 +23,25 @@
      * Private functions.
      */
 
+    function addKo(color, x, y, goban) {
+        var liberties = [];
+
+        function isLiberty(x, y) {
+            if (goban[x] !== undefined && goban[x][y] !== undefined &&
+                    (goban[x][y] === color || goban[x][y] === '')) {
+                liberties.push([x, y]); // Liberty or same color.
+            }
+        }
+        isLiberty(x - 1, y); 
+        isLiberty(x + 1, y); 
+        isLiberty(x, y - 1); 
+        isLiberty(x, y + 1); 
+        if (liberties.length === 1) {
+            goban[liberties[0][0]][liberties[0][1]] = 'K';
+        }
+        return goban;
+    }
+
     /** gobanToStones {{{
      * Transform goban array to stones list.
      *
@@ -295,6 +314,11 @@
 
         // Test if that makes captures and get new state if so.
         captureresult = testCaptures(color, x, y, goban);
+
+        if (captureresult.prisonners === 1) {
+            // Test if that create a ko situation.
+            goban = addKo(color, x, y, captureresult.goban);
+        }
 
         newstate = {
             'stones': gobanToStones(size, captureresult.goban),
