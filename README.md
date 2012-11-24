@@ -17,7 +17,6 @@ general.
 - Make different modes: play, edition...
 - Calculate the score.
 - Add suicide rule.
-- Add ko rules.
 - Add other rules.
 - Validation link sent by mail.
 - Provide direct link to a game.

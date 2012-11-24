@@ -23,9 +23,20 @@
      * Private functions.
      */
 
+    /** addKo {{{
+     * Test if a move created a ko situation and add the only liberty to goban
+     * as such.
+     *
+     * @param {String} color Played color.
+     * @param {Number} x X coord.
+     * @param {Number} y Y coord.
+     * @param {Array} goban Goban to test.
+     *
+     * @return {Array} New goban with eventual ko added.
+     */
     function addKo(color, x, y, goban) {
         var liberties = [];
-
+    
         function isLiberty(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined &&
                     (goban[x][y] === color || goban[x][y] === '')) {
@@ -41,6 +52,7 @@
         }
         return goban;
     }
+    /*}}}*/
 
     /** gobanToStones {{{
      * Transform goban array to stones list.
@@ -116,7 +128,6 @@
         }
         putStones(stones.B, 'B');
         putStones(stones.W, 'W');
-        putStones(stones.K, 'K');
         return goban;
     }
     /*}}}*/
