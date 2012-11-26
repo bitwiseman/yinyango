@@ -334,11 +334,10 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    border: 1px solid transparent;
     border-radius: 50%;
 }
 .stone.white {
-    border-color: #000;
+    border: 1px solid #000;
 }
 .cell > a:not(.none) {
     display: block;
