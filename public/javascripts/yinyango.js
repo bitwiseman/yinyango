@@ -1455,7 +1455,7 @@ var yygo = {};
                         yygo.events.playStone(id);
                     }
                     // TODO Other modes.
-                }, false);
+                }, true);
             }
 
             for (i = 0; i < size; i++) {
