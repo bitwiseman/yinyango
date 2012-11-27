@@ -274,8 +274,8 @@ var yygo = {};
                     stones[node] = {};
                     for (branch in data[node]) {
                         if (data[node].hasOwnProperty(branch)) {
-                            stones[node][branch] = {B: [], W: [], BS: [],
-                                    WS: [], K: []};
+                            stones[node][branch] = {B: [], W: [], BF: [],
+                                    WF: [], K: []};
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
@@ -776,7 +776,6 @@ var yygo = {};
             var node =          yygo.data.curnode,
                 branch =        yygo.data.curbranch,
                 stones =        yygo.data.stones[node][branch],
-                rule =          yygo.data.game[0][0].RU[0],
                 turn =          yygo.data.playerturn;
 
             function placeColor(list, color) {
@@ -796,11 +795,11 @@ var yygo = {};
             placeColor(stones.B, 'black');
             placeColor(stones.W, 'white');
             placeColor(stones.K, 'ko');
-            // Add forbidden moves depending on player turn and rules.
-            if (turn === 'B' && rule === 'Japanese') {
-                placeColor(stones.BS, 'BS');
-            } else if (rule === 'Japanese') {
-                placeColor(stones.WS, 'WS');
+            // Add forbidden moves.
+            if (turn === 'B') {
+                placeColor(stones.BF, 'BF');
+            } else {
+                placeColor(stones.WF, 'WF');
             }
         },
         /*}}}*/
@@ -1257,8 +1256,8 @@ var yygo = {};
                     'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
                     'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
                     'mg', 'mh', 'nd', 'ne', 'nf', 'ng'],
-                'BS': ['ke'],
-                'WS': ['io'],
+                'BF': ['ke'],
+                'WF': ['io'],
                 'K': []
             } } };
 

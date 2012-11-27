@@ -82,7 +82,7 @@
      *                    'K':{String} (kos on goban) }
      */
     function gobanToStones(size, goban) {
-        var stones =    { B: [], W: [], BS: [], WS: [], K: [] },
+        var stones =    { B: [], W: [], BF: [], WF: [], K: [] },
             letters =   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                          'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
             coord,
@@ -97,10 +97,10 @@
                         stones.B.push(coord);
                     } else if (goban[x][y] === 'W') {
                         stones.W.push(coord);
-                    } else if (goban[x][y] === 'BS') {
-                        stones.BS.push(coord);
-                    } else if (goban[x][y] === 'WS') {
-                        stones.WS.push(coord);
+                    } else if (goban[x][y] === 'BF') {
+                        stones.BF.push(coord);
+                    } else if (goban[x][y] === 'WF') {
+                        stones.WF.push(coord);
                     } else if (goban[x][y] === 'K') {
                         stones.K.push(coord);
                     }
@@ -149,8 +149,8 @@
         }
         putStones(stones.B, 'B');
         putStones(stones.W, 'W');
-        putStones(stones.BS, 'BS');
-        putStones(stones.WS, 'WS');
+        putStones(stones.BF, 'BF');
+        putStones(stones.WF, 'WF');
         return goban;
     }
     /*}}}*/
