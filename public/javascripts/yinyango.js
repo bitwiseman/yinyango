@@ -189,6 +189,7 @@ var yygo = {};
                 stones =        this.stones[node][branch],
                 size =          this.size,
                 turn =          this.playerturn,
+                rule =          this.game[0][0].RU[0],
                 parentbranch,
                 play;
 
@@ -203,7 +204,7 @@ var yygo = {};
             this.game[node + 1][branch][turn] = [];
             this.game[node + 1][branch][turn].push(coord);
 
-            play = gotools.playMove(turn, coord, size, stones);
+            play = gotools.playMove(turn, coord, size, stones, rule);
             // Add stones state.
             if (this.stones[node + 1] === undefined) {
                 this.stones[node + 1] = {};
@@ -228,6 +229,7 @@ var yygo = {};
         calcStones: function (data) {
             var stones =        {},
                 size =          yygo.data.size,
+                rule =          this.game[0][0].RU[0],
                 parentbranch,
                 prevstones,
                 key,
@@ -240,14 +242,16 @@ var yygo = {};
                 switch (key) {
                 case 'B':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('B', value[0], size, stones);
+                        play =
+                            gotools.playMove('B', value[0], size, stones, rule);
                         stones = play.stones;
                         yygo.data.score.B += play.prisonners;
                     }
                     break;
                 case 'W':
                     if (value[0] !== '') { // Did not pass.
-                        play = gotools.playMove('W', value[0], size, stones);
+                        play =
+                            gotools.playMove('W', value[0], size, stones, rule);
                         stones = play.stones;
                         yygo.data.score.W += play.prisonners;
                     }
@@ -270,7 +274,8 @@ var yygo = {};
                     stones[node] = {};
                     for (branch in data[node]) {
                         if (data[node].hasOwnProperty(branch)) {
-                            stones[node][branch] = {B: [], W: [], K: []};
+                            stones[node][branch] = {B: [], W: [], BS: [],
+                                    WS: [], K: []};
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
@@ -770,7 +775,9 @@ var yygo = {};
         placeStones: function () {
             var node =          yygo.data.curnode,
                 branch =        yygo.data.curbranch,
-                stones =        yygo.data.stones[node][branch];
+                stones =        yygo.data.stones[node][branch],
+                rule =          yygo.data.game[0][0].RU[0],
+                turn =          yygo.data.playerturn;
 
             function placeColor(list, color) {
                 var listlen = list.length,
@@ -789,6 +796,12 @@ var yygo = {};
             placeColor(stones.B, 'black');
             placeColor(stones.W, 'white');
             placeColor(stones.K, 'ko');
+            // Add forbidden moves depending on player turn and rules.
+            if (turn === 'B' && rule === 'Japanese') {
+                placeColor(stones.BS, 'BS');
+            } else if (rule === 'Japanese') {
+                placeColor(stones.WS, 'WS');
+            }
         },
         /*}}}*/
 
@@ -1244,6 +1257,8 @@ var yygo = {};
                     'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
                     'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
                     'mg', 'mh', 'nd', 'ne', 'nf', 'ng'],
+                'BS': ['ke'],
+                'WS': ['io'],
                 'K': []
             } } };
 

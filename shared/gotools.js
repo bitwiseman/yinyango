@@ -23,7 +23,7 @@
      * Private functions.
      */
 
-    /** addKo {{{
+    /** testKo {{{
      * Test if a move created a ko situation and add the only liberty to goban
      * as such.
      *
@@ -34,7 +34,7 @@
      *
      * @return {Array} New goban with eventual ko added.
      */
-    function addKo(color, x, y, goban) {
+    function testKo(color, x, y, goban) {
         var liberties = [];
     
         function isLiberty(x, y) {
@@ -54,6 +54,23 @@
     }
     /*}}}*/
 
+    /** testSuicides {{{
+     * Test if a move created a suicide situation for any color, or if it
+     * removed such situation. Some rules permit suicides, so we need to
+     * check which rule we are playing too.
+     *
+     * @param {String} color Played color.
+     * @param {Number} x X coord.
+     * @param {Number} y Y coord.
+     * @param {Array} goban Goban to test.
+     * @param {String} rule Played rule.
+     *
+     * @return {Array} New goban with suicides.
+     */
+    function testSuicides(color, x, y, goban, rule) {
+    }
+    /*}}}*/
+
     /** gobanToStones {{{
      * Transform goban array to stones list.
      *
@@ -65,7 +82,7 @@
      *                    'K':{String} (kos on goban) }
      */
     function gobanToStones(size, goban) {
-        var stones =    { 'B': [], 'W': [], 'K': [] },
+        var stones =    { B: [], W: [], BS: [], WS: [], K: [] },
             letters =   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                          'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
             coord,
@@ -80,6 +97,10 @@
                         stones.B.push(coord);
                     } else if (goban[x][y] === 'W') {
                         stones.W.push(coord);
+                    } else if (goban[x][y] === 'BS') {
+                        stones.BS.push(coord);
+                    } else if (goban[x][y] === 'WS') {
+                        stones.WS.push(coord);
                     } else if (goban[x][y] === 'K') {
                         stones.K.push(coord);
                     }
@@ -118,7 +139,7 @@
                 x,
                 y;
 
-            if (stones.length !== 0) {
+            if (stoneslen !== 0) {
                 for (i = 0; i < stoneslen; i++) {
                     x = stones[i].charCodeAt(0) - 97;
                     y = stones[i].charCodeAt(1) - 97;
@@ -128,6 +149,8 @@
         }
         putStones(stones.B, 'B');
         putStones(stones.W, 'W');
+        putStones(stones.BS, 'BS');
+        putStones(stones.WS, 'WS');
         return goban;
     }
     /*}}}*/
@@ -308,12 +331,13 @@
      * @param {String}  coord   Coordinate of played stone in letters.
      * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones list.
+     * @param {String}  rule    Played rule.
      *
      * @return {Object} { 'stones':{Object} (new stones list after playing the
      *                                       stone and applying rules),
      *                    'prisonners':{Number} (number of prisonners made) }
      */
-    exports.playMove = function (color, coord, size, stones) {
+    exports.playMove = function (color, coord, size, stones, rule) {
         var x =             coord.charCodeAt(0) - 97, // Coord to Number.
             y =             coord.charCodeAt(1) - 97,
             goban =         stonesToGoban(size, stones),
@@ -328,8 +352,9 @@
 
         if (captureresult.prisonners === 1) {
             // Test if that create a ko situation.
-            goban = addKo(color, x, y, captureresult.goban);
+            goban = testKo(color, x, y, captureresult.goban);
         }
+        goban = testSuicides(color, x, y, goban, rule);
 
         newstate = {
             'stones': gobanToStones(size, captureresult.goban),
