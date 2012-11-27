@@ -1490,7 +1490,7 @@ var yygo = {};
                     jsonRequest('/load/' + ids[row], 'GET', function (data) {
                         yygo.events.loadGame(data);
                     });
-                }, false);
+                }, true);
             }
 
             for (r = 0; r < rl; r++) {
