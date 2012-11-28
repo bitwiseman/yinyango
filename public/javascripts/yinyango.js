@@ -778,6 +778,7 @@ var yygo = {};
                 stones =        yygo.data.stones[node][branch],
                 turn =          yygo.data.playerturn;
 
+            console.log(stones);
             function placeColor(list, color) {
                 var listlen = list.length,
                     stone,

@@ -68,6 +68,32 @@
      * @return {Array} New goban with suicides.
      */
     function testSuicides(color, x, y, goban, rule) {
+        function isSuicide(color, x, y) {
+            var testlib,
+                testcapture,
+                isko;
+
+            if (goban [x] !== undefined && goban[x][y] !== undefined &&
+                    goban[x][y] === '') {
+                testlib = testLiberties(color, x, y, goban, []);
+                testcapture = testCaptures(color, x, y, goban);
+                console.log(color + ' coords:' + x + ',' + y + ' libs:' + testlib +
+                        ' caps:' + testcapture.prisonners);
+                if (testlib[0] === 0 && testcapture.prisonners === 0) {
+                    goban[x][y] = color + 'F';
+                }
+            }
+        }
+        isSuicide('B', x - 1, y);
+        isSuicide('B', x + 1, y);
+        isSuicide('B', x, y - 1);
+        isSuicide('B', x, y + 1);
+        isSuicide('W', x - 1, y);
+        isSuicide('W', x + 1, y);
+        isSuicide('W', x, y - 1);
+        isSuicide('W', x, y + 1);
+
+        return goban;
     }
     /*}}}*/
 
