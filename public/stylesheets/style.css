@@ -304,19 +304,6 @@ body {
 /*}}}*/
 /*}}}*/
 
-#variations {/*{{{*/
-    text-align: center;
-    height: 20px;
-}
-.varbutton {
-    display: inline-block;
-    border: 2px solid #000;
-    border-radius: 10px;
-    margin: 0px 2px 0px 2px;
-    height: 16px;
-    width: 16px;
-}
-/*}}}*/
 #goban {/*{{{*/
     position: relative;
     margin: auto;

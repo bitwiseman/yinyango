@@ -608,14 +608,14 @@ var yygo = {};
          * Create and insert variations html code.
          */
         makeVariations: function () {
-            var game =              yygo.data.game,
-                curbranch =         yygo.data.curbranch,
-                curnode =           yygo.data.curnode,
-                branchs =           game[0][0].branchs,
-                variationselem =    document.getElementById('variations'),
-                variations =        0,
-                html =              '',
-                binds =             [],
+            var game =          yygo.data.game,
+                curbranch =     yygo.data.curbranch,
+                curnode =       yygo.data.curnode,
+                branchs =       game[0][0].branchs,
+                variations =    document.getElementById('variations'),
+                variationsnum = 0,
+                html =          '<select>',
+                select,
                 pbranch,
                 opbranch,
                 i;
@@ -631,29 +631,33 @@ var yygo = {};
                     if (opbranch === pbranch) {
                         // Our branch and 'i' branch got the same parent so
                         // 'i' is a variation.
-                        variations++;
+                        variationsnum++;
                         if (i === curbranch) {
                             // This is our branch show a plain radio button.
-                            html += '<div class="varbutton black"></div>';
+                            //html += '<div class="varbutton black"></div>';
+                            html += '<option value="' + i +
+                                '" selected="selected">' + i + '</option>';
                         } else {
                             // Show a clickable empty radio button.
-                            html += '<a href="#" id="var' + i +
-                                '" class="varbutton"></a>';
-                            binds.push(i); // Add variation to the binds.
+                            //html += '<a href="#" id="var' + i +
+                                //'" class="varbutton"></a>';
+                            html += '<option value="' + i + '">' +
+                                i + '</option>';
                         }
                     }
                 }
             }
 
-            if (variations <= 1) { // No variations, delete html.
+            html += '</select>';
+            if (variationsnum <= 1) { // No variations, delete html.
                 html = '';
             }
 
-            variationselem.innerHTML = html;
+            variations.innerHTML = html;
 
             if (html !== '') {
-                // Binds radio buttons to their respective variation.
-                yygo.events.makeVariationsBinds(binds);
+                select = variations.getElementsByTagName('select')[0];
+                yygo.events.makeVariationsBind(select);
             }
         },
         /*}}}*/
@@ -778,7 +782,6 @@ var yygo = {};
                 stones =        yygo.data.stones[node][branch],
                 turn =          yygo.data.playerturn;
 
-            console.log(stones);
             function placeColor(list, color) {
                 var listlen = list.length,
                     stone,
@@ -1514,40 +1517,24 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.events.makeVariationsBinds {{{
-         * Assign each variation radio button a click event with proper
-         * reference to it.
+        /** yygo.events.makeVariationsBind {{{
+         * Change branch according to selected variation.
+         *
+         * @param {Element} select Select tag element.
          */
-        makeVariationsBinds: function (binds) {
-            var ci = binds.length,
-                varbut,
-                i;
+        makeVariationsBind: function (select) {
+            select.addEventListener('change', function () {
+                var branch = parseInt(this.value, 10);
 
-            function varbutClick(id) {
-                return function () {
-                    var branch = parseInt(id.substr(3), 10);
-
-                    yygo.data.curbranch = branch;
-                    yygo.data.lastbranch = branch;
-
-                    yygo.data.setLastNode();
-
-                    yygo.view.toggleNavButtons();
-
-                    yygo.view.makeVariations();
-                    yygo.view.makeComments();
-
-                    yygo.view.emptyGoban();
-                    yygo.view.placeStones();
-                    yygo.view.placeSymbols();
-                };
-            }
-
-            for (i = 0; i < ci; i++) {
-                varbut = document.getElementById('var' + binds[i]);
-                varbut.addEventListener('click', varbutClick(varbut.id),
-                    false);
-            }
+                yygo.data.curbranch = branch;
+                yygo.data.lastbranch = branch;
+                yygo.data.setLastNode();
+                yygo.view.toggleNavButtons();
+                yygo.view.makeComments();
+                yygo.view.emptyGoban();
+                yygo.view.placeStones();
+                yygo.view.placeSymbols();
+            }, false);
         },
         /*}}}*/
 
