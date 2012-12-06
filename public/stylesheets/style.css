@@ -5,13 +5,11 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
-
-body {
+body {/*{{{*/
     margin: 0;
     font-size: 100%;
     text-align: center;
-}
-
+}/*}}}*/
 /** general {{{
  * General use CSS.
  */
@@ -86,7 +84,6 @@ body {
     cursor: pointer;
 }
 /*}}}*/
-
 /** hide at start {{{
  * Elements that starts hidden
  */
@@ -95,7 +92,9 @@ body {
     display: none;
 }
 /*}}}*/
-
+/** menu {{{
+ * Game menu.
+ */
 #menucontainer {
     position: absolute;
 }
@@ -108,13 +107,15 @@ body {
     background: #000;
     opacity: 0.7;
 }
-#loading {
+/*}}}*/
+#loading {/*{{{*/
     position: absolute;
     top: 50%;
     height: 1em;
     width: 100%;
     margin-top: -0.5em;
 }
+/*}}}*/
 #gameslist {/*{{{*/
     border-collapse: collapse;
     text-align: center;
@@ -128,7 +129,6 @@ body {
     cursor: pointer;
 }
 /*}}}*/
-
 /** buttonsbar {{{
  * CSS for buttons bar.
  */
@@ -303,7 +303,6 @@ body {
 }
 /*}}}*/
 /*}}}*/
-
 #goban {/*{{{*/
     position: relative;
     margin: auto;
@@ -396,23 +395,5 @@ body {
     padding: 0.5em;
     text-align: left;
     overflow: auto;
-}
-/*}}}*/
-#infos {/*{{{*/
-    position: absolute;
-    width: 100%;
-    top: 50px;
-    bottom: 5px;
-    overflow: auto;
-}
-#infos table {
-    margin: auto;
-    text-align: right;
-}
-#infos td {
-    padding: 10px;
-}
-.infolabel {
-    text-align: left;
 }
 /*}}}*/
