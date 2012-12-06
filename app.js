@@ -5,9 +5,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
-
 'use strict';
-
 /* Modules & globals. {{{*/
 var express =       require('express'),
     sys =           require('sys'),
@@ -21,7 +19,6 @@ var express =       require('express'),
     app =           express(),
     db =            mongoose.createConnection('localhost', 'yinyango');
 /*}}}*/
-
 /* Mongoose Schemas & models {{{*/
 var userSchema = new mongoose.Schema({
     name:       String,
@@ -43,7 +40,6 @@ var sgfSchema = new mongoose.Schema({
 var User = db.model('user', userSchema);
 var Sgf = db.model('sgf', sgfSchema);
 /*}}}*/
-
 /* Configuration. {{{*/
 app.configure(function () {
     app.set('views', __dirname + '/views/');
@@ -67,18 +63,15 @@ app.configure('production', function () {
 });
 db.on('error', console.error.bind(console, 'db connection error:'));
 /*}}}*/
-
 /* Prototypes {{{*/
 Validator.prototype.error = function (msg) {
     this._errors.push(msg);
     return this;
 };
-
 Validator.prototype.getErrors = function () {
     return this._errors;
 };
 /*}}}*/
-
 /* Functions. {{{*/
 /** restricted {{{
  * Restrict some pages to registered users.
@@ -91,7 +84,6 @@ function restricted(req, res, next) {
     }
 }
 /*}}}*/
-
 /** checkSgf {{{
  * Check if a sgf file is valid with sgfc.
  *
@@ -117,7 +109,6 @@ function checkSgf(sgf, res, next) {
     });
 }
 /*}}}*/
-
 /** hash {{{
  * Hashes a password with optional salt, otherwise generate a salt for 
  * password and return both salt and hash.
@@ -151,7 +142,6 @@ function hash(pwd, salt, fn) {
 }
 /*}}}*/
 /*}}}*/
-
 /* Routes. {{{*/
 /** get / {{{
  * Application start.
@@ -168,7 +158,6 @@ app.get('/', function (req, res) {
     }
 });
 /*}}}*/
-
 /** get /guest {{{
  * Guest login.
  */
@@ -178,7 +167,6 @@ app.get('/guest', function (req, res) {
     res.redirect('/');
 });
 /*}}}*/
-
 /** get /gameslist/:page {{{
  * Send games corresponding to a page.
  */
@@ -198,7 +186,6 @@ app.get('/gameslist/:page', function (req, res) {
     });
 });
 /*}}}*/
-
 /** get /load/:id {{{
  * Load selected game or navigate in pages.
  */
@@ -221,7 +208,6 @@ app.get('/load/:id', function (req, res) {
     });
 });
 /*}}}*/
-
 /** get /logout {{{
  * User logout.
  */
@@ -232,7 +218,6 @@ app.get('/logout', function (req, res) {
     });
 });
 /*}}}*/
-
 /** get /register {{{
  * Registration page.
  */
@@ -240,7 +225,6 @@ app.get('/register', function (req, res) {
     res.render('register', { error: '' });
 });
 /*}}}*/
-
 /** get /session {{{
  * Return user session infos and game data.
  */
@@ -265,7 +249,6 @@ app.get('/session', function (req, res) {
     }
 });
 /*}}}*/
-
 /** post /login {{{
  * User login.
  */
@@ -312,7 +295,6 @@ app.post('/login', function (req, res) {
     }
 });
 /*}}}*/
-
 /** post /register {{{
  * Register new user.
  */
@@ -380,7 +362,6 @@ app.post('/register', function (req, res) {
     }
 });
 /*}}}*/
-
 /** post /sendsgf {{{
  * Save sent sgf file to database.
  */
@@ -434,7 +415,6 @@ app.post('/sendsgf', function (req, res) {
     });
 });
 /*}}}*/
-
 /** post /settings {{{
  * Apply user parameters.
  * Use _id for faster database access as it's indexed.
@@ -468,11 +448,10 @@ app.post('/settings', function (req, res) {
 });
 /*}}}*/
 /*}}}*/
-
-/**
+/** init {{{
  * Server init.
  */
-
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
 });
+/*}}}*/
