@@ -564,12 +564,11 @@ var yygo = {};
          */
         makeInfos: function () {
             var infos =         yygo.data.game[0][0],
-                locale =        yygo.data.locale,
                 infoselem =     document.getElementById('infos'),
                 html =          '<table>';
 
             if (infos.PB !== undefined) {
-                html += '<tr><td class="infolabel"><em>' + locale.black +
+                html += '<tr><td class="infolabel"><em>Black' +
                     ':</em></td><td>' + infos.PB;
                 if (infos.BR !== undefined) {
                     html += ' [' + infos.BR + ']';
@@ -578,7 +577,7 @@ var yygo = {};
             }
 
             if (infos.PW !== undefined) {
-                html += '<tr><td class="infolabel"><em>' + locale.white +
+                html += '<tr><td class="infolabel"><em>White' +
                     ':</em></td><td>' + infos.PW;
                 if (infos.WR !== undefined) {
                     html += ' [' + infos.WR + ']';
@@ -587,20 +586,48 @@ var yygo = {};
             }
 
             if (infos.DT !== undefined) {
-                html += '<tr><td class="infolabel"><em>' + locale.date +
+                html += '<tr><td class="infolabel"><em>Date' +
                     ':</em></td><td>' + infos.DT + '</td></tr>';
             }
             if (infos.PC !== undefined) {
-                html += '<tr><td class="infolabel"><em>' + locale.place +
+                html += '<tr><td class="infolabel"><em>Place' +
                     ':</em></td><td>' + infos.PC + '</td></tr>';
             }
             if (infos.RU !== undefined) {
-                html += '<tr><td class="infolabel"><em>' + locale.rules +
+                html += '<tr><td class="infolabel"><em>Rules' +
                     ':</em></td><td>' + infos.RU + '</td></tr>';
             }
             html += '</table>';
 
             infoselem.innerHTML = html;
+        },
+        /*}}}*/
+
+        /** yygo.view.makePlayersInfos {{{
+         * Create and insert players informations html code.
+         */
+        makePlayersInfos: function () {
+            var infos =         yygo.data.game[0][0],
+                playersinfos =  document.getElementById('playersinfos'),
+                html =          '';
+
+            if (infos.PB !== undefined) {
+                html += '<a href="#" class="player black">' + infos.PB;
+                if (infos.BR !== undefined) {
+                    html += ' [' + infos.BR + ']';
+                }
+                html += '</a>';
+            }
+
+            if (infos.PW !== undefined) {
+                html += '<a href="#" class="player white">' + infos.PW;
+                if (infos.WR !== undefined) {
+                    html += ' [' + infos.WR + ']';
+                }
+                html += '</a>';
+            }
+
+            playersinfos.innerHTML = html;
         },
         /*}}}*/
 
@@ -1202,7 +1229,7 @@ var yygo = {};
             }
 
             yygo.view.makeVariations();
-            //yygo.view.makeInfos();
+            yygo.view.makePlayersInfos();
             yygo.view.makeComments();
 
             yygo.view.placeStones();

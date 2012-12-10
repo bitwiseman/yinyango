@@ -9,7 +9,8 @@ body {/*{{{*/
     margin: 0;
     font-size: 100%;
     text-align: center;
-}/*}}}*/
+}
+/*}}}*/
 /** general {{{
  * General use CSS.
  */
@@ -395,5 +396,19 @@ body {/*{{{*/
     padding: 0.5em;
     text-align: left;
     overflow: auto;
+}
+/*}}}*/
+#playersinfos {/*{{{*/
+    height: 1em;
+}
+.player {
+    display: inline-block;
+    width: 50%;
+    height: 1em;
+    overflow: hidden;
+    border-radius: 1em;/* Make sure its all rounded. */
+    text-decoration: none;
+    line-height: 1em;/* Center player name */
+    cursor: pointer;
 }
 /*}}}*/
