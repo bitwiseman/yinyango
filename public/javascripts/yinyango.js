@@ -76,7 +76,6 @@ var yygo = {};
 
         game:           {},
         gameslist:      {},
-        score:          {B: 0, W: 0},
         stones:         {},
 
         listpage:       0,
@@ -186,16 +185,21 @@ var yygo = {};
         addMove: function (coord) {
             var node =          this.curnode,
                 branch =        this.lastbranch,
-                stones =        this.stones[node][branch],
                 size =          this.size,
                 turn =          this.playerturn,
                 rule =          this.game[0][0].RU[0],
+                stones,
+                prevscore,
                 parentbranch,
                 play;
 
-            if (stones === undefined) {
+            if (this.stones[node][branch] === undefined) {
                 parentbranch = this.getParentBranch(node, branch);
                 stones = this.stones[node][parentbranch];
+                prevscore = this.game[node][parentbranch].score;
+            } else {
+                stones = this.stones[node][branch];
+                prevscore = this.game[node][branch].score;
             }
             if (this.game[node + 1] === undefined) {
                 this.game[node + 1] = {};
@@ -203,6 +207,10 @@ var yygo = {};
             this.game[node + 1][branch] = {};
             this.game[node + 1][branch][turn] = [];
             this.game[node + 1][branch][turn].push(coord);
+            this.game[node + 1][branch].score = {
+                B: prevscore.B,
+                W: prevscore.W
+            };
 
             play = gotools.playMove(turn, coord, size, stones, rule);
             // Add stones state.
@@ -211,9 +219,9 @@ var yygo = {};
             }
             this.stones[node + 1][branch] = play.stones;
             // Add prisonners to player score.
-            this.score[turn] += play.prisonners;
+            this.game[node + 1][branch].score[turn] =
+                prevscore[turn] + play.prisonners;
             // Move to next node.
-            //this.curnode++;
             this.lastnode = this.curnode + 1;
             yygo.events.navigateNode(1);
         },
@@ -228,15 +236,16 @@ var yygo = {};
          */
         calcStones: function (data) {
             var stones =        {},
-                size =          yygo.data.size,
+                size =          this.size,
                 rule =          this.game[0][0].RU[0],
                 parentbranch,
                 prevstones,
+                prevscore,
                 key,
                 node,
                 branch;
 
-            function keyAction(key, value, stones) {
+            function keyAction(node, branch, key, value, stones, prevscore) {
                 var play;
 
                 switch (key) {
@@ -245,7 +254,8 @@ var yygo = {};
                         play =
                             gotools.playMove('B', value[0], size, stones, rule);
                         stones = play.stones;
-                        yygo.data.score.B += play.prisonners;
+                        yygo.data.game[node][branch].score.B = prevscore.B +
+                            play.prisonners;
                     }
                     break;
                 case 'W':
@@ -253,7 +263,8 @@ var yygo = {};
                         play =
                             gotools.playMove('W', value[0], size, stones, rule);
                         stones = play.stones;
-                        yygo.data.score.W += play.prisonners;
+                        yygo.data.game[node][branch].score.W = prevscore.W +
+                            play.prisonners;
                     }
                     break;
                 case 'AB':
@@ -276,20 +287,23 @@ var yygo = {};
                         if (data[node].hasOwnProperty(branch)) {
                             stones[node][branch] = {B: [], W: [], BF: [],
                                     WF: [], K: []};
+                            this.game[node][branch].score = {B: 0, W: 0};
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
                             if (node > 0) {
                                 prevstones = stones[node - 1][parentbranch];
+                                prevscore = this.game[node - 1][parentbranch].score; 
                             } else {
                                 prevstones = stones[node][branch];
+                                prevscore = this.game[node][branch].score; 
                             }
                             // Treat keys.
                             for (key in data[node][branch]) {
                                 if (data[node][branch].hasOwnProperty(key)) {
-                                    prevstones = keyAction(key,
+                                    prevstones = keyAction(node, branch, key,
                                             data[node][branch][key],
-                                            prevstones);
+                                            prevstones, prevscore);
                                 }
                             }
                             // Save stones.
@@ -608,8 +622,11 @@ var yygo = {};
          */
         makePlayersInfos: function () {
             var infos =         yygo.data.game[0][0],
+                node =          yygo.data.curnode,
+                branch =        yygo.data.curbranch,
+                score =         yygo.data.game[node][branch].score,
                 playersinfos =  document.getElementById('playersinfos'),
-                html =          '';
+                html =          '<div>';
 
             if (infos.PB !== undefined) {
                 html += '<a href="#" class="player black">' + infos.PB;
@@ -626,6 +643,10 @@ var yygo = {};
                 }
                 html += '</a>';
             }
+            html += '</div><div>';
+            html += '<div class="player black">' + score.B + '</div>';
+            html += '<div class="player white">' + score.W + '</div>';
+            html += '</div>';
 
             playersinfos.innerHTML = html;
         },
@@ -1212,6 +1233,7 @@ var yygo = {};
             var oldsize = yygo.data.size;
 
             yygo.data.game = data;
+            yygo.data.game[0][0].score = {B: 0, W: 0};
             yygo.data.size = parseInt(yygo.data.game[0][0].SZ, 10);
             yygo.data.stones = yygo.data.calcStones(data);
 
@@ -1254,7 +1276,8 @@ var yygo = {};
         loadIntro: function () {
             yygo.data.game = {0: {0: {
                 'RU': ['Japanese'],
-                'branchs': 1
+                'branchs': 1,
+                'score': {B: 0, W: 0}
             } } };
             yygo.data.stones = {0: {0: {
                 'B': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
@@ -1651,6 +1674,7 @@ var yygo = {};
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
+            yygo.view.makePlayersInfos();
             yygo.view.makeComments();
 
             yygo.view.emptyGoban();

@@ -399,7 +399,7 @@ body {/*{{{*/
 }
 /*}}}*/
 #playersinfos {/*{{{*/
-    height: 1em;
+    height: 2em;
 }
 .player {
     display: inline-block;

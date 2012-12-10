@@ -77,8 +77,8 @@
                     goban[x][y] === '') {
                 testlib = testLiberties(color, x, y, goban, []);
                 testcapture = testCaptures(color, x, y, goban);
-                console.log(color + ' coords:' + x + ',' + y + ' libs:' + testlib +
-                        ' caps:' + testcapture.prisonners);
+                //console.log(color + ' coords:' + x + ',' + y + ' libs:' + testlib +
+                        //' caps:' + testcapture.prisonners);
                 if (testlib[0] === 0 && testcapture.prisonners === 0) {
                     goban[x][y] = color + 'F';
                 }
