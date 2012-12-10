@@ -626,27 +626,30 @@ var yygo = {};
                 branch =        yygo.data.curbranch,
                 score =         yygo.data.game[node][branch].score,
                 playersinfos =  document.getElementById('playersinfos'),
-                html =          '<div>';
+                html =          '';
 
+
+            html += '<a href="#" class="player black">';
             if (infos.PB !== undefined) {
-                html += '<a href="#" class="player black">' + infos.PB;
+                html += '<div class="playername">' + infos.PB;
                 if (infos.BR !== undefined) {
                     html += ' [' + infos.BR + ']';
                 }
-                html += '</a>';
+                html += '</div>';
             }
+            html += '<div>' + score.B + '</div>';
+            html += '</a>';
 
+            html += '<a href="#" class="player white">';
             if (infos.PW !== undefined) {
-                html += '<a href="#" class="player white">' + infos.PW;
+                html += '<div class="playername">' + infos.PW;
                 if (infos.WR !== undefined) {
                     html += ' [' + infos.WR + ']';
                 }
-                html += '</a>';
+                html += '</div>';
             }
-            html += '</div><div>';
-            html += '<div class="player black">' + score.B + '</div>';
-            html += '<div class="player white">' + score.W + '</div>';
-            html += '</div>';
+            html += '<div>' + score.W + '</div>';
+            html += '</a>';
 
             playersinfos.innerHTML = html;
         },
