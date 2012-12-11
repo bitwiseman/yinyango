@@ -770,7 +770,7 @@ var yygo = {};
             var toppanel =  document.getElementById('toppanel'),
                 comments =  document.getElementById('comments');
         
-            comments.style.top = toppanel.offsetHeight + 'px';
+            comments.style.top = toppanel.offsetHeight + 5 + 'px';
         },
         /*}}}*/
 
