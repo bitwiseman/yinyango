@@ -404,13 +404,12 @@ body {/*{{{*/
     display: inline-block;
     box-sizing: border-box;
     padding: 0 2%;
-    width: 50%;
+    width: 40%;
     height: 2em;
     border: 1px solid black;
-    border-radius: 1em;/* Make sure its all rounded. */
+    border-radius: 2em;/* Make sure its all rounded. */
     text-decoration: none;
     line-height: 1em;/* Center player name & score */
-    cursor: pointer;
 }
 .playername {
     overflow: hidden;
