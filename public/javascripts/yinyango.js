@@ -533,6 +533,7 @@ var yygo = {};
                 branch =    yygo.data.curbranch,
                 comments =  document.getElementById('comments'),
                 html =      '',
+                nameregex = /^(.+\s\[.+\]):/gm,
                 comment,
                 clen,
                 chr,
@@ -542,16 +543,18 @@ var yygo = {};
                 comment = yygo.data.game[node][branch].C[0];
             }
             if (comment !== undefined) {
+                comment = comment.replace(nameregex, '<strong>$1</strong>:');
                 clen = comment.length;
                 for (i = 0; i < clen; i++) {
                     chr = comment.charAt(i);
                     if (chr === '\n') { // Translate new line.
-                        html += '<br />';
+                        html += '<br/>';
                     } else {
                         html += chr;
                     }
                 }
             }
+            
             comments.innerHTML = html; // Insert html.
         },
         /*}}}*/
