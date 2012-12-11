@@ -1,0 +1,399 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Japanese]SZ[19]KM[6.50]
+PW[Hickop]PB[bfm]WR[17k]DT[2009-07-30]PC[The KGS Go Server at http://www.gokgs.com/]C[bfm [-\]: oyo
+Hickop [17k\]: salut
+bfm [-\]: je peux avoir le contrôle ?
+bfm [-\]: merci ^^
+bfm [-\]: voila l'ordre des priorités
+Laly [1d\]: Oo
+bfm [-\]: on commence par les coins
+Hickop [17k\]: oui ça j'ai compris :D
+bfm [-\]: ne fais pas confiance à laly
+bfm [-\]: elle est méchante
+Hickop [17k\]: haha
+bfm [-\]: :D
+]
+(;AW[nc][oc][pc][qc][dp][pp]AB[dd][nd][od][pd][qd][rd]LB[qe:1][qf:2][qg:3][qh:4][qi:5][pj:B][qj:C]TR[rd][sd]SQ[nd][od][pd][qd][cj][ck][cl][cm][cn]C[Laly [1d\]: même âs vrai; méchant =o
+bfm [-\]: ici
+Hickop [17k\]: noir joue ?
+bfm [-\]: admettons que les coins soient déjà occupés
+bfm [-\]: c'est à noir de jouer oui, où doit il jouer ? :p
+Laly [1d\]: bon, ze vous laisse, veux pas voir le massacre x)
+bfm [-\]: enfin... sur quel coté ?
+Hickop [17k\]: je jouerais 1
+bfm [-\]: ++ laly
+Hickop [17k\]: pour étendre a gauche
+bfm [-\]: dans cette zone là donc
+Hickop [17k\]: oui
+bfm [-\]: eh ben c'est pas bon ^^
+Hickop [17k\]: C6 meme plus couramment
+bfm [-\]: noir a utilisé 4 pierres pour faire un mur en A
+bfm [-\]: utiliser ces 4 pierres est plus important que d'approcher un coin
+bfm [-\]: noir doit donc jouer en B ou en C
+Hickop [17k\]: ha mais ce mur n'a pas assez d'influence ?
+bfm [-\]: un mur en lui même ne sert à rien
+bfm [-\]: pour développer un potentiel efficace, on doit lui donner une extention
+Hickop [17k\]: ok je vois
+bfm [-\]: en général, l'extention idéale d'un mur est à x+1 intersections, où x est le nombre de pierres du mur
+Hickop [17k\]: ha oui c'est vrai
+bfm [-\]: concrètement, quand on a un mur de 4 pierres, il faut lui donner une extention de 5 intersections
+bfm [-\]: la règle est vrai jusqu'à environ 7 pierres ^^
+Hickop [17k\]: donc dans quel cas je peux approcher un coin ?
+bfm [-\]: remarque : si  noir avait une pierre ici, l'extention idéale serait quand même de 5 intersections
+bfm [-\]: pour le calcul de l'extention idéale, on ne prend pas en compte les pierres qui sont sur la 2e et la 1ère ligne
+Hickop [17k\]: pourquoi ?
+bfm [-\]: je n'ai jamais trouvé la réponse XD
+Hickop [17k\]: ok :D
+])
+(;B[pd]LB[jc:D][jd:C][pj:A][qj:B]C[bfm [-\]: l'extention idéale d'une pierre de coin est en général à 5 intersections
+]
+(;W[dp]
+;B[pq]
+;W[dd]LB[fc:A][jd:E][po:C][qo:D][fq:B]C[bfm [-\]: les 4 coins sont occupés
+bfm [-\]: on est toujours dans le fuseki
+bfm [-\]: lequel de ces coups est le meilleur ? ^^
+Hickop [17k\]: j'aime bien A et D
+bfm [-\]: tous ces coups sont possibles ^^
+bfm [-\]: le moins bon est probablement E
+bfm [-\]: G et F sont des stratégies spéciales
+bfm [-\]: j'en parlerai pas
+bfm [-\]: A et B se valent
+Hickop [17k\]: D est le meilleur alors ?
+Hickop [17k\]: avec C
+bfm [-\]: C et D se valent aussi
+bfm [-\]: ces 4 coups sont équivalents ^^
+bfm [-\]: C et D ferment le coin
+Hickop [17k\]: oui
+bfm [-\]: A et B sont des approches
+Hickop [17k\]: c'est plus passif
+bfm [-\]: hmmm
+bfm [-\]: non
+bfm [-\]: pour être actif, on est pas obligé de jouer chez l'autre ^^
+Hickop [17k\]: ok c'est mon problème en fait , je joue comme un avare
+bfm [-\]: :p
+bfm [-\]: voila typiquement une situation où il faut approcher un coin
+bfm [-\]: un coup en E serait un peu imprécis
+Hickop [17k\]: il ne menace pas assez ?
+bfm [-\]: il ne respecte pas l'ordre naturel du fuseki ^^
+]
+(;B[jd]
+;W[gc]SQ[nc][md][nd]C[bfm [-\]: blanc pourrait jouer ici par exemple
+bfm [-\]: le coin C17 est presque fermé
+bfm [-\]: et si blanc sépare noir en jouant dans cette zone
+bfm [-\]: la pierre K16 ne sert plus à grand chose
+]
+;B[qo]
+;W[nc]
+(;B[qf])
+(;B[oc]
+;W[nd]
+;B[pf]
+;W[ld]C[bfm [-\]: voila l'idée
+Hickop [17k\]: ok
+bfm [-\]: l'ordre ne coup n'est pas précis, c'est juste pour te montrer comment blant pourrait exploiter K16
+Hickop [17k\]: mais si on ouvre en san ren sei ?
+]))
+(;B[qk]C[Hickop [17k\]: quelle est la stratégie ?
+bfm [-\]: san ren sei, c'est un peu comme ce fuseki là (fuseki chinois), c'est une stratégie spéciale aussi
+bfm [-\]: l'objectif du sanrensei est de former un moyo
+Hickop [17k\]: dans ce cas K16 a plus de valeur non ?
+bfm [-\]: c'est pas très intéressant pour l'étude du fuseki ^^" puisque c'est une stratégie spéciale
+bfm [-\]: oui en effet
+])
+(;B[fq]
+;W[nc]
+;B[lc]
+;W[qc]
+;B[pc]
+;W[qd]
+;B[pe]
+;W[pb]
+;B[ob]
+;W[qb]
+;B[oc]
+;W[qf]LB[ic:A][pf:B]C[Hickop [17k\]: joseki ?
+bfm [-\]: admettons qu'on soit dans cette position l
+bfm [-\]: là
+bfm [-\]: oui c'est joseki
+Hickop [17k\]: ok
+bfm [-\]: sur le bord nord
+bfm [-\]: quels sont les coups noirs à envisager ?
+bfm [-\]: quel est*
+Hickop [17k\]: A 
+bfm [-\]: bien ^^
+]
+;B[ic]C[bfm [-\]: A plutot que B
+Hickop [17k\]: on profite du mur pour s''étendre
+bfm [-\]: c'est ça ^^
+Hickop [17k\]: ok
+])
+(;B[pj]
+;W[nc]
+;B[lc]
+;W[qc]
+;B[qd]
+;W[pc]
+;B[od]
+(;W[me])
+(;W[nb]
+;B[me]LB[po:A]SQ[lc]C[bfm [-\]: ici ?
+Hickop [17k\]: blanc ?
+bfm [-\]: oui
+Hickop [17k\]: j'aime bien A et D, A semble risqué peut-être
+Hickop [17k\]: D
+bfm [-\]: D n'est pas bon :(
+Hickop [17k\]: ho
+bfm [-\]: ^^
+bfm [-\]: cette pierre est basse
+bfm [-\]: les pierres basses sont bonnes pour sécuriser un territoire
+bfm [-\]: pas pour en développer un
+Hickop [17k\]: donc noir n'a pas d'intentions au nord ?
+bfm [-\]: donc noir ne sera pas très gros même s'il jour en F17
+bfm [-\]: joue*
+bfm [-\]: normalement non et s'il en a, c'est bon pour blanc ^^
+Hickop [17k\]: alors A 
+bfm [-\]: A est bon ^^
+])))
+(;W[cp]SQ[cj][dj][ip][iq]C[bfm [-\]: quelles sont les extentions idéales du komoku ?
+Hickop [17k\]: hum
+Hickop [17k\]: E3 et E4 ?
+bfm [-\]: hey non ^^
+bernier [18k\]: c10 j4 
+bfm [-\]: E3 et E4 ne sont pas des extentions mais des fermetures de coins
+Hickop [17k\]: ha d'accord
+Hickop [17k\]: donc c'est pareil ?
+bfm [-\]: les bonnes extentions du komoku sont ici oui ^^
+bfm [-\]: hmmmm qu'est ce qui est pareil ?
+Hickop [17k\]: que sur le hoshi
+bfm [-\]: oui
+Hickop [17k\]: 5 d'extension
+Hickop [17k\]: ok
+bfm [-\]: pour toutes les pierres de coin, c'est pareil
+bfm [-\]: mais
+]
+;AB[cd][ed]LB[ci:C][cj:B][ck:A]C[bfm [-\]: il faut s'adapter ^^
+Hickop [17k\]: A
+bfm [-\]: hey non :(
+bfm [-\]: l'idéal est C
+Hickop [17k\]: mal
+]
+(;B[]
+;W[ci]
+;B[ck]
+;W[cf]
+;B[cn]
+;W[ef]
+;B[en]TR[cp]SQ[cd][ed]C[bfm [-\]: blanc vise ça
+bfm [-\]: les pierres noires avaient beaucoup plus de potentiel que la pierre blanche
+Hickop [17k\]: pourquoi menace noir au nord ?
+bfm [-\]: maintenant, ce potentiel est parti
+bfm [-\]: donc l'échange est bon pour blanc
+Hickop [17k\]: j'ai du ml a voir
+])
+(;AW[dq]AB[fq]LB[cd:B][cp:A]C[bfm [-\]: le groupe B a beaucoup plus de potentiel sur le bord gauche que le groupe blanc
+bfm [-\]: ok ?
+bfm [-\]: enfin... tu comprends ça ?
+Hickop [17k\]: il a plus d'influence oui
+bfm [-\]: donc
+]
+;LB[jc:G][jd:H][ci:A][di:B][cj:F][dj:C][ck:E][dk:D]C[bfm [-\]: admettons que ce soit à noir de jouer ^^
+Hickop [17k\]: G :p
+bfm [-\]: XD
+Hickop [17k\]: C12
+bfm [-\]: non ^^
+Hickop [17k\]: alors on appliques pas la règle du mur ?
+bfm [-\]: un shimari (fermeture de coin) a la même règle d'extention que les pierres de coin
+Hickop [17k\]: ok !
+Hickop [17k\]: ça c'est bon a savoir
+bfm [-\]: non, c'est pas un mur, c'est un shimari ^^
+bfm [-\]: un mur de fait pas de territoire dans un coin ^^
+Hickop [17k\]: c'est vrai
+bfm [-\]: ici on applique la règle : extention de 5 pour les pierres de coin
+Hickop [17k\]: donc C ou F
+bfm [-\]: exact ^^
+bfm [-\]: maintenant petite exeption
+bfm [-\]: sur l'autre bord, l'extention idéale est ici
+bfm [-\]: et non pas à 5 intersections
+Hickop [17k\]: ha
+Hickop [17k\]: une explication ?
+bfm [-\]: me demande pas pourquoi... je sais pas ^^"
+Hickop [17k\]: ok :D
+bfm [-\]: mais c'est comme ça ^^
+bfm [-\]: maintenant
+bfm [-\]: sachant que les pierres sur la 3e ligne sont bonnes pour sécuriser du territoire
+bfm [-\]: et que les pierres sur la 4e sont bonne pour développer du potentiel
+bfm [-\]: qu'est ce qui est mieux ? C ou F ?
+Hickop [17k\]: au milieu ? :p
+Hickop [17k\]: hehe
+bfm [-\]: lol
+Hickop [17k\]: je dirais F
+Hickop [17k\]: pour garder le bord
+bfm [-\]: hey non ^^
+bfm [-\]: noir a beaucop beaucoup de potentiel avec son shimari
+bfm [-\]: il faut le développer
+Hickop [17k\]: il faut éviter d'avoir trop de pierres sur la meme ligne en fait ?
+bfm [-\]: en général, il vaut mieux alterner haut-bas
+Hickop [17k\]: ok
+bfm [-\]: mais c'est vraiment assez flou comme règle ^^
+bfm [-\]: donc ici
+bfm [-\]: si c'est à blanc de jouer
+bfm [-\]: et si blanc veut faire une extention sur le bord gauche
+Hickop [17k\]: il joue A
+bfm [-\]: c'est ça
+Hickop [17k\]: car il manque d'influence avec son coin
+Hickop [17k\]: donc 3ème ligne
+bfm [-\]: c'est surtout pour détruire le potentiel du shimari noir ^^
+bfm [-\]: en fait
+bfm [-\]: les extention à 5 intersections sont bonnes pour développer
+bfm [-\]: les extentions à 6 sont bonnes pour limiter
+bfm [-\]: et les extentions à 4 sont bonnes pour protéger
+Hickop [17k\]: et si je peux pas faire une extension de 4 je pince ?
+bfm [-\]: alors...
+Hickop [17k\]: ok
+]
+(;B[]
+;W[ci]C[bfm [-\]: blanc joue ici
+Hickop [17k\]: ho je vois
+bfm [-\]: pour détruire le potentiel de noir
+Hickop [17k\]: c'est comme une extension de mur
+Hickop [17k\]: oui
+]
+(;B[cg]C[bfm [-\]: si noir joue comme ça
+bfm [-\]: noir ne va surtout pas faire ça
+]
+;W[dl]C[bfm [-\]: blanc est très content
+bfm [-\]: ok ?
+Hickop [17k\]: on empeche noir C 12 en fait ?
+bfm [-\]: C12...
+])
+(;B[ck]C[bfm [-\]: mais s'il essaye de chasser blanc
+]
+;W[ei]
+;B[ek]
+;W[cf]C[Hickop [17k\]: blanc va détruire le potentiel du shimari
+bfm [-\]: il ne réussit qu'à achever de détruire son potentiel à gauche
+Hickop [17k\]: ok
+bfm [-\]: ^^
+]))
+(;B[ch]C[bfm [-\]: ah
+bfm [-\]: non ^^
+bfm [-\]: bon j'ai été un peu vite en proposant de jouer blanc :s
+])
+(;B[dj]C[Hickop [17k\]: blanc est chiant c'est bien connu
+]
+(;W[ee]C[bfm [-\]: alors que là... si blanc joue ici c'est null ^^
+])
+(;W[eg]C[bfm [-\]: et si blanc joue par là... bof bof aussi ^^
+]
+;B[cg]
+;W[gg]
+;B[cl]C[Hickop [17k\]: noir content
+bfm [-\]: là, noir est content d'avoir joué D10 plutot que C10
+bfm [-\]: C10 serait plat
+]
+;AE[dj]AB[cj]C[Hickop [17k\]: je vois
+]))
+(;AE[ed]AW[ee]AB[ec][dj]C[bfm [-\]: ici, ce serait différent ^^
+bfm [-\]: noir a nettement moins de potentiel ici
+Hickop [17k\]: sur le bord ?
+bfm [-\]: parce que blanc peut jouer par là par exemple
+])
+(;AE[cp][dq]AW[cj][dl][cn]
+;B[ch]C[bfm [-\]: une extention à 4 peut se jouer dans cette situation par exemple
+]
+;W[cf]C[bfm [-\]: si blanc se met en tête d'envahir
+]
+;B[dg]C[bfm [-\]: il se fait capturer
+bfm [-\]: si tu ne peux pas faire d'extention à 4...
+bfm [-\]: à prioris c'est que tu as perdu tout le potentiel du shimari
+])
+(;AE[dq]AW[ci][ei]AB[ck][cp]C[bfm [-\]: là par exemple
+bfm [-\]: C13 c'est plus un coup de yose qu'une extention
+bfm [-\]: et si jamais tu es dans ce genre de situation
+bfm [-\]: là, effectivement il faut pincer
+bfm [-\]: et blanc jouera probablement comme ça
+Hickop [17k\]: en fait c'est une extension du bas dans ce cas 
+bfm [-\]: oui
+])
+(;AE[fq]AW[ci]C[bfm [-\]: parce que si tu es dans ce cas là...
+bfm [-\]: c'est que blanc a bien joué ^^
+bfm [-\]: et... pincer semble être le moins pire effectivement
+bfm [-\]: sinon, suivant la situation ailleurs, un tenuki est peut être possible
+]
+(;B[jc]C[Hickop [17k\]: il reste un coin :p
+Hickop [17k\]: c'est bon les coins
+bfm [-\]: tu peux aussi essayer de développer l'autre coté mais bon... ^^ pas forcément terrible ^^
+bfm [-\]: oui là il reste un coin
+])
+(;B[pq]C[bfm [-\]: jouer dedans à ce moment là de la partie c'est bien
+bfm [-\]: bon ben... on a fait le tour ^^
+Hickop [17k\]: super
+Hickop [17k\]: merci beaucoup
+bfm [-\]: de rien ^^
+bfm [-\]: j'espère que ça va t'aider ^^
+Hickop [17k\]: ça va m'aider a bien commencer le 19x19
+bfm [-\]: ^^
+Hickop [17k\]: car j'ai surtout joué en 13x13 et ça n'a rien a voir
+bfm [-\]: je ferme ++
+bfm [-\]: en effet ;)
+])))))
+(;AW[nc][dd][dp]AB[pd][pj][pp]
+;B[jp]C[bfm [-\]: dans ce cas de figure, ce coup est bon
+bfm [-\]: noir vise ça
+]
+;W[qc]
+;B[qd]
+;W[pc]
+;B[od]
+;W[oc]
+;B[me]C[Hickop [17k\]: un gros moyo 
+bfm [-\]: "tout pour le moyo" ^^
+Hickop [17k\]: je vois
+bfm [-\]: c'est vraiment une façon de jouer très très particulière
+])
+(;B[qd]
+;W[dc]
+;B[pq]
+;W[oc]
+;B[cp]
+;W[qo]
+;B[eq]
+;W[pe]
+;B[qe]
+;W[pf]
+;B[qg]LB[qc:B][jd:C][ce:F][de:E][pe:1][qe:2][pf:3][pg:A][qg:4][op:D]C[bfm [-\]: plus compliqué
+bfm [-\]: A et B sont joseki
+bfm [-\]: B prend le coin
+Hickop [17k\]: C ?
+bfm [-\]: A permet d'avoir plus d'influence
+bfm [-\]: ouep ^^
+bfm [-\]: C est bon ^^
+bfm [-\]: est ce que D est bon ?
+Hickop [17k\]: hum
+Hickop [17k\]: diffucile a dire
+bfm [-\]: voila la séquence ^^
+bfm [-\]: ça t'aide ?
+Hickop [17k\]: j'ai du mal a voir ce que vise D 
+bfm [-\]: la même chose qu'en haut
+]
+;W[op]
+;B[oq]
+;W[np]
+;B[mq]LB[qg:A]SQ[qo][np][op]C[Hickop [17k\]: il donne le coin a noir
+bfm [-\]: contre de l'influence oui
+bfm [-\]: bon ou mauvais ? ^^
+bfm [-\]: localement hein
+Hickop [17k\]: je dirais mauvais
+bfm [-\]: on regarde que le bord droit
+bfm [-\]: exact
+bfm [-\]: blanc développe de l'influence en face d'une pierre forte
+]
+;W[qj]C[bfm [-\]: s'il essaye de faire son extention ici
+]
+;B[qm]LB[qj:B][qm:C][op:A]C[Hickop [17k\]: oui voilà il devra jouer moins large
+bfm [-\]: noir pourra plus tar jouer par là pour séparer blanc
+bfm [-\]: blanc doit gérer deux groupes faibles
+bfm [-\]: noir n'en a qu'un seul à gérer
+bfm [-\]: donc c'est mieux pour noir
+bfm [-\]: maintenant, les extentions de coin
+]))

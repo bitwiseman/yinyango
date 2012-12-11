@@ -1,6 +1,6 @@
 (;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
 RU[Japanese]SZ[13]KM[0.00]
-PW[Blanc]PB[Noir]DT[2009-06-16]PC[The KGS Go Server at http://www.gokgs.com/]C[Pour cette série, c'est a Noir de jouer et de tuer Blanc. La difficulté est plus ou moins croissante.
+PW[yang]PB[yin]DT[2009-06-16]PC[The KGS Go Server at http://www.gokgs.com/]C[Pour cette série, c'est a Noir de jouer et de tuer Blanc. La difficulté est plus ou moins croissante.
 
 Quelques conseils:
 
@@ -8,9 +8,8 @@ Quelques conseils:
 - Si après 5 minutes passées sur le même problème la solution n'apparait toujours pas, il vaut mieux passer au suivant et y revenir plus tard.
 - Quand on pense avoir la solution, il est important de bien la vérifier en explorant les diverses réponses possibles.
 
-Bon courage!DBrian: Yop =)
-DBrian: première chose
-DBrian: je t'encourage a sauver ce fichier sur ton disque
+Bon courage!
+
 ]
 (;AW[al][bl][cl][dl][bm]AB[ak][bk][ck][dk][el][fl]C[#1])
 (;AW[al][bl][cl][dl][bm]AB[ak][bk][ck][dk][ek][fl][gl]C[#2])
