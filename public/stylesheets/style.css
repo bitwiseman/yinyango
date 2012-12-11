@@ -398,7 +398,7 @@ body {/*{{{*/
 }
 /*}}}*/
 #playersinfos {/*{{{*/
-    height: 2em;
+    height: 3em;
 }
 #playerblack {
     border-radius: 2em 0 0 2em;
@@ -411,7 +411,7 @@ body {/*{{{*/
     box-sizing: border-box;
     padding: 0 2%;
     width: 40%;
-    height: 2em;
+    height: 3em;
     border: 1px solid black;
     text-decoration: none;
     line-height: 1em;/* Center player name & score */

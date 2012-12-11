@@ -597,41 +597,41 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.makePlayersInfos {{{
-         * Create and insert players informations html code.
+        /** yygo.view.updatePlayersInfos {{{
+         * Update players time and score.
          */
-        makePlayersInfos: function () {
-            var infos =         yygo.data.game[0][0],
-                node =          yygo.data.curnode,
+        updatePlayersInfos: function () {
+            var node =          yygo.data.curnode,
                 branch =        yygo.data.curbranch,
-                score =         yygo.data.game[node][branch].score,
-                playersinfos =  document.getElementById('playersinfos'),
-                html =          '';
+                game =          yygo.data.game[node][branch],
+                blackscore =    document.getElementById('blackscore'),
+                blacktime =     document.getElementById('blacktime'),
+                whitescore =    document.getElementById('whitescore'),
+                whitetime =     document.getElementById('whitetime'),
+                min,
+                sec;
 
+            // Update scores.
+            blackscore.textContent = game.score.B;
+            whitescore.textContent = game.score.W;
 
-            html += '<a href="#" id="playerblack" class="player black">';
-            if (infos.PB !== undefined) {
-                html += '<div class="playername">' + infos.PB;
-                if (infos.BR !== undefined) {
-                    html += ' [' + infos.BR + ']';
+            // Update time.
+            if (game.BL !== undefined) {
+                min = Math.floor(game.BL / 60);
+                sec = Math.floor(game.BL % 60);
+                if (sec < 10) {
+                    sec = '0' + sec;
                 }
-                html += '</div>';
+                blacktime.textContent = min + ':' + sec;
             }
-            html += '<div>' + score.B + '</div>';
-            html += '</a>';
-
-            html += '<a href="#" id="playerwhite" class="player white">';
-            if (infos.PW !== undefined) {
-                html += '<div class="playername">' + infos.PW;
-                if (infos.WR !== undefined) {
-                    html += ' [' + infos.WR + ']';
+            if (game.WL !== undefined) {
+                min = Math.floor(game.WL / 60);
+                sec = Math.floor(game.WL % 60);
+                if (sec < 10) {
+                    sec = '0' + sec;
                 }
-                html += '</div>';
+                whitetime.textContent = min + ':' + sec;
             }
-            html += '<div>' + score.W + '</div>';
-            html += '</a>';
-
-            playersinfos.innerHTML = html;
         },
         /*}}}*/
 
@@ -694,14 +694,19 @@ var yygo = {};
         /*}}}*/
 
         /** yygo.view.setPlayersInfos {{{
-         * Insert players names and starting scores.
+         * Insert players names, starting scores and times.
          */
         setPlayersInfos: function () {
             var infos =         yygo.data.game[0][0],
                 blackname =     document.getElementById('blackname'),
                 blackscore =    document.getElementById('blackscore'),
+                blacktime =     document.getElementById('blacktime'),
                 whitename =     document.getElementById('whitename'),
-                whitescore =    document.getElementById('whitescore');
+                whitescore =    document.getElementById('whitescore'),
+                whitetime =     document.getElementById('whitetime'),
+                min,
+                sec;
+
 
             if (infos.PB !== undefined) {
                 blackname.textContent = infos.PB;
@@ -722,6 +727,20 @@ var yygo = {};
                 whitename.textContent = '???';
             }
             whitescore.textContent = infos.score.W;
+
+            // Initiate players time.
+            if (infos.TM !== undefined) {
+                min = Math.floor(infos.TM / 60);
+                sec = Math.floor(infos.TM % 60);
+                if (sec < 10) {
+                    sec = '0' + sec;
+                }
+                blacktime.textContent = min + ':' + sec;
+                whitetime.textContent = min + ':' + sec;
+            } else {
+                blacktime.textContent = '--';
+                whitetime.textContent = '--';
+            }
         },
         /*}}}*/
 
@@ -1704,7 +1723,7 @@ var yygo = {};
             yygo.view.toggleNavButtons();
 
             yygo.view.makeVariations();
-            yygo.view.makePlayersInfos();
+            yygo.view.updatePlayersInfos();
             yygo.view.makeComments();
             yygo.view.setCommentsTop();
 
