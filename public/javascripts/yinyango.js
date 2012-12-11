@@ -647,8 +647,14 @@ var yygo = {};
                 curnode =       yygo.data.curnode,
                 branchs =       game[0][0].branchs,
                 variations =    document.getElementById('variations'),
+                varselect =     document.getElementById('varselect'),
+                varvalue =      document.getElementById('varvalue'),
+                letter =        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                                 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                                 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
                 variationsnum = 0,
-                html =          '<select>',
+                html =          '',
+                currentvar,
                 select,
                 pbranch,
                 opbranch,
@@ -666,32 +672,26 @@ var yygo = {};
                         // Our branch and 'i' branch got the same parent so
                         // 'i' is a variation.
                         variationsnum++;
-                        if (i === curbranch) {
-                            // This is our branch show a plain radio button.
-                            //html += '<div class="varbutton black"></div>';
+                        if (i === curbranch) { // This is our branch.
+                            currentvar = letter[variationsnum - 1];
                             html += '<option value="' + i +
-                                '" selected="selected">' + i + '</option>';
-                        } else {
-                            // Show a clickable empty radio button.
-                            //html += '<a href="#" id="var' + i +
-                                //'" class="varbutton"></a>';
+                                '" selected="selected">' +
+                                currentvar + '</option>';
+                        } else { // Add variation to select list.
                             html += '<option value="' + i + '">' +
-                                i + '</option>';
+                                letter[variationsnum - 1] + '</option>';
                         }
                     }
                 }
             }
 
-            html += '</select>';
-            if (variationsnum <= 1) { // No variations, delete html.
-                html = '';
-            }
-
-            variations.innerHTML = html;
-
-            if (html !== '') {
-                select = variations.getElementsByTagName('select')[0];
-                yygo.events.makeVariationsBind(select);
+            if (variationsnum <= 1) { // No variations to show.
+                variations.style.display = 'none';
+            } else {
+                varvalue.textContent = currentvar;
+                varselect.innerHTML = html;
+                variations.style.display = 'block';
+                yygo.events.makeVariationsBind(varselect);
             }
         },
         /*}}}*/
@@ -1625,9 +1625,13 @@ var yygo = {};
          * @param {Element} select Select tag element.
          */
         makeVariationsBind: function (select) {
-            select.addEventListener('change', function () {
-                var branch = parseInt(this.value, 10);
+            var varvalue = document.getElementById('varvalue');
 
+            select.addEventListener('change', function () {
+                var branch = parseInt(this.value, 10),
+                    letter = this.options[this.selectedIndex].innerHTML;
+
+                varvalue.textContent = letter;
                 yygo.data.curbranch = branch;
                 yygo.data.lastbranch = branch;
                 yygo.data.setLastNode();

@@ -389,16 +389,29 @@ body {/*{{{*/
     padding: 5px;
 }
 /*}}}*/
-#comments {/*{{{*/
-    position: absolute;
-    bottom: 0;
-    padding: 0.5em;
-    text-align: left;
-    overflow: auto;
-}
-/*}}}*/
 #playersinfos {/*{{{*/
+    position: relative;
     height: 3em;
+}
+#variations {
+    position: absolute;
+    top: 0.5em;
+    bottom: 0.5em;
+    left: 50%;
+    margin-left: -1em;
+    width: 2em;
+    border-radius: 50%;
+    border: 1px solid black;
+    line-height: 2em;
+}
+#varselect {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
 }
 #playerblack {
     border-radius: 1em 0 0 1em;
@@ -409,7 +422,7 @@ body {/*{{{*/
 .player {
     display: inline-block;
     box-sizing: border-box;
-    padding: 0 2%;
+    padding: 0 1em;
     width: 40%;
     height: 3em;
     border: 1px solid black;
@@ -419,5 +432,13 @@ body {/*{{{*/
 .playername {
     overflow: hidden;
     height: 1em;
+}
+/*}}}*/
+#comments {/*{{{*/
+    position: absolute;
+    bottom: 0;
+    padding: 0.5em;
+    text-align: left;
+    overflow: auto;
 }
 /*}}}*/
