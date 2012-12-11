@@ -287,7 +287,6 @@ var yygo = {};
                         if (data[node].hasOwnProperty(branch)) {
                             stones[node][branch] = {B: [], W: [], BF: [],
                                     WF: [], K: []};
-                            this.game[node][branch].score = {B: 0, W: 0};
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
@@ -298,6 +297,10 @@ var yygo = {};
                                 prevstones = stones[node][branch];
                                 prevscore = this.game[node][branch].score; 
                             }
+                            this.game[node][branch].score = {
+                                B: prevscore.B,
+                                W: prevscore.W
+                            };
                             // Treat keys.
                             for (key in data[node][branch]) {
                                 if (data[node][branch].hasOwnProperty(key)) {
