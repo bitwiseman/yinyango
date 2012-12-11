@@ -759,7 +759,6 @@ var yygo = {};
                 panel.style.right = 0;
                 panel.style.left = 0;
             }
-            this.setCommentsTop();
             fn();
         },
         /*}}}*/
@@ -1054,6 +1053,7 @@ var yygo = {};
             if (show) {
                 goban.style.display = 'block';
                 panel.style.display = 'block';
+                this.setCommentsTop();
             } else {
                 goban.style.display = 'none';
                 panel.style.display = 'none';
