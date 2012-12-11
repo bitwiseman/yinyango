@@ -62,6 +62,7 @@ body {/*{{{*/
 }
 .input {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     margin: 0;
     width: 100%;
     border: 1px solid #000;
@@ -89,7 +90,8 @@ body {/*{{{*/
  * Elements that starts hidden
  */
 #menucontainer, #menumask, #sendsgf, #errorsendsgf, #errorinvalid, #errormd5,
-#sendsuccess, #settings, #settingssaved, #load, #goban, #panel, .inputhelp {
+#sendsuccess, #settings, #settingssaved, #load, #goban, #panel, #variations,
+.inputhelp {
     display: none;
 }
 /*}}}*/
@@ -392,6 +394,7 @@ body {/*{{{*/
 #playersinfos {/*{{{*/
     position: relative;
     height: 3em;
+    width: 100%;
 }
 #variations {
     position: absolute;
@@ -422,12 +425,11 @@ body {/*{{{*/
 .player {
     display: inline-block;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding: 0 1em;
-    width: 40%;
-    height: 3em;
+    width: 45%;
     border: 1px solid black;
-    text-decoration: none;
-    line-height: 1em;/* Center player name & score */
+    line-height: 1em;
 }
 .playername {
     overflow: hidden;

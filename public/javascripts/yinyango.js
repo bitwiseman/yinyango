@@ -649,9 +649,6 @@ var yygo = {};
                 variations =    document.getElementById('variations'),
                 varselect =     document.getElementById('varselect'),
                 varvalue =      document.getElementById('varvalue'),
-                letter =        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-                                 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                                 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
                 variationsnum = 0,
                 html =          '',
                 currentvar,
@@ -673,13 +670,13 @@ var yygo = {};
                         // 'i' is a variation.
                         variationsnum++;
                         if (i === curbranch) { // This is our branch.
-                            currentvar = letter[variationsnum - 1];
+                            currentvar = variationsnum;
                             html += '<option value="' + i +
                                 '" selected="selected">' +
                                 currentvar + '</option>';
                         } else { // Add variation to select list.
                             html += '<option value="' + i + '">' +
-                                letter[variationsnum - 1] + '</option>';
+                                variationsnum + '</option>';
                         }
                     }
                 }
