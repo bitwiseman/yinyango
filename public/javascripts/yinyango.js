@@ -553,26 +553,6 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.makeGamesList {{{
-         * Create and insert games list html code.
-         */
-        makeGamesList: function () {
-            var gameslist =     yygo.data.gameslist,
-                loadlist =      document.getElementById('loadlist'),
-                html =          '<table id="gameslist">',
-                ci =            gameslist.length,
-                i;
-
-            for (i = 0; i < ci; i++) {
-                html += '<tr><td>' + gameslist[i].id + '</td>' +
-                    '<td>' + gameslist[i].name + '</td>';
-            }
-            html += '</table>';
-
-            loadlist.innerHTML = html;
-        },
-        /*}}}*/
-
         /** yygo.view.makeInfos {{{
          * Create and insert informations html code.
          */
@@ -629,7 +609,7 @@ var yygo = {};
                 html =          '';
 
 
-            html += '<a href="#" class="player black">';
+            html += '<a href="#" id="playerblack" class="player black">';
             if (infos.PB !== undefined) {
                 html += '<div class="playername">' + infos.PB;
                 if (infos.BR !== undefined) {
@@ -640,7 +620,7 @@ var yygo = {};
             html += '<div>' + score.B + '</div>';
             html += '</a>';
 
-            html += '<a href="#" class="player white">';
+            html += '<a href="#" id="playerwhite" class="player white">';
             if (infos.PW !== undefined) {
                 html += '<div class="playername">' + infos.PW;
                 if (infos.WR !== undefined) {
@@ -710,6 +690,38 @@ var yygo = {};
                 select = variations.getElementsByTagName('select')[0];
                 yygo.events.makeVariationsBind(select);
             }
+        },
+        /*}}}*/
+
+        /** yygo.view.setPlayersInfos {{{
+         * Insert players names and starting scores.
+         */
+        setPlayersInfos: function () {
+            var infos =         yygo.data.game[0][0],
+                blackname =     document.getElementById('blackname'),
+                blackscore =    document.getElementById('blackscore'),
+                whitename =     document.getElementById('whitename'),
+                whitescore =    document.getElementById('whitescore');
+
+            if (infos.PB !== undefined) {
+                blackname.textContent = infos.PB;
+                if (infos.BR !== undefined) {
+                    blackname.textContent += ' [' + infos.BR + ']';
+                }
+            } else {
+                blackname.textContent = '???';
+            }
+            blackscore.textContent = infos.score.B;
+
+            if (infos.PW !== undefined) {
+                whitename.textContent = infos.PW;
+                if (infos.WR !== undefined) {
+                    whitename.textContent += ' [' + infos.WR + ']';
+                }
+            } else {
+                whitename.textContent = '???';
+            }
+            whitescore.textContent = infos.score.W;
         },
         /*}}}*/
 
@@ -1266,7 +1278,7 @@ var yygo = {};
             }
 
             yygo.view.makeVariations();
-            yygo.view.makePlayersInfos();
+            yygo.view.setPlayersInfos();
             yygo.view.makeComments();
 
             yygo.view.placeStones();
@@ -1291,6 +1303,8 @@ var yygo = {};
         loadIntro: function () {
             yygo.data.game = {0: {0: {
                 'RU': ['Japanese'],
+                'PB': 'yin',
+                'PW': 'yang',
                 'branchs': 1,
                 'score': {B: 0, W: 0}
             } } };
@@ -1341,6 +1355,7 @@ var yygo = {};
             this.screen = 'goban';
 
             yygo.view.toggleNavButtons();
+            yygo.view.setPlayersInfos();
 
             yygo.view.redraw = true;
             yygo.view.setGobanSize(function () {

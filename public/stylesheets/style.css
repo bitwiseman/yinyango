@@ -400,6 +400,12 @@ body {/*{{{*/
 #playersinfos {/*{{{*/
     height: 2em;
 }
+#playerblack {
+    border-radius: 2em 0 0 2em;
+}
+#playerwhite {
+    border-radius: 0 2em 2em 0;
+}
 .player {
     display: inline-block;
     box-sizing: border-box;
@@ -407,7 +413,6 @@ body {/*{{{*/
     width: 40%;
     height: 2em;
     border: 1px solid black;
-    border-radius: 2em;/* Make sure its all rounded. */
     text-decoration: none;
     line-height: 1em;/* Center player name & score */
 }
