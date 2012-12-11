@@ -759,7 +759,19 @@ var yygo = {};
                 panel.style.right = 0;
                 panel.style.left = 0;
             }
+            this.setCommentsTop();
             fn();
+        },
+        /*}}}*/
+
+        /** yygo.view.setCommentsTop {{{
+         * Set comments top at bottom of top panel part.
+         */
+        setCommentsTop: function () {
+            var toppanel =  document.getElementById('toppanel'),
+                comments =  document.getElementById('comments');
+        
+            comments.style.top = toppanel.offsetHeight + 'px';
         },
         /*}}}*/
 
@@ -1679,6 +1691,7 @@ var yygo = {};
             yygo.view.makeVariations();
             yygo.view.makePlayersInfos();
             yygo.view.makeComments();
+            yygo.view.setCommentsTop();
 
             yygo.view.emptyGoban();
             yygo.view.placeStones();

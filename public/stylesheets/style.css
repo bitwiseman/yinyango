@@ -386,12 +386,11 @@ body {/*{{{*/
 #panel {/*{{{*/
     position: absolute;
     bottom: 0;
-    padding: 5px;
+    margin: 0;
 }
 /*}}}*/
 #comments {/*{{{*/
     position: absolute;
-    top: 70px;
     bottom: 0;
     padding: 0.5em;
     text-align: left;
