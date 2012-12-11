@@ -393,8 +393,6 @@ body {/*{{{*/
 /*}}}*/
 #playersinfos {/*{{{*/
     position: relative;
-    height: 3em;
-    width: 100%;
 }
 #variations {
     position: absolute;
@@ -431,7 +429,7 @@ body {/*{{{*/
     border: 1px solid black;
     line-height: 1em;
 }
-.playername {
+.playerline {
     overflow: hidden;
     height: 1em;
 }
