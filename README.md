@@ -20,6 +20,7 @@ general.
 - Add other rules.
 - Validation link sent by mail.
 - Provide direct link to a game.
+- Save previous players times.
 
 ## LICENSE
 

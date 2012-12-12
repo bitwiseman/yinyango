@@ -55,6 +55,31 @@ var yygo = {};
     }
     /*}}}*/
 
+    /** secToTime {{{
+     * Convert a time in seconds to "minutes:seconds".
+     *
+     * @param {Number} time Time in seconds.
+     *
+     * @return {String} "minutes:seconds"
+     */
+    function secToTime(secs) {
+        var hour,
+            min,
+            sec;
+
+        hour = Math.floor(secs / 3600);
+        min = Math.floor((secs % 3600) / 60);
+        sec = Math.ceil((secs % 3600) % 60);
+        if (sec < 10) {
+            sec = '0' + sec;
+        }
+        if (hour > 0) {
+            return hour + ':' + min + ':' + sec;
+        }
+        return min + ':' + sec;
+    }
+    /*}}}*/
+
     // Creation of yygo.
 
     /** yygo.data {{{
@@ -581,9 +606,7 @@ var yygo = {};
                 gamescribe =    document.getElementById('gamescribe'),
                 gamesource =    document.getElementById('gamesource'),
                 gamecopyright = document.getElementById('gamecopyright'),
-                gamecomment =   document.getElementById('gamecomment'),
-                min,
-                sec;
+                gamecomment =   document.getElementById('gamecomment');
 
             function insertInfo(info, element) {
                 var infos = yygo.data.game[0][0];
@@ -618,12 +641,7 @@ var yygo = {};
                 gamewhite.textContent = '';
             }
             if (infos.TM !== undefined) {
-                min = Math.floor(infos.TM / 60);
-                sec = Math.floor(infos.TM % 60);
-                if (sec < 10) {
-                    sec = '0' + sec;
-                }
-                gametime.textContent = min + ':' + sec;
+                gametime.textContent = secToTime(infos.TM);
             } else {
                 gametime.textContent = '';
             }
@@ -654,9 +672,7 @@ var yygo = {};
                 blackscore =    document.getElementById('blackscore'),
                 blacktime =     document.getElementById('blacktime'),
                 whitescore =    document.getElementById('whitescore'),
-                whitetime =     document.getElementById('whitetime'),
-                min,
-                sec;
+                whitetime =     document.getElementById('whitetime');
 
             // Update scores.
             blackscore.textContent = game.score.B;
@@ -664,20 +680,10 @@ var yygo = {};
 
             // Update time.
             if (game.BL !== undefined) {
-                min = Math.floor(game.BL / 60);
-                sec = Math.floor(game.BL % 60);
-                if (sec < 10) {
-                    sec = '0' + sec;
-                }
-                blacktime.textContent = min + ':' + sec;
+                blacktime.textContent = secToTime(game.BL);
             }
             if (game.WL !== undefined) {
-                min = Math.floor(game.WL / 60);
-                sec = Math.floor(game.WL % 60);
-                if (sec < 10) {
-                    sec = '0' + sec;
-                }
-                whitetime.textContent = min + ':' + sec;
+                whitetime.textContent = secToTime(game.WL);
             }
         },
         /*}}}*/
@@ -747,10 +753,7 @@ var yygo = {};
                 blacktime =     document.getElementById('blacktime'),
                 whitename =     document.getElementById('whitename'),
                 whitescore =    document.getElementById('whitescore'),
-                whitetime =     document.getElementById('whitetime'),
-                min,
-                sec;
-
+                whitetime =     document.getElementById('whitetime');
 
             if (infos.PB !== undefined) {
                 blackname.textContent = infos.PB;
@@ -774,13 +777,8 @@ var yygo = {};
 
             // Initiate players time.
             if (infos.TM !== undefined) {
-                min = Math.floor(infos.TM / 60);
-                sec = Math.floor(infos.TM % 60);
-                if (sec < 10) {
-                    sec = '0' + sec;
-                }
-                blacktime.textContent = min + ':' + sec;
-                whitetime.textContent = min + ':' + sec;
+                blacktime.textContent = secToTime(infos.TM);
+                whitetime.textContent = secToTime(infos.TM);
             } else {
                 blacktime.textContent = '--';
                 whitetime.textContent = '--';

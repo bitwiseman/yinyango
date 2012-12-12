@@ -441,9 +441,8 @@ body {/*{{{*/
     overflow: auto;
 }
 /*}}}*/
-#gameinfosbox div {
-    /*display: inline-block;*/
+#gameinfosbox div {/*{{{*/
     text-align: left;
     float: left;
     padding: 1em;
-}
+}/*}}}*/
