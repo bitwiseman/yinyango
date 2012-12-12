@@ -1,36 +1,55 @@
 h1= lingua.title
 h2= lingua.gameinfos
 #gameinfosbox.box.brown2
-    strong= lingua.black + ': '
-    span#gameblack
-    strong= lingua.white + ': '
-    span#gamewhite
-    strong= lingua.gameresult
-    span#gameresult
-    strong= lingua.gamedate 
-    span#gamedate
-    strong= lingua.gameplace 
-    span#gameplace
-    strong= lingua.gameevent 
-    span#gameevent
-    strong= lingua.gamename 
-    span#gamename
-    strong= lingua.gamerules 
-    span#gamerules
-    strong= lingua.gamekomi 
-    span#gamekomi
-    strong= lingua.gametime 
-    span#gametime
-    strong= lingua.gameovertime 
-    span#gameovertime
-    strong= lingua.gameannotator 
-    span#gameannotator
-    strong= lingua.gamescribe 
-    span#gamescribe
-    strong= lingua.gamesource 
-    span#gamesource
-    strong= lingua.gamecopyright 
-    span#gamecopyright
-    strong= lingua.gamecomment 
-    span#gamecomment
+    table
+        tr
+            td: p
+                strong= lingua.black + ': '
+                span#gameblack
+                br
+                strong= lingua.white + ': '
+                span#gamewhite
+                br
+                strong= lingua.gameresult
+                span#gameresult
+                br
+                strong= lingua.gamedate 
+                span#gamedate
+                br
+                strong= lingua.gameplace 
+                span#gameplace
+                br
+                strong= lingua.gameevent 
+                span#gameevent
+                br
+                strong= lingua.gamename 
+                span#gamename
+            td: p
+                strong= lingua.gamerules 
+                span#gamerules
+                br
+                strong= lingua.gamekomi 
+                span#gamekomi
+                br
+                strong= lingua.gametime 
+                span#gametime
+                br
+                strong= lingua.gameovertime 
+                span#gameovertime
+                br
+                strong= lingua.gameannotator 
+                span#gameannotator
+                br
+                strong= lingua.gamescribe 
+                span#gamescribe
+                br
+                strong= lingua.gamesource 
+                span#gamesource
+                br
+                strong= lingua.gamecopyright 
+                span#gamecopyright
+        tr
+            td: p
+                strong= lingua.gamecomment 
+                span#gamecomment
 p: a#exitgameinfos.linkbutton.black(href='#')= lingua.back

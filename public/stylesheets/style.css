@@ -443,3 +443,15 @@ body {/*{{{*/
     overflow: auto;
 }
 /*}}}*/
+#gameinfos table {
+    table-layout: fixed;
+    text-align: left;
+    width: 100%;
+}
+#gameinfosbox {
+    box-sizing: border-box;
+    width: 100%;
+}
+#gameinfos td {
+    width: 50%;
+}

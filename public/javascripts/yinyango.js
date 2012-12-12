@@ -582,7 +582,6 @@ var yygo = {};
                 gamecopyright = document.getElementById('gamecopyright'),
                 gamecomment =   document.getElementById('gamecomment');
 
-            console.log(gameinfosbox.gameblack);
             if (infos.PB !== undefined) {
                 gameblack.textContent = infos.PB;
                 if (infos.BR !== undefined) {
