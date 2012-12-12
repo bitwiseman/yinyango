@@ -287,10 +287,7 @@ var yygo = {};
                         if (data[node].hasOwnProperty(branch)) {
                             stones[node][branch] = {B: [], W: [], BF: [],
                                     WF: [], K: []};
-                            this.game[node][branch].score = {
-                                B: 0,
-                                W: 0
-                            };
+                            this.game[node][branch].score = {B: 0, W: 0};
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
@@ -537,7 +534,7 @@ var yygo = {};
                 branch =    yygo.data.curbranch,
                 comments =  document.getElementById('comments'),
                 html =      '',
-                nameregex = /^(.+\s\[.+\]):/gm,
+                nameregex = /^(.+):/gm,
                 comment,
                 clen,
                 chr,
