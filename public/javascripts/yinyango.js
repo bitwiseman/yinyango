@@ -580,7 +580,9 @@ var yygo = {};
                 gamescribe =    document.getElementById('gamescribe'),
                 gamesource =    document.getElementById('gamesource'),
                 gamecopyright = document.getElementById('gamecopyright'),
-                gamecomment =   document.getElementById('gamecomment');
+                gamecomment =   document.getElementById('gamecomment'),
+                min,
+                sec;
 
             if (infos.PB !== undefined) {
                 gameblack.textContent = infos.PB;
@@ -590,6 +592,8 @@ var yygo = {};
                 if (infos.BT !== undefined) {
                     gameblack.textContent += ' (' + infos.BT + ')';
                 }
+            } else {
+                gameblack.textContent = '';
             }
             if (infos.PW !== undefined) {
                 gamewhite.textContent = infos.PW;
@@ -599,49 +603,84 @@ var yygo = {};
                 if (infos.WT !== undefined) {
                     gamewhite.textContent += ' (' + infos.WT + ')';
                 }
+            } else {
+                gamewhite.textContent = '';
             }
 
             if (infos.RE !== undefined) {
                 gameresult.textContent = infos.RE;
+            } else {
+                gameresult.textContent = '';
             }
             if (infos.DT !== undefined) {
                 gamedate.textContent = infos.DT;
+            } else {
+                gamedate.textContent = '';
             }
             if (infos.PC !== undefined) {
                 gameplace.textContent = infos.PC;
+            } else {
+                gameplace.textContent = '';
             }
             if (infos.EV !== undefined) {
                 gameevent.textContent = infos.EV;
+            } else {
+                gameevent.textContent = '';
             }
             if (infos.GN !== undefined) {
                 gamename.textContent = infos.GN;
+            } else {
+                gamename.textContent = '';
             }
             if (infos.RU !== undefined) {
                 gamerules.textContent = infos.RU;
+            } else {
+                gamerules.textContent = '';
             }
             if (infos.KM !== undefined) {
                 gamekomi.textContent = infos.KM;
+            } else {
+                gamekomi.textContent = '';
             }
             if (infos.TM !== undefined) {
-                gametime.textContent = infos.TM;
+                min = Math.floor(infos.TM / 60);
+                sec = Math.floor(infos.TM % 60);
+                if (sec < 10) {
+                    sec = '0' + sec;
+                }
+                gametime.textContent = min + ':' + sec;
+            } else {
+                gametime.textContent = '';
             }
             if (infos.OT !== undefined) {
                 gameovertime.textContent = infos.OT;
+            } else {
+                gameovertime.textContent = '';
             }
             if (infos.AN !== undefined) {
                 gameannotator.textContent = infos.AN;
+            } else {
+                gameannotator.textContent = '';
             }
             if (infos.US !== undefined) {
                 gamescribe.textContent = infos.US;
+            } else {
+                gamescribe.textContent = '';
             }
             if (infos.SO !== undefined) {
                 gamesource.textContent = infos.SO;
+            } else {
+                gamesource.textContent = '';
             }
             if (infos.CP !== undefined) {
                 gamecopyright.textContent = infos.CP;
+            } else {
+                gamecopyright.textContent = '';
             }
             if (infos.GC !== undefined) {
                 gamecomment.textContent = infos.GC;
+            } else {
+                gamecomment.textContent = '';
             }
         },
         /*}}}*/
