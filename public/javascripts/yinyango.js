@@ -287,6 +287,10 @@ var yygo = {};
                         if (data[node].hasOwnProperty(branch)) {
                             stones[node][branch] = {B: [], W: [], BF: [],
                                     WF: [], K: []};
+                            this.game[node][branch].score = {
+                                B: 0,
+                                W: 0
+                            };
                             // Load previous stones.
                             parentbranch =
                                 yygo.data.getParentBranch(node - 1, branch);
@@ -584,6 +588,16 @@ var yygo = {};
                 min,
                 sec;
 
+            function insertInfo(info, element) {
+                var infos = yygo.data.game[0][0];
+
+                if (infos[info] !== undefined) {
+                    element.textContent = infos[info];
+                } else {
+                    element.textContent = '';
+                }
+            }
+
             if (infos.PB !== undefined) {
                 gameblack.textContent = infos.PB;
                 if (infos.BR !== undefined) {
@@ -606,42 +620,6 @@ var yygo = {};
             } else {
                 gamewhite.textContent = '';
             }
-
-            if (infos.RE !== undefined) {
-                gameresult.textContent = infos.RE;
-            } else {
-                gameresult.textContent = '';
-            }
-            if (infos.DT !== undefined) {
-                gamedate.textContent = infos.DT;
-            } else {
-                gamedate.textContent = '';
-            }
-            if (infos.PC !== undefined) {
-                gameplace.textContent = infos.PC;
-            } else {
-                gameplace.textContent = '';
-            }
-            if (infos.EV !== undefined) {
-                gameevent.textContent = infos.EV;
-            } else {
-                gameevent.textContent = '';
-            }
-            if (infos.GN !== undefined) {
-                gamename.textContent = infos.GN;
-            } else {
-                gamename.textContent = '';
-            }
-            if (infos.RU !== undefined) {
-                gamerules.textContent = infos.RU;
-            } else {
-                gamerules.textContent = '';
-            }
-            if (infos.KM !== undefined) {
-                gamekomi.textContent = infos.KM;
-            } else {
-                gamekomi.textContent = '';
-            }
             if (infos.TM !== undefined) {
                 min = Math.floor(infos.TM / 60);
                 sec = Math.floor(infos.TM % 60);
@@ -652,36 +630,20 @@ var yygo = {};
             } else {
                 gametime.textContent = '';
             }
-            if (infos.OT !== undefined) {
-                gameovertime.textContent = infos.OT;
-            } else {
-                gameovertime.textContent = '';
-            }
-            if (infos.AN !== undefined) {
-                gameannotator.textContent = infos.AN;
-            } else {
-                gameannotator.textContent = '';
-            }
-            if (infos.US !== undefined) {
-                gamescribe.textContent = infos.US;
-            } else {
-                gamescribe.textContent = '';
-            }
-            if (infos.SO !== undefined) {
-                gamesource.textContent = infos.SO;
-            } else {
-                gamesource.textContent = '';
-            }
-            if (infos.CP !== undefined) {
-                gamecopyright.textContent = infos.CP;
-            } else {
-                gamecopyright.textContent = '';
-            }
-            if (infos.GC !== undefined) {
-                gamecomment.textContent = infos.GC;
-            } else {
-                gamecomment.textContent = '';
-            }
+
+            insertInfo('RE', gameresult);
+            insertInfo('DT', gamedate);
+            insertInfo('PC', gameplace);
+            insertInfo('EV', gameevent);
+            insertInfo('GN', gamename);
+            insertInfo('RU', gamerules);
+            insertInfo('KM', gamekomi);
+            insertInfo('OT', gameovertime);
+            insertInfo('AN', gameannotator);
+            insertInfo('US', gamescribe);
+            insertInfo('SO', gamesource);
+            insertInfo('CP', gamecopyright);
+            insertInfo('GC', gamecomment);
         },
         /*}}}*/
 
