@@ -559,47 +559,91 @@ var yygo = {};
         },
         /*}}}*/
 
-        /** yygo.view.makeInfos {{{
+        /** yygo.view.makeGameInfos {{{
          * Create and insert informations html code.
          */
-        makeInfos: function () {
+        makeGameInfos: function () {
             var infos =         yygo.data.game[0][0],
-                infoselem =     document.getElementById('infos'),
-                html =          '<table>';
+                gameinfosbox =  document.getElementById('gameinfosbox'),
+                gameblack =     document.getElementById('gameblack'),
+                gamewhite =     document.getElementById('gamewhite'),
+                gameresult =    document.getElementById('gameresult'),
+                gamedate =      document.getElementById('gamedate'),
+                gameplace =     document.getElementById('gameplace'),
+                gameevent =     document.getElementById('gameevent'),
+                gamename =      document.getElementById('gamename'),
+                gamerules =     document.getElementById('gamerules'),
+                gamekomi =      document.getElementById('gamekomi'),
+                gametime =      document.getElementById('gametime'),
+                gameovertime =  document.getElementById('gameovertime'),
+                gameannotator = document.getElementById('gameannotator'),
+                gamescribe =    document.getElementById('gamescribe'),
+                gamesource =    document.getElementById('gamesource'),
+                gamecopyright = document.getElementById('gamecopyright'),
+                gamecomment =   document.getElementById('gamecomment');
 
+            console.log(gameinfosbox.gameblack);
             if (infos.PB !== undefined) {
-                html += '<tr><td class="infolabel"><em>Black' +
-                    ':</em></td><td>' + infos.PB;
+                gameblack.textContent = infos.PB;
                 if (infos.BR !== undefined) {
-                    html += ' [' + infos.BR + ']';
+                    gameblack.textContent += ' [' + infos.BR + ']';
                 }
-                html += '</td></tr>';
+                if (infos.BT !== undefined) {
+                    gameblack.textContent += ' (' + infos.BT + ')';
+                }
             }
-
             if (infos.PW !== undefined) {
-                html += '<tr><td class="infolabel"><em>White' +
-                    ':</em></td><td>' + infos.PW;
+                gamewhite.textContent = infos.PW;
                 if (infos.WR !== undefined) {
-                    html += ' [' + infos.WR + ']';
+                    gamewhite.textContent += ' [' + infos.WR + ']';
                 }
-                html += '</td></tr>';
+                if (infos.WT !== undefined) {
+                    gamewhite.textContent += ' (' + infos.WT + ')';
+                }
             }
 
+            if (infos.RE !== undefined) {
+                gameresult.textContent = infos.RE;
+            }
             if (infos.DT !== undefined) {
-                html += '<tr><td class="infolabel"><em>Date' +
-                    ':</em></td><td>' + infos.DT + '</td></tr>';
+                gamedate.textContent = infos.DT;
             }
             if (infos.PC !== undefined) {
-                html += '<tr><td class="infolabel"><em>Place' +
-                    ':</em></td><td>' + infos.PC + '</td></tr>';
+                gameplace.textContent = infos.PC;
+            }
+            if (infos.EV !== undefined) {
+                gameevent.textContent = infos.EV;
+            }
+            if (infos.GN !== undefined) {
+                gamename.textContent = infos.GN;
             }
             if (infos.RU !== undefined) {
-                html += '<tr><td class="infolabel"><em>Rules' +
-                    ':</em></td><td>' + infos.RU + '</td></tr>';
+                gamerules.textContent = infos.RU;
             }
-            html += '</table>';
-
-            infoselem.innerHTML = html;
+            if (infos.KM !== undefined) {
+                gamekomi.textContent = infos.KM;
+            }
+            if (infos.TM !== undefined) {
+                gametime.textContent = infos.TM;
+            }
+            if (infos.OT !== undefined) {
+                gameovertime.textContent = infos.OT;
+            }
+            if (infos.AN !== undefined) {
+                gameannotator.textContent = infos.AN;
+            }
+            if (infos.US !== undefined) {
+                gamescribe.textContent = infos.US;
+            }
+            if (infos.SO !== undefined) {
+                gamesource.textContent = infos.SO;
+            }
+            if (infos.CP !== undefined) {
+                gamecopyright.textContent = infos.CP;
+            }
+            if (infos.GC !== undefined) {
+                gamecomment.textContent = infos.GC;
+            }
         },
         /*}}}*/
 
@@ -1229,6 +1273,25 @@ var yygo = {};
                 settings.style.display = 'none';
                 yygo.view.showGoban(true);
             }
+        },
+        /*}}}*/
+
+        /** yygo.view.showGameInfos {{{
+         * Alternate the display of the current game infos.
+         *
+         * @param {Boolean} show Show page.
+         */
+        showGameInfos: function (show) {
+            var gameinfos = document.getElementById('gameinfos');
+
+            if (show) {
+                yygo.view.showGoban(false);
+                yygo.view.showMenu(false);
+                gameinfos.style.display = 'block';
+            } else {
+                gameinfos.style.display = 'none';
+                yygo.view.showGoban(true);
+            }
         }
         /*}}}*/
 
@@ -1300,6 +1363,7 @@ var yygo = {};
             }
 
             yygo.view.makeVariations();
+            yygo.view.makeGameInfos();
             yygo.view.setPlayersInfos();
             yygo.view.makeComments();
 
@@ -1377,6 +1441,7 @@ var yygo = {};
             this.screen = 'goban';
 
             yygo.view.toggleNavButtons();
+            yygo.view.makeGameInfos();
             yygo.view.setPlayersInfos();
 
             yygo.view.redraw = true;
@@ -1396,6 +1461,7 @@ var yygo = {};
                 menuload =          document.getElementById('menuload'),
                 menusendsgf =       document.getElementById('menusendsgf'),
                 menusettings =      document.getElementById('menusettings'),
+                menugameinfos =     document.getElementById('menugameinfos'),
                 menulogout =        document.getElementById('menulogout'),
                 menuback =          document.getElementById('menuback'),
                 exitload =          document.getElementById('exitload'),
@@ -1403,6 +1469,7 @@ var yygo = {};
                 nextpage =          document.getElementById('nextpage'),
                 refreshlist =       document.getElementById('refreshlist'),
                 exitsettings =      document.getElementById('exitsettings'),
+                exitgameinfos =     document.getElementById('exitgameinfos'),
                 submitsettings =    document.getElementById('submitsettings'),
                 exitsendsgf =       document.getElementById('exitsendsgf'),
                 submitsgf =         document.getElementById('submitsgf'),
@@ -1434,6 +1501,9 @@ var yygo = {};
             }, false);
             menusettings.addEventListener('click', function () {
                 yygo.view.showSettings(true);
+            }, false);
+            menugameinfos.addEventListener('click', function () {
+                yygo.view.showGameInfos(true);
             }, false);
             menulogout.addEventListener('click', function () {
                 window.location.href = '/logout';
@@ -1480,6 +1550,12 @@ var yygo = {};
                         settingssaved.style.display = 'block';
                     }
                 });
+            }, false);
+            //}}}
+
+            // Game infos specific.{{{
+            exitgameinfos.addEventListener('click', function () {
+                yygo.view.showGameInfos(false);
             }, false);
             //}}}
 

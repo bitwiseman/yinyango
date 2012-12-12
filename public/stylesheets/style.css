@@ -90,8 +90,8 @@ body {/*{{{*/
  * Elements that starts hidden
  */
 #menucontainer, #menumask, #sendsgf, #errorsendsgf, #errorinvalid, #errormd5,
-#sendsuccess, #settings, #settingssaved, #load, #goban, #panel, #variations,
-.inputhelp {
+#gameinfos, #sendsuccess, #settings, #settingssaved, #load, #goban, #panel,
+#variations, .inputhelp {
     display: none;
 }
 /*}}}*/
