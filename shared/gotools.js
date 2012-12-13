@@ -223,7 +223,8 @@
             i;
 
         if (goban[x] !== undefined && goban[x][y] !== undefined) {
-            if (goban[x][y] === '') {
+            if (goban[x][y] === '' || goban[x][y] === 'BF' ||
+                    goban[x][y] === 'WF') {
                 return 1; // Liberty.
             }
             if (goban[x][y] === ennemy) { // Ennemy stone.
