@@ -68,30 +68,49 @@
      * @return {Array} New goban with suicides.
      */
     function testSuicides(color, x, y, goban, rule) {
-        function isSuicide(color, x, y) {
-            var testlib,
-                testcapture,
-                isko;
+        var ruleForbidSuicide = function () {
+            if (rule === 'NZ') {
+                return false;
+            }
+            return true;
+        };
 
-            if (goban [x] !== undefined && goban[x][y] !== undefined &&
-                    goban[x][y] === '') {
-                testlib = testLiberties(color, x, y, goban, []);
-                testcapture = testCaptures(color, x, y, goban);
-                //console.log(color + ' coords:' + x + ',' + y + ' libs:' + testlib +
-                        //' caps:' + testcapture.prisonners);
-                if (testlib[0] === 0 && testcapture.prisonners === 0) {
-                    goban[x][y] = color + 'F';
+        function color(x, y) {
+            if (goban[x] !== undefined && goban[x][y] !== undefined) {
+                return goban[x][y];
+            }
+            return 'X';
+        }
+
+        function testIntersection(x, y) {
+            // First case intersection is empty.
+            if (color(x, y) === '') {
+                // Intersection surrounded by black/borders ?
+                if ((color(x - 1, y) === 'B' || color(x - 1, y) === 'X') &&
+                    (color(x + 1, y) === 'B' || color(x + 1, y) === 'X') &&
+                    (color(x, y - 1) === 'B' || color(x, y - 1) === 'X') &&
+                    (color(x, y + 1) === 'B' || color(x, y + 1) === 'X')) {
+                    // Forbid white, even rules that permit suicide forbid one
+                    // stone suicide.
+                    goban[x][y] = 'WF';
+                }
+                // Intersection surrounded by white/borders ?
+                if ((color(x - 1, y) === 'W' || color(x - 1, y) === 'X') &&
+                    (color(x + 1, y) === 'W' || color(x + 1, y) === 'X') &&
+                    (color(x, y - 1) === 'W' || color(x, y - 1) === 'X') &&
+                    (color(x, y + 1) === 'W' || color(x, y + 1) === 'X')) {
+                    goban[x][y] = 'BF'; // Forbid black.
                 }
             }
+            // Second case intersection is colored.
+            if (color(x, y) === 'B' || color(x, y) === 'W') {
+            }
         }
-        isSuicide('B', x - 1, y);
-        isSuicide('B', x + 1, y);
-        isSuicide('B', x, y - 1);
-        isSuicide('B', x, y + 1);
-        isSuicide('W', x - 1, y);
-        isSuicide('W', x + 1, y);
-        isSuicide('W', x, y - 1);
-        isSuicide('W', x, y + 1);
+
+        testIntersection(x - 1, y);
+        testIntersection(x + 1, y);
+        testIntersection(x, y - 1);
+        testIntersection(x, y + 1);
 
         return goban;
     }
