@@ -507,7 +507,11 @@
                 break;
             default:
                 if (isvalue) {
-                    value += chr;
+                    if (isescaped) {
+                        value += '\\' + chr;
+                    } else {
+                        value += chr;
+                    }
                 } else if (chr !== '\n') {
                     key += chr;
                 }
