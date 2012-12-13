@@ -449,7 +449,12 @@
                 break;
             case '(': // Value, start of branch or mark ?
                 if (isvalue) {
-                    value += '(';
+                    if (isescaped) {
+                        value += '\\(';
+                        isescaped = false;
+                    } else {
+                        value += '(';
+                    }
                 } else if (isstart) {
                     branch++;
                     node = nodemark[mark];
@@ -461,7 +466,12 @@
                 break;
             case ')': // Value or end of branch ?
                 if (isvalue) {
-                    value += ')';
+                    if (isescaped) {
+                        value += '\\)';
+                        isescaped = false;
+                    } else {
+                        value += ')';
+                    }
                 } else if (isstart) {
                     mark--;
                 } else {
@@ -470,14 +480,24 @@
                 break;
             case ';': // Value or new node ?
                 if (isvalue) {
-                    value += ';';
+                    if (isescaped) {
+                        value += '\\;';
+                        isescaped = false;
+                    } else {
+                        value += ';';
+                    }
                 } else {
                     node++;
                 }
                 break;
             case '[': // Value or start of value ?
                 if (isvalue) {
-                    value += '[';
+                    if (isescaped) {
+                        value += '\\[';
+                        isescaped = false;
+                    } else {
+                        value += '[';
+                    }
                 } else {
                     isvalue = true;
                 }
@@ -509,6 +529,7 @@
                 if (isvalue) {
                     if (isescaped) {
                         value += '\\' + chr;
+                        isescaped = false;
                     } else {
                         value += chr;
                     }
