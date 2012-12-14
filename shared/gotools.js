@@ -156,7 +156,12 @@
                         listLiberties(color(x - 1, y), libx, liby, liblistb, group);
                         console.log(liblistb);
                         if (liblistb.length === 0) {
-                            goban[libx][liby] = color(x - 1, y) + 'F';
+                            if (testCaptures(color(x - 1, y), libx, liby, goban)
+                                    .length === 0) {
+                                goban[libx][liby] = color(x - 1, y) + 'F';
+                            } else {
+                                goban[libx][liby] = '';
+                            }
                         } else {
                             goban[libx][liby] = '';
                             //goban[libx][liby] = prevgoban;
@@ -181,7 +186,12 @@
                         listLiberties(color(x + 1, y), libx, liby, liblistb, group);
                         console.log(liblistb);
                         if (liblistb.length === 0) {
-                            goban[libx][liby] = color(x + 1, y) + 'F';
+                            if (testCaptures(color(x + 1, y), libx, liby, goban)
+                                    .length === 0) {
+                                goban[libx][liby] = color(x + 1, y) + 'F';
+                            } else {
+                                goban[libx][liby] = '';
+                            }
                         } else {
                             goban[libx][liby] = '';
                             //goban[libx][liby] = prevgoban;
@@ -206,7 +216,12 @@
                         listLiberties(color(x, y - 1), libx, liby, liblistb, group);
                         console.log(liblistb);
                         if (liblistb.length === 0) {
-                            goban[libx][liby] = color(x, y - 1) + 'F';
+                            if (testCaptures(color(x, y - 1), libx, liby, goban)
+                                    .length === 0) {
+                                goban[libx][liby] = color(x, y - 1) + 'F';
+                            } else {
+                                goban[libx][liby] = '';
+                            }
                         } else {
                             goban[libx][liby] = '';
                             //goban[libx][liby] = prevgoban;
@@ -231,7 +246,12 @@
                         listLiberties(color(x, y + 1), libx, liby, liblistb, group);
                         console.log(liblistb);
                         if (liblistb.length === 0) {
-                            goban[libx][liby] = color(x, y + 1) + 'F';
+                            if (testCaptures(color(x, y + 1), libx, liby, goban)
+                                    .length === 0) {
+                                goban[libx][liby] = color(x, y + 1) + 'F';
+                            } else {
+                                goban[libx][liby] = '';
+                            }
                         } else {
                             goban[libx][liby] = '';
                             //goban[libx][liby] = prevgoban;
@@ -259,7 +279,12 @@
                 goban[libx][liby] = color(x, y);
                 listLiberties(color(x, y), libx, liby, liblistb, group);
                 if (liblistb.length === 0) {
-                    goban[libx][liby] = color(x, y) + 'F';
+                    if (testCaptures(color(x, y), libx, liby, goban)
+                            .length === 0) {
+                        goban[libx][liby] = color(x, y) + 'F';
+                    } else {
+                        goban[libx][liby] = '';
+                    }
                 } else {
                     goban[libx][liby] = '';
                     //goban[libx][liby] = prevgoban;
@@ -481,15 +506,15 @@
      *                    'prisonners':{Number} (number of prisonners) }.
      */
     function testCaptures(color, x, y, goban) {
-        var result = { 'goban': [], 'prisonners': 0 },
-            prisonners = 0;
+        //var result = { 'goban': [], 'prisonners': [] },
+        var prisonners = [];
 
         function checkDirection(x, y) {
             var test = testLiberties(color, x, y, goban, []);
 
             if (test[0] === 0) { // No liberties found.
-                goban = removePrisonners(goban, test[1]);
-                prisonners += test[1].length;
+                //goban = removePrisonners(goban, test[1]);
+                prisonners = prisonners.concat(test[1]);
             }
         }
         // Test each direction.
@@ -498,10 +523,12 @@
         checkDirection(x + 1, y);
         checkDirection(x, y + 1);
 
-        result.goban = goban;
-        result.prisonners = prisonners;
+        //result.goban = goban;
+        //result.prisonners = prisonners;
 
-        return result;
+        //return result;
+        console.log(prisonners);
+        return prisonners;
     }
     /*}}}*/
 
@@ -575,24 +602,29 @@
         var x =             coord.charCodeAt(0) - 97, // Coord to Number.
             y =             coord.charCodeAt(1) - 97,
             goban =         stonesToGoban(size, stones),
-            captureresult = {},
+            prisonners =    [],
             newstate =      {};
 
         // Add played stone to goban.
         goban[x][y] = color;
 
         // Test if that makes captures and get new state if so.
-        captureresult = testCaptures(color, x, y, goban);
+        prisonners = testCaptures(color, x, y, goban);
+        console.log('prison: ' + prisonners);
 
-        if (captureresult.prisonners === 1) {
+        // Remove prisonners.
+        if (prisonners.length > 0) {
+            goban = removePrisonners(goban, prisonners);
+        }
+        if (prisonners.length === 1) {
             // Test if that create a ko situation.
-            goban = testKo(color, x, y, captureresult.goban);
+            goban = testKo(color, x, y, goban);
         }
         goban = testSuicides(color, x, y, goban, rule);
 
         newstate = {
-            'stones': gobanToStones(size, captureresult.goban),
-            'prisonners': captureresult.prisonners
+            'stones': gobanToStones(size, goban),
+            'prisonners': prisonners.length
         };
 
         return newstate;

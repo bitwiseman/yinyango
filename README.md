@@ -21,6 +21,7 @@ general.
 - Validation link sent by mail.
 - Provide direct link to a game.
 - Save previous players times.
+- Simplify gotools mess.
 
 ## LICENSE
 
