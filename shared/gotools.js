@@ -142,8 +142,6 @@
             if (ruleForbidSuicide) {
                 if (color(x - 1, y) === 'B' || color(x - 1, y) === 'W') {
                     listLiberties(color(x - 1, y), x - 1, y, liblist, group);
-                    console.log(color(x - 1, y));
-                    console.log(liblist);
                     group = [];
                     // If only one liberty found.
                     if (liblist.length === 1) {
@@ -154,7 +152,6 @@
                         //prevgoban = goban[libx][liby];
                         goban[libx][liby] = color(x - 1, y);
                         listLiberties(color(x - 1, y), libx, liby, liblistb, group);
-                        console.log(liblistb);
                         if (liblistb.length === 0) {
                             if (testCaptures(color(x - 1, y), libx, liby, goban)
                                     .length === 0) {
@@ -173,8 +170,6 @@
                 group = [];
                 if (color(x + 1, y) === 'B' || color(x + 1, y) === 'W') {
                     listLiberties(color(x + 1, y), x + 1, y, liblist, group);
-                    console.log(color(x + 1, y));
-                    console.log(liblist);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group. 
@@ -184,7 +179,6 @@
                         //prevgoban = goban[libx][liby];
                         goban[libx][liby] = color(x + 1, y);
                         listLiberties(color(x + 1, y), libx, liby, liblistb, group);
-                        console.log(liblistb);
                         if (liblistb.length === 0) {
                             if (testCaptures(color(x + 1, y), libx, liby, goban)
                                     .length === 0) {
@@ -203,8 +197,6 @@
                 group = [];
                 if (color(x, y - 1) === 'B' || color(x, y - 1) === 'W') {
                     listLiberties(color(x, y - 1), x, y - 1, liblist, group);
-                    console.log(color(x, y - 1));
-                    console.log(liblist);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group. 
@@ -214,7 +206,6 @@
                         //prevgoban = goban[libx][liby];
                         goban[libx][liby] = color(x, y - 1);
                         listLiberties(color(x, y - 1), libx, liby, liblistb, group);
-                        console.log(liblistb);
                         if (liblistb.length === 0) {
                             if (testCaptures(color(x, y - 1), libx, liby, goban)
                                     .length === 0) {
@@ -233,8 +224,6 @@
                 group = [];
                 if (color(x, y + 1) === 'B' || color(x, y + 1) === 'W') {
                     listLiberties(color(x, y + 1), x, y + 1, liblist, group);
-                    console.log(color(x, y + 1));
-                    console.log(liblist);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group. 
@@ -244,7 +233,6 @@
                         //prevgoban = goban[libx][liby];
                         goban[libx][liby] = color(x, y + 1);
                         listLiberties(color(x, y + 1), libx, liby, liblistb, group);
-                        console.log(liblistb);
                         if (liblistb.length === 0) {
                             if (testCaptures(color(x, y + 1), libx, liby, goban)
                                     .length === 0) {
@@ -266,8 +254,6 @@
         // Second case intersection is colored.
         if (color(x, y) === 'B' || color(x, y) === 'W') {
             listLiberties(color(x, y), x, y, liblist, group);
-            console.log(color(x, y));
-            console.log(liblist);
             group = [];
             // If only one liberty found.
             if (liblist.length === 1) {
@@ -478,17 +464,38 @@
             y,
             i;
 
+        function testCorners(x, y) {
+            var isinlist = false,
+                coord,
+                xc,
+                yc,
+                i;
+            
+            // Check if we test a dead.
+            for (i = 0; i < prilen; i++) {
+                coord = prisonners[i].split(':');
+                xc = parseInt(coord[0], 10);
+                yc = parseInt(coord[1], 10);
+                if (xc === x && yc === y) {
+                    isinlist = true;
+                }
+            }
+            if (isinlist === false) {
+                testIntersection(goban, x, y);
+            }
+        }
+
         for (i = 0; i < prilen; i++) {
             coord = prisonners[i].split(':');
             x = parseInt(coord[0], 10);
             y = parseInt(coord[1], 10);
             // Test corners of dead stones to set possible forbid moves.
-            testIntersection(goban, x - 1, y - 1);
-            testIntersection(goban, x + 1, y - 1);
-            testIntersection(goban, x - 1, y + 1);
-            testIntersection(goban, x + 1, y + 1);
+            testCorners(x - 1, y - 1);
+            testCorners(x + 1, y - 1);
+            testCorners(x - 1, y + 1);
+            testCorners(x + 1, y + 1);
             // Remove stone from goban.
-            goban[coord[0]][coord[1]] = '';
+            goban[x][y] = '';
         }
         return goban;
     }
@@ -527,7 +534,6 @@
         //result.prisonners = prisonners;
 
         //return result;
-        console.log(prisonners);
         return prisonners;
     }
     /*}}}*/
@@ -610,7 +616,6 @@
 
         // Test if that makes captures and get new state if so.
         prisonners = testCaptures(color, x, y, goban);
-        console.log('prison: ' + prisonners);
 
         // Remove prisonners.
         if (prisonners.length > 0) {
