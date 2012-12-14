@@ -101,6 +101,8 @@
                     (color(x, y + 1) === 'W' || color(x, y + 1) === 'X')) {
                     goban[x][y] = 'BF'; // Forbid black.
                 }
+                if (color(x - 1, y) === 'B' || color(x - 1, y) === 'W') {
+                }
             }
             // Second case intersection is colored.
             if (color(x, y) === 'B' || color(x, y) === 'W') {

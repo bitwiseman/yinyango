@@ -949,6 +949,7 @@ var yygo = {};
         placeSymbols: function () {
             var branch =        yygo.data.curbranch,
                 node =          yygo.data.curnode,
+                ko =            yygo.data.stones[node][branch].K,
                 game =          yygo.data.game[node][branch];
 
             function insertSymbols(symbol, list) {//{{{
@@ -1005,6 +1006,10 @@ var yygo = {};
                 insertSymbols('CR', game.W);
             } else if (game.B !== undefined && game.B[0] !== '') {
                 insertSymbols('CR', game.B);
+            }
+            // Square to indicate eventual ko.
+            if (ko !== undefined) {
+                insertSymbols('SQ', ko);
             }
         },
         /*}}}*/
