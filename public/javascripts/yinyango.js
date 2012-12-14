@@ -1008,7 +1008,7 @@ var yygo = {};
                 insertSymbols('CR', game.B);
             }
             // Square to indicate eventual ko.
-            if (ko !== undefined) {
+            if (ko[0] !== undefined) {
                 insertSymbols('SQ', ko);
             }
         },

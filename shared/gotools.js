@@ -54,6 +54,48 @@
     }
     /*}}}*/
 
+    function testIntersection(goban, x, y, rule) {
+        var ruleForbidSuicide = function () {
+            if (rule === 'NZ') {
+                return false;
+            }
+            return true;
+        };
+        if (rule === undefined) {
+            rule = '';
+        }
+        function color(x, y) {
+            if (goban[x] !== undefined && goban[x][y] !== undefined) {
+                return goban[x][y];
+            }
+            return 'X';
+        }
+        // First case intersection is empty.
+        if (color(x, y) === '') {
+            // Intersection surrounded by black/borders ?
+            if ((color(x - 1, y) === 'B' || color(x - 1, y) === 'X') &&
+                    (color(x + 1, y) === 'B' || color(x + 1, y) === 'X') &&
+                    (color(x, y - 1) === 'B' || color(x, y - 1) === 'X') &&
+                    (color(x, y + 1) === 'B' || color(x, y + 1) === 'X')) {
+                        // Forbid white, even rules that permit suicide forbid one
+                        // stone suicide.
+                        goban[x][y] = 'WF';
+                    }
+            // Intersection surrounded by white/borders ?
+            if ((color(x - 1, y) === 'W' || color(x - 1, y) === 'X') &&
+                    (color(x + 1, y) === 'W' || color(x + 1, y) === 'X') &&
+                    (color(x, y - 1) === 'W' || color(x, y - 1) === 'X') &&
+                    (color(x, y + 1) === 'W' || color(x, y + 1) === 'X')) {
+                        goban[x][y] = 'BF'; // Forbid black.
+                    }
+            if (color(x - 1, y) === 'B' || color(x - 1, y) === 'W') {
+            }
+        }
+        // Second case intersection is colored.
+        if (color(x, y) === 'B' || color(x, y) === 'W') {
+        }
+    }
+
     /** testSuicides {{{
      * Test if a move created a suicide situation for any color, or if it
      * removed such situation. Some rules permit suicides, so we need to
@@ -68,51 +110,11 @@
      * @return {Array} New goban with suicides.
      */
     function testSuicides(color, x, y, goban, rule) {
-        var ruleForbidSuicide = function () {
-            if (rule === 'NZ') {
-                return false;
-            }
-            return true;
-        };
 
-        function color(x, y) {
-            if (goban[x] !== undefined && goban[x][y] !== undefined) {
-                return goban[x][y];
-            }
-            return 'X';
-        }
-
-        function testIntersection(x, y) {
-            // First case intersection is empty.
-            if (color(x, y) === '') {
-                // Intersection surrounded by black/borders ?
-                if ((color(x - 1, y) === 'B' || color(x - 1, y) === 'X') &&
-                    (color(x + 1, y) === 'B' || color(x + 1, y) === 'X') &&
-                    (color(x, y - 1) === 'B' || color(x, y - 1) === 'X') &&
-                    (color(x, y + 1) === 'B' || color(x, y + 1) === 'X')) {
-                    // Forbid white, even rules that permit suicide forbid one
-                    // stone suicide.
-                    goban[x][y] = 'WF';
-                }
-                // Intersection surrounded by white/borders ?
-                if ((color(x - 1, y) === 'W' || color(x - 1, y) === 'X') &&
-                    (color(x + 1, y) === 'W' || color(x + 1, y) === 'X') &&
-                    (color(x, y - 1) === 'W' || color(x, y - 1) === 'X') &&
-                    (color(x, y + 1) === 'W' || color(x, y + 1) === 'X')) {
-                    goban[x][y] = 'BF'; // Forbid black.
-                }
-                if (color(x - 1, y) === 'B' || color(x - 1, y) === 'W') {
-                }
-            }
-            // Second case intersection is colored.
-            if (color(x, y) === 'B' || color(x, y) === 'W') {
-            }
-        }
-
-        testIntersection(x - 1, y);
-        testIntersection(x + 1, y);
-        testIntersection(x, y - 1);
-        testIntersection(x, y + 1);
+        testIntersection(goban, x - 1, y, rule);
+        testIntersection(goban, x + 1, y, rule);
+        testIntersection(goban, x, y - 1, rule);
+        testIntersection(goban, x, y + 1, rule);
 
         return goban;
     }
@@ -272,10 +274,19 @@
     function removePrisonners(goban, prisonners) {
         var prilen =    prisonners.length,
             coord =     [],
+            x,
+            y,
             i;
 
         for (i = 0; i < prilen; i++) {
             coord = prisonners[i].split(':');
+            x = parseInt(coord[0], 10);
+            y = parseInt(coord[1], 10);
+            // Test corners of dead stones to set possible forbid moves.
+            testIntersection(goban, x - 1, y - 1);
+            testIntersection(goban, x + 1, y - 1);
+            testIntersection(goban, x - 1, y + 1);
+            testIntersection(goban, x + 1, y + 1);
             // Remove stone from goban.
             goban[coord[0]][coord[1]] = '';
         }
