@@ -559,7 +559,7 @@ var yygo = {};
                 branch =    yygo.data.curbranch,
                 comments =  document.getElementById('comments'),
                 html =      '',
-                nameregex = /^(.+):/gm,
+                nameregex = /^(.+?):/gm,
                 comment,
                 clen,
                 chr,
