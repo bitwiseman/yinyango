@@ -494,7 +494,24 @@
             }
         }
         function testAdjacent(x, y) {
-            testIntersection(goban, x, y, rule);
+            var isinlist = false,
+                coord,
+                xc,
+                yc,
+                i;
+            
+            // Check if we test a dead.
+            for (i = 0; i < prilen; i++) {
+                coord = prisonners[i].split(':');
+                xc = parseInt(coord[0], 10);
+                yc = parseInt(coord[1], 10);
+                if (xc === x && yc === y) {
+                    isinlist = true;
+                }
+            }
+            if (isinlist === false) {
+                testIntersection(goban, x, y, rule);
+            }
         }
 
         for (i = 0; i < prilen; i++) {
