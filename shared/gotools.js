@@ -36,17 +36,17 @@
      */
     function testKo(color, x, y, goban) {
         var liberties = [];
-    
+
         function isLiberty(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined &&
                     (goban[x][y] === color || goban[x][y] === '')) {
                 liberties.push([x, y]); // Liberty or same color.
             }
         }
-        isLiberty(x - 1, y); 
-        isLiberty(x + 1, y); 
-        isLiberty(x, y - 1); 
-        isLiberty(x, y + 1); 
+        isLiberty(x - 1, y);
+        isLiberty(x + 1, y);
+        isLiberty(x, y - 1);
+        isLiberty(x, y + 1);
         if (liberties.length === 1) {
             goban[liberties[0][0]][liberties[0][1]] = 'K';
         }
@@ -54,6 +54,103 @@
     }
     /*}}}*/
 
+    /** testLiberties {{{
+     * Test liberties of a stone or a group of stones recursively.
+     * Inspired by eidogo algorithm.
+     *
+     * @param {String}  color       Color of the played stone.
+     * @param {Number}  x           X coordinate to test.
+     * @param {Number}  y           Y coordinate to test.
+     * @param {Array}   goban       Goban state to test.
+     * @param {Array}   prisonners  Potential prisonners.
+     *
+     * @return {Array} [ {Number}
+     *                   (0: No liberties or already in prisonners list.
+     *                    1: Has liberties.
+     *                    2: Same color or goban border.),
+     *                   {Array} (Potential prisonners) ]
+     */
+    function testLiberties(color, x, y, goban, prisonners) {
+        var ennemy = (color === 'B') ? 'W' : 'B',
+            prilen = prisonners.length,
+            stone,
+            i;
+
+        if (goban[x] !== undefined && goban[x][y] !== undefined) {
+            if (goban[x][y] === '' || goban[x][y] === 'BF' ||
+                    goban[x][y] === 'WF') {
+                return 1; // Liberty.
+            }
+            if (goban[x][y] === ennemy) { // Ennemy stone.
+                stone = x + ':' + y;
+                // Check if we already have this prisonner.
+                for (i = 0; i < prilen; i++) {
+                    if (prisonners[i] === stone) {
+                        return 0;
+                    }
+                }
+
+                prisonners.push(stone); // Add stone to prisonners.
+
+                // Test recursively coordinates around the prisonner.
+                if (testLiberties(color, x - 1, y, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x, y - 1, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x + 1, y, goban, prisonners) === 1) {
+                    return 1;
+                }
+                if (testLiberties(color, x, y + 1, goban, prisonners) === 1) {
+                    return 1;
+                }
+                // If we reached here then we found no liberties.
+                return [ 0, prisonners ];
+            }
+        }
+        return 2; // Same color or goban border.
+    }
+    /*}}}*/
+
+    /** testCaptures {{{
+     * Test if played stone will capture stone(s).
+     *
+     * @param {String}  color Played color.
+     * @param {Number}  x     X coordinate of played stone.
+     * @param {Number}  y     Y coordinate of played stone.
+     * @param {Array}   goban Goban to test.
+     *
+     * @return {Array} Prisonners coordinates.
+     */
+    function testCaptures(color, x, y, goban) {
+        var prisonners = [];
+
+        function checkDirection(x, y) {
+            var test = testLiberties(color, x, y, goban, []);
+
+            if (test[0] === 0) { // No liberties found.
+                prisonners = prisonners.concat(test[1]);
+            }
+        }
+        // Test each direction.
+        checkDirection(x - 1, y);
+        checkDirection(x, y - 1);
+        checkDirection(x + 1, y);
+        checkDirection(x, y + 1);
+
+        return prisonners;
+    }
+    /*}}}*/
+
+    /** testIntersection {{{
+     * Test goban intersection for liberties and set/remove firbidden moves
+     * depending on current rule.
+     *
+     * @param {Array} goban Goban.
+     * @param {Number} x X coord.
+     * @param {Number} y Y coord.
+     */
     function testIntersection(goban, x, y, rule) {
         var ruleForbidSuicide = function () {
             if (rule === 'NZ') {
@@ -75,7 +172,7 @@
             }
             return 'X';
         }
-        
+
         function listLiberties(color, x, y, liblist, group) {
             var liblen = liblist.length,
                 grouplen = group.length,
@@ -141,7 +238,7 @@
                     group = [];
                     // If only one liberty found.
                     if (liblist.length === 1) {
-                        // Add stone and recheck liberties of new group. 
+                        // Add stone and recheck liberties of new group.
                         coord = liblist[0].split(':');
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
@@ -168,7 +265,7 @@
                     listLiberties(color(x + 1, y), x + 1, y, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
-                        // Add stone and recheck liberties of new group. 
+                        // Add stone and recheck liberties of new group.
                         coord = liblist[0].split(':');
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
@@ -195,7 +292,7 @@
                     listLiberties(color(x, y - 1), x, y - 1, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
-                        // Add stone and recheck liberties of new group. 
+                        // Add stone and recheck liberties of new group.
                         coord = liblist[0].split(':');
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
@@ -222,7 +319,7 @@
                     listLiberties(color(x, y + 1), x, y + 1, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
-                        // Add stone and recheck liberties of new group. 
+                        // Add stone and recheck liberties of new group.
                         coord = liblist[0].split(':');
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
@@ -253,7 +350,7 @@
             group = [];
             // If only one liberty found.
             if (liblist.length === 1) {
-                // Add stone and recheck liberties of new group. 
+                // Add stone and recheck liberties of new group.
                 coord = liblist[0].split(':');
                 libx = parseInt(coord[0], 10);
                 liby = parseInt(coord[1], 10);
@@ -307,6 +404,7 @@
             group = [];
         }
     }
+    /*}}}*/
 
     /** testSuicides {{{
      * Test if a move created a suicide situation for any color, or if it
@@ -416,65 +514,6 @@
     }
     /*}}}*/
 
-    /** testLiberties {{{
-     * Test liberties of a stone or a group of stones recursively.
-     * Inspired by eidogo algorithm.
-     *
-     * @param {String}  color       Color of the played stone.
-     * @param {Number}  x           X coordinate to test.
-     * @param {Number}  y           Y coordinate to test.
-     * @param {Array}   goban       Goban state to test.
-     * @param {Array}   prisonners  Potential prisonners.
-     *
-     * @return {Array} [ {Number}
-     *                   (0: No liberties or already in prisonners list.
-     *                    1: Has liberties.
-     *                    2: Same color or goban border.),
-     *                   {Array} (Potential prisonners) ]
-     */
-    function testLiberties(color, x, y, goban, prisonners) {
-        var ennemy = (color === 'B') ? 'W' : 'B',
-            prilen = prisonners.length,
-            stone,
-            i;
-
-        if (goban[x] !== undefined && goban[x][y] !== undefined) {
-            if (goban[x][y] === '' || goban[x][y] === 'BF' ||
-                    goban[x][y] === 'WF') {
-                return 1; // Liberty.
-            }
-            if (goban[x][y] === ennemy) { // Ennemy stone.
-                stone = x + ':' + y;
-                // Check if we already have this prisonner.
-                for (i = 0; i < prilen; i++) {
-                    if (prisonners[i] === stone) {
-                        return 0;
-                    }
-                }
-
-                prisonners.push(stone); // Add stone to prisonners.
-
-                // Test recursively coordinates around the prisonner.
-                if (testLiberties(color, x - 1, y, goban, prisonners) === 1) {
-                    return 1;
-                }
-                if (testLiberties(color, x, y - 1, goban, prisonners) === 1) {
-                    return 1;
-                }
-                if (testLiberties(color, x + 1, y, goban, prisonners) === 1) {
-                    return 1;
-                }
-                if (testLiberties(color, x, y + 1, goban, prisonners) === 1) {
-                    return 1;
-                }
-                // If we reached here then we found no liberties.
-                return [ 0, prisonners ];
-            }
-        }
-        return 2; // Same color or goban border.
-    }
-    /*}}}*/
-
     /** removePrisonners {{{
      * Remove captured stone(s) from the state.
      *
@@ -496,7 +535,7 @@
                 xc,
                 yc,
                 i;
-            
+
             // Check if we test a dead.
             for (i = 0; i < prilen; i++) {
                 coord = prisonners[i].split(':');
@@ -517,7 +556,7 @@
                 xc,
                 yc,
                 i;
-            
+
             // Check if we test a dead.
             for (i = 0; i < prilen; i++) {
                 coord = prisonners[i].split(':');
@@ -551,43 +590,6 @@
             testCorners(x + 1, y + 1);
         }
         return goban;
-    }
-    /*}}}*/
-
-    /** testCaptures {{{
-     * Test if played stone will capture stone(s).
-     *
-     * @param {String}  color Played color.
-     * @param {Number}  x     X coordinate of played stone.
-     * @param {Number}  y     Y coordinate of played stone.
-     * @param {Array}   goban Goban to test.
-     *
-     * @return {Object} { 'goban':{Array} (goban after eventual captures),
-     *                    'prisonners':{Number} (number of prisonners) }.
-     */
-    function testCaptures(color, x, y, goban) {
-        //var result = { 'goban': [], 'prisonners': [] },
-        var prisonners = [];
-
-        function checkDirection(x, y) {
-            var test = testLiberties(color, x, y, goban, []);
-
-            if (test[0] === 0) { // No liberties found.
-                //goban = removePrisonners(goban, test[1]);
-                prisonners = prisonners.concat(test[1]);
-            }
-        }
-        // Test each direction.
-        checkDirection(x - 1, y);
-        checkDirection(x, y - 1);
-        checkDirection(x + 1, y);
-        checkDirection(x, y + 1);
-
-        //result.goban = goban;
-        //result.prisonners = prisonners;
-
-        //return result;
-        return prisonners;
     }
     /*}}}*/
 
