@@ -518,18 +518,18 @@
             coord = prisonners[i].split(':');
             x = parseInt(coord[0], 10);
             y = parseInt(coord[1], 10);
-            // Test corners of dead stones to set possible forbid moves.
-            testCorners(x - 1, y - 1);
-            testCorners(x + 1, y - 1);
-            testCorners(x - 1, y + 1);
-            testCorners(x + 1, y + 1);
+            // Remove stone from goban.
+            goban[x][y] = '';
             // Test adjacent ennemies groups to remove no more forbidden moves.
             testAdjacent(x - 1, y);
             testAdjacent(x + 1, y);
             testAdjacent(x, y - 1);
             testAdjacent(x, y + 1);
-            // Remove stone from goban.
-            goban[x][y] = '';
+            // Test corners of dead stones to set possible forbid moves.
+            testCorners(x - 1, y - 1);
+            testCorners(x + 1, y - 1);
+            testCorners(x - 1, y + 1);
+            testCorners(x + 1, y + 1);
         }
         return goban;
     }
