@@ -83,7 +83,7 @@
 
             if (goban[x] !== undefined && goban[x][y] !== undefined) {
                 if (goban[x][y] === '' || goban[x][y] === 'BF' ||
-                        goban[x][y] === 'WF') {
+                        goban[x][y] === 'WF' || goban[x][y] === 'K') {
                     // Check if we already have this intersection in liberties.
                     for (i = 0; i < liblen; i++) {
                         if (liblist[i] === x + ':' + y) {
@@ -283,6 +283,23 @@
                     liby = parseInt(coord[1], 10);
                     if (goban[libx][liby] === color(x, y) + 'F') {
                         goban[libx][liby] = '';
+                        console.log('Removed: ' + color(x, y) + ';' + x + ';' + y);
+                    } else {
+                        var ennemy = color(x, y) === 'B' ? 'W' : 'B';
+                        goban[libx][liby] = ennemy;
+                        listLiberties(ennemy, libx, liby, liblistb, group);
+                        if (liblistb.length === 0) {
+                            if (testCaptures(ennemy, libx, liby, goban)
+                                    .length === 0) {
+                                        goban[libx][liby] = ennemy + 'F';
+                                    } else {
+                                        goban[libx][liby] = '';
+                                    }
+                        } else {
+                            goban[libx][liby] = '';
+                            //goban[libx][liby] = prevgoban;
+                        }
+                        liblistb = [];
                     }
                 }
             }
@@ -491,6 +508,7 @@
             }
             if (isinlist === false) {
                 testIntersection(goban, x, y, rule);
+                console.log('Corner: ' + x + ';' + y);
             }
         }
         function testAdjacent(x, y) {
@@ -511,6 +529,7 @@
             }
             if (isinlist === false) {
                 testIntersection(goban, x, y, rule);
+                console.log('Adj: ' + x + ';' + y);
             }
         }
 
