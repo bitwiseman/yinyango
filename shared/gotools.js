@@ -69,10 +69,6 @@
             libx,
             liby;
 
-        if (rule === undefined) {
-            rule = '';
-        }
-
         function color(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined) {
                 return goban[x][y];
@@ -277,6 +273,19 @@
                 }
                 liblistb = [];
             }
+            // More than one liberty, make sure to remove forbidden moves
+            // of that group color, as a capture may create more liberties
+            // for a group.
+            if (liblist.length > 1) {
+                for (var i = 0; i < liblist.length; i++) {
+                    coord = liblist[i].split(':');
+                    libx = parseInt(coord[0], 10);
+                    liby = parseInt(coord[1], 10);
+                    if (goban[libx][liby] === color(x, y) + 'F') {
+                        goban[libx][liby] = '';
+                    }
+                }
+            }
             liblist = [];
             group = [];
         }
@@ -457,7 +466,7 @@
      *
      * @return {Array} Goban after removing prisonners.
      */
-    function removePrisonners(goban, prisonners) {
+    function removePrisonners(goban, prisonners, rule) {
         var prilen =    prisonners.length,
             coord =     [],
             x,
@@ -481,8 +490,11 @@
                 }
             }
             if (isinlist === false) {
-                testIntersection(goban, x, y);
+                testIntersection(goban, x, y, rule);
             }
+        }
+        function testAdjacent(x, y) {
+            testIntersection(goban, x, y, rule);
         }
 
         for (i = 0; i < prilen; i++) {
@@ -494,6 +506,11 @@
             testCorners(x + 1, y - 1);
             testCorners(x - 1, y + 1);
             testCorners(x + 1, y + 1);
+            // Test adjacent ennemies groups to remove no more forbidden moves.
+            testAdjacent(x - 1, y);
+            testAdjacent(x + 1, y);
+            testAdjacent(x, y - 1);
+            testAdjacent(x, y + 1);
             // Remove stone from goban.
             goban[x][y] = '';
         }
@@ -619,7 +636,7 @@
 
         // Remove prisonners.
         if (prisonners.length > 0) {
-            goban = removePrisonners(goban, prisonners);
+            goban = removePrisonners(goban, prisonners, rule);
         }
         if (prisonners.length === 1) {
             // Test if that create a ko situation.
