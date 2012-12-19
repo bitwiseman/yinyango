@@ -1004,9 +1004,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             if (this.sizegoban !== oldsizegoban) {
                 redraw = true;
             }
-            this.drawInterface(redraw, function () {
-                fn();
-            });
+            this.drawInterface(redraw, fn);
         },
         /*}}}*/
         /** yygo.view.showGameInfos {{{
@@ -1363,7 +1361,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             // Window resize.{{{
             window.addEventListener('resize', function () {
-                yygo.view.setGobanSize(function () {});
+                yygo.view.setGobanSize(false, function () {});
             }, false);
             //}}}
             // Only registered users.{{{
