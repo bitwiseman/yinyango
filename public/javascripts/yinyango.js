@@ -6,16 +6,12 @@
  * @link     https://github.com/hickop/yinyango
  */
 
-/**
- * @namespace Contains all properties and methods of interface.
- */
-var yygo = {};
+var yygo = {}; // Namespace that contains all properties and methods.
 
 (function () {
     'use strict';
 
     // Utilities functions.
-
     /** jsonRequest {{{
      * Simple ajax request expecting json in response.
      *
@@ -42,7 +38,6 @@ var yygo = {};
         xhr.send(data);
     }
     /*}}}*/
-
     /** isEmpty {{{
      * Test if an Object is empty.
      * @link http://stackoverflow.com/a/7864800
@@ -54,7 +49,6 @@ var yygo = {};
         return Object.keys(obj).length === 0;
     }
     /*}}}*/
-
     /** secToTime {{{
      * Convert a time in seconds to "minutes:seconds".
      *
@@ -81,7 +75,6 @@ var yygo = {};
     /*}}}*/
 
     // Creation of yygo.
-
     /** yygo.data {{{
      * Data part of the yygo namespace, where we store the game and the actual
      * state.
@@ -96,26 +89,19 @@ var yygo = {};
      * @property {Number}   lastnode    Last node of the last branch.
      */
     yygo.data = {
-
         // Properties.
-
         game:           {},
         gameslist:      {},
         stones:         {},
-
         listpage:       0,
-
         size:           0,
-
         curbranch:      0,
         curnode:        0,
         lastbranch:     0,
         lastnode:       0,
-
         playerturn:     'B',
 
         // Methods.
-
         /** yygo.data.addBranch {{{
          * Player move made a new branch.
          *
@@ -201,7 +187,6 @@ var yygo = {};
             this.addMove(coord);
         },
         /*}}}*/
-
         /** yygo.data.addMove {{{
          * Add player move to game data.
          *
@@ -251,7 +236,6 @@ var yygo = {};
             yygo.events.navigateNode(1);
         },
         /*}}}*/
-
         /** yygo.data.calcStones {{{
          * Calculate all the stones present at each goban step.
          *
@@ -344,7 +328,6 @@ var yygo = {};
             return stones;
         },
         /*}}}*/
-
         /** yygo.data.getParentBranch {{{
          * Find the branch of which depends a given branch at a given node.
          *
@@ -365,7 +348,6 @@ var yygo = {};
             return 0;
         },
         /*}}}*/
-
         /** yygo.data.parseDataFromList {{{
          * Parse the data of the selected game in list.
          *
@@ -389,7 +371,6 @@ var yygo = {};
             });
         },
         /*}}}*/
-
         /** yygo.data.setLastNode {{{
          * Define the last node of the current branch.
          */
@@ -405,10 +386,8 @@ var yygo = {};
             this.lastnode = lastnode;
         }
         /*}}}*/
-
     };
     /*}}}*/
-
     /** yygo.view {{{
      * View part of the yygo namespace, where we treat all the rendering.
      *
@@ -422,23 +401,126 @@ var yygo = {};
      * @property {Number}   sizegoban       Size of goban in pixels.
      */
     yygo.view = {
-
         // Properties.
-
         orientation:    '',
-
         comtoshow:      true,
         redraw:         false,
         showborders:    true,
         showcomments:   true,
-
         sizecell:       0,
         sizegoban:      0,
 
         // Methods.
-
         // Construction/insertion of html code.
+        /** yygo.view.makeComments {{{
+         * Create and insert comments html code.
+         */
+        makeComments: function () {
+            var node =      yygo.data.curnode,
+                branch =    yygo.data.curbranch,
+                comments =  document.getElementById('comments'),
+                html =      '',
+                nameregex = /^(.+?):/gm,
+                comment,
+                clen,
+                chr,
+                i;
 
+            if (yygo.data.game[node][branch].C !== undefined) {
+                comment = yygo.data.game[node][branch].C[0];
+            }
+            if (comment !== undefined) {
+                comment = comment.replace(nameregex, '<strong>$1</strong>:');
+                clen = comment.length;
+                for (i = 0; i < clen; i++) {
+                    chr = comment.charAt(i);
+                    if (chr === '\n') { // Translate new line.
+                        html += '<br/>';
+                    } else {
+                        html += chr;
+                    }
+                }
+            }
+            
+            comments.innerHTML = html; // Insert html.
+        },
+        /*}}}*/
+        /** yygo.view.makeGameInfos {{{
+         * Create and insert informations html code.
+         */
+        makeGameInfos: function () {
+            var infos =         yygo.data.game[0][0],
+                gameinfosbox =  document.getElementById('gameinfosbox'),
+                gameblack =     document.getElementById('gameblack'),
+                gamewhite =     document.getElementById('gamewhite'),
+                gameresult =    document.getElementById('gameresult'),
+                gamedate =      document.getElementById('gamedate'),
+                gameplace =     document.getElementById('gameplace'),
+                gameevent =     document.getElementById('gameevent'),
+                gamename =      document.getElementById('gamename'),
+                gamerules =     document.getElementById('gamerules'),
+                gamekomi =      document.getElementById('gamekomi'),
+                gametime =      document.getElementById('gametime'),
+                gameovertime =  document.getElementById('gameovertime'),
+                gameannotator = document.getElementById('gameannotator'),
+                gamescribe =    document.getElementById('gamescribe'),
+                gamesource =    document.getElementById('gamesource'),
+                gamecopyright = document.getElementById('gamecopyright'),
+                gamecomment =   document.getElementById('gamecomment');
+
+            function insertInfo(info, element) {
+                var infos = yygo.data.game[0][0];
+
+                if (infos[info] !== undefined) {
+                    element.textContent = infos[info];
+                } else {
+                    element.textContent = '';
+                }
+            }
+
+            if (infos.PB !== undefined) {
+                gameblack.textContent = infos.PB;
+                if (infos.BR !== undefined) {
+                    gameblack.textContent += ' [' + infos.BR + ']';
+                }
+                if (infos.BT !== undefined) {
+                    gameblack.textContent += ' (' + infos.BT + ')';
+                }
+            } else {
+                gameblack.textContent = '';
+            }
+            if (infos.PW !== undefined) {
+                gamewhite.textContent = infos.PW;
+                if (infos.WR !== undefined) {
+                    gamewhite.textContent += ' [' + infos.WR + ']';
+                }
+                if (infos.WT !== undefined) {
+                    gamewhite.textContent += ' (' + infos.WT + ')';
+                }
+            } else {
+                gamewhite.textContent = '';
+            }
+            if (infos.TM !== undefined) {
+                gametime.textContent = secToTime(infos.TM);
+            } else {
+                gametime.textContent = '';
+            }
+
+            insertInfo('RE', gameresult);
+            insertInfo('DT', gamedate);
+            insertInfo('PC', gameplace);
+            insertInfo('EV', gameevent);
+            insertInfo('GN', gamename);
+            insertInfo('RU', gamerules);
+            insertInfo('KM', gamekomi);
+            insertInfo('OT', gameovertime);
+            insertInfo('AN', gameannotator);
+            insertInfo('US', gamescribe);
+            insertInfo('SO', gamesource);
+            insertInfo('CP', gamecopyright);
+            insertInfo('GC', gamecomment);
+        },
+        /*}}}*/
         /** yygo.view.makeGoban {{{
          * Create and insert goban html code. This include the borders and
          * the grid.
@@ -550,144 +632,6 @@ var yygo = {};
             yygo.events.makeGobanBinds();
         },
         /*}}}*/
-
-        /** yygo.view.makeComments {{{
-         * Create and insert comments html code.
-         */
-        makeComments: function () {
-            var node =      yygo.data.curnode,
-                branch =    yygo.data.curbranch,
-                comments =  document.getElementById('comments'),
-                html =      '',
-                nameregex = /^(.+?):/gm,
-                comment,
-                clen,
-                chr,
-                i;
-
-            if (yygo.data.game[node][branch].C !== undefined) {
-                comment = yygo.data.game[node][branch].C[0];
-            }
-            if (comment !== undefined) {
-                comment = comment.replace(nameregex, '<strong>$1</strong>:');
-                clen = comment.length;
-                for (i = 0; i < clen; i++) {
-                    chr = comment.charAt(i);
-                    if (chr === '\n') { // Translate new line.
-                        html += '<br/>';
-                    } else {
-                        html += chr;
-                    }
-                }
-            }
-            
-            comments.innerHTML = html; // Insert html.
-        },
-        /*}}}*/
-
-        /** yygo.view.makeGameInfos {{{
-         * Create and insert informations html code.
-         */
-        makeGameInfos: function () {
-            var infos =         yygo.data.game[0][0],
-                gameinfosbox =  document.getElementById('gameinfosbox'),
-                gameblack =     document.getElementById('gameblack'),
-                gamewhite =     document.getElementById('gamewhite'),
-                gameresult =    document.getElementById('gameresult'),
-                gamedate =      document.getElementById('gamedate'),
-                gameplace =     document.getElementById('gameplace'),
-                gameevent =     document.getElementById('gameevent'),
-                gamename =      document.getElementById('gamename'),
-                gamerules =     document.getElementById('gamerules'),
-                gamekomi =      document.getElementById('gamekomi'),
-                gametime =      document.getElementById('gametime'),
-                gameovertime =  document.getElementById('gameovertime'),
-                gameannotator = document.getElementById('gameannotator'),
-                gamescribe =    document.getElementById('gamescribe'),
-                gamesource =    document.getElementById('gamesource'),
-                gamecopyright = document.getElementById('gamecopyright'),
-                gamecomment =   document.getElementById('gamecomment');
-
-            function insertInfo(info, element) {
-                var infos = yygo.data.game[0][0];
-
-                if (infos[info] !== undefined) {
-                    element.textContent = infos[info];
-                } else {
-                    element.textContent = '';
-                }
-            }
-
-            if (infos.PB !== undefined) {
-                gameblack.textContent = infos.PB;
-                if (infos.BR !== undefined) {
-                    gameblack.textContent += ' [' + infos.BR + ']';
-                }
-                if (infos.BT !== undefined) {
-                    gameblack.textContent += ' (' + infos.BT + ')';
-                }
-            } else {
-                gameblack.textContent = '';
-            }
-            if (infos.PW !== undefined) {
-                gamewhite.textContent = infos.PW;
-                if (infos.WR !== undefined) {
-                    gamewhite.textContent += ' [' + infos.WR + ']';
-                }
-                if (infos.WT !== undefined) {
-                    gamewhite.textContent += ' (' + infos.WT + ')';
-                }
-            } else {
-                gamewhite.textContent = '';
-            }
-            if (infos.TM !== undefined) {
-                gametime.textContent = secToTime(infos.TM);
-            } else {
-                gametime.textContent = '';
-            }
-
-            insertInfo('RE', gameresult);
-            insertInfo('DT', gamedate);
-            insertInfo('PC', gameplace);
-            insertInfo('EV', gameevent);
-            insertInfo('GN', gamename);
-            insertInfo('RU', gamerules);
-            insertInfo('KM', gamekomi);
-            insertInfo('OT', gameovertime);
-            insertInfo('AN', gameannotator);
-            insertInfo('US', gamescribe);
-            insertInfo('SO', gamesource);
-            insertInfo('CP', gamecopyright);
-            insertInfo('GC', gamecomment);
-        },
-        /*}}}*/
-
-        /** yygo.view.updatePlayersInfos {{{
-         * Update players time and score.
-         */
-        updatePlayersInfos: function () {
-            var node =          yygo.data.curnode,
-                branch =        yygo.data.curbranch,
-                game =          yygo.data.game[node][branch],
-                blackscore =    document.getElementById('blackscore'),
-                blacktime =     document.getElementById('blacktime'),
-                whitescore =    document.getElementById('whitescore'),
-                whitetime =     document.getElementById('whitetime');
-
-            // Update scores.
-            blackscore.textContent = game.score.B;
-            whitescore.textContent = game.score.W;
-
-            // Update time.
-            if (game.BL !== undefined) {
-                blacktime.textContent = secToTime(game.BL);
-            }
-            if (game.WL !== undefined) {
-                whitetime.textContent = secToTime(game.WL);
-            }
-        },
-        /*}}}*/
-
         /** yygo.view.makeVariations {{{
          * Create and insert variations html code.
          */
@@ -742,7 +686,31 @@ var yygo = {};
             }
         },
         /*}}}*/
+        /** yygo.view.updatePlayersInfos {{{
+         * Update players time and score.
+         */
+        updatePlayersInfos: function () {
+            var node =          yygo.data.curnode,
+                branch =        yygo.data.curbranch,
+                game =          yygo.data.game[node][branch],
+                blackscore =    document.getElementById('blackscore'),
+                blacktime =     document.getElementById('blacktime'),
+                whitescore =    document.getElementById('whitescore'),
+                whitetime =     document.getElementById('whitetime');
 
+            // Update scores.
+            blackscore.textContent = game.score.B;
+            whitescore.textContent = game.score.W;
+
+            // Update time.
+            if (game.BL !== undefined) {
+                blacktime.textContent = secToTime(game.BL);
+            }
+            if (game.WL !== undefined) {
+                whitetime.textContent = secToTime(game.WL);
+            }
+        },
+        /*}}}*/
         /** yygo.view.setPlayersInfos {{{
          * Insert players names, starting scores and times.
          */
@@ -787,7 +755,6 @@ var yygo = {};
         /*}}}*/
 
         // Display.
-
         /** yygo.view.drawInterface {{{
          * Draw the goban and the panel.
          *
@@ -835,18 +802,6 @@ var yygo = {};
             fn();
         },
         /*}}}*/
-
-        /** yygo.view.setCommentsTop {{{
-         * Set comments top at bottom of top panel part.
-         */
-        setCommentsTop: function () {
-            var toppanel =  document.getElementById('toppanel'),
-                comments =  document.getElementById('comments');
-        
-            comments.style.top = toppanel.offsetHeight + 5 + 'px';
-        },
-        /*}}}*/
-
         /** yygo.view.emptyGoban {{{
          * Empty the goban of all stones, symbols, labels.
          */
@@ -873,7 +828,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.view.insertSymbolSvg {{{
          * Insert a symbol in a cell using svg format.
          *
@@ -906,7 +860,6 @@ var yygo = {};
             stone.innerHTML = svg;
         },
         /*}}}*/
-
         /** yygo.view.placeStones {{{
          * Place the stones and kos of the actual state on the goban.
          * Also remove links of those to make them unplayable moves.
@@ -942,7 +895,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.view.placeSymbols {{{
          * Place the symbols of the actual state on the goban.
          */
@@ -1013,7 +965,16 @@ var yygo = {};
             }
         },
         /*}}}*/
-
+        /** yygo.view.setCommentsTop {{{
+         * Set comments top at bottom of top panel part.
+         */
+        setCommentsTop: function () {
+            var toppanel =  document.getElementById('toppanel'),
+                comments =  document.getElementById('comments');
+        
+            comments.style.top = toppanel.offsetHeight + 5 + 'px';
+        },
+        /*}}}*/
         /** yygo.view.setGobanSize {{{
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
@@ -1061,64 +1022,24 @@ var yygo = {};
             });
         },
         /*}}}*/
-
-        /** yygo.view.toggleNavButtons {{{
-         * Alternate active state of navigation buttons.
+        /** yygo.view.showGameInfos {{{
+         * Alternate the display of the current game infos.
+         *
+         * @param {Boolean} show Show page.
          */
-        toggleNavButtons: function () {
-            var curnode =       yygo.data.curnode,
-                lastnode =      yygo.data.lastnode,
-                butstart =     document.getElementById('butstart'),
-                butprev =      document.getElementById('butprev'),
-                butfastprev =  document.getElementById('butfastprev'),
-                butnext =      document.getElementById('butnext'),
-                butfastnext =  document.getElementById('butfastnext'),
-                butend =       document.getElementById('butend');
+        showGameInfos: function (show) {
+            var gameinfos = document.getElementById('gameinfos');
 
-            // Activate all buttons.
-            butstart.classList.remove('disabled');
-            butprev.classList.remove('disabled');
-            butfastprev.classList.remove('disabled');
-            butnext.classList.remove('disabled');
-            butfastnext.classList.remove('disabled');
-            butend.classList.remove('disabled');
-
-            // We are at the start, make rewind buttons inactive.
-            if (curnode === 0) {
-                butstart.classList.add('disabled');
-                butprev.classList.add('disabled');
-                butfastprev.classList.add('disabled');
-            }
-            // We are at the end, make forward buttons inactive.
-            if (curnode === lastnode) {
-                butnext.classList.add('disabled');
-                butfastnext.classList.add('disabled');
-                butend.classList.add('disabled');
+            if (show) {
+                yygo.view.showGoban(false);
+                yygo.view.showMenu(false);
+                gameinfos.style.display = 'block';
+            } else {
+                gameinfos.style.display = 'none';
+                yygo.view.showGoban(true);
             }
         },
         /*}}}*/
-
-        /** yygo.view.toggleComments {{{
-         * Alternate the display of the comments.
-         */
-        toggleComments: function () {
-            var comments =  document.getElementById('comments'),
-                comment =   document.getElementById('comment');
-
-            if (this.showcomments && this.comtoshow) {
-                comments.style.display = 'block';
-            } else {
-                comments.style.display = 'none';
-            }
-
-            if (this.comtoshow) {
-                comment.classList.remove('disabled');
-            } else {
-                comment.classList.add('disabled');
-            }
-        },
-        /*}}}*/
-
         /** yygo.view.showGoban {{{
          * Alternate the display of the goban and panel.
          *
@@ -1138,42 +1059,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
-        /** yygo.view.showMenu {{{
-         * Alternate the display of the options menu.
-         *
-         * @param {Boolean} show Show menu.
-         */
-        showMenu: function (show) {
-            var menucontainer = document.getElementById('menucontainer'),
-                menumask =      document.getElementById('menumask');
-
-            if (show) {
-                menucontainer.style.display = 'block';
-                menumask.style.display = 'block';
-            } else {
-                menucontainer.style.display = 'none';
-                menumask.style.display = 'none';
-            }
-        },
-        /*}}}*/
-
-        /** yygo.view.showLoading {{{
-         * Alternate the display of Loading...
-         *
-         * @param {Boolean} show Loading...
-         */
-        showLoading: function (show) {
-            var loading = document.getElementById('loading');
-
-            if (show) {
-                loading.style.display = 'block';
-            } else {
-                loading.style.display = 'none';
-            }
-        },
-        /*}}}*/
-
         /** yygo.view.showLoad {{{
          * Alternate the display of the page to load a game.
          *
@@ -1233,7 +1118,39 @@ var yygo = {};
             }
         },
         /*}}}*/
+        /** yygo.view.showLoading {{{
+         * Alternate the display of Loading...
+         *
+         * @param {Boolean} show Loading...
+         */
+        showLoading: function (show) {
+            var loading = document.getElementById('loading');
 
+            if (show) {
+                loading.style.display = 'block';
+            } else {
+                loading.style.display = 'none';
+            }
+        },
+        /*}}}*/
+        /** yygo.view.showMenu {{{
+         * Alternate the display of the options menu.
+         *
+         * @param {Boolean} show Show menu.
+         */
+        showMenu: function (show) {
+            var menucontainer = document.getElementById('menucontainer'),
+                menumask =      document.getElementById('menumask');
+
+            if (show) {
+                menucontainer.style.display = 'block';
+                menumask.style.display = 'block';
+            } else {
+                menucontainer.style.display = 'none';
+                menumask.style.display = 'none';
+            }
+        },
+        /*}}}*/
         /** yygo.view.showSendSgf {{{
          * Alternate the display of the page to send sgf files.
          *
@@ -1254,7 +1171,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.view.showSettings {{{
          * Alternate the display of the user settings.
          *
@@ -1275,29 +1191,63 @@ var yygo = {};
             }
         },
         /*}}}*/
-
-        /** yygo.view.showGameInfos {{{
-         * Alternate the display of the current game infos.
-         *
-         * @param {Boolean} show Show page.
+        /** yygo.view.toggleComments {{{
+         * Alternate the display of the comments.
          */
-        showGameInfos: function (show) {
-            var gameinfos = document.getElementById('gameinfos');
+        toggleComments: function () {
+            var comments =  document.getElementById('comments'),
+                comment =   document.getElementById('comment');
 
-            if (show) {
-                yygo.view.showGoban(false);
-                yygo.view.showMenu(false);
-                gameinfos.style.display = 'block';
+            if (this.showcomments && this.comtoshow) {
+                comments.style.display = 'block';
             } else {
-                gameinfos.style.display = 'none';
-                yygo.view.showGoban(true);
+                comments.style.display = 'none';
+            }
+
+            if (this.comtoshow) {
+                comment.classList.remove('disabled');
+            } else {
+                comment.classList.add('disabled');
+            }
+        },
+        /*}}}*/
+        /** yygo.view.toggleNavButtons {{{
+         * Alternate active state of navigation buttons.
+         */
+        toggleNavButtons: function () {
+            var curnode =       yygo.data.curnode,
+                lastnode =      yygo.data.lastnode,
+                butstart =     document.getElementById('butstart'),
+                butprev =      document.getElementById('butprev'),
+                butfastprev =  document.getElementById('butfastprev'),
+                butnext =      document.getElementById('butnext'),
+                butfastnext =  document.getElementById('butfastnext'),
+                butend =       document.getElementById('butend');
+
+            // Activate all buttons.
+            butstart.classList.remove('disabled');
+            butprev.classList.remove('disabled');
+            butfastprev.classList.remove('disabled');
+            butnext.classList.remove('disabled');
+            butfastnext.classList.remove('disabled');
+            butend.classList.remove('disabled');
+
+            // We are at the start, make rewind buttons inactive.
+            if (curnode === 0) {
+                butstart.classList.add('disabled');
+                butprev.classList.add('disabled');
+                butfastprev.classList.add('disabled');
+            }
+            // We are at the end, make forward buttons inactive.
+            if (curnode === lastnode) {
+                butnext.classList.add('disabled');
+                butfastnext.classList.add('disabled');
+                butend.classList.add('disabled');
             }
         }
         /*}}}*/
-
     };
     /*}}}*/
-
     /** yygo.events {{{
      * Events part of the yygo namespace.
      *
@@ -1306,15 +1256,12 @@ var yygo = {};
      * @property {String}   screen      Actual screen to show.
      */
     yygo.events = {
-
         // Properties.
-
         mode:           'replay',
         username:       '',
         screen:         'goban',
 
         // Methods.
-
         /** yygo.events.init {{{
          * This is where we start.
          */
@@ -1335,7 +1282,6 @@ var yygo = {};
 
         },
         /*}}}*/
-
         /** yygo.events.loadGame {{{
          * Load a game.
          *
@@ -1382,7 +1328,6 @@ var yygo = {};
             });
         },
         /*}}}*/
-
         /** yygo.events.loadIntro {{{
          * Load introductive goban data and show it.
          */
@@ -1451,7 +1396,6 @@ var yygo = {};
             });
         },
         /*}}}*/
-
         /** yygo.events.makeBinds {{{
          * Bind events to the elements.
          */
@@ -1486,7 +1430,6 @@ var yygo = {};
                 yygo.view.setGobanSize(function () {});
             }, false);
             //}}}
-
             // Only registered users.{{{
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
@@ -1494,7 +1437,6 @@ var yygo = {};
                 }, false);
             }
             //}}}
-
             // Menu buttons.{{{
             menuload.addEventListener('click', function () {
                 yygo.view.showLoad(true);
@@ -1518,7 +1460,6 @@ var yygo = {};
                 event.stopPropagation();
             }, false);
             //}}}
-
             // Load page specific.{{{
             exitload.addEventListener('click', function () {
                 yygo.view.showLoad(false);
@@ -1535,7 +1476,6 @@ var yygo = {};
                 yygo.view.showLoad(true, true);
             }, false);
             //}}}
-
             // Settings specific.{{{
             exitsettings.addEventListener('click', function () {
                 yygo.view.showSettings(false);
@@ -1552,13 +1492,11 @@ var yygo = {};
                 });
             }, false);
             //}}}
-
             // Game infos specific.{{{
             exitgameinfos.addEventListener('click', function () {
                 yygo.view.showGameInfos(false);
             }, false);
             //}}}
-
             // Send sgf specific.{{{
             exitsendsgf.addEventListener('click', function () {
                 yygo.view.showSendSgf(false);
@@ -1588,7 +1526,6 @@ var yygo = {};
                 });
             }, false);
             //}}}
-
             // Buttons bar.{{{
             butmenu.addEventListener('click', function () {
                 yygo.view.showMenu(true);
@@ -1626,7 +1563,6 @@ var yygo = {};
             //}}}
         },
         /*}}}*/
-
         /** yygo.events.makeGobanBinds {{{
          * Assign each goban intersection a click event.
          */
@@ -1661,7 +1597,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.events.makeListBinds {{{
          * Assign a click event to each row in games list to load the proper
          * game index.
@@ -1694,7 +1629,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.events.makeVariationsBind {{{
          * Change branch according to selected variation.
          *
@@ -1719,7 +1653,6 @@ var yygo = {};
             }, false);
         },
         /*}}}*/
-
         /** yygo.events.navigateNode {{{
          * Navigate the game depending on the defined last branch.
          *
@@ -1815,7 +1748,6 @@ var yygo = {};
             yygo.view.placeSymbols();
         },
         /*}}}*/
-
         /** yygo.events.playStone {{{
          * User played a move.
          *
@@ -1856,7 +1788,6 @@ var yygo = {};
             }
         },
         /*}}}*/
-
         /** yygo.events.serverResponse {{{
          * Show the response of the server after sending a sgf file,
          * user login or user registration.
@@ -1896,7 +1827,6 @@ var yygo = {};
             }
         }
         /*}}}*/
-
     };
     /*}}}*/
 
