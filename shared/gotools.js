@@ -19,10 +19,7 @@
 (function (exports) {
     'use strict';
 
-    /**
-     * Private functions.
-     */
-
+    // Private functions.
     /** testKo {{{
      * Test if a move created a ko situation and add the only liberty to goban
      * as such.
@@ -53,7 +50,6 @@
         return goban;
     }
     /*}}}*/
-
     /** testLiberties {{{
      * Test liberties of a stone or a group of stones recursively.
      * Inspired by eidogo algorithm.
@@ -112,7 +108,6 @@
         return 2; // Same color or goban border.
     }
     /*}}}*/
-
     /** testCaptures {{{
      * Test if played stone will capture stone(s).
      *
@@ -142,7 +137,6 @@
         return prisonners;
     }
     /*}}}*/
-
     /** testIntersection {{{
      * Test goban intersection for liberties and set/remove firbidden moves
      * depending on current rule.
@@ -405,7 +399,6 @@
         }
     }
     /*}}}*/
-
     /** testSuicides {{{
      * Test if a move created a suicide situation for any color, or if it
      * removed such situation. Some rules permit suicides, so we need to
@@ -429,7 +422,6 @@
         return goban;
     }
     /*}}}*/
-
     /** gobanToStones {{{
      * Transform goban array to stones list.
      *
@@ -469,7 +461,6 @@
         return stones;
     }
     /*}}}*/
-
     /** stonesToGoban {{{
      * Transform stones list to a goban array.
      * b: black, w: white, k: ko.
@@ -513,7 +504,6 @@
         return goban;
     }
     /*}}}*/
-
     /** removePrisonners {{{
      * Remove captured stone(s) from the state.
      *
@@ -592,7 +582,6 @@
         return goban;
     }
     /*}}}*/
-
     /** getParentBranch {{{
      * Find the branch of which depends a given branch at a given node.
      *
@@ -613,10 +602,7 @@
     }
     /*}}}*/
 
-    /**
-     * Public functions.
-     */
-
+    // Public functions.
     /** addStones {{{
      * Add stones to goban.
      *
@@ -650,7 +636,6 @@
         return stones;
     };
     /*}}}*/
-
     /** playMove {{{
      * Play a stone, apply rules and return new stones list and number of
      * prisonners.
@@ -696,7 +681,6 @@
         return newstate;
     };
     /*}}}*/
-
     /** parseSgf {{{
      * Read sgf data and register keys/values, sorting the nodes (moves)
      * and branchs (variations).
@@ -830,7 +814,6 @@
         fn(sgfobj);
     };
     /*}}}*/
-
     /** buildSgf {{{
      * Build an sgf string from provided data.
      *
