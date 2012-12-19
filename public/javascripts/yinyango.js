@@ -12,6 +12,17 @@ var yygo = {}; // Namespace that contains all properties and methods.
     'use strict';
 
     // Utilities functions.
+    /** isEmpty {{{
+     * Test if an Object is empty.
+     * @link http://stackoverflow.com/a/7864800
+     *
+     * @param {Object} obj Object to check.
+     * @return {Boolean} TRUE if Object is empty.
+     */
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+    /*}}}*/
     /** jsonRequest {{{
      * Simple ajax request expecting json in response.
      *
@@ -36,17 +47,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
         xhr.open(method, url, true);
         xhr.send(data);
-    }
-    /*}}}*/
-    /** isEmpty {{{
-     * Test if an Object is empty.
-     * @link http://stackoverflow.com/a/7864800
-     *
-     * @param {Object} obj Object to check.
-     * @return {Boolean} TRUE if Object is empty.
-     */
-    function isEmpty(obj) {
-        return Object.keys(obj).length === 0;
     }
     /*}}}*/
     /** secToTime {{{
@@ -392,21 +392,12 @@ var yygo = {}; // Namespace that contains all properties and methods.
      * View part of the yygo namespace, where we treat all the rendering.
      *
      * @property {String}   orientation     Orientation of the screen.
-     * @property {Boolean}  comtoshow       There is comments to show.
-     * @property {Boolean}  redraw          We need to redraw the goban.
-     * @property {Boolean}  showborders     We must show the goban borders.
-     * @property {Boolean}  showcomments    We must show the comments.
-     * @property {Boolean}  showmenu        We must show the options menu.
      * @property {Number}   sizecell        Size of a goban cell in pixels.
      * @property {Number}   sizegoban       Size of goban in pixels.
      */
     yygo.view = {
         // Properties.
         orientation:    '',
-        comtoshow:      true,
-        redraw:         false,
-        showborders:    true,
-        showcomments:   true,
         sizecell:       0,
         sizegoban:      0,
 
@@ -758,9 +749,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
         /** yygo.view.drawInterface {{{
          * Draw the goban and the panel.
          *
-         * @param {Function} fn Callback.
+         * @param {Boolean}  redraw Do we need to redraw interface?
+         * @param {Function} fn     Callback.
          */
-        drawInterface: function (fn) {
+        drawInterface: function (redraw, fn) {
             var panel =         document.getElementById('panel'),
                 goban =         document.getElementById('goban'),
                 cells =         document.getElementsByClassName('cell'),
@@ -768,8 +760,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 fontsize =      this.sizecell / 1.5,
                 c;
 
-            if (this.redraw) { // Redraw only when needed.
-                this.redraw = false;
+            if (redraw) { // Redraw only when needed.
                 // Resize goban.
                 goban.style.height = this.sizegoban + 'px';
                 goban.style.width = this.sizegoban + 'px';
@@ -784,11 +775,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             // Place panel depending on orientation.
             if (this.orientation === 'horizontal') {
                 // Move goban on left side and place comments on the right.
-                if (this.showcomments && this.comtoshow) {
-                    goban.style.margin = 0;
-                } else {
-                    goban.style.margin = 'auto';
-                }
+                goban.style.margin = 0;
                 panel.style.top = 0;
                 panel.style.right = 0;
                 panel.style.left = this.sizegoban + 'px';
@@ -979,9 +966,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
          *
-         * @param {Function} fn Callback.
+         * @param {Boolean}  redraw Do we need to redraw interface?
+         * @param {Function} fn     Callback.
          */
-        setGobanSize: function (fn) {
+        setGobanSize: function (redraw, fn) {
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
                 winh =          window.innerHeight,
@@ -990,16 +978,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             if (winw < winh) {
                 this.orientation = 'vertical';
-                if (this.showcomments && this.comtoshow &&
-                        winh - 200 <= winw) {
+                if (winh - 200 <= winw) {
                     smaller = winh - 200;
                 } else {
                     smaller = winw;
                 }
             } else {
                 this.orientation = 'horizontal';
-                if (this.showcomments && this.comtoshow &&
-                        winw - 220 <= winh) {
+                if (winw - 220 <= winh) {
                     smaller = winw - 220;
                 } else {
                     smaller = winh;
@@ -1013,11 +999,11 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
             this.sizegoban = this.sizecell * (size + 2);
 
-            // Redraw if size changed or if asked.
-            if (this.sizegoban !== oldsizegoban || this.redraw) {
-                this.redraw = true;
+            // Redraw if size changed.
+            if (this.sizegoban !== oldsizegoban) {
+                redraw = true;
             }
-            this.drawInterface(function () {
+            this.drawInterface(redraw, function () {
                 fn();
             });
         },
@@ -1191,26 +1177,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.toggleComments {{{
-         * Alternate the display of the comments.
-         */
-        toggleComments: function () {
-            var comments =  document.getElementById('comments'),
-                comment =   document.getElementById('comment');
-
-            if (this.showcomments && this.comtoshow) {
-                comments.style.display = 'block';
-            } else {
-                comments.style.display = 'none';
-            }
-
-            if (this.comtoshow) {
-                comment.classList.remove('disabled');
-            } else {
-                comment.classList.add('disabled');
-            }
-        },
-        /*}}}*/
         /** yygo.view.toggleNavButtons {{{
          * Alternate active state of navigation buttons.
          */
@@ -1321,8 +1287,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             yygo.view.toggleNavButtons();
 
-            yygo.view.redraw = true;
-            yygo.view.setGobanSize(function () {
+            yygo.view.setGobanSize(true, function () {
                 yygo.view.showLoading(false);
                 yygo.view.showGoban(true);
             });
@@ -1389,8 +1354,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.makeGameInfos();
             yygo.view.setPlayersInfos();
 
-            yygo.view.redraw = true;
-            yygo.view.setGobanSize(function () {
+            yygo.view.setGobanSize(true, function () {
                 yygo.view.showLoading(false);
                 yygo.view.showGoban(true);
             });
