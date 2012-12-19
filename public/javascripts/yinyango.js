@@ -1232,6 +1232,44 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * This is where we start.
          */
         init: function () {
+            var introdata = {0: {0: {
+                'SZ': ['19'],
+                'RU': ['Japanese'],
+                'PB': ['yin'],
+                'PW': ['yang'],
+                'branchs': 1,
+                'AB': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
+                    'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
+                    'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
+                    'jk', 'jl', 'jm', 'jp', 'jq', 'jr', 'js', 'ka', 'kj', 'kk',
+                    'kl', 'km', 'kp', 'kq', 'kr', 'ks', 'la', 'lj', 'lk', 'll',
+                    'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'ma', 'mb', 'mi',
+                    'mj', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms',
+                    'nb', 'nc', 'nh', 'ni', 'nj', 'nk', 'nl', 'nm', 'nn', 'no',
+                    'np', 'nq', 'nr', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh',
+                    'oi', 'oj', 'ok', 'ol', 'om', 'on', 'oo', 'op', 'oq', 'or',
+                    'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pi', 'pj', 'pk', 'pl',
+                    'pm', 'pn', 'po', 'pp', 'pq', 'qd', 'qe', 'qf', 'qg', 'qh',
+                    'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 're', 'rf',
+                    'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'sg',
+                    'sh', 'si', 'sj', 'sk', 'sl', 'sm'],
+                'AW': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
+                    'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'cd',
+                    'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn',
+                    'co', 'cp', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj',
+                    'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dq', 'eb', 'ec', 'ed',
+                    'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek', 'el', 'em', 'en',
+                    'eo', 'ep', 'eq', 'er', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg',
+                    'fh', 'fi', 'fj', 'fk', 'fl', 'fq', 'fr', 'ga', 'gb', 'gc',
+                    'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gj', 'gk', 'gr', 'gs',
+                    'ha', 'hb', 'hc', 'hd', 'he', 'hf', 'hg', 'hh', 'hi', 'hj',
+                    'hs', 'ia', 'ib', 'ic', 'id', 'ig', 'ih', 'ii', 'ij', 'is',
+                    'ja', 'jb', 'jc', 'jd', 'jg', 'jh', 'ji', 'jn', 'jo', 'kb',
+                    'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
+                    'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
+                    'mg', 'mh', 'nd', 'ne', 'nf', 'ng']
+            } } };
+
             // Get user session if it still exist.
             jsonRequest('/session', 'GET', function (session) {
                 yygo.events.username = session.username;
@@ -1239,7 +1277,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.makeBinds();
                 if (session.data === '') {
                     // Load intro screen for guest and new users.
-                    yygo.events.loadIntro();
+                    yygo.events.loadGame(introdata);
                 } else {
                     // Load game with provided data.
                     yygo.events.loadGame(session.data);
@@ -1286,73 +1324,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.events.screen = 'goban';
 
             yygo.view.toggleNavButtons();
-
-            yygo.view.setGobanSize(true, function () {
-                yygo.view.showLoading(false);
-                yygo.view.showGoban(true);
-            });
-        },
-        /*}}}*/
-        /** yygo.events.loadIntro {{{
-         * Load introductive goban data and show it.
-         */
-        loadIntro: function () {
-            yygo.data.game = {0: {0: {
-                'RU': ['Japanese'],
-                'PB': 'yin',
-                'PW': 'yang',
-                'branchs': 1,
-                'score': {B: 0, W: 0}
-            } } };
-            yygo.data.stones = {0: {0: {
-                'B': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
-                    'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
-                    'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
-                    'jk', 'jl', 'jm', 'jp', 'jq', 'jr', 'js', 'ka', 'kj', 'kk',
-                    'kl', 'km', 'kp', 'kq', 'kr', 'ks', 'la', 'lj', 'lk', 'll',
-                    'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'ma', 'mb', 'mi',
-                    'mj', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms',
-                    'nb', 'nc', 'nh', 'ni', 'nj', 'nk', 'nl', 'nm', 'nn', 'no',
-                    'np', 'nq', 'nr', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh',
-                    'oi', 'oj', 'ok', 'ol', 'om', 'on', 'oo', 'op', 'oq', 'or',
-                    'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pi', 'pj', 'pk', 'pl',
-                    'pm', 'pn', 'po', 'pp', 'pq', 'qd', 'qe', 'qf', 'qg', 'qh',
-                    'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 're', 'rf',
-                    'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'sg',
-                    'sh', 'si', 'sj', 'sk', 'sl', 'sm'],
-                'W': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
-                    'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'cd',
-                    'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn',
-                    'co', 'cp', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj',
-                    'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dq', 'eb', 'ec', 'ed',
-                    'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek', 'el', 'em', 'en',
-                    'eo', 'ep', 'eq', 'er', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg',
-                    'fh', 'fi', 'fj', 'fk', 'fl', 'fq', 'fr', 'ga', 'gb', 'gc',
-                    'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gj', 'gk', 'gr', 'gs',
-                    'ha', 'hb', 'hc', 'hd', 'he', 'hf', 'hg', 'hh', 'hi', 'hj',
-                    'hs', 'ia', 'ib', 'ic', 'id', 'ig', 'ih', 'ii', 'ij', 'is',
-                    'ja', 'jb', 'jc', 'jd', 'jg', 'jh', 'ji', 'jn', 'jo', 'kb',
-                    'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
-                    'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
-                    'mg', 'mh', 'nd', 'ne', 'nf', 'ng'],
-                'BF': ['ke'],
-                'WF': ['io'],
-                'K': []
-            } } };
-
-            yygo.data.size = 19;
-
-            yygo.view.makeGoban();
-
-            yygo.view.placeStones();
-            yygo.view.placeSymbols();
-
-            this.mode = 'replay';
-            this.screen = 'goban';
-
-            yygo.view.toggleNavButtons();
-            yygo.view.makeGameInfos();
-            yygo.view.setPlayersInfos();
 
             yygo.view.setGobanSize(true, function () {
                 yygo.view.showLoading(false);
@@ -1749,45 +1720,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 } else {
                     yygo.data.addBranch(coord);
                 }
-            }
-        },
-        /*}}}*/
-        /** yygo.events.serverResponse {{{
-         * Show the response of the server after sending a sgf file,
-         * user login or user registration.
-         */
-        serverResponse: function () {
-            var locale =            yygo.data.locale,
-                serverresponse =    document.getElementById('serverresponse'),
-                response;
-
-            response = frames.resframe
-                .document.getElementsByTagName("body")[0].innerHTML;
-
-            if (response === 'invalidsgf') {
-                serverresponse.textContent = locale.invalidsgf;
-            } else if (response === 'sendsuccess') {
-                serverresponse.textContent = locale.sendsuccess;
-            } else if (response === 'sgfexist') {
-                serverresponse.textContent = locale.sgfexist;
-            } else if (response === 'invalidnick') {
-                serverresponse.textContent = locale.invalidnick;
-            } else if (response === 'invalidmail') {
-                serverresponse.textContent = locale.invalidmail;
-            } else if (response === 'nickexist') {
-                serverresponse.textContent = locale.nickexist;
-            } else if (response === 'regsuccess') {
-                serverresponse.textContent = locale.regsuccess;
-            } else if (response === 'wrong') {
-                serverresponse.textContent = locale.wrong;
-            } else if (response === 'login') {
-                this.username = document.getElementById('username').value;
-                this.screen = 'options';
-            } else if (response === 'logout') {
-                // Reload page after logout.
-                window.location.reload();
-            } else {
-                serverresponse.textContent = locale.error;
             }
         }
         /*}}}*/
