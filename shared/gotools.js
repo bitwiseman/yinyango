@@ -624,10 +624,11 @@
      * @param {Array}   add     Stone list to add/remove.
      * @param {Number}  size    Goban size.
      * @param {Object}  stones  Stones to modify.
+     * @param {String}  rule    Played rule.
      *
      * @return {Object} New stones after adding/removing stones.
      */
-    exports.addStones = function (color, add, size, stones) {
+    exports.addStones = function (color, add, size, stones, rule) {
         var addlen =    add.length,
             goban =     stonesToGoban(size, stones),
             i,
@@ -638,6 +639,11 @@
             x = add[i].charCodeAt(0) - 97;
             y = add[i].charCodeAt(1) - 97;
             goban[x][y] = color;
+            // TODO: Find a faster method, this is too CPU intensive.
+            //testIntersection(goban, x - 1, y, rule);
+            //testIntersection(goban, x + 1, y, rule);
+            //testIntersection(goban, x, y - 1, rule);
+            //testIntersection(goban, x, y + 1, rule);
         }
         stones = gobanToStones(size, goban);
 

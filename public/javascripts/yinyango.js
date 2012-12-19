@@ -277,13 +277,13 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     }
                     break;
                 case 'AB':
-                    stones = gotools.addStones('B', value, size, stones);
+                    stones = gotools.addStones('B', value, size, stones, rule);
                     break;
                 case 'AW':
-                    stones = gotools.addStones('W', value, size, stones);
+                    stones = gotools.addStones('W', value, size, stones, rule);
                     break;
                 case 'AE':
-                    stones = gotools.addStones('', value, size, stones);
+                    stones = gotools.addStones('', value, size, stones, rule);
                     break;
                 }
                 return stones;
@@ -302,7 +302,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                                 yygo.data.getParentBranch(node - 1, branch);
                             if (node > 0) {
                                 prevstones = stones[node - 1][parentbranch];
-                                prevscore = this.game[node - 1][parentbranch].score; 
+                                prevscore =
+                                    this.game[node - 1][parentbranch].score; 
                             } else {
                                 prevstones = stones[node][branch];
                                 prevscore = this.game[node][branch].score; 
@@ -1233,11 +1234,11 @@ var yygo = {}; // Namespace that contains all properties and methods.
          */
         init: function () {
             var introdata = {0: {0: {
+                'branchs': 1,
                 'SZ': ['19'],
                 'RU': ['Japanese'],
                 'PB': ['yin'],
                 'PW': ['yang'],
-                'branchs': 1,
                 'AB': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
                     'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
                     'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
