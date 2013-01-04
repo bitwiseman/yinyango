@@ -122,10 +122,20 @@
         var prisonners = [];
 
         function checkDirection(x, y) {
-            var test = testLiberties(color, x, y, goban, []);
+            var test = testLiberties(color, x, y, goban, []),
+                prisonner,
+                prilen,
+                i;
 
             if (test[0] === 0) { // No liberties found.
-                prisonners = prisonners.concat(test[1]);
+                prilen = test[1].length;
+                // Only add prisonners not already in list.
+                for (i = 0; i < prilen; i++) {
+                    prisonner = test[1][i];
+                    if (prisonners.indexOf(prisonner) === -1) {
+                        prisonners.push(prisonner);
+                    }
+                }
             }
         }
         // Test each direction.
