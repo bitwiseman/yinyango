@@ -10,6 +10,7 @@
     "jade": "*",
     "lingua": "*",
     "mongoose": "*",
+    "socket.io": "*",
     "validator": "*"
   }
 }

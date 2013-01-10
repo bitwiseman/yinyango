@@ -17,6 +17,9 @@ var express =       require('express'),
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
     app =           express(),
+    http =          require('http'),
+    server =        http.createServer(app),
+    io =            require('socket.io').listen(server),
     db =            mongoose.createConnection('localhost', 'yinyango');
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
@@ -451,7 +454,7 @@ app.post('/settings', function (req, res) {
 /** init {{{
  * Server init.
  */
-app.listen(3000, function () {
+server.listen(3000, function () {
     console.log('Express server listening on port 3000');
 });
 /*}}}*/
