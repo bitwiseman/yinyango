@@ -451,6 +451,14 @@ app.post('/settings', function (req, res) {
 });
 /*}}}*/
 /*}}}*/
+/* Sockets.io. {{{*/
+io.sockets.on('connection', function (socket) {
+    socket.emit('msg', { msg: 'socket connected' });
+    socket.on('msg', function (data) {
+        console.log(data.msg);
+    });
+});
+/*}}}*/
 /** init {{{
  * Server init.
  */

@@ -1267,7 +1267,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
                     'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
                     'mg', 'mh', 'nd', 'ne', 'nf', 'ng']
-            } } };
+                } } },
+                socket;
 
             // Get user session if it still exist.
             jsonRequest('/session', 'GET', function (session) {
@@ -1281,6 +1282,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     // Load game with provided data.
                     yygo.events.loadGame(session.data);
                 }
+                socket = io.connect('http://localhost:3000');
+                socket.on('connect', function () {
+                    socket.emit('msg', { msg: 'client connected' });
+                });
+                socket.on('msg', function (data) {
+                    console.log(data.msg);
+                    socket.emit('msg', { msg: 'msg received' });
+                });
             });
 
         },
