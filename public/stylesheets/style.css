@@ -89,8 +89,7 @@ body {/*{{{*/
  */
 #sendsgf, #errorsendsgf, #errorinvalid, #errormd5, #game, #gameinfos,
 #sendsuccess, #settings, #settingssaved, #load, #loading, #menuback,
-#menugameinfos, #variations,
-.inputhelp {
+#menugameinfos, #menuloadlatest, #variations, .inputhelp {
     display: none;
 }
 /*}}}*/

@@ -34,6 +34,7 @@
     "lesson":           "Lesson",
     "load":             "Load a game",
     "loading":          "Loading...",
+    "loadlatest":       "Load latest viewed game",
     "login":            "Login",
     "logout":           "Logout",
     "menu":             "Menu",

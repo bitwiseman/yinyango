@@ -1136,6 +1136,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     // Load intro screen for guest and new users.
                     //yygo.events.loadGame(introdata);
                 } else {
+                    // Add a button to load latest viewed game.
+                    document.getElementById('menuloadlatest').
+                        style.display = 'block';
                     // Load game with provided data.
                     //yygo.events.loadGame(session.data);
                 }
