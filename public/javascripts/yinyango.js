@@ -399,6 +399,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
     yygo.view = {
         // Properties.
         orientation:    '',
+        screen:         'menu',
         sizecell:       0,
         sizegoban:      0,
 
@@ -1007,52 +1008,13 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.drawInterface(redraw, fn);
         },
         /*}}}*/
-        /** yygo.view.showGameInfos {{{
-         * Alternate the display of the current game infos.
-         *
-         * @param {Boolean} show Show page.
-         */
-        showGameInfos: function (show) {
-            var gameinfos = document.getElementById('gameinfos');
-
-            if (show) {
-                yygo.view.showGoban(false);
-                yygo.view.showMenu(false);
-                gameinfos.style.display = 'block';
-            } else {
-                gameinfos.style.display = 'none';
-                yygo.view.showGoban(true);
-            }
-        },
-        /*}}}*/
-        /** yygo.view.showGoban {{{
-         * Alternate the display of the goban and panel.
-         *
-         * @param {Boolean} show Show goban and panel.
-         */
-        showGoban: function (show) {
-            var goban = document.getElementById('goban'),
-                panel = document.getElementById('panel');
-
-            if (show) {
-                goban.style.display = 'block';
-                panel.style.display = 'block';
-                this.setCommentsTop();
-            } else {
-                goban.style.display = 'none';
-                panel.style.display = 'none';
-            }
-        },
-        /*}}}*/
-        /** yygo.view.showLoad {{{
+        /** yygo.view.showLoadList {{{
          * Alternate the display of the page to load a game.
          *
-         * @param {Boolean} show Show page.
          * @param {Boolean} refresh Force list refresh.
          */
-        showLoad: function (show, refresh) {
-            var load =      document.getElementById('load'),
-                prevpage =  document.getElementById('prevpage'),
+        showLoadList: function (refresh) {
+            var prevpage =  document.getElementById('prevpage'),
                 nextpage =  document.getElementById('nextpage'),
                 gameslist = document.getElementById('gameslist'),
                 page =      yygo.data.listpage,
@@ -1064,116 +1026,49 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 refresh = false;
             }
 
-            if (show) {
-                if (page === 0) {
-                    prevpage.style.display = 'none';
-                } else {
-                    prevpage.style.display = 'inline';
-                }
-                if (isEmpty(list) || refresh) { // Get fresh list from server.
-                    jsonRequest('/gameslist/' + page, 'GET', function (data) {
-                        var datalen = data.length,
-                            ids = [];
-
-                        // More than one page.
-                        if (datalen === 11) {
-                            nextpage.style.display = 'inline';
-                            datalen--;
-                            data.pop();
-                        } else {
-                            nextpage.style.display = 'none';
-                        }
-                        yygo.data.gameslist = data;
-                        for (i = 0; i < datalen; i++) {
-                            html += '<tr><td><a class="linkbutton brown2" ' +
-                                'href="#">' + data[i].name + '</a></td></tr>';
-                            ids.push(data[i]._id);
-                        }
-                        gameslist.innerHTML = html;
-                        // Bind click events to list.
-                        yygo.events.makeListBinds(ids);
-                    });
-                }
-                yygo.view.showGoban(false);
-                yygo.view.showMenu(false);
-                load.style.display = 'block';
+            if (page === 0) {
+                prevpage.style.display = 'none';
             } else {
-                load.style.display = 'none';
-                yygo.view.showGoban(true);
+                prevpage.style.display = 'inline';
+            }
+            if (isEmpty(list) || refresh) { // Get fresh list from server.
+                jsonRequest('/gameslist/' + page, 'GET', function (data) {
+                    var datalen = data.length,
+                        ids = [];
+
+                    // More than one page.
+                    if (datalen === 11) {
+                        nextpage.style.display = 'inline';
+                        datalen--;
+                        data.pop();
+                    } else {
+                        nextpage.style.display = 'none';
+                    }
+                    yygo.data.gameslist = data;
+                    for (i = 0; i < datalen; i++) {
+                        html += '<tr><td><a class="linkbutton brown2" ' +
+                            'href="#">' + data[i].name + '</a></td></tr>';
+                        ids.push(data[i]._id);
+                    }
+                    gameslist.innerHTML = html;
+                    // Bind click events to list.
+                    yygo.events.makeListBinds(ids);
+                });
             }
         },
         /*}}}*/
-        /** yygo.view.showLoading {{{
-         * Alternate the display of Loading...
+        /** yygo.view.showScreen {{{
+         * Switch to another screen.
          *
-         * @param {Boolean} show Loading...
+         * @param {String} show Element reference to screen to show.
          */
-        showLoading: function (show) {
-            var loading = document.getElementById('loading');
+        showScreen: function (show) {
+            var hideelem = document.getElementById(this.screen),
+                showelem = document.getElementById(show);
 
-            if (show) {
-                loading.style.display = 'block';
-            } else {
-                loading.style.display = 'none';
-            }
-        },
-        /*}}}*/
-        /** yygo.view.showMenu {{{
-         * Alternate the display of the options menu.
-         *
-         * @param {Boolean} show Show menu.
-         */
-        showMenu: function (show) {
-            var menucontainer = document.getElementById('menucontainer'),
-                menumask =      document.getElementById('menumask');
-
-            if (show) {
-                menucontainer.style.display = 'block';
-                menumask.style.display = 'block';
-            } else {
-                menucontainer.style.display = 'none';
-                menumask.style.display = 'none';
-            }
-        },
-        /*}}}*/
-        /** yygo.view.showSendSgf {{{
-         * Alternate the display of the page to send sgf files.
-         *
-         * @param {Boolean} show Show page.
-         */
-        showSendSgf: function (show) {
-            var sendsgf =       document.getElementById('sendsgf'),
-                answersendsgf = document.getElementById('answersendsgf');
-
-            if (show) {
-                yygo.view.showGoban(false);
-                yygo.view.showMenu(false);
-                sendsgf.style.display = 'block';
-                answersendsgf.style.display = 'none';
-            } else {
-                sendsgf.style.display = 'none';
-                yygo.view.showGoban(true);
-            }
-        },
-        /*}}}*/
-        /** yygo.view.showSettings {{{
-         * Alternate the display of the user settings.
-         *
-         * @param {Boolean} show Show page.
-         */
-        showSettings: function (show) {
-            var settings =      document.getElementById('settings'),
-                settingssaved = document.getElementById('settingssaved');
-
-            if (show) {
-                yygo.view.showGoban(false);
-                yygo.view.showMenu(false);
-                settings.style.display = 'block';
-                settingssaved.style.display = 'none';
-            } else {
-                settings.style.display = 'none';
-                yygo.view.showGoban(true);
-            }
+            hideelem.style.display = 'none';
+            showelem.style.display = 'block';
+            this.screen = show;
         },
         /*}}}*/
         /** yygo.view.toggleNavButtons {{{
@@ -1224,51 +1119,13 @@ var yygo = {}; // Namespace that contains all properties and methods.
         // Properties.
         mode:           'replay',
         username:       '',
-        screen:         'goban',
 
         // Methods.
         /** yygo.events.init {{{
          * This is where we start.
          */
         init: function () {
-            var introdata = {0: {0: {
-                'branchs': 1,
-                'SZ': ['19'],
-                'RU': ['Japanese'],
-                'PB': ['yin'],
-                'PW': ['yang'],
-                'AB': ['fm', 'fn', 'fo', 'fp', 'gl', 'gm', 'gn', 'go', 'gp',
-                    'gq', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'ie',
-                    'if', 'ik', 'il', 'im', 'in', 'ip', 'iq', 'ir', 'je', 'jf',
-                    'jk', 'jl', 'jm', 'jp', 'jq', 'jr', 'js', 'ka', 'kj', 'kk',
-                    'kl', 'km', 'kp', 'kq', 'kr', 'ks', 'la', 'lj', 'lk', 'll',
-                    'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'ma', 'mb', 'mi',
-                    'mj', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms',
-                    'nb', 'nc', 'nh', 'ni', 'nj', 'nk', 'nl', 'nm', 'nn', 'no',
-                    'np', 'nq', 'nr', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh',
-                    'oi', 'oj', 'ok', 'ol', 'om', 'on', 'oo', 'op', 'oq', 'or',
-                    'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pi', 'pj', 'pk', 'pl',
-                    'pm', 'pn', 'po', 'pp', 'pq', 'qd', 'qe', 'qf', 'qg', 'qh',
-                    'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 're', 'rf',
-                    'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'sg',
-                    'sh', 'si', 'sj', 'sk', 'sl', 'sm'],
-                'AW': ['ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'be', 'bf',
-                    'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'cd',
-                    'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn',
-                    'co', 'cp', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj',
-                    'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dq', 'eb', 'ec', 'ed',
-                    'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek', 'el', 'em', 'en',
-                    'eo', 'ep', 'eq', 'er', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg',
-                    'fh', 'fi', 'fj', 'fk', 'fl', 'fq', 'fr', 'ga', 'gb', 'gc',
-                    'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gj', 'gk', 'gr', 'gs',
-                    'ha', 'hb', 'hc', 'hd', 'he', 'hf', 'hg', 'hh', 'hi', 'hj',
-                    'hs', 'ia', 'ib', 'ic', 'id', 'ig', 'ih', 'ii', 'ij', 'is',
-                    'ja', 'jb', 'jc', 'jd', 'jg', 'jh', 'ji', 'jn', 'jo', 'kb',
-                    'kc', 'kd', 'kf', 'kg', 'kh', 'ki', 'kn', 'ko', 'lb', 'lc',
-                    'ld', 'le', 'lf', 'lg', 'lh', 'li', 'mc', 'md', 'me', 'mf',
-                    'mg', 'mh', 'nd', 'ne', 'nf', 'ng']
-                } } },
-                socket;
+            var socket;
 
             // Get user session if it still exist.
             jsonRequest('/session', 'GET', function (session) {
@@ -1277,10 +1134,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.makeBinds();
                 if (session.data === '') {
                     // Load intro screen for guest and new users.
-                    yygo.events.loadGame(introdata);
+                    //yygo.events.loadGame(introdata);
                 } else {
                     // Load game with provided data.
-                    yygo.events.loadGame(session.data);
+                    //yygo.events.loadGame(session.data);
                 }
                 socket = io.connect('http://localhost:3000');
                 socket.on('connect', function () {
@@ -1333,9 +1190,13 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             yygo.view.toggleNavButtons();
 
+            // Activate menu buttons related to game.
+            document.getElementById('menuback').style.display = 'block';
+            document.getElementById('menugameinfos').style.display = 'block';
+
             yygo.view.setGobanSize(true, function () {
-                yygo.view.showLoading(false);
-                yygo.view.showGoban(true);
+                yygo.view.showScreen('game');
+                yygo.view.setCommentsTop();
             });
         },
         /*}}}*/
@@ -1344,7 +1205,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
          */
         makeBinds: function () {
             var menu =              document.getElementById('menu'),
-                menucontainer =     document.getElementById('menucontainer'),
                 menuload =          document.getElementById('menuload'),
                 menusendsgf =       document.getElementById('menusendsgf'),
                 menusettings =      document.getElementById('menusettings'),
@@ -1376,52 +1236,55 @@ var yygo = {}; // Namespace that contains all properties and methods.
             // Only registered users.{{{
             if (yygo.events.username !== 'guest') {
                 menusendsgf.addEventListener('click', function () {
-                    yygo.view.showSendSgf(true);
+                    // Hide previous answer from server.
+                    document.getElementById('answersendsgf').
+                        style.display = 'none';
+
+                    yygo.view.showScreen('sendsgf');
                 }, false);
             }
             //}}}
             // Menu buttons.{{{
             menuload.addEventListener('click', function () {
-                yygo.view.showLoad(true);
+                yygo.view.showScreen('load');
+                yygo.view.showLoadList();
             }, false);
             menusettings.addEventListener('click', function () {
-                yygo.view.showSettings(true);
+                // Hide previous answer from server.
+                document.getElementById('settingssaved').
+                    style.display = 'none';
+                yygo.view.showScreen('settings');
             }, false);
             menugameinfos.addEventListener('click', function () {
-                yygo.view.showGameInfos(true);
+                yygo.view.showScreen('gameinfos');
             }, false);
             menulogout.addEventListener('click', function () {
                 window.location.href = '/logout';
             }, false);
             menuback.addEventListener('click', function () {
-                yygo.view.showMenu(false);
-            }, false);
-            menucontainer.addEventListener('click', function () {
-                yygo.view.showMenu(false);
-            }, false);
-            menu.addEventListener('click', function (event) {
-                event.stopPropagation();
+                yygo.view.showScreen('game');
+                yygo.view.setCommentsTop();
             }, false);
             //}}}
             // Load page specific.{{{
             exitload.addEventListener('click', function () {
-                yygo.view.showLoad(false);
+                yygo.view.showScreen('menu');
             }, false);
             prevpage.addEventListener('click', function () {
                 yygo.data.listpage--;
-                yygo.view.showLoad(true, true);
+                yygo.view.showLoadList(true);
             }, false);
             nextpage.addEventListener('click', function () {
                 yygo.data.listpage++;
-                yygo.view.showLoad(true, true);
+                yygo.view.showLoadList(true);
             }, false);
             refreshlist.addEventListener('click', function () {
-                yygo.view.showLoad(true, true);
+                yygo.view.showLoadList(true);
             }, false);
             //}}}
             // Settings specific.{{{
             exitsettings.addEventListener('click', function () {
-                yygo.view.showSettings(false);
+                yygo.view.showScreen('menu');
             }, false);
             submitsettings.addEventListener('click', function () {
                 var settingssaved = document.getElementById('settingssaved'),
@@ -1437,12 +1300,12 @@ var yygo = {}; // Namespace that contains all properties and methods.
             //}}}
             // Game infos specific.{{{
             exitgameinfos.addEventListener('click', function () {
-                yygo.view.showGameInfos(false);
+                yygo.view.showScreen('menu');
             }, false);
             //}}}
             // Send sgf specific.{{{
             exitsendsgf.addEventListener('click', function () {
-                yygo.view.showSendSgf(false);
+                yygo.view.showScreen('menu');
             }, false);
             submitsgf.addEventListener('click', function () {
                 var answersendsgf = document.getElementById('answersendsgf'),
@@ -1471,7 +1334,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             //}}}
             // Buttons bar.{{{
             butmenu.addEventListener('click', function () {
-                yygo.view.showMenu(true);
+                yygo.view.showScreen('menu');
             }, false);
             butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
@@ -1557,9 +1420,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     var row = this.rowIndex;
 
                     // Show loading screen.
-                    yygo.view.showLoading(true);
-                    yygo.view.showLoad(false);
-                    yygo.view.showGoban(false);
+                    yygo.view.showScreen('loading');
                     // Get data of game corresponding clicked row.
                     jsonRequest('/load/' + ids[row], 'GET', function (data) {
                         yygo.events.loadGame(data);

@@ -87,26 +87,11 @@ body {/*{{{*/
 /** hide at start {{{
  * Elements that starts hidden
  */
-#menucontainer, #menumask, #sendsgf, #errorsendsgf, #errorinvalid, #errormd5,
-#gameinfos, #sendsuccess, #settings, #settingssaved, #load, #goban, #panel,
-#variations, .inputhelp {
+#sendsgf, #errorsendsgf, #errorinvalid, #errormd5, #game, #gameinfos,
+#sendsuccess, #settings, #settingssaved, #load, #loading, #menuback,
+#menugameinfos, #variations,
+.inputhelp {
     display: none;
-}
-/*}}}*/
-/** menu {{{
- * Game menu.
- */
-#menucontainer {
-    position: absolute;
-}
-#menumask {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: #000;
-    opacity: 0.7;
 }
 /*}}}*/
 #loading {/*{{{*/

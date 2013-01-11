@@ -1,23 +1,20 @@
 extends layout
 
 block content
-    #loading= lingua.loading
-    #goban
-    #panel
-        include includes/panel
-    #menumask.none
-    #menucontainer.screen
-        p: div.box.black
-            h1= lingua.title
-        p: div#menu.box.brown2
-            include includes/menu
-    #load.screen.brown
+    #loading.screen= lingua.loading
+    #game.screen
+        #goban
+        #panel
+            include includes/panel
+    #menu.screen
+        include includes/menu
+    #load.screen
         include includes/load
-    #sendsgf.screen.brown
+    #sendsgf.screen
         include includes/sendsgf
-    #settings.screen.brown
+    #settings.screen
         include includes/settings
-    #gameinfos
+    #gameinfos.screen
         include includes/gameinfos
     script(src='gotools.js')
     script(src='/socket.io/socket.io.js')
