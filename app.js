@@ -8,6 +8,7 @@
 'use strict';
 /* Modules & globals. {{{*/
 var express =       require('express'),
+    RedisStore =    require('connect-redis')(express),
     sys =           require('sys'),
     fs =            require('fs'),
     crypto =        require('crypto'),
@@ -52,8 +53,8 @@ app.configure(function () {
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'Not a vegetable' }));
+    app.use(express.cookieParser('Not a vegetable'));
+    app.use(express.session({ store: new RedisStore }));
     app.use(express.static(__dirname + '/public'));
     app.use(express.static(__dirname + '/shared'));
     app.use(app.router);
