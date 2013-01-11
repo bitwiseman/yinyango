@@ -399,7 +399,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
     yygo.view = {
         // Properties.
         orientation:    '',
-        screen:         'menu',
+        screen:         '',
         sizecell:       0,
         sizegoban:      0,
 
@@ -1063,11 +1063,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * @param {String} show Element reference to screen to show.
          */
         showScreen: function (show) {
-            var hideelem = document.getElementById(this.screen),
-                showelem = document.getElementById(show);
-
-            hideelem.style.display = 'none';
-            showelem.style.display = 'block';
+            if (this.screen !== '') {
+                document.getElementById(this.screen).style.display = 'none';
+            }
+            document.getElementById(show).style.display = 'block';
             this.screen = show;
         },
         /*}}}*/
@@ -1119,39 +1118,21 @@ var yygo = {}; // Namespace that contains all properties and methods.
         // Properties.
         mode:           'replay',
         username:       '',
+        socket:         {},
 
         // Methods.
         /** yygo.events.init {{{
          * This is where we start.
          */
         init: function () {
-            var socket;
-
             // Get user session if it still exist.
             jsonRequest('/session', 'GET', function (session) {
                 yygo.events.username = session.username;
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
-                if (session.data === '') {
-                    // Load intro screen for guest and new users.
-                    //yygo.events.loadGame(introdata);
-                } else {
-                    // Add a button to load latest viewed game.
-                    document.getElementById('menuloadlatest').
-                        style.display = 'block';
-                    // Load game with provided data.
-                    //yygo.events.loadGame(session.data);
-                }
-                socket = io.connect('http://localhost:3000');
-                socket.on('connect', function () {
-                    socket.emit('msg', { msg: 'client connected' });
-                });
-                socket.on('msg', function (data) {
-                    console.log(data.msg);
-                    socket.emit('msg', { msg: 'msg received' });
-                });
+                // Show menu.
+                yygo.view.showScreen('menu');
             });
-
         },
         /*}}}*/
         /** yygo.events.loadGame {{{
@@ -1209,6 +1190,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         makeBinds: function () {
             var menu =              document.getElementById('menu'),
                 menuload =          document.getElementById('menuload'),
+                menuonline =        document.getElementById('menuonline'),
                 menusendsgf =       document.getElementById('menusendsgf'),
                 menusettings =      document.getElementById('menusettings'),
                 menugameinfos =     document.getElementById('menugameinfos'),
@@ -1218,6 +1200,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 prevpage =          document.getElementById('prevpage'),
                 nextpage =          document.getElementById('nextpage'),
                 refreshlist =       document.getElementById('refreshlist'),
+                exitonline =        document.getElementById('exitonline'),
                 exitsettings =      document.getElementById('exitsettings'),
                 exitgameinfos =     document.getElementById('exitgameinfos'),
                 submitsettings =    document.getElementById('submitsettings'),
@@ -1252,6 +1235,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showScreen('load');
                 yygo.view.showLoadList();
             }, false);
+            menuonline.addEventListener('click', function () {
+                yygo.view.showScreen('online');
+                yygo.events.startOnline();
+            }, false);
             menusettings.addEventListener('click', function () {
                 // Hide previous answer from server.
                 document.getElementById('settingssaved').
@@ -1283,6 +1270,12 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             refreshlist.addEventListener('click', function () {
                 yygo.view.showLoadList(true);
+            }, false);
+            //}}}
+            // Online specific.{{{
+            exitonline.addEventListener('click', function () {
+                yygo.view.showScreen('menu');
+                yygo.events.socket.disconnect();
             }, false);
             //}}}
             // Settings specific.{{{
@@ -1593,6 +1586,24 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     yygo.data.addBranch(coord);
                 }
             }
+        },
+        /*}}}*/
+        /** yygo.events.startOnline {{{
+         * Start online mode.
+         */
+        startOnline: function () {
+            var socket;
+
+            yygo.events.socket = io.connect('http://localhost:3000');
+            socket = yygo.events.socket;
+
+            socket.on('connect', function () {
+                socket.emit('msg', { msg: 'client connected' });
+            });
+            socket.on('msg', function (data) {
+                console.log(data.msg);
+                socket.emit('msg', { msg: 'msg received' });
+            });
         }
         /*}}}*/
     };
