@@ -53,8 +53,12 @@ app.configure(function () {
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.cookieParser('Not a vegetable'));
-    app.use(express.session({ store: new RedisStore }));
+    app.use(express.cookieParser());
+    app.use(express.session({
+        secret: 'Not a vegetable',
+        store: new RedisStore,
+        cookie: { maxAge: 2592000000 } // One month cookie.
+    }));
     app.use(express.static(__dirname + '/public'));
     app.use(express.static(__dirname + '/shared'));
     app.use(app.router);
