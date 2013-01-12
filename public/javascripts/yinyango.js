@@ -1212,7 +1212,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 butprev =           document.getElementById('butprev'),
                 butnext =           document.getElementById('butnext'),
                 butfastnext =       document.getElementById('butfastnext'),
-                butend =            document.getElementById('butend');
+                butend =            document.getElementById('butend'),
+                chatmsg =           document.getElementById('chatmsg'),
+                chatform =          document.getElementById('chatform');
 
             // Window resize.{{{
             window.addEventListener('resize', function () {
@@ -1276,6 +1278,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
             exitonline.addEventListener('click', function () {
                 yygo.view.showScreen('menu');
                 yygo.events.socket.disconnect();
+            }, false);
+            chatform.addEventListener('submit', function(ev) {
+                // Send message to server.
+                yygo.events.socket.emit('chat', chatmsg.value);
+                // Clear message input.
+                chatmsg.value = '';
+                // Prevent brower from submiting the form.
+                return false;
             }, false);
             //}}}
             // Settings specific.{{{
@@ -1592,17 +1602,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Start online mode.
          */
         startOnline: function () {
-            var socket;
+            var chat = document.getElementById('chat'),
+                socket;
 
-            yygo.events.socket = io.connect('http://localhost:3000');
+            yygo.events.socket = io.connect('http://192.168.1.2:3000');
             socket = yygo.events.socket;
 
-            socket.on('connect', function () {
-                socket.emit('msg', { msg: 'client connected' });
-            });
-            socket.on('msg', function (data) {
-                console.log(data.msg);
-                socket.emit('msg', { msg: 'msg received' });
+            socket.on('chat', function (message) {
+                chat.value += message + "\n";
             });
         }
         /*}}}*/

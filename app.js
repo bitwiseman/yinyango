@@ -458,9 +458,9 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 /* Sockets.io. {{{*/
 io.sockets.on('connection', function (socket) {
-    socket.emit('msg', { msg: 'socket connected' });
-    socket.on('msg', function (data) {
-        console.log(data.msg);
+    socket.on('chat', function (message) {
+        console.log('chat message: ' + message);
+        io.sockets.emit('chat', message);
     });
 });
 /*}}}*/
