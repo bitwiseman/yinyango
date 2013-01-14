@@ -7,11 +7,10 @@
   },
   "dependencies": {
     "connect-redis": "*",
-    "express": "*",
+    "express.io": "*",
     "jade": "*",
     "lingua": "*",
     "mongoose": "*",
-    "socket.io": "*",
     "validator": "*"
   }
 }

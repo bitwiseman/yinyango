@@ -1284,8 +1284,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.socket.emit('chat', chatmsg.value);
                 // Clear message input.
                 chatmsg.value = '';
-                // Prevent brower from submiting the form.
-                return false;
             }, false);
             //}}}
             // Settings specific.{{{
@@ -1605,7 +1603,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             var chat = document.getElementById('chat'),
                 socket;
 
-            yygo.events.socket = io.connect('http://192.168.1.2:3000');
+            yygo.events.socket = io.connect();
             socket = yygo.events.socket;
 
             socket.on('chat', function (message) {

@@ -7,21 +7,18 @@
  */
 'use strict';
 /* Modules & globals. {{{*/
-var express =       require('express'),
+var express =       require('express.io'),
+    app =           express().http().io(),
     RedisStore =    require('connect-redis')(express),
+    mongoose =      require('mongoose'),
+    db =            mongoose.createConnection('localhost', 'yinyango'),
+    lingua =        require('lingua'),
     sys =           require('sys'),
     fs =            require('fs'),
     crypto =        require('crypto'),
     exec =          require('child_process').exec,
-    lingua =        require('lingua'),
-    mongoose =      require('mongoose'),
     Validator =     require('validator').Validator,
-    gotools =       require('./shared/gotools'),
-    app =           express(),
-    http =          require('http'),
-    server =        http.createServer(app),
-    io =            require('socket.io').listen(server),
-    db =            mongoose.createConnection('localhost', 'yinyango');
+    gotools =       require('./shared/gotools');
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
 var userSchema = new mongoose.Schema({
@@ -455,19 +452,17 @@ app.post('/settings', function (req, res) {
     }
 });
 /*}}}*/
-/*}}}*/
-/* Sockets.io. {{{*/
-io.sockets.on('connection', function (socket) {
-    socket.on('chat', function (message) {
-        console.log('chat message: ' + message);
-        io.sockets.emit('chat', message);
-    });
+/** io chat {{{*/
+app.io.route('chat', function (req) {
+    console.log('chat message: ' + req.data);
+    req.io.emit('chat', req.session.username + ': ' + req.data);
 });
+/*}}}*/
 /*}}}*/
 /** init {{{
  * Server init.
  */
-server.listen(3000, function () {
+app.listen(3000, function () {
     console.log('Express server listening on port 3000');
 });
 /*}}}*/
