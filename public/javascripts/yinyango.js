@@ -1213,6 +1213,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 butnext =           document.getElementById('butnext'),
                 butfastnext =       document.getElementById('butfastnext'),
                 butend =            document.getElementById('butend'),
+                chat =              document.getElementById('chat'),
                 chatmsg =           document.getElementById('chatmsg'),
                 chatform =          document.getElementById('chatform');
 
@@ -1282,6 +1283,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
             chatform.addEventListener('submit', function(ev) {
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
+                // Write message in chat.
+                chat.value += yygo.events.username + ': ' + chatmsg.value +
+                    "\n";
                 // Clear message input.
                 chatmsg.value = '';
             }, false);
