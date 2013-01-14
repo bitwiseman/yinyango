@@ -1118,7 +1118,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         // Properties.
         mode:           'replay',
         username:       '',
-        socket:         {},
+        socket:         null,
 
         // Methods.
         /** yygo.events.init {{{
@@ -1279,6 +1279,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
             exitonline.addEventListener('click', function () {
                 yygo.view.showScreen('menu');
                 yygo.events.socket.disconnect();
+                // Clear chat.
+                chat.value = '';
             }, false);
             chatform.addEventListener('submit', function(ev) {
                 // Send message to server.
@@ -1604,13 +1606,15 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Start online mode.
          */
         startOnline: function () {
-            var chat = document.getElementById('chat'),
-                socket;
+            var chat = document.getElementById('chat');
 
-            yygo.events.socket = io.connect();
-            socket = yygo.events.socket;
+            if (yygo.events.socket === null) {
+                yygo.events.socket = io.connect();
+            } else {
+                yygo.events.socket.socket.connect();
+            }
 
-            socket.on('chat', function (message) {
+            yygo.events.socket.on('chat', function (message) {
                 chat.value += message + "\n";
             });
         }

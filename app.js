@@ -454,7 +454,6 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 /** io chat {{{*/
 app.io.route('chat', function (req) {
-    console.log('chat message: ' + req.data);
     req.io.broadcast('chat', req.session.username + ': ' + req.data);
 });
 /*}}}*/
