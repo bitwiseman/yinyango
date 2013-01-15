@@ -1241,6 +1241,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             menuonline.addEventListener('click', function () {
                 chat.value = ''; // Clear chat.
                 yygo.view.showScreen('online');
+                chatmsg.focus(); // Focus chat message input.
                 yygo.events.startOnline();
             }, false);
             menusettings.addEventListener('click', function () {
