@@ -1288,6 +1288,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 // Write message in chat.
                 chat.value += yygo.events.username + ': ' + chatmsg.value +
                     "\n";
+                chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
                 // Clear message input.
                 chatmsg.value = '';
             }, false);
@@ -1616,6 +1617,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             yygo.events.socket.on('chat', function (message) {
                 chat.value += message + "\n";
+                chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
             });
         }
         /*}}}*/
