@@ -31,7 +31,7 @@ body {/*{{{*/
     background: #eecc88;
     color: #000;
 }
-.yellow {
+.yellow, #chatmsg:focus {
     background: #ffeeaa;
 }
 .red {
@@ -431,6 +431,7 @@ body {/*{{{*/
     padding: 1em;
 }/*}}}*/
 #chat {
+    border: 1px solid #000;
     height: 300px;
     width: 100%;
 }

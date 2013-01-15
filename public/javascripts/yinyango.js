@@ -1239,6 +1239,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showLoadList();
             }, false);
             menuonline.addEventListener('click', function () {
+                chat.value = ''; // Clear chat.
                 yygo.view.showScreen('online');
                 yygo.events.startOnline();
             }, false);
@@ -1279,8 +1280,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             exitonline.addEventListener('click', function () {
                 yygo.view.showScreen('menu');
                 yygo.events.socket.disconnect();
-                // Clear chat.
-                chat.value = '';
             }, false);
             chatform.addEventListener('submit', function(ev) {
                 // Send message to server.

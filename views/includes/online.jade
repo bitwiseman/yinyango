@@ -1,6 +1,6 @@
 h1= lingua.title
 h2= lingua.online
-textarea#chat.input.white(readonly)
-form#chatform(name='form', onsubmit='return false;')
-    input.input#chatmsg(type='text', autocomplete='off', autofocus)
+form#chatform.box.brown2(name='form', onsubmit='return false;')
+    p: textarea#chat.brown2(readonly)
+    p: input#chatmsg.input.brown2(type='text', name='chatmsg', autocomplete='off', autofocus)
 p: a#exitonline.linkbutton.black(href='#')= lingua.backtomenu
