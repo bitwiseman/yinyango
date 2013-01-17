@@ -1103,6 +1103,21 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 butfastnext.classList.add('disabled');
                 butend.classList.add('disabled');
             }
+        },
+        /*}}}*/
+        /** yygo.view.usersList {{{
+         * Make chat users list.
+         */
+        usersList: function () {
+            var userslist = document.getElementById('userslist'),
+                html = '',
+                s = yygo.events.userslist.length,
+                i;
+            
+            for (i = 0; i < s; i++) {
+                html += yygo.events.userslist[i] + '</br>';
+            }
+            userslist.innerHTML = html;
         }
         /*}}}*/
     };
@@ -1118,6 +1133,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         // Properties.
         mode:           'replay',
         username:       '',
+        userslist:      [],
         socket:         null,
 
         // Methods.
@@ -1610,12 +1626,30 @@ var yygo = {}; // Namespace that contains all properties and methods.
             } else {
                 yygo.events.socket.socket.connect();
             }
+            yygo.events.socket.emit('join', '', function (data) {
+                if (!data.success) {
+                    yygo.events.socket.disconnect();
+                    yygo.view.showScreen('menu');
+                } else {
+                    yygo.events.userslist = data.users;
+                    yygo.view.usersList();
+                }
+            });
 
             yygo.events.socket.on('chat', function (message) {
                 var myname = new RegExp('\\b(' + yygo.events.username + ')\\b', 'g');
                 message = message.replace(myname, '<strong class=tred>$1</strong>');
                 chat.innerHTML += message + '</br>';
                 chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
+            });
+            yygo.events.socket.on('user-joined', function (user) {
+                yygo.events.userslist.push(user);
+                yygo.view.usersList();
+            });
+            yygo.events.socket.on('user-left', function (user) {
+                var id = yygo.events.userslist.indexOf(user);
+                delete yygo.events.userslist[id];
+                yygo.view.usersList();
             });
         }
         /*}}}*/

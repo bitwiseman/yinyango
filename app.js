@@ -18,7 +18,8 @@ var express =       require('express.io'),
     crypto =        require('crypto'),
     exec =          require('child_process').exec,
     Validator =     require('validator').Validator,
-    gotools =       require('./shared/gotools');
+    gotools =       require('./shared/gotools'),
+    chatusers =     [];
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
 var userSchema = new mongoose.Schema({
@@ -453,6 +454,25 @@ app.post('/settings', function (req, res) {
 });
 /*}}}*/
 /** io chat {{{*/
+app.io.route('join', function (req) {
+    // Check if that user is already connected to chat.
+    if (chatusers.indexOf(req.session.username) !== -1) {
+        req.io.respond({ success: false });
+    } else {
+        // Add user to chat users.
+        chatusers.push(req.session.username);
+        // Broadcast new user to connected users.
+        req.io.broadcast('user-joined', req.session.username);
+        // Send users list to new user.
+        req.io.respond({ success: true, users: chatusers });
+    }
+});
+app.io.route('leave', function (req) {
+    var id = chatusers.indexOf(req.session.username);
+    // Remove user from list.
+    delete chatusers[id];
+    req.io.broadcast('user-left', req.session.username);
+});
 app.io.route('chat', function (req) {
     app.io.broadcast('chat', '<strong>' + req.session.username + ': </strong>' +
         req.data);
