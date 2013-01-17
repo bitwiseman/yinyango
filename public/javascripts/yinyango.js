@@ -1239,7 +1239,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showLoadList();
             }, false);
             menuonline.addEventListener('click', function () {
-                chat.value = ''; // Clear chat.
+                chat.innerHTML = ''; // Clear chat.
                 yygo.view.showScreen('online');
                 chatmsg.focus(); // Focus chat message input.
                 yygo.events.startOnline();
@@ -1286,8 +1286,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
                 // Write message in chat.
-                chat.value += yygo.events.username + ': ' + chatmsg.value +
-                    "\n";
+                chat.innerHTML += '<strong class=tred>' + yygo.events.username +
+                    ': </strong>' + chatmsg.value + '</br>';
                 chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
                 // Clear message input.
                 chatmsg.value = '';
@@ -1616,7 +1616,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
 
             yygo.events.socket.on('chat', function (message) {
-                chat.value += message + "\n";
+                var myname = new RegExp('\\b(' + yygo.events.username + ')\\b', 'g');
+                message = message.replace(myname, '<strong class=tred>$1</strong>');
+                chat.innerHTML += message + '</br>';
                 chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
             });
         }
