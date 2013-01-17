@@ -1285,10 +1285,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             chatform.addEventListener('submit', function(ev) {
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
-                // Write message in chat.
-                chat.innerHTML += '<strong class=tred>' + yygo.events.username +
-                    ': </strong>' + chatmsg.value + '</br>';
-                chat.scrollTop = chat.scrollHeight; // Scroll to bottom.
                 // Clear message input.
                 chatmsg.value = '';
             }, false);
