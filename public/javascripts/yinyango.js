@@ -1216,7 +1216,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 prevpage =          document.getElementById('prevpage'),
                 nextpage =          document.getElementById('nextpage'),
                 refreshlist =       document.getElementById('refreshlist'),
-                exitonline =        document.getElementById('exitonline'),
                 exitsettings =      document.getElementById('exitsettings'),
                 exitgameinfos =     document.getElementById('exitgameinfos'),
                 submitsettings =    document.getElementById('submitsettings'),
@@ -1623,7 +1622,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             if (yygo.events.socket === null) {
                 yygo.events.socket = io.connect();
-            } else {
+            } else if (yygo.events.socket.socket.connected !== true) {
                 yygo.events.socket.socket.connect();
             }
             yygo.events.socket.emit('join', '', function (data) {
@@ -1648,7 +1647,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             });
             yygo.events.socket.on('user-left', function (user) {
                 var id = yygo.events.userslist.indexOf(user);
-                delete yygo.events.userslist[id];
+                yygo.events.userslist.splice(id, 1);
                 yygo.view.usersList();
             });
         }

@@ -453,7 +453,8 @@ app.post('/settings', function (req, res) {
     }
 });
 /*}}}*/
-/** io chat {{{*/
+/*}}}*/
+/* IO Routes {{{*/
 app.io.route('join', function (req) {
     // Check if that user is already connected to chat.
     if (chatusers.indexOf(req.session.username) !== -1) {
@@ -467,17 +468,16 @@ app.io.route('join', function (req) {
         req.io.respond({ success: true, users: chatusers });
     }
 });
-app.io.route('leave', function (req) {
+app.io.route('disconnect', function (req) {
     var id = chatusers.indexOf(req.session.username);
     // Remove user from list.
-    delete chatusers[id];
+    chatusers.splice(id, 1);
     req.io.broadcast('user-left', req.session.username);
 });
 app.io.route('chat', function (req) {
     app.io.broadcast('chat', '<strong>' + req.session.username + ': </strong>' +
         req.data);
 });
-/*}}}*/
 /*}}}*/
 /** init {{{
  * Server init.

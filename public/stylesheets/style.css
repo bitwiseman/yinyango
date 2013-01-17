@@ -433,14 +433,15 @@ body {/*{{{*/
     float: left;
     padding: 1em;
 }/*}}}*/
-#chat, #userslist, #gameslist {
+#chat, #userslist {
+    display: inline-block;
+    float: left;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    display: inline-block;
     text-align: left;
     overflow: auto;
     border: 1px solid #000;
-    height: 300px;
+    height: 200px;
     width: 50%;
     word-wrap: break-word;
 }
