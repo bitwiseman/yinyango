@@ -1160,6 +1160,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
      */
     yygo.events = {
         // Properties.
+        connected:      false,
         mode:           'replay',
         navbar:         true,
         username:       '',
@@ -1180,6 +1181,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.setScreenTop();
                 // Start online.
                 yygo.events.startOnline();
+                yygo.view.showScreen('online');
+                document.getElementById('chatmsg').focus();
             });
         },
         /*}}}*/
@@ -1300,10 +1303,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showLoadList();
             }, false);
             nonline.addEventListener('click', function () {
-                chat.innerHTML = ''; // Clear chat.
+                // Show screen.
                 yygo.view.showScreen('online');
-                chatmsg.focus(); // Focus chat message input.
-                yygo.events.startOnline();
+                // Focus chat message input.
+                chatmsg.focus();
             }, false);
             nsettings.addEventListener('click', function () {
                 // Hide previous answer from server.
@@ -1640,9 +1643,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Start online mode.
          */
         startOnline: function () {
-            var chat = document.getElementById('chat');
-
-            yygo.view.showScreen('online');
+            var chat =      document.getElementById('chat');
 
             if (yygo.events.socket === null) {
                 yygo.events.socket = io.connect();
@@ -1652,9 +1653,11 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.events.socket.emit('join', '', function (data) {
                 if (!data.success) {
                     yygo.events.socket.disconnect();
+                    yygo.events.connected = false;
                 } else {
                     yygo.events.userslist = data.users;
                     yygo.view.usersList();
+                    yygo.events.connected = true;
                 }
             });
 
