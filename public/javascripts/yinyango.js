@@ -1160,7 +1160,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
      */
     yygo.events = {
         // Properties.
-        connected:      false,
         mode:           'replay',
         navbar:         true,
         username:       '',
@@ -1282,6 +1281,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     yygo.events.navbar = true;
                 }
                 yygo.view.setScreenTop();
+                if (yygo.view.screen === 'game') {
+                    yygo.view.setGobanSize(false, function () {});
+                }
             }, false);
             // Navbar Menu.{{{
             // Only registered users.{{{

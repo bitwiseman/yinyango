@@ -19,6 +19,7 @@ var express =       require('express.io'),
     exec =          require('child_process').exec,
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
+    socketIds =     {},
     chatusers =     [];
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
@@ -158,6 +159,10 @@ app.get('/', function (req, res) {
 
     // Login if user session is set.
     if (username) {
+        if (socketIds[username] === undefined) {
+            // Start sockets registration.
+            socketIds[username] = [];
+        }
         res.render('yygo', { username: username, lang: lang });
     } else {
         res.render('login', { error: '' });
@@ -456,6 +461,9 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 /* IO Routes {{{*/
 app.io.route('join', function (req) {
+    // Add socket id to sockets list.
+    socketIds[req.session.username].push(req.io.socket.id);
+    console.log(socketIds);
     // Check if that user is already connected to chat.
     if (chatusers.indexOf(req.session.username) !== -1) {
         req.io.respond({ success: false });
@@ -469,10 +477,17 @@ app.io.route('join', function (req) {
     }
 });
 app.io.route('disconnect', function (req) {
-    var id = chatusers.indexOf(req.session.username);
-    // Remove user from list.
-    chatusers.splice(id, 1);
-    req.io.broadcast('user-left', req.session.username);
+    var name =  chatusers.indexOf(req.session.username),
+        id =    socketIds[req.session.username].indexOf(req.io.socket.id);
+
+    // Remove socket id from sockets list.
+    socketIds[req.session.username].splice(id, 1);
+    console.log(socketIds);
+    // If no more sockets are connected, remove user.
+    if (socketIds[req.session.username].length === 0) {
+        chatusers.splice(name, 1);
+        req.io.broadcast('user-left', req.session.username);
+    }
 });
 app.io.route('chat', function (req) {
     app.io.broadcast('chat', '<strong>' + req.session.username + ': </strong>' +

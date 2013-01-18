@@ -22,6 +22,7 @@ general.
 - Provide direct link to a game.
 - Save previous players times.
 - Simplify gotools mess.
+- Message about user shown in menu.
 
 ## LICENSE
 
