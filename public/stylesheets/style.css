@@ -40,12 +40,17 @@ body {/*{{{*/
 .tred {
     color: #d44343;
 }
+.twhite {
+    color: #f9f0ca;
+}
+.tgrey {
+    color: #999;
+}
 /*}}}*/
 .none {
     display: none;
 }
 .alert {
-    display: inline-block;
     width: 100%;
     height: 3em;
 }
@@ -57,7 +62,6 @@ body {/*{{{*/
     left: 0;
 }
 .box {
-    display: inline-block;
     padding: 0 1em;
     border-radius: 1em;
 }
@@ -87,13 +91,16 @@ body {/*{{{*/
     cursor: pointer;
 }
 /*}}}*/
-/** hide at start {{{
- * Elements that starts hidden
- */
+/* display: none {{{*/
 #errorsendsgf, #errorinvalid, #errormd5, #game, #gameinfos, #sendsuccess,
 #settings, #settingssaved, #load, #loading, #menu, #menuback, #menugameinfos,
 #online, #sendsgf, #variations, .inputhelp {
     display: none;
+}
+/*}}}*/
+/* display: inline-block {{{*/
+#buttonsbar, #chat, #navbar, #navmenu div, #userslist, .alert, .box, .player {
+    display: inline-block;
 }
 /*}}}*/
 #loading {/*{{{*/
@@ -121,7 +128,6 @@ body {/*{{{*/
  * CSS for buttons bar.
  */
 #buttonsbar {
-    display: inline-block;
     position: relative;
 }
 .button {
@@ -407,7 +413,6 @@ body {/*{{{*/
     border-radius: 0 1em 1em 0;
 }
 .player {
-    display: inline-block;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 0 1em;
@@ -434,7 +439,6 @@ body {/*{{{*/
     padding: 1em;
 }/*}}}*/
 #chat, #userslist {
-    display: inline-block;
     float: left;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -449,4 +453,21 @@ body {/*{{{*/
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     width: 90%;
+}
+#navbar {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 0.2em;
+}
+#navtitle {
+    float: left;
+}
+#navmenu {
+    float: right;
+}
+#navmenu a {
+    padding: 0 0.5em;
+    text-decoration: none;
+    cursor: pointer;
 }
