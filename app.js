@@ -19,8 +19,7 @@ var express =       require('express.io'),
     exec =          require('child_process').exec,
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
-    socketIds =     {},
-    chatusers =     [];
+    socketIds =     {};
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
 var userSchema = new mongoose.Schema({
@@ -159,10 +158,6 @@ app.get('/', function (req, res) {
 
     // Login if user session is set.
     if (username) {
-        if (socketIds[username] === undefined) {
-            // Start sockets registration.
-            socketIds[username] = [];
-        }
         res.render('yygo', { username: username, lang: lang });
     } else {
         res.render('login', { error: '' });
@@ -461,15 +456,21 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 /* IO Routes {{{*/
 app.io.route('join', function (req) {
-    // Add socket id to sockets list.
-    socketIds[req.session.username].push(req.io.socket.id);
-    console.log(socketIds);
+    var chatusers = [],
+        user;
+
     // Check if that user is already connected to chat.
-    if (chatusers.indexOf(req.session.username) !== -1) {
+    if (socketIds[req.session.username] !== undefined) {
         req.io.respond({ success: false });
     } else {
+        // Start sockets registration.
+        socketIds[req.session.username] = [];
+        // Add socket id to sockets list.
+        socketIds[req.session.username].push(req.io.socket.id);
         // Add user to chat users.
-        chatusers.push(req.session.username);
+        for (user in socketIds) {
+            chatusers.push(user);
+        }
         // Broadcast new user to connected users.
         req.io.broadcast('user-joined', req.session.username);
         // Send users list to new user.
@@ -477,16 +478,16 @@ app.io.route('join', function (req) {
     }
 });
 app.io.route('disconnect', function (req) {
-    var name =  chatusers.indexOf(req.session.username),
-        id =    socketIds[req.session.username].indexOf(req.io.socket.id);
+    var id =    socketIds[req.session.username].indexOf(req.io.socket.id);
 
-    // Remove socket id from sockets list.
-    socketIds[req.session.username].splice(id, 1);
-    console.log(socketIds);
-    // If no more sockets are connected, remove user.
-    if (socketIds[req.session.username].length === 0) {
-        chatusers.splice(name, 1);
-        req.io.broadcast('user-left', req.session.username);
+    if (id !== -1) {
+        // Remove socket id from sockets list.
+        socketIds[req.session.username].splice(id, 1);
+        // If no more sockets are connected, remove user.
+        if (socketIds[req.session.username].length === 0) {
+            delete socketIds[req.session.username];
+            req.io.broadcast('user-left', req.session.username);
+        }
     }
 });
 app.io.route('chat', function (req) {

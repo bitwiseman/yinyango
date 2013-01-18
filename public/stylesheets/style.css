@@ -459,10 +459,7 @@ body {/*{{{*/
 }
 #navtitle {
     float: left;
-    padding-left: 1.4em;
-}
-#navmenu {
-    float: right;
+    padding: 0 1.4em;
 }
 #navmenu a {
     padding: 0 0.5em;
