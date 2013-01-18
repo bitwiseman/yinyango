@@ -43,20 +43,18 @@ body {/*{{{*/
 .twhite {
     color: #f9f0ca;
 }
-.tgrey {
+.tgrey, #navmenu a:not(.twhite) {
     color: #999;
 }
 /*}}}*/
-.none {
-    display: none;
-}
 .alert {
     width: 100%;
     height: 3em;
 }
 .screen {
     position: absolute;
-    top: 0;
+    z-index: -1;
+    overflow: auto;
     right: 0;
     bottom: 0;
     left: 0;
@@ -93,22 +91,14 @@ body {/*{{{*/
 /*}}}*/
 /* display: none {{{*/
 #errorsendsgf, #errorinvalid, #errormd5, #game, #gameinfos, #sendsuccess,
-#settings, #settingssaved, #load, #loading, #menu, #menuback, #menugameinfos,
-#online, #sendsgf, #variations, .inputhelp {
+#settings, #settingssaved, #load, #loading,  #n-game, #n-gameinfos, #online, #sendsgf,
+#variations, .inputhelp {
     display: none;
 }
 /*}}}*/
 /* display: inline-block {{{*/
 #buttonsbar, #chat, #navbar, #navmenu div, #userslist, .alert, .box, .player {
     display: inline-block;
-}
-/*}}}*/
-#loading {/*{{{*/
-    position: absolute;
-    top: 50%;
-    height: 1em;
-    width: 100%;
-    margin-top: -0.5em;
 }
 /*}}}*/
 #gameslist {/*{{{*/
@@ -454,6 +444,13 @@ body {/*{{{*/
     -moz-box-sizing: border-box;
     width: 90%;
 }
+#navswitch {
+    position: absolute;
+    top: 0.2em;
+    left: 0.2em;
+    width: 1.2em;
+    height: 1.2em;
+}
 #navbar {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -462,6 +459,7 @@ body {/*{{{*/
 }
 #navtitle {
     float: left;
+    padding-left: 1.4em;
 }
 #navmenu {
     float: right;

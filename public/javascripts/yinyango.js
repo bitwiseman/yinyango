@@ -400,6 +400,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         // Properties.
         orientation:    '',
         screen:         '',
+        screenh:        0,
         sizecell:       0,
         sizegoban:      0,
 
@@ -974,7 +975,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         setGobanSize: function (redraw, fn) {
             var size =          yygo.data.size,
                 winw =          window.innerWidth,
-                winh =          window.innerHeight,
+                winh =          yygo.view.screenh,
                 oldsizegoban =  this.sizegoban,
                 smaller;
 
@@ -1006,6 +1007,27 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 redraw = true;
             }
             this.drawInterface(redraw, fn);
+        },
+        /*}}}*/
+        /** yygo.view.setScreenTop {{{
+         * Set screen top relatively to navbar.
+         */
+        setScreenTop: function () {
+            var navbar = document.getElementById('navbar'),
+                screens = document.getElementsByClassName('screen'),
+                nscreens = screens.length,
+                screentop = 0,
+                i;
+
+            if (yygo.events.navbar) {
+                screentop = navbar.offsetHeight;
+            }
+
+            for (i = 0; i < nscreens; i++) {
+                screens[i].style.top = screentop + 'px';
+            }
+            // Set screen height.
+            yygo.view.screenh = window.innerHeight - screentop;
         },
         /*}}}*/
         /** yygo.view.showLoadList {{{
@@ -1065,8 +1087,15 @@ var yygo = {}; // Namespace that contains all properties and methods.
         showScreen: function (show) {
             if (this.screen !== '') {
                 document.getElementById(this.screen).style.display = 'none';
+                if (this.screen !== 'loading') {
+                    document.getElementById('n-' + this.screen).classList.
+                        remove('twhite');
+                }
             }
             document.getElementById(show).style.display = 'block';
+            if (show !== 'loading') {
+                document.getElementById('n-' + show).classList.add('twhite');
+            }
             this.screen = show;
         },
         /*}}}*/
@@ -1132,6 +1161,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
     yygo.events = {
         // Properties.
         mode:           'replay',
+        navbar:         true,
         username:       '',
         userslist:      [],
         socket:         null,
@@ -1146,8 +1176,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.username = session.username;
                 // Bind buttons to functions.
                 yygo.events.makeBinds();
-                // Show menu.
-                yygo.view.showScreen('menu');
+                // Set screen top.
+                yygo.view.setScreenTop();
+                // Start online.
+                yygo.events.startOnline();
             });
         },
         /*}}}*/
@@ -1186,13 +1218,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.placeSymbols();
 
             yygo.events.mode = 'replay';
-            yygo.events.screen = 'goban';
 
             yygo.view.toggleNavButtons();
 
             // Activate menu buttons related to game.
-            document.getElementById('menuback').style.display = 'block';
-            document.getElementById('menugameinfos').style.display = 'block';
+            document.getElementById('n-game').style.display = 'block';
+            document.getElementById('n-gameinfos').style.display = 'block';
+            // Set Screen top.
+            yygo.view.setScreenTop();
 
             yygo.view.setGobanSize(true, function () {
                 yygo.view.showScreen('game');
@@ -1204,24 +1237,20 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Bind events to the elements.
          */
         makeBinds: function () {
-            var menu =              document.getElementById('menu'),
-                menuload =          document.getElementById('menuload'),
-                menuonline =        document.getElementById('menuonline'),
-                menusendsgf =       document.getElementById('menusendsgf'),
-                menusettings =      document.getElementById('menusettings'),
-                menugameinfos =     document.getElementById('menugameinfos'),
-                menulogout =        document.getElementById('menulogout'),
-                menuback =          document.getElementById('menuback'),
-                exitload =          document.getElementById('exitload'),
+            var navswitch =         document.getElementById('navswitch'),
+                navbar =            document.getElementById('navbar'),
+                ngame =             document.getElementById('n-game'),
+                nload =             document.getElementById('n-load'),
+                nonline =           document.getElementById('n-online'),
+                nsendsgf =          document.getElementById('n-sendsgf'),
+                nsettings =         document.getElementById('n-settings'),
+                ngameinfos =        document.getElementById('n-gameinfos'),
+                nlogout =           document.getElementById('n-logout'),
                 prevpage =          document.getElementById('prevpage'),
                 nextpage =          document.getElementById('nextpage'),
                 refreshlist =       document.getElementById('refreshlist'),
-                exitsettings =      document.getElementById('exitsettings'),
-                exitgameinfos =     document.getElementById('exitgameinfos'),
                 submitsettings =    document.getElementById('submitsettings'),
-                exitsendsgf =       document.getElementById('exitsendsgf'),
                 submitsgf =         document.getElementById('submitsgf'),
-                butmenu =           document.getElementById('butmenu'),
                 butstart =          document.getElementById('butstart'),
                 butfastprev =       document.getElementById('butfastprev'),
                 butprev =           document.getElementById('butprev'),
@@ -1234,12 +1263,27 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             // Window resize.{{{
             window.addEventListener('resize', function () {
-                yygo.view.setGobanSize(false, function () {});
+                yygo.view.setScreenTop();
+                if (yygo.view.screen === 'game') {
+                    yygo.view.setGobanSize(false, function () {});
+                }
             }, false);
             //}}}
+            // Navbar.{{{
+            navswitch.addEventListener('click', function () {
+                if (yygo.events.navbar) {
+                    navbar.style.display = 'none';
+                    yygo.events.navbar = false;
+                } else {
+                    navbar.style.display = 'inline-block';
+                    yygo.events.navbar = true;
+                }
+                yygo.view.setScreenTop();
+            }, false);
+            // Navbar Menu.{{{
             // Only registered users.{{{
             if (yygo.events.username !== 'guest') {
-                menusendsgf.addEventListener('click', function () {
+                nsendsgf.addEventListener('click', function () {
                     // Hide previous answer from server.
                     document.getElementById('answersendsgf').
                         style.display = 'none';
@@ -1248,38 +1292,34 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 }, false);
             }
             //}}}
-            // Menu buttons.{{{
-            menuload.addEventListener('click', function () {
+            ngame.addEventListener('click', function () {
+                yygo.view.showScreen('game');
+            }, false);
+            nload.addEventListener('click', function () {
                 yygo.view.showScreen('load');
                 yygo.view.showLoadList();
             }, false);
-            menuonline.addEventListener('click', function () {
+            nonline.addEventListener('click', function () {
                 chat.innerHTML = ''; // Clear chat.
                 yygo.view.showScreen('online');
                 chatmsg.focus(); // Focus chat message input.
                 yygo.events.startOnline();
             }, false);
-            menusettings.addEventListener('click', function () {
+            nsettings.addEventListener('click', function () {
                 // Hide previous answer from server.
                 document.getElementById('settingssaved').
                     style.display = 'none';
                 yygo.view.showScreen('settings');
             }, false);
-            menugameinfos.addEventListener('click', function () {
+            ngameinfos.addEventListener('click', function () {
                 yygo.view.showScreen('gameinfos');
             }, false);
-            menulogout.addEventListener('click', function () {
+            nlogout.addEventListener('click', function () {
                 window.location.href = '/logout';
             }, false);
-            menuback.addEventListener('click', function () {
-                yygo.view.showScreen('game');
-                yygo.view.setCommentsTop();
-            }, false);
+            //}}}
             //}}}
             // Load page specific.{{{
-            exitload.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-            }, false);
             prevpage.addEventListener('click', function () {
                 yygo.data.listpage--;
                 yygo.view.showLoadList(true);
@@ -1293,10 +1333,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             // Online specific.{{{
-            exitonline.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-                yygo.events.socket.disconnect();
-            }, false);
             chatform.addEventListener('submit', function(ev) {
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
@@ -1305,9 +1341,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             // Settings specific.{{{
-            exitsettings.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-            }, false);
             submitsettings.addEventListener('click', function () {
                 var settingssaved = document.getElementById('settingssaved'),
                     settings =      new FormData(this.form);
@@ -1320,15 +1353,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 });
             }, false);
             //}}}
-            // Game infos specific.{{{
-            exitgameinfos.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-            }, false);
-            //}}}
             // Send sgf specific.{{{
-            exitsendsgf.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-            }, false);
             submitsgf.addEventListener('click', function () {
                 var answersendsgf = document.getElementById('answersendsgf'),
                     errorinvalid =  document.getElementById('errorinvalid'),
@@ -1355,9 +1380,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             // Buttons bar.{{{
-            butmenu.addEventListener('click', function () {
-                yygo.view.showScreen('menu');
-            }, false);
             butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-999999);
@@ -1620,6 +1642,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
         startOnline: function () {
             var chat = document.getElementById('chat');
 
+            yygo.view.showScreen('online');
+
             if (yygo.events.socket === null) {
                 yygo.events.socket = io.connect();
             } else if (yygo.events.socket.socket.connected !== true) {
@@ -1628,7 +1652,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.events.socket.emit('join', '', function (data) {
                 if (!data.success) {
                     yygo.events.socket.disconnect();
-                    yygo.view.showScreen('menu');
                 } else {
                     yygo.events.userslist = data.users;
                     yygo.view.usersList();

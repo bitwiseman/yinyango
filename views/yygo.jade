@@ -1,9 +1,17 @@
 extends layout
 
 block content
+    a#navswitch(href='#')
+        .yinyang-bg.circle.black
+        .yinyang-left.white
+        .yinyang-top.circle.white
+        .yinyang-bottom.circle.black
+        .yinyang-top-dot.circle.black
+        .yinyang-bottom-dot.circle.white
     #navbar.black
         include includes/navbar
-    #loading.screen= lingua.loading
+    #loading.screen
+        p= lingua.loading
     #game.screen
         #goban
         #panel
@@ -12,8 +20,8 @@ block content
         include includes/gameinfos
     #load.screen
         include includes/load
-    #menu.screen
-        include includes/menu
+    //-#menu.screen
+        //-include includes/menu
     #online.screen
         include includes/online
     #sendsgf.screen
