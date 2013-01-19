@@ -1,8 +1,6 @@
 {
     "apply":            "Apply",
     "back":             "Back",
-    "backtogame":       "Back to game",
-    "backtomenu":       "Back to menu",
     "black":            "Black",
     "downsgf":          "Download with SGF format",
     "email":            "Email",
@@ -54,10 +52,8 @@
     "sendsuccess":      "File successfully registered.",
     "settings":         "Settings",
     "settingssaved":    "Settings saved. They will apply at next launch.",
-    "sgfexist":         "File already exist.",
     "title":            "yinyango",
     "user":             "User",
     "username":         "User name",
-    "white":            "White",
-    "wrong":            "Wrong nickname or password."
+    "white":            "White"
 }

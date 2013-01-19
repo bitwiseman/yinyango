@@ -1,8 +1,6 @@
 {
     "apply":            "Appliquer",
     "back":             "Retour",
-    "backtogame":       "Retour à la partie",
-    "backtomenu":       "Retour au menu",
     "black":            "Noir",
     "downsgf":          "Télécharger au format SGF",
     "email":            "Email",
@@ -54,10 +52,8 @@
     "sendsuccess":      "Fichier enregistré avec succès.",
     "settings":         "Paramètres",
     "settingssaved":    "Paramètres enregistrés. Ils seront pris en compte au prochain lancement.",
-    "sgfexist":         "Le fichier existe déjà.",
     "title":            "yinyango",
     "user":             "Utilisateur",
     "username":         "Nom d'utilisateur",
-    "white":            "Blanc",
-    "wrong":            "Mauvais pseudonyme ou mot de passe."
+    "white":            "Blanc"
 }
