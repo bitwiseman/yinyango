@@ -90,7 +90,7 @@ body {/*{{{*/
 }
 /*}}}*/
 /* display: none {{{*/
-#errorsendsgf, #errorinvalid, #errormd5, #game, #gameinfos, #sendsuccess,
+#errorsendsgf, #errorinvalid, #errorlogin, #errormd5, #game, #gameinfos, #sendsuccess,
 #settings, #settingssaved, #load, #loading,  #n-game, #n-gameinfos, #online, #sendsgf,
 #variations, .inputhelp {
     display: none;

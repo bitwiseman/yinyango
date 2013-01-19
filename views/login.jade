@@ -4,16 +4,13 @@ block content
     h1= lingua.title
     h2= lingua.login
     p: a.linkbutton.black(href='/guest')= lingua.guestlogin
-    if error == 'login'
-        .box.red
-            p= lingua.errorlogin
-            p: a.linkbutton.black(href='/')= lingua.back
-    else
-        form.box.brown2(name='form', method='post', action='/login')
-            p= lingua.username
-            input.input(type='text', name='username', autocomplete='on',
-                autofocus, maxlength='15', required)
-            p= lingua.password
-            input.input(type='password', name='password', required)
-            p: input.linkbutton.black(type='submit', value= lingua.login)
+    form#loginform.box.brown2(onsubmit='return false;')
+        p= lingua.username
+        input.input(type='text', name='username', autocomplete='on', autofocus,
+            maxlength='15', required)
+        p= lingua.password
+        input.input(type='password', name='password', required)
+        p: input.linkbutton.black(type='submit', value= lingua.login)
+        p: div#errorlogin.box.red= lingua.errorlogin
     p: a.linkbutton.black(href='/register')= lingua.register
+    script(src='javascripts/login.js')

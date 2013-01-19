@@ -287,13 +287,13 @@ app.post('/login', function (req, res) {
                         req.session.username =  user.name;
                         req.session.sgfid =     user.sgfid;
                         res.cookie('language', user.lang);
-                        res.redirect('/');
+                        res.send(true);
                     } else {
-                        res.render('login', { error: 'login' });
+                        res.send(false);
                     }
                 });
             } else {
-                res.render('login', { error: 'login' });
+                res.send(false);
             }
         });
     } else {
