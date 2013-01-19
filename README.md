@@ -24,6 +24,10 @@ general.
 - Simplify gotools mess.
 - Message about user shown in menu.
 
+## Bugs to fix:
+
+- Switching branch does not update score.
+
 ## LICENSE
 
 >[![License](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)][link]

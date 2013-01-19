@@ -429,21 +429,42 @@ body {/*{{{*/
     float: left;
     padding: 1em;
 }/*}}}*/
-#chat, #userslist {
-    float: left;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    text-align: left;
-    overflow: auto;
-    border: 1px solid #000;
-    height: 200px;
-    width: 50%;
-    word-wrap: break-word;
+#room-games {
+    top: 0;
+    bottom: 50%;
 }
 #chatform {
+    top: 50%;
+    bottom: 0;
+    border-top: 1px solid #000;
+}
+#room-games, #chatform {
+    position: absolute;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    width: 90%;
+    width: 100%;
+    /*padding: 1em;*/
+}
+#chat {
+    width: 80%;
+    border-right: 1px solid #000;
+}
+#userslist {
+    width: 20%;
+}
+#chat, #userslist {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    text-align: left;
+    padding: 0.5em;
+    overflow: auto;
+    word-wrap: break-word;
+}
+#chatmsg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 #navswitch {
     position: absolute;
