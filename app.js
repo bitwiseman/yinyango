@@ -330,7 +330,7 @@ app.post('/register', function (req, res) {
                 return;
             }
             if (user) { // User name already exist.
-                res.render('register', { error: 'exist' });
+                res.send({ success: false, error: 'exist' });
             } else { // Generate salt and hash and insert in database.
                 hash(password, function (err, salt, hash) {
                     if (err) {
@@ -353,7 +353,7 @@ app.post('/register', function (req, res) {
                             return;
                         }
                         // Registration successful.
-                        res.render('register', { error: 'none' });
+                        res.send({ success: true });
                     });
                 });
             }
@@ -364,7 +364,7 @@ app.post('/register', function (req, res) {
                 error = 'name';
             }
         }
-        res.render('register', { error: error });
+        res.send({ success: false, error: error });
     }
 });
 /*}}}*/

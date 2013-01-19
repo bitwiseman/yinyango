@@ -1,0 +1,16 @@
+h2= lingua.register
+form#registerform.box.brown2(onsubmit='return false;')
+    p= lingua.username
+    input.input(type='text', name='username', autocomplete='on', maxlength='15',
+        required)
+    .inputhelp.yellow= lingua.helpname 
+    p= lingua.password
+    input.input(type='password', name='password', maxlength='64', required)
+    p= lingua.email
+    input.input(type='email', autocomplete='on', name='email', maxlength='64',
+        required)
+    p: input.linkbutton.black(type='submit', value= lingua.register)
+    p: div#errorname.box.red= lingua.errorname
+    p: div#errorexist.box.red= lingua.errorexist
+    p: div#regsuccess.box.brown2= lingua.regsuccess
+p: a#login.linkbutton.black(href='#')= lingua.back

@@ -90,8 +90,9 @@ body {/*{{{*/
 }
 /*}}}*/
 /* display: none {{{*/
-#errorsendsgf, #errorinvalid, #errorlogin, #errormd5, #game, #gameinfos, #sendsuccess,
-#settings, #settingssaved, #load, #loading,  #n-game, #n-gameinfos, #online, #sendsgf,
+#errorexist, #errorsendsgf, #errorinvalid, #errorlogin, #errormd5, #errorname,
+#game, #gameinfos, #sendsuccess, #settings, #settingssaved, #load, #loading,
+#n-game, #n-gameinfos, #online, #register-scr, #regsuccess, #sendsgf,
 #variations, .inputhelp {
     display: none;
 }

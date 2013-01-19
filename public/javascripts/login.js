@@ -35,7 +35,12 @@
     /*}}}*/
     function makeBinds() {
         var loginform =     document.getElementById('loginform'),
+            registerform =  document.getElementById('registerform'),
             errorlogin =    document.getElementById('errorlogin'),
+            errorexist =    document.getElementById('errorexist'),
+            errorname =     document.getElementById('errorname'),
+            regsuccess =    document.getElementById('regsuccess'),
+            login =         document.getElementById('login'),
             register =      document.getElementById('register');
 
         loginform.addEventListener('submit', function () {
@@ -50,15 +55,46 @@
                 }
             });
         }, false);
+        registerform.addEventListener('submit', function () {
+            errorexist.style.display = 'none';
+            errorname.style.display = 'none';
+            regsuccess.style.display = 'none';
+            jsonRequest('/register', 'POST', new FormData(this), function (data) {
+                if (data.success) {
+                    // Registration successfull.
+                    regsuccess.style.display = 'block';
+                } else if (data.error === 'name') {
+                    errorname.style.display = 'block';
+                } else if (data.error === 'exist') {
+                    errorexist.style.display = 'block';
+                }
+            });
+        }, false);
 
+        login.addEventListener('click', function () {
+            errorlogin.style.display = 'none';
+            document.getElementById('register-scr').style.display = 'none';
+            document.getElementById('login-scr').style.display = 'block';
+            loginform.username.focus();
+        }, false);
         register.addEventListener('click', function () {
+            errorexist.style.display = 'none';
+            errorname.style.display = 'none';
+            regsuccess.style.display = 'none';
             document.getElementById('login-scr').style.display = 'none';
             document.getElementById('register-scr').style.display = 'block';
+            registerform.username.focus();
         }, false);
     }
 
     function init() {
+        var loginform = document.getElementById('loginform');
+
         makeBinds();
+        // Show login screen.
+        document.getElementById('login-scr').style.display = 'block';
+        // Focus username.
+        loginform.username.focus();
     }
 
     // Call init when DOM is loaded.
