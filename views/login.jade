@@ -2,15 +2,8 @@ extends layout
 
 block content
     h1= lingua.title
-    h2= lingua.login
-    p: a.linkbutton.black(href='/guest')= lingua.guestlogin
-    form#loginform.box.brown2(onsubmit='return false;')
-        p= lingua.username
-        input.input(type='text', name='username', autocomplete='on', autofocus,
-            maxlength='15', required)
-        p= lingua.password
-        input.input(type='password', name='password', required)
-        p: input.linkbutton.black(type='submit', value= lingua.login)
-        p: div#errorlogin.box.red= lingua.errorlogin
-    p: a.linkbutton.black(href='/register')= lingua.register
+    #login-scr
+        include includes/login
+    #register-scr
+        include includes/register
     script(src='javascripts/login.js')

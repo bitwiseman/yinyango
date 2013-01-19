@@ -35,7 +35,8 @@
     /*}}}*/
     function makeBinds() {
         var loginform =     document.getElementById('loginform'),
-            errorlogin =    document.getElementById('errorlogin');
+            errorlogin =    document.getElementById('errorlogin'),
+            register =      document.getElementById('register');
 
         loginform.addEventListener('submit', function () {
             errorlogin.style.display = 'none';
@@ -48,6 +49,11 @@
                     errorlogin.style.display = 'block';
                 }
             });
+        }, false);
+
+        register.addEventListener('click', function () {
+            document.getElementById('login-scr').style.display = 'none';
+            document.getElementById('register-scr').style.display = 'block';
         }, false);
     }
 
