@@ -224,13 +224,6 @@ app.get('/logout', function (req, res) {
     });
 });
 /*}}}*/
-/** get /register {{{
- * Registration page.
- */
-app.get('/register', function (req, res) {
-    res.render('register', { error: '' });
-});
-/*}}}*/
 /** get /session {{{
  * Return user session infos and game data.
  */
