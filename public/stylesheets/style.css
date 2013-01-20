@@ -5,6 +5,11 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+* {/*{{{*/
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+/*}}}*/
 body {/*{{{*/
     margin: 0;
     font-size: 100%;
@@ -64,8 +69,6 @@ body {/*{{{*/
     border-radius: 1em;
 }
 .input {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
     margin: 0;
     width: 100%;
     border: 1px solid #000;
@@ -404,8 +407,6 @@ body {/*{{{*/
     border-radius: 0 1em 1em 0;
 }
 .player {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
     padding: 0 1em;
     width: 45%;
     border: 1px solid black;
@@ -440,8 +441,6 @@ body {/*{{{*/
 }
 #room-games, #chatform {
     position: absolute;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
     width: 100%;
     /*padding: 1em;*/
 }
@@ -453,8 +452,6 @@ body {/*{{{*/
     width: 20%;
 }
 #chat, #userslist {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
     float: left;
     text-align: left;
     padding: 0.5em;
@@ -474,8 +471,6 @@ body {/*{{{*/
     height: 1.2em;
 }
 #navbar {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
     width: 100%;
     padding: 0.2em;
 }
