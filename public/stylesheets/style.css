@@ -70,6 +70,7 @@ body {/*{{{*/
 }
 .input {
     margin: 0;
+    height: 1.4em;
     width: 100%;
     border: 1px solid #000;
     font: bold 1em sans-serif;
@@ -431,25 +432,26 @@ body {/*{{{*/
     padding: 1em;
 }/*}}}*/
 #room-games {
+    position: absolute;
     top: 0;
     bottom: 50%;
-}
-#chatform {
-    top: 50%;
-    bottom: 0;
-    border-top: 1px solid #000;
-}
-#room-games, #chatform {
-    position: absolute;
-    width: 100%;
-    /*padding: 1em;*/
+    width: 80%;
 }
 #chat {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    bottom: 1.4em;
     width: 80%;
-    border-right: 1px solid #000;
+    border-top: 1px solid #000;
 }
 #userslist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 1.4em;
     width: 20%;
+    border-left: 1px solid #000;
 }
 #chat, #userslist {
     float: left;
