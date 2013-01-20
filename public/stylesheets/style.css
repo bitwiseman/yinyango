@@ -409,7 +409,7 @@ body {/*{{{*/
 }
 /*}}}*/
 /*}}}*/
-#gameinfosbox div {/*{{{*/
+.infos-column {/*{{{*/
     text-align: left;
     float: left;
     padding: 1em;

@@ -874,7 +874,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     stone.classList.add(color);
                     link = stone.parentNode.
                         getElementsByClassName('cell-link')[0];
-                    link.classList.remove('playable');
+                    link.className = 'cell-link';
                 }
             }
 
