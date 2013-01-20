@@ -16,9 +16,7 @@ body {/*{{{*/
     text-align: center;
 }
 /*}}}*/
-/** general {{{
- * General use CSS.
- */
+/* General Classes {{{*/
 /* Colors {{{*/
 .black {
     background: #000;
@@ -106,6 +104,27 @@ body {/*{{{*/
     display: inline-block;
 }
 /*}}}*/
+#navbar {/*{{{*/
+    width: 100%;
+    padding: 0.2em;
+}
+#navswitch {
+    position: absolute;
+    top: 0.2em;
+    left: 0.2em;
+    width: 1.2em;
+    height: 1.2em;
+}
+#navtitle {
+    float: left;
+    padding: 0 1.4em;
+}
+#navmenu a {
+    padding: 0 0.5em;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*}}}*/
 #gameslist {/*{{{*/
     border-collapse: collapse;
     text-align: center;
@@ -119,10 +138,8 @@ body {/*{{{*/
     cursor: pointer;
 }
 /*}}}*/
-/** buttonsbar {{{
- * CSS for buttons bar.
- */
-#buttonsbar {
+/* Game {{{*/
+#buttonsbar {/*{{{*/
     position: relative;
 }
 .button {
@@ -426,11 +443,14 @@ body {/*{{{*/
     overflow: auto;
 }
 /*}}}*/
+/*}}}*/
 #gameinfosbox div {/*{{{*/
     text-align: left;
     float: left;
     padding: 1em;
-}/*}}}*/
+}
+/*}}}*/
+/* Hall {{{*/
 #room-games {
     position: absolute;
     top: 0;
@@ -438,23 +458,20 @@ body {/*{{{*/
     width: 80%;
 }
 #chat {
-    position: absolute;
     top: 50%;
     left: 0;
-    bottom: 1.4em;
     width: 80%;
     border-top: 1px solid #000;
 }
 #userslist {
-    position: absolute;
     top: 0;
     right: 0;
-    bottom: 1.4em;
     width: 20%;
     border-left: 1px solid #000;
 }
 #chat, #userslist {
-    float: left;
+    position: absolute;
+    bottom: 1.4em;
     text-align: left;
     padding: 0.5em;
     overflow: auto;
@@ -465,23 +482,4 @@ body {/*{{{*/
     bottom: 0;
     left: 0;
 }
-#navswitch {
-    position: absolute;
-    top: 0.2em;
-    left: 0.2em;
-    width: 1.2em;
-    height: 1.2em;
-}
-#navbar {
-    width: 100%;
-    padding: 0.2em;
-}
-#navtitle {
-    float: left;
-    padding: 0 1.4em;
-}
-#navmenu a {
-    padding: 0 0.5em;
-    text-decoration: none;
-    cursor: pointer;
-}
+/*}}}*/

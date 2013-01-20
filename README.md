@@ -23,6 +23,7 @@ general.
 - Save previous players times.
 - Simplify gotools mess.
 - Message about user shown in menu.
+- Make better games loading list.
 
 ## Bugs to fix:
 
