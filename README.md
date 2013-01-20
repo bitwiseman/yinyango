@@ -24,6 +24,7 @@ general.
 - Simplify gotools mess.
 - Message about user shown in menu.
 - Make better games loading list.
+- Make sub-navmenu for game including loading and infos.
 
 ## Bugs to fix:
 
