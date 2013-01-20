@@ -1,10 +1,10 @@
 #navtitle= lingua.title
 #navmenu
-    div: a#n-game(href='#')= lingua.game
-    div: a#n-load(href='#')= lingua.load
-    div: a#n-online(href='#')= lingua.online
+    a#n-game.navlink(href='#')= lingua.game
+    a#n-load.navlink(href='#')= lingua.load
+    a#n-online.navlink(href='#')= lingua.online
     if username !== 'guest'
-        div: a#n-sendsgf(href='#')= lingua.sendsgf
-    div: a#n-settings(href='#')= lingua.settings
-    div: a#n-gameinfos(href='#')= lingua.gameinfos
-    div: a#n-logout(href='#')= lingua.logout
+        a#n-sendsgf.navlink(href='#')= lingua.sendsgf
+    a#n-settings.navlink(href='#')= lingua.settings
+    a#n-gameinfos.navlink(href='#')= lingua.gameinfos
+    a#n-logout.navlink(href='#')= lingua.logout

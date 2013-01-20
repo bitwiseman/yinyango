@@ -50,6 +50,9 @@ body {/*{{{*/
     color: #999;
 }
 /*}}}*/
+.none {
+    display: none;
+}
 .alert {
     width: 100%;
     height: 3em;
@@ -100,7 +103,7 @@ body {/*{{{*/
 }
 /*}}}*/
 /* display: inline-block {{{*/
-#buttonsbar, #chat, #navbar, #navmenu div, #userslist, .alert, .box, .player {
+#buttonsbar, #chat, #navbar, #userslist, .alert, .box, .navlink, .player {
     display: inline-block;
 }
 /*}}}*/
@@ -119,23 +122,19 @@ body {/*{{{*/
     float: left;
     padding: 0 1.4em;
 }
-#navmenu a {
+.navlink {
     padding: 0 0.5em;
     text-decoration: none;
     cursor: pointer;
 }
 /*}}}*/
 #gameslist {/*{{{*/
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
     text-align: center;
     width: 100%;
 }
-#gameslist td {
-    padding: 20px;
-}
-#gameslist tr:hover {
-    background: #ddbb77;
-    cursor: pointer;
+.gameslist-entry {
+    padding: 0.5em;
 }
 /*}}}*/
 /* Game {{{*/
@@ -274,40 +273,6 @@ body {/*{{{*/
     height: 10%;
 }
 /*}}}*/
-/* bubble button {{{*/
-.bubble {
-    position: relative;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 60%;
-    border-radius: 20%/30%;
-}
-.bubble-tail {
-    position: absolute;
-    top: 10%;
-    left: 30%;
-    width: 15%;
-    height: 80%;
-}
-.bubble-line {
-    position: absolute;
-    top: 25%;
-    left: 30%;
-    width: 40%;
-    height: 5%;
-}
-.move {
-    -webkit-transform: translateY(250%);
-    -o-transform: translateY(250%);
-    transform: translateY(250%);
-}
-.move2 {
-    -webkit-transform: translateY(500%);
-    -o-transform: translateY(500%);
-    transform: translateY(500%);
-}
-/*}}}*/
 /*}}}*/
 #goban {/*{{{*/
     position: relative;
@@ -338,7 +303,10 @@ body {/*{{{*/
     border-radius: 50%;
     opacity: 0;
 }
-.cell:hover > a {
+/*.cell:hover > a {*/
+    /*opacity: 0.3;*/
+/*}*/
+.cell-link {
     opacity: 0.3;
 }
 /* Grid {{{*/

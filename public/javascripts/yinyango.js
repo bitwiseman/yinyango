@@ -532,7 +532,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 gl =        '<div class="g gl black"></div>',
                 sto =       '<div class="stone" id="',
                 stc =       '"></div>',
-                a =         '<a href="#" class="black"></a>',
+                a =         '<a href="#" class="black cell-link"></a>',
                 html =      '',
                 content,
                 id,
@@ -1068,7 +1068,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     }
                     yygo.data.gameslist = data;
                     for (i = 0; i < datalen; i++) {
-                        html += '<tr><td><a class="linkbutton brown2" ' +
+                        html += '<tr><td class="gameslist-entry">' + 
+                            '<a class="linkbutton brown2" ' +
                             'href="#">' + data[i].name + '</a></td></tr>';
                         ids.push(data[i]._id);
                     }
@@ -1224,8 +1225,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.toggleNavButtons();
 
             // Activate menu buttons related to game.
-            document.getElementById('n-game').style.display = 'block';
-            document.getElementById('n-gameinfos').style.display = 'block';
+            document.getElementById('n-game').style.display = 'inline-block';
+            document.getElementById('n-gameinfos').style.display =
+                'inline-block';
             // Set Screen top.
             yygo.view.setScreenTop();
 
