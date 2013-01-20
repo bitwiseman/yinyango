@@ -532,7 +532,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 gl =        '<div class="g gl black"></div>',
                 sto =       '<div class="stone" id="',
                 stc =       '"></div>',
-                a =         '<a href="#" class="black cell-link"></a>',
+                a =         '<a href="#" class="cell-link"></a>',
                 html =      '',
                 content,
                 id,
@@ -800,8 +800,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 classturn = yygo.data.playerturn === 'W' ? 'white' : 'black',
                 coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                              'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                links =     document.getElementsByClassName('cell-link'),
+                linkslen =  links.length,
                 stone,
-                link,
                 id,
                 i,
                 j;
@@ -812,9 +813,11 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     stone = document.getElementById(id);
                     stone.className = 'stone';
                     stone.innerHTML = '';
-                    link = stone.parentNode.getElementsByTagName('a')[0];
-                    link.className = classturn;
                 }
+            }
+            // Make Cell links.
+            for (i = 0; i < linkslen; i++) {
+                links[i].className = 'cell-link ' + classturn + ' playable';
             }
         },
         /*}}}*/
@@ -869,8 +872,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 for (i = 0; i < listlen; i++) {
                     stone = document.getElementById(list[i]);
                     stone.classList.add(color);
-                    link = stone.parentNode.getElementsByTagName('a')[0];
-                    link.className = 'none';
+                    link = stone.parentNode.
+                        getElementsByClassName('cell-link')[0];
+                    link.classList.remove('playable');
                 }
             }
 
@@ -1208,9 +1212,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
             // Generate goban grid if necessary.
             if (yygo.data.size !== oldsize) {
                 yygo.view.makeGoban();
-            } else {
-                yygo.view.emptyGoban();
             }
+
+            // This will initialize cell links.
+            yygo.view.emptyGoban();
 
             yygo.view.makeVariations();
             yygo.view.makeGameInfos();

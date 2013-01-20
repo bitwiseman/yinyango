@@ -296,17 +296,14 @@ body {/*{{{*/
 .stone.white {
     border: 1px solid #000;
 }
-.cell > a:not(.none) {
+.playable {
     display: block;
     height: 100%;
     width: 100%;
     border-radius: 50%;
     opacity: 0;
 }
-/*.cell:hover > a {*/
-    /*opacity: 0.3;*/
-/*}*/
-.cell-link {
+.cell:hover > .playable {
     opacity: 0.3;
 }
 /* Grid {{{*/
