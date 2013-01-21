@@ -5,6 +5,100 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+@media (max-width: 600px) {
+    #room-games {
+        width: 100% !important;
+    }
+    #userslist {
+        display: none !important;
+        top: 50% !important;
+        width: 100% !important;
+        border-top: 1px solid #000;
+    }
+    #chat {
+        top: 50% !important;
+        left: 0 !important;
+        width: 100% !important;
+    }
+    #users-button {
+        display: block !important;
+    }
+    #users-button:active ~ #userslist {
+        z-index: 1;
+        display: inline-block !important;
+    }
+    #chatmsg:focus ~ #userslist {
+        display: none !important;
+    }
+}
+@media (max-height: 500px) and (max-width: 600px) {
+    #room-games {
+        bottom: 1.4em !important;
+        width: 100% !important;
+    }
+    #chat {
+        display: none !important;
+        top: 0 !important;
+    }
+    #userslist {
+        display: none !important;
+        top: 0 !important;
+    }
+    #chatmsg:focus ~ #chat {
+        display: inline-block !important;
+    }
+    #chatmsg:focus ~ #room-games {
+        display: none !important;
+    }
+    #chatmsg:focus ~ #userslist {
+        display: none !important;
+    }
+    #users-button {
+        display: block !important;
+    }
+    #users-button:active ~ #userslist {
+        z-index: 1;
+        display: inline-block !important;
+    }
+}
+@media (max-height: 500px) and (max-width: 700px) and (min-width: 600px) {
+    #room-games {
+        bottom: 1.4em !important;
+        width: 60% !important;
+    }
+    #chat {
+        top: 0 !important;
+        left: 60% !important;
+        width: 40% !important;
+        border-width: 0 0 0 1px !important;
+    }
+    #userslist {
+        display: none !important;
+        width: 40% !important;
+    }
+    #users-button {
+        display: block !important;
+    }
+    #users-button:active ~ #userslist {
+        z-index: 1;
+        display: inline-block !important;
+    }
+    #chatmsg:focus ~ #userslist {
+        display: none !important;
+    }
+}
+@media (max-height: 500px) and (min-width: 700px) {
+    #room-games {
+        bottom: 1.4em !important;
+        width: 50% !important;
+    }
+    #chat {
+        top: 0 !important;
+        left: 50% !important;
+        width: 30% !important;
+        border-width: 0 0 0 1px !important;
+    }
+}
 * {/*{{{*/
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -426,13 +520,23 @@ body {/*{{{*/
     top: 50%;
     left: 0;
     width: 80%;
-    border-top: 1px solid #000;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: black;
 }
 #userslist {
     top: 0;
     right: 0;
     width: 20%;
     border-left: 1px solid #000;
+}
+#users-button {
+    display: none;
+    position: absolute;
+    right: 0.2em;
+    bottom: 0.2em;
+    height: 1em;
+    width: 1em;
 }
 #chat, #userslist {
     position: absolute;
@@ -446,5 +550,6 @@ body {/*{{{*/
     position: absolute;
     bottom: 0;
     left: 0;
+    border-width: 1px 0 0 0;
 }
 /*}}}*/
