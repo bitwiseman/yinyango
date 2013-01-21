@@ -5,6 +5,28 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+/* viewport {{{*/
+@-webkit-viewport {
+    width: device-width;
+    user-zoom: fixed;
+}
+@-moz-viewport {
+    width: device-width;
+    user-zoom: fixed;
+}
+@-ms-viewport {
+    width: device-width;
+    user-zoom: fixed;
+}
+@-o-viewport {
+    width: device-width;
+    user-zoom: fixed;
+}
+@viewport {
+    width: device-width;
+    user-zoom: fixed;
+}
+/*}}}*/
 @media (max-width: 600px) {
     #room-games {
         width: 100% !important;
