@@ -1139,6 +1139,23 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
+        /** yygo.view.toggleUsersList {{{
+         * Toggle visibility of users list.
+         */
+        toggleUsersList: function () {
+            var userslist = document.getElementById('userslist'),
+                chat =      document.getElementById('chat');
+        
+            if (userslist.style.display === '' ||
+                    userslist.style.display === 'none') {
+                userslist.style.display = 'block';
+                chat.style.display = 'none';
+            } else {
+                userslist.style.display = 'none';
+                chat.style.display = 'block';
+            }
+        },
+        /*}}}*/
         /** yygo.view.usersList {{{
          * Make chat users list.
          */
@@ -1268,7 +1285,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 butend =            document.getElementById('butend'),
                 chat =              document.getElementById('chat'),
                 chatmsg =           document.getElementById('chatmsg'),
-                chatform =          document.getElementById('chatform');
+                chatform =          document.getElementById('chatform'),
+                showusers =         document.getElementById('showusers');
 
             // Window resize.{{{
             window.addEventListener('resize', function () {
@@ -1345,11 +1363,15 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             // Online specific.{{{
-            chatform.addEventListener('submit', function(ev) {
+            chatform.addEventListener('submit', function () {
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
                 // Clear message input.
                 chatmsg.value = '';
+            }, false);
+            showusers.addEventListener('click', function () {
+                // Toggle users list visibility.
+                yygo.view.toggleUsersList();
             }, false);
             //}}}
             // Settings specific.{{{

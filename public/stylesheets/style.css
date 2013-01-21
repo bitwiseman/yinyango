@@ -34,7 +34,7 @@
         bottom: 40% !important;
     }
     #userslist {
-        display: none !important;
+        display: none;
         top: 60% !important;
         width: 100% !important;
         border-width: 1px 0 0 0 !important;
@@ -45,15 +45,8 @@
         width: 100% !important;
         border-width: 1px 0 0 0 !important;
     }
-    #users-button {
+    #showusers {
         display: block !important;
-    }
-    #users-button:active ~ #userslist {
-        z-index: 1;
-        display: inline-block !important;
-    }
-    #chatmsg:focus ~ #userslist {
-        display: none !important;
     }
 }
 @media (max-width: 800px) and (min-width: 600px) {
@@ -61,18 +54,16 @@
         width: 50% !important;
     }
     #userslist {
-        display: none !important;
+        display: none;
         width: 50% !important;
     }
-    #users-button {
+    #showusers {
         display: block !important;
     }
-    #users-button:active ~ #userslist {
-        z-index: 1;
-        display: inline-block !important;
-    }
-    #chatmsg:focus ~ #userslist {
-        display: none !important;
+}
+@media (min-width: 800px) {
+    #chat, #userslist {
+        display: block !important;
     }
 }
 /*}}}*/
@@ -503,14 +494,6 @@ body {/*{{{*/
     right: 0;
     width: 20%;
 }
-#users-button {
-    display: none;
-    position: absolute;
-    right: 0.2em;
-    bottom: 0.2em;
-    height: 1em;
-    width: 1em;
-}
 #chat, #userslist {
     position: absolute;
     bottom: 1.4em;
@@ -522,10 +505,35 @@ body {/*{{{*/
     border-style: solid;
     border-color: black;
 }
-#chatmsg {
+#bottombar {
+    border-collapse: collapse;
+    border-top: 1px solid black;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    border-width: 1px 0 0 0;
+    bottom: 1px; /* some browsers add 1px unremovable border */
+    width: 100%;
+    z-index: 2;
+}
+#bb-msg, #bb-send, #bb-users {
+    padding: 0;
+    margin: 0;
+}
+#bb-msg {
+    width: 100%;
+}
+#chatmsg {
+    border-width: 0;
+    padding: 0 0.5em;
+    margin: 0;
+}
+#sendmsg, #showusers {
+    margin: 0;
+    padding: 0 0.5em;
+    border: 1px solid black;
+    font: bold 1em sans-serif;
+    cursor: pointer;
+}
+#showusers {
+    display: none;
+    border-left: 2px solid white;
 }
 /*}}}*/

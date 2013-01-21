@@ -1,6 +1,12 @@
 form#chatform(onsubmit='return false;')
-    input#chatmsg.input.brown2(type='text', autocomplete='off')
-    a#users-button.circle.black(href='#')
+    table#bottombar
+        tr
+            td#bb-msg
+                input#chatmsg.input.brown2(type='text', autocomplete='off')
+            td#bb-send
+                input#sendmsg.black(type='submit', value='^')
+            td#bb-users
+                input#showusers.black(type='button', value='@')
     #userslist.white
     #chat.yellow
     #room-games.red
