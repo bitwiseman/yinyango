@@ -1143,16 +1143,13 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * Toggle visibility of users list.
          */
         toggleUsersList: function () {
-            var userslist = document.getElementById('userslist'),
-                chat =      document.getElementById('chat');
+            var userslist = document.getElementById('userslist');
         
             if (userslist.style.display === '' ||
                     userslist.style.display === 'none') {
                 userslist.style.display = 'block';
-                chat.style.display = 'none';
             } else {
                 userslist.style.display = 'none';
-                chat.style.display = 'block';
             }
         },
         /*}}}*/

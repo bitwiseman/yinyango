@@ -29,20 +29,18 @@
 /*}}}*/
 /* media queries {{{*/
 @media (max-width: 600px) {
-    #room-games {
+    #columns {
+        -webkit-flex-direction: column !important;
+        -moz-flex-direction: column !important;
+        flex-direction: column !important;
+    }
+    #room-games, #chat, #userslist {
         width: 100% !important;
-        bottom: 40% !important;
     }
     #userslist {
         display: none;
-        top: 60% !important;
-        width: 100% !important;
-        border-width: 1px 0 0 0 !important;
     }
-    #chat {
-        top: 60% !important;
-        left: 0 !important;
-        width: 100% !important;
+    #chat, #userslist {
         border-width: 1px 0 0 0 !important;
     }
     #showusers {
@@ -50,12 +48,8 @@
     }
 }
 @media (max-width: 800px) and (min-width: 600px) {
-    #chat {
-        width: 50% !important;
-    }
     #userslist {
         display: none;
-        width: 50% !important;
     }
     #showusers {
         display: block !important;
@@ -132,6 +126,7 @@ body {/*{{{*/
     border-radius: 1em;
 }
 .input {
+    min-width: 0;
     margin: 0;
     height: 1.4em;
     width: 100%;
@@ -478,25 +473,33 @@ body {/*{{{*/
 }
 /*}}}*/
 /* Hall {{{*/
+#columns {
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+#columns, #chatform {
+    width: 100%;
+}
+#hall {
+    height: 100%;
+}
 #room-games {
-    position: absolute;
-    top: 0;
-    bottom: 1.4em;
-    width: 50%;
+    -webkit-flex: 3 1 auto;
+    -moz-flex: 3 1 auto;
+    flex: 3 1 auto;
 }
 #chat {
-    top: 0;
-    left: 50%;
-    width: 30%;
+    -webkit-flex: 2 1 auto;
+    -moz-flex: 2 1 auto;
+    flex: 2 1 auto;
 }
 #userslist {
-    top: 0;
-    right: 0;
-    width: 20%;
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 #chat, #userslist {
-    position: absolute;
-    bottom: 1.4em;
     text-align: left;
     padding: 0.5em;
     overflow: auto;
@@ -505,20 +508,24 @@ body {/*{{{*/
     border-style: solid;
     border-color: black;
 }
-#bottombar {
-    border-collapse: collapse;
+#chatform {
     border-top: 1px solid black;
-    position: absolute;
-    bottom: 1px; /* some browsers add 1px unremovable border */
-    width: 100%;
-    z-index: 2;
 }
-#bb-msg, #bb-send, #bb-users {
-    padding: 0;
-    margin: 0;
+.flex, #columns {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    flex-direction: row;
 }
-#bb-msg {
-    width: 100%;
+.vflex {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
 }
 #chatmsg {
     border-width: 0;
@@ -526,6 +533,7 @@ body {/*{{{*/
     margin: 0;
 }
 #sendmsg, #showusers {
+    height: 1.4em;
     margin: 0;
     padding: 0 0.5em;
     border: 1px solid black;

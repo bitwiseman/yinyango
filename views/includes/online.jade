@@ -1,12 +1,9 @@
-form#chatform(onsubmit='return false;')
-    table#bottombar
-        tr
-            td#bb-msg
-                input#chatmsg.input.brown2(type='text', autocomplete='off')
-            td#bb-send
-                input#sendmsg.black(type='submit', value='^')
-            td#bb-users
-                input#showusers.black(type='button', value='@')
-    #userslist.white
-    #chat.yellow
-    #room-games.red
+#hall.vflex
+    #columns
+        #room-games.white
+        #chat.yellow
+        #userslist.white
+    form#chatform.flex.red(onsubmit='return false;')
+        input#chatmsg.input.brown2(type='text', autocomplete='off')
+        input#sendmsg.black(type='submit', value='^')
+        input#showusers.black(type='button', value='@')
