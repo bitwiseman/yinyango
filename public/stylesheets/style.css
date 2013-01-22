@@ -148,9 +148,6 @@ body {/*{{{*/
     border-bottom-left-radius: 1em;
     border-bottom-right-radius: 1em;
 }
-.input:focus + .inputhelp {
-    display: block;
-}
 .linkbutton {
     width: 100%;
     padding: 0.3em 0.6em;
@@ -165,7 +162,7 @@ body {/*{{{*/
 #errorexist, #errorsendsgf, #errorinvalid, #errorlogin, #errormd5, #errorname,
 #game, #gameinfos, #sendsuccess, #settings, #settingssaved, #load, #loading,
 #n-game, #n-gameinfos, #online, #register-scr, #regsuccess, #sendsgf,
-#variations, .inputhelp {
+#variations {
     display: none;
 }
 /*}}}*/
