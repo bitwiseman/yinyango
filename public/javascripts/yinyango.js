@@ -1197,9 +1197,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.makeBinds();
                 // Set screen top.
                 yygo.view.setScreenTop();
-                // Start online.
-                yygo.events.startOnline();
-                yygo.view.showScreen('online');
+                // Connect to main hall.
+                yygo.events.joinHall();
+                yygo.view.showScreen('hall');
                 document.getElementById('chatmsg').focus();
             });
         },
@@ -1264,7 +1264,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 navbar =            document.getElementById('navbar'),
                 ngame =             document.getElementById('n-game'),
                 nload =             document.getElementById('n-load'),
-                nonline =           document.getElementById('n-online'),
+                nhall =           document.getElementById('n-hall'),
                 nsendsgf =          document.getElementById('n-sendsgf'),
                 nsettings =         document.getElementById('n-settings'),
                 ngameinfos =        document.getElementById('n-gameinfos'),
@@ -1326,9 +1326,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showScreen('load');
                 yygo.view.showLoadList();
             }, false);
-            nonline.addEventListener('click', function () {
+            nhall.addEventListener('click', function () {
                 // Show screen.
-                yygo.view.showScreen('online');
+                yygo.view.showScreen('hall');
                 // Focus chat message input.
                 chatmsg.focus();
             }, false);
@@ -1359,7 +1359,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showLoadList(true);
             }, false);
             //}}}
-            // Online specific.{{{
+            // Hall specific.{{{
             chatform.addEventListener('submit', function () {
                 // Send message to server.
                 yygo.events.socket.emit('chat', chatmsg.value);
@@ -1667,10 +1667,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.events.startOnline {{{
-         * Start online mode.
+        /** yygo.events.joinHall {{{
+         * Connect to main hall.
          */
-        startOnline: function () {
+        joinHall: function () {
             var chat =      document.getElementById('chat');
 
             if (yygo.events.socket === null) {
