@@ -25,6 +25,7 @@ general.
 - Message about user shown in menu.
 - Make better games loading list.
 - Make sub-navmenu for game including loading and infos.
+- Integrate games list into hall room games.
 
 ## Bugs to fix:
 

@@ -17,8 +17,10 @@ var express =       require('express.io'),
     fs =            require('fs'),
     crypto =        require('crypto'),
     exec =          require('child_process').exec,
+    spawn =         require('child_process').spawn,
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
+    gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     socketIds =     {};
 /*}}}*/
 /* Mongoose Schemas & models {{{*/
@@ -493,5 +495,13 @@ app.io.route('chat', function (req) {
  */
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
+    gnugo.stdout.on('data', function (data) {
+        console.log(data.toString());
+    });
+    gnugo.stdin.write('genmove b\n');
+    gnugo.stdin.write('list_stones b\n');
+    gnugo.stdin.write('genmove w\n');
+    gnugo.stdin.write('list_stones w\n');
+    gnugo.stdin.write('list_stones b\n');
 });
 /*}}}*/
