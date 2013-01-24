@@ -1518,13 +1518,14 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             select.addEventListener('change', function () {
                 var branch = parseInt(this.value, 10),
-                    letter = this.options[this.selectedIndex].innerHTML;
+                    number = this.options[this.selectedIndex].innerHTML;
 
-                varvalue.textContent = letter;
+                varvalue.textContent = number;
                 yygo.data.curbranch = branch;
                 yygo.data.lastbranch = branch;
                 yygo.data.setLastNode();
                 yygo.view.toggleNavButtons();
+                yygo.view.updatePlayersInfos();
                 yygo.view.makeComments();
                 yygo.view.emptyGoban();
                 yygo.view.placeStones();
