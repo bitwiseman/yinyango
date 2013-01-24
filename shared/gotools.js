@@ -36,7 +36,8 @@
 
         function isLiberty(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined &&
-                    (goban[x][y] === color || goban[x][y] === '')) {
+                    (goban[x][y] === color || goban[x][y] === '' ||
+                     goban[x][y] === 'BF' || goban[x][y] === 'WF')) {
                 liberties.push([x, y]); // Liberty or same color.
             }
         }
