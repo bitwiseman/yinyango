@@ -149,7 +149,7 @@
     }
     /*}}}*/
     /** testIntersection {{{
-     * Test goban intersection for liberties and set/remove firbidden moves
+     * Test goban intersection for liberties and set/remove forbidden moves
      * depending on current rule.
      *
      * @param {Array} goban Goban.
@@ -385,18 +385,18 @@
                     liby = parseInt(coord[1], 10);
                     if (goban[libx][liby] === color(x, y) + 'F') {
                         goban[libx][liby] = '';
-                        console.log('Removed: ' + color(x, y) + ';' + x + ';' + y);
                     } else {
                         var ennemy = color(x, y) === 'B' ? 'W' : 'B';
                         goban[libx][liby] = ennemy;
+                        group = [];
                         listLiberties(ennemy, libx, liby, liblistb, group);
                         if (liblistb.length === 0) {
                             if (testCaptures(ennemy, libx, liby, goban)
                                     .length === 0) {
-                                        goban[libx][liby] = ennemy + 'F';
-                                    } else {
-                                        goban[libx][liby] = '';
-                                    }
+                                goban[libx][liby] = ennemy + 'F';
+                            } else {
+                                goban[libx][liby] = '';
+                            }
                         } else {
                             goban[libx][liby] = '';
                             //goban[libx][liby] = prevgoban;
@@ -548,7 +548,6 @@
             }
             if (isinlist === false) {
                 testIntersection(goban, x, y, rule);
-                console.log('Corner: ' + x + ';' + y);
             }
         }
         function testAdjacent(x, y) {
@@ -569,7 +568,6 @@
             }
             if (isinlist === false) {
                 testIntersection(goban, x, y, rule);
-                console.log('Adj: ' + x + ';' + y);
             }
         }
 
