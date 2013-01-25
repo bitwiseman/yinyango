@@ -486,8 +486,10 @@ app.io.route('disconnect', function (req) {
     }
 });
 app.io.route('chat', function (req) {
-    app.io.broadcast('chat', '<strong>' + req.session.username + ': </strong>' +
-        req.data);
+    if (req.data !== '') {
+        app.io.broadcast('chat', '<strong>' + req.session.username +
+            ': </strong>' + req.data);
+    }
 });
 /*}}}*/
 /** init {{{

@@ -1361,10 +1361,12 @@ var yygo = {}; // Namespace that contains all properties and methods.
             //}}}
             // Hall specific.{{{
             chatform.addEventListener('submit', function () {
-                // Send message to server.
-                yygo.events.socket.emit('chat', chatmsg.value);
-                // Clear message input.
-                chatmsg.value = '';
+                if (chatmsg.value !== '') {
+                    // Send message to server.
+                    yygo.events.socket.emit('chat', chatmsg.value);
+                    // Clear message input.
+                    chatmsg.value = '';
+                }
             }, false);
             showusers.addEventListener('click', function () {
                 // Toggle users list visibility.
