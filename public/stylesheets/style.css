@@ -105,7 +105,7 @@ body {/*{{{*/
 .twhite {
     color: #f9f0ca;
 }
-.tgrey, #navmenu a:not(.twhite) {
+.tgrey, .menu a:not(.twhite) {
     color: #999;
 }
 /*}}}*/
@@ -159,10 +159,10 @@ body {/*{{{*/
 }
 /*}}}*/
 /* display: none {{{*/
-#errorexist, #errorsendsgf, #errorinvalid, #errorlogin, #errormd5, #errorname,
-#game, #gameinfos, #sendsuccess, #settings, #settingssaved, #load, #loading,
-#n-game, #n-gameinfos, #online, #register-scr, #regsuccess, #sendsgf,
-#variations {
+#db-games, #errorexist, #errorsendsgf, #errorinvalid, #errorlogin, #errormd5,
+#errorname, #game, #gameinfos, #sendsuccess, #settings, #settingssaved,
+#sgf-games, #loading, #n-game, #n-gameinfos, #online, #register-scr,
+#regsuccess, #sendsgf, #variations {
     display: none;
 }
 /*}}}*/
@@ -171,7 +171,8 @@ body {/*{{{*/
     display: inline-block;
 }
 /*}}}*/
-#navbar {/*{{{*/
+/* Menubars {{{*/
+.menubar {
     width: 100%;
     padding: 0.2em;
 }
@@ -484,7 +485,7 @@ body {/*{{{*/
     width: 50%;
     overflow: auto;
 }
-#gameslist {
+#online-gameslist, #db-gameslist {
     text-align: center;
     width: 100%;
 }

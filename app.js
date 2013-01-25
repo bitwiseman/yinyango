@@ -251,6 +251,31 @@ app.get('/session', function (req, res) {
     }
 });
 /*}}}*/
+/** post /loadsgf/:method {{{
+ * Load an SGF file provided by user or from a given URL.
+ */
+app.post('/loadsgf/:method', function (req, res) {
+    var method =    req.params.method,
+        file;
+
+    if (method === 'file') {
+        file = req.files.sgffile.path;
+    } else {
+        // Get SGF at given URL.
+    }
+    checkSgf(file, res, function () {
+        fs.readFile(file, function (err, data) {
+            if (err) {
+                console.error('fs.readFile error: ' + err);
+                return;
+            }
+            gotools.parseSgf(data.toString(), function (data) {
+                res.send(data);
+            });
+        });
+    });
+});
+/*}}}*/
 /** post /login {{{
  * User login.
  */

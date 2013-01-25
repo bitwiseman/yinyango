@@ -1,7 +1,14 @@
 #games.white
-    #games-choice
-    p: a#refreshlist.linkbutton.black(href='#')= lingua.refresh
-    table#gameslist
+    #games-menu.black.menu.menubar
+        a#g-online-games.navlink(href='#') Online 
+        a#g-db-games.navlink(href='#') Db
+        a#g-sgf-games.navlink(href='#') SGF
+    #online-games
+        table#online-gameslist
+    #db-games
+        p: a#refreshlist.linkbutton.black(href='#')= lingua.refresh
+        table#db-gameslist
+    #sgf-games
 #chat.yellow
 #userslist.white
 form#chatform.flex(onsubmit='return false;')

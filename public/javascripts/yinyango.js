@@ -354,7 +354,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * @param {Number} index Index of the selected game in list.
          */
         parseDataFromList: function (index, callback) {
-            var table = document.getElementById('gameslist'),
+            var table = document.getElementById('db-gameslist'),
                 id =    table.rows[index].cells[0].textContent;
 
             jsonRequest('games/' + id, 'GET', function (data) {
@@ -400,6 +400,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         orientation:    '',
         screen:         '',
         screenh:        0,
+        gamesscreen:    '',
         sizecell:       0,
         sizegoban:      0,
 
@@ -1033,13 +1034,31 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.screenh = window.innerHeight - screentop;
         },
         /*}}}*/
+        /** yygo.view.showGamesScreen {{{
+         * Switch to another games screen.
+         *
+         * @param {String} show Element reference to screen to show.
+         */
+        showGamesScreen: function (show) {
+            show = show + '-games';
+            if (this.gamesscreen !== '') {
+                document.getElementById(this.gamesscreen).style.display =
+                    'none';
+                document.getElementById('g-' + this.gamesscreen).classList.
+                    remove('twhite');
+            }
+            document.getElementById(show).style.display = 'block';
+            document.getElementById('g-' + show).classList.add('twhite');
+            this.gamesscreen = show;
+        },
+        /*}}}*/
         /** yygo.view.showLoadList {{{
          * Alternate the display of the page to load a game.
          *
          * @param {Boolean} refresh Force list refresh.
          */
         showLoadList: function (refresh) {
-            var gameslist = document.getElementById('gameslist'),
+            var gameslist = document.getElementById('db-gameslist'),
                 list =      yygo.data.gameslist,
                 page =      0,
                 html =      '',
@@ -1191,6 +1210,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.setScreenTop();
                 // Connect to main hall.
                 yygo.events.joinHall();
+                yygo.view.showGamesScreen('online');
                 yygo.view.showScreen('hall');
                 document.getElementById('chatmsg').focus();
             });
@@ -1260,6 +1280,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 nsettings =         document.getElementById('n-settings'),
                 ngameinfos =        document.getElementById('n-gameinfos'),
                 nlogout =           document.getElementById('n-logout'),
+                gonlinegames =      document.getElementById('g-online-games'),
+                gdbgames =          document.getElementById('g-db-games'),
+                gsgfgames =         document.getElementById('g-sgf-games'),
                 refreshlist =       document.getElementById('refreshlist'),
                 submitsettings =    document.getElementById('submitsettings'),
                 submitsgf =         document.getElementById('submitsgf'),
@@ -1335,6 +1358,17 @@ var yygo = {}; // Namespace that contains all properties and methods.
             //}}}
             //}}}
             // Hall specific.{{{
+            // Menus. {{{
+            gonlinegames.addEventListener('click', function () {
+                yygo.view.showGamesScreen('online');
+            }, false);
+            gdbgames.addEventListener('click', function () {
+                yygo.view.showGamesScreen('db');
+            }, false);
+            gsgfgames.addEventListener('click', function () {
+                yygo.view.showGamesScreen('sgf');
+            }, false);
+            // }}}
             refreshlist.addEventListener('click', function () {
                 yygo.view.showLoadList(true);
             }, false);
@@ -1465,7 +1499,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * @param {Array} ids Identifiers for database reference.
          */
         makeListBinds: function (ids) {
-            var table =     document.getElementById('gameslist'),
+            var table =     document.getElementById('db-gameslist'),
                 rows =      table.getElementsByTagName('tr'),
                 rl =        rows.length,
                 r;
