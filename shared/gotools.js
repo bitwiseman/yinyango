@@ -148,7 +148,7 @@
         return prisonners;
     }
     /*}}}*/
-    /** testIntersection {{{
+    /** testCell {{{
      * Test goban intersection for liberties and set/remove forbidden moves
      * depending on current rule.
      *
@@ -156,7 +156,7 @@
      * @param {Number} x X coord.
      * @param {Number} y Y coord.
      */
-    function testIntersection(goban, x, y, rule) {
+    function testCell(goban, x, y, rule) {
         var ruleForbidSuicide = function () {
             if (rule === 'NZ') {
                 return false;
@@ -171,13 +171,19 @@
             libx,
             liby;
 
+        /** getColor {{{
+         * Get color of cell.
+         */
         function getColor(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined) {
                 return goban[x][y];
             }
             return 'X';
         }
-
+        /*}}}*/
+        /** isCellEmpty {{{
+         * Check if a cell is empty.
+         */
         function isCellEmpty(x, y) {
             if (getColor(x, y) === '' || getColor(x, y) === 'BF' ||
                     getColor(x, y) === 'WF' || getColor(x, y) === 'K') {
@@ -185,8 +191,10 @@
             }
             return false;
         }
-
-        // Check if a cell is surrounded by color.
+        /*}}}*/
+        /** isSurroundedBy {{{
+         * Check if a cell is surrounded by color.
+         */
         function isSurroundedBy(x, y, color) {
             if ((getColor(x - 1, y) === color || getColor(x - 1, y) === 'X') &&
                     (getColor(x + 1, y) === color ||
@@ -199,12 +207,15 @@
             }
             return false;
         }
-
+        /*}}}*/
+        /** listLiberties {{{
+         * List liberties of a stones group.
+         */
         function listLiberties(color, x, y, liblist, group) {
             var liblen = liblist.length,
                 grouplen = group.length,
                 i;
-
+        
             if (isCellEmpty(x, y)) {
                 // Check if we already have this intersection in liberties.
                 for (i = 0; i < liblen; i++) {
@@ -233,6 +244,7 @@
             }
             return;
         }
+        /*}}}*/
 
         // First case intersection is empty.
         if (isCellEmpty(x, y)) {
@@ -434,10 +446,10 @@
      */
     function testSuicides(color, x, y, goban, rule) {
 
-        testIntersection(goban, x - 1, y, rule);
-        testIntersection(goban, x + 1, y, rule);
-        testIntersection(goban, x, y - 1, rule);
-        testIntersection(goban, x, y + 1, rule);
+        testCell(goban, x - 1, y, rule);
+        testCell(goban, x + 1, y, rule);
+        testCell(goban, x, y - 1, rule);
+        testCell(goban, x, y + 1, rule);
 
         return goban;
     }
@@ -539,14 +551,17 @@
             y,
             i;
 
-        function testCorners(x, y) {
+        /** checkCell {{{
+         * Check if a dead stone will change playable moves for both players.
+         */
+        function checkCell(x, y) {
             var isinlist = false,
                 coord,
                 xc,
                 yc,
                 i;
-
-            // Check if we test a dead.
+        
+            // Make sure we do not test a dead stone.
             for (i = 0; i < prilen; i++) {
                 coord = prisonners[i].split(':');
                 xc = parseInt(coord[0], 10);
@@ -556,29 +571,10 @@
                 }
             }
             if (isinlist === false) {
-                testIntersection(goban, x, y, rule);
+                testCell(goban, x, y, rule);
             }
         }
-        function testAdjacent(x, y) {
-            var isinlist = false,
-                coord,
-                xc,
-                yc,
-                i;
-
-            // Check if we test a dead.
-            for (i = 0; i < prilen; i++) {
-                coord = prisonners[i].split(':');
-                xc = parseInt(coord[0], 10);
-                yc = parseInt(coord[1], 10);
-                if (xc === x && yc === y) {
-                    isinlist = true;
-                }
-            }
-            if (isinlist === false) {
-                testIntersection(goban, x, y, rule);
-            }
-        }
+        /*}}}*/
 
         for (i = 0; i < prilen; i++) {
             coord = prisonners[i].split(':');
@@ -586,16 +582,18 @@
             y = parseInt(coord[1], 10);
             // Remove stone from goban.
             goban[x][y] = '';
-            // Test adjacent ennemies groups to remove no more forbidden moves.
-            testAdjacent(x - 1, y);
-            testAdjacent(x + 1, y);
-            testAdjacent(x, y - 1);
-            testAdjacent(x, y + 1);
-            // Test corners of dead stones to set possible forbid moves.
-            testCorners(x - 1, y - 1);
-            testCorners(x + 1, y - 1);
-            testCorners(x - 1, y + 1);
-            testCorners(x + 1, y + 1);
+            // Check adjacent cells for ennemies groups to remove 
+            // forbidden moves that are no more forbidden.
+            checkCell(x - 1, y);
+            checkCell(x + 1, y);
+            checkCell(x, y - 1);
+            checkCell(x, y + 1);
+            // Check corners cells to set possible new forbidden moves for
+            // dead color.
+            checkCell(x - 1, y - 1);
+            checkCell(x + 1, y - 1);
+            checkCell(x - 1, y + 1);
+            checkCell(x + 1, y + 1);
         }
         return goban;
     }
@@ -644,10 +642,10 @@
             y = add[i].charCodeAt(1) - 97;
             goban[x][y] = color;
             // TODO: Find a faster method, this is too CPU intensive.
-            //testIntersection(goban, x - 1, y, rule);
-            //testIntersection(goban, x + 1, y, rule);
-            //testIntersection(goban, x, y - 1, rule);
-            //testIntersection(goban, x, y + 1, rule);
+            //testCell(goban, x - 1, y, rule);
+            //testCell(goban, x + 1, y, rule);
+            //testCell(goban, x, y - 1, rule);
+            //testCell(goban, x, y + 1, rule);
         }
         stones = gobanToStones(size, goban);
 
