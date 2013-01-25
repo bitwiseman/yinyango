@@ -1264,7 +1264,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 navbar =            document.getElementById('navbar'),
                 ngame =             document.getElementById('n-game'),
                 nload =             document.getElementById('n-load'),
-                nhall =           document.getElementById('n-hall'),
+                nhall =             document.getElementById('n-hall'),
                 nsendsgf =          document.getElementById('n-sendsgf'),
                 nsettings =         document.getElementById('n-settings'),
                 ngameinfos =        document.getElementById('n-gameinfos'),
@@ -1342,6 +1342,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showScreen('gameinfos');
             }, false);
             nlogout.addEventListener('click', function () {
+                // Fire socket disconnection.
+                yygo.events.socket.disconnect();
+                // End Session.
                 window.location.href = '/logout';
             }, false);
             //}}}

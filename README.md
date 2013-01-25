@@ -12,11 +12,9 @@ general.
 
 ## TODO
 
-- Use CSS flex, inline-flex when available on current browsers.
 - Clean unused js.
 - Make different modes: play, edition...
 - Calculate the score.
-- Add suicide rule.
 - Add other rules.
 - Validation link sent by mail.
 - Provide direct link to a game.
