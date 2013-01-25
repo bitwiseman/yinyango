@@ -171,7 +171,7 @@
             libx,
             liby;
 
-        function color(x, y) {
+        function getColor(x, y) {
             if (goban[x] !== undefined && goban[x][y] !== undefined) {
                 return goban[x][y];
             }
@@ -183,63 +183,61 @@
                 grouplen = group.length,
                 i;
 
-            if (goban[x] !== undefined && goban[x][y] !== undefined) {
-                if (goban[x][y] === '' || goban[x][y] === 'BF' ||
-                        goban[x][y] === 'WF' || goban[x][y] === 'K') {
-                    // Check if we already have this intersection in liberties.
-                    for (i = 0; i < liblen; i++) {
-                        if (liblist[i] === x + ':' + y) {
-                            return;
-                        }
+            if (getColor(x, y) === '' || getColor(x, y) === 'BF' ||
+                    getColor(x, y) === 'WF' || getColor(x, y) === 'K') {
+                // Check if we already have this intersection in liberties.
+                for (i = 0; i < liblen; i++) {
+                    if (liblist[i] === x + ':' + y) {
+                        return;
                     }
-                    liblist.push(x + ':' + y);
-                    return;
                 }
-                if (goban[x][y] === color) {
-                    // Test if stone is not already in group.
-                    for (i = 0; i < grouplen; i++) {
-                        if (group[i] === x + ':' + y) {
-                            return;
-                        }
+                liblist.push(x + ':' + y);
+                return;
+            }
+            if (getColor(x, y) === color) {
+                // Test if stone is not already in group.
+                for (i = 0; i < grouplen; i++) {
+                    if (group[i] === x + ':' + y) {
+                        return;
                     }
-                    // Add stone to group.
-                    group.push(x + ':' + y);
-                    // Test recursively intersections.
-                    listLiberties(color, x - 1, y, liblist, group);
-                    listLiberties(color, x, y - 1, liblist, group);
-                    listLiberties(color, x + 1, y, liblist, group);
-                    listLiberties(color, x, y + 1, liblist, group);
-                    return;
                 }
+                // Add stone to group.
+                group.push(x + ':' + y);
+                // Test recursively intersections.
+                listLiberties(color, x - 1, y, liblist, group);
+                listLiberties(color, x, y - 1, liblist, group);
+                listLiberties(color, x + 1, y, liblist, group);
+                listLiberties(color, x, y + 1, liblist, group);
+                return;
             }
             return;
         }
 
         // First case intersection is empty.
-        if (color(x, y) === '' || color(x, y) === 'WF' ||
-                color(x, y) === 'BF') {
+        if (getColor(x, y) === '' || getColor(x, y) === 'WF' ||
+                getColor(x, y) === 'BF') {
             // Intersection surrounded by black/borders ?
-            if ((color(x - 1, y) === 'B' || color(x - 1, y) === 'X') &&
-                    (color(x + 1, y) === 'B' || color(x + 1, y) === 'X') &&
-                    (color(x, y - 1) === 'B' || color(x, y - 1) === 'X') &&
-                    (color(x, y + 1) === 'B' || color(x, y + 1) === 'X')) {
+            if ((getColor(x - 1, y) === 'B' || getColor(x - 1, y) === 'X') &&
+                    (getColor(x + 1, y) === 'B' || getColor(x + 1, y) === 'X') &&
+                    (getColor(x, y - 1) === 'B' || getColor(x, y - 1) === 'X') &&
+                    (getColor(x, y + 1) === 'B' || getColor(x, y + 1) === 'X')) {
                 // Forbid white, even rules that permit suicide forbid one
                 // stone suicide.
                 goban[x][y] = 'WF';
             }
             // Intersection surrounded by white/borders ?
-            if ((color(x - 1, y) === 'W' || color(x - 1, y) === 'X') &&
-                    (color(x + 1, y) === 'W' || color(x + 1, y) === 'X') &&
-                    (color(x, y - 1) === 'W' || color(x, y - 1) === 'X') &&
-                    (color(x, y + 1) === 'W' || color(x, y + 1) === 'X')) {
+            if ((getColor(x - 1, y) === 'W' || getColor(x - 1, y) === 'X') &&
+                    (getColor(x + 1, y) === 'W' || getColor(x + 1, y) === 'X') &&
+                    (getColor(x, y - 1) === 'W' || getColor(x, y - 1) === 'X') &&
+                    (getColor(x, y + 1) === 'W' || getColor(x, y + 1) === 'X')) {
                 goban[x][y] = 'BF'; // Forbid black.
             }
             // Find and list group liberties. If we have only one,
             // and that rules does not permit suicide this is
             // a forbidden move for group color.
             if (ruleForbidSuicide) {
-                if (color(x - 1, y) === 'B' || color(x - 1, y) === 'W') {
-                    listLiberties(color(x - 1, y), x - 1, y, liblist, group);
+                if (getColor(x - 1, y) === 'B' || getColor(x - 1, y) === 'W') {
+                    listLiberties(getColor(x - 1, y), x - 1, y, liblist, group);
                     group = [];
                     // If only one liberty found.
                     if (liblist.length === 1) {
@@ -248,12 +246,12 @@
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
                         //prevgoban = goban[libx][liby];
-                        goban[libx][liby] = color(x - 1, y);
-                        listLiberties(color(x - 1, y), libx, liby, liblistb, group);
+                        goban[libx][liby] = getColor(x - 1, y);
+                        listLiberties(getColor(x - 1, y), libx, liby, liblistb, group);
                         if (liblistb.length === 0) {
-                            if (testCaptures(color(x - 1, y), libx, liby, goban)
+                            if (testCaptures(getColor(x - 1, y), libx, liby, goban)
                                     .length === 0) {
-                                goban[libx][liby] = color(x - 1, y) + 'F';
+                                goban[libx][liby] = getColor(x - 1, y) + 'F';
                             } else {
                                 goban[libx][liby] = '';
                             }
@@ -266,8 +264,8 @@
                 }
                 liblist = [];
                 group = [];
-                if (color(x + 1, y) === 'B' || color(x + 1, y) === 'W') {
-                    listLiberties(color(x + 1, y), x + 1, y, liblist, group);
+                if (getColor(x + 1, y) === 'B' || getColor(x + 1, y) === 'W') {
+                    listLiberties(getColor(x + 1, y), x + 1, y, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group.
@@ -275,12 +273,12 @@
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
                         //prevgoban = goban[libx][liby];
-                        goban[libx][liby] = color(x + 1, y);
-                        listLiberties(color(x + 1, y), libx, liby, liblistb, group);
+                        goban[libx][liby] = getColor(x + 1, y);
+                        listLiberties(getColor(x + 1, y), libx, liby, liblistb, group);
                         if (liblistb.length === 0) {
-                            if (testCaptures(color(x + 1, y), libx, liby, goban)
+                            if (testCaptures(getColor(x + 1, y), libx, liby, goban)
                                     .length === 0) {
-                                goban[libx][liby] = color(x + 1, y) + 'F';
+                                goban[libx][liby] = getColor(x + 1, y) + 'F';
                             } else {
                                 goban[libx][liby] = '';
                             }
@@ -293,8 +291,8 @@
                 }
                 liblist = [];
                 group = [];
-                if (color(x, y - 1) === 'B' || color(x, y - 1) === 'W') {
-                    listLiberties(color(x, y - 1), x, y - 1, liblist, group);
+                if (getColor(x, y - 1) === 'B' || getColor(x, y - 1) === 'W') {
+                    listLiberties(getColor(x, y - 1), x, y - 1, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group.
@@ -302,12 +300,12 @@
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
                         //prevgoban = goban[libx][liby];
-                        goban[libx][liby] = color(x, y - 1);
-                        listLiberties(color(x, y - 1), libx, liby, liblistb, group);
+                        goban[libx][liby] = getColor(x, y - 1);
+                        listLiberties(getColor(x, y - 1), libx, liby, liblistb, group);
                         if (liblistb.length === 0) {
-                            if (testCaptures(color(x, y - 1), libx, liby, goban)
+                            if (testCaptures(getColor(x, y - 1), libx, liby, goban)
                                     .length === 0) {
-                                goban[libx][liby] = color(x, y - 1) + 'F';
+                                goban[libx][liby] = getColor(x, y - 1) + 'F';
                             } else {
                                 goban[libx][liby] = '';
                             }
@@ -320,8 +318,8 @@
                 }
                 liblist = [];
                 group = [];
-                if (color(x, y + 1) === 'B' || color(x, y + 1) === 'W') {
-                    listLiberties(color(x, y + 1), x, y + 1, liblist, group);
+                if (getColor(x, y + 1) === 'B' || getColor(x, y + 1) === 'W') {
+                    listLiberties(getColor(x, y + 1), x, y + 1, liblist, group);
                     // If only one liberty found.
                     if (liblist.length === 1) {
                         // Add stone and recheck liberties of new group.
@@ -329,12 +327,12 @@
                         libx = parseInt(coord[0], 10);
                         liby = parseInt(coord[1], 10);
                         //prevgoban = goban[libx][liby];
-                        goban[libx][liby] = color(x, y + 1);
-                        listLiberties(color(x, y + 1), libx, liby, liblistb, group);
+                        goban[libx][liby] = getColor(x, y + 1);
+                        listLiberties(getColor(x, y + 1), libx, liby, liblistb, group);
                         if (liblistb.length === 0) {
-                            if (testCaptures(color(x, y + 1), libx, liby, goban)
+                            if (testCaptures(getColor(x, y + 1), libx, liby, goban)
                                     .length === 0) {
-                                goban[libx][liby] = color(x, y + 1) + 'F';
+                                goban[libx][liby] = getColor(x, y + 1) + 'F';
                             } else {
                                 goban[libx][liby] = '';
                             }
@@ -350,8 +348,8 @@
             }
         }
         // Second case intersection is colored.
-        if (color(x, y) === 'B' || color(x, y) === 'W') {
-            listLiberties(color(x, y), x, y, liblist, group);
+        if (getColor(x, y) === 'B' || getColor(x, y) === 'W') {
+            listLiberties(getColor(x, y), x, y, liblist, group);
             group = [];
             // If only one liberty found.
             if (liblist.length === 1) {
@@ -360,12 +358,12 @@
                 libx = parseInt(coord[0], 10);
                 liby = parseInt(coord[1], 10);
                 //prevgoban = goban[libx][liby];
-                goban[libx][liby] = color(x, y);
-                listLiberties(color(x, y), libx, liby, liblistb, group);
+                goban[libx][liby] = getColor(x, y);
+                listLiberties(getColor(x, y), libx, liby, liblistb, group);
                 if (liblistb.length === 0) {
-                    if (testCaptures(color(x, y), libx, liby, goban)
+                    if (testCaptures(getColor(x, y), libx, liby, goban)
                             .length === 0) {
-                        goban[libx][liby] = color(x, y) + 'F';
+                        goban[libx][liby] = getColor(x, y) + 'F';
                     } else {
                         goban[libx][liby] = '';
                     }
@@ -383,10 +381,10 @@
                     coord = liblist[i].split(':');
                     libx = parseInt(coord[0], 10);
                     liby = parseInt(coord[1], 10);
-                    if (goban[libx][liby] === color(x, y) + 'F') {
+                    if (goban[libx][liby] === getColor(x, y) + 'F') {
                         goban[libx][liby] = '';
                     } else {
-                        var ennemy = color(x, y) === 'B' ? 'W' : 'B';
+                        var ennemy = getColor(x, y) === 'B' ? 'W' : 'B';
                         goban[libx][liby] = ennemy;
                         group = [];
                         listLiberties(ennemy, libx, liby, liblistb, group);
