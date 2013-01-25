@@ -969,6 +969,22 @@ var yygo = {}; // Namespace that contains all properties and methods.
             comments.style.top = toppanel.offsetHeight + 5 + 'px';
         },
         /*}}}*/
+        /** yygo.view.setGamesScreenTop {{{
+         * Set games screen top relatively to gamesmenu.
+         */
+        setGamesScreenTop: function () {
+            var gamesmenu =     document.getElementById('games-menu'),
+                gamesscreens =  document.getElementsByClassName('gamesscreen'),
+                nscreens =      gamesscreens.length,
+                screentop =     gamesmenu.offsetHeight,
+                i;
+
+
+            for (i = 0; i < nscreens; i++) {
+                gamesscreens[i].style.top = screentop + 'px';
+            }
+        },
+        /*}}}*/
         /** yygo.view.setGobanSize {{{
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
@@ -1212,6 +1228,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.events.joinHall();
                 yygo.view.showGamesScreen('online');
                 yygo.view.showScreen('hall');
+                // Set games screen top.
+                yygo.view.setGamesScreenTop();
                 document.getElementById('chatmsg').focus();
             });
         },
@@ -1302,6 +1320,9 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.setScreenTop();
                 if (yygo.view.screen === 'game') {
                     yygo.view.setGobanSize(false, function () {});
+                }
+                if (yygo.view.screen === 'hall') {
+                    yygo.view.setGamesScreenTop();
                 }
             }, false);
             //}}}

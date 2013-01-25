@@ -483,6 +483,12 @@ body {/*{{{*/
 #games {
     left: 0;
     width: 50%;
+}
+.gamesscreen {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
     overflow: auto;
 }
 #online-gameslist, #db-gameslist {
