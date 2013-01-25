@@ -93,7 +93,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
         game:           {},
         gameslist:      {},
         stones:         {},
-        listpage:       0,
         size:           0,
         curbranch:      0,
         curnode:        0,
@@ -1040,36 +1039,29 @@ var yygo = {}; // Namespace that contains all properties and methods.
          * @param {Boolean} refresh Force list refresh.
          */
         showLoadList: function (refresh) {
-            var prevpage =  document.getElementById('prevpage'),
-                nextpage =  document.getElementById('nextpage'),
-                gameslist = document.getElementById('gameslist'),
-                page =      yygo.data.listpage,
+            var gameslist = document.getElementById('gameslist'),
                 list =      yygo.data.gameslist,
-                html = '',
+                page =      0,
+                html =      '',
                 i;
 
             if (refresh === undefined) {
                 refresh = false;
             }
 
-            if (page === 0) {
-                prevpage.style.display = 'none';
-            } else {
-                prevpage.style.display = 'inline';
-            }
             if (isEmpty(list) || refresh) { // Get fresh list from server.
                 jsonRequest('/gameslist/' + page, 'GET', function (data) {
                     var datalen = data.length,
                         ids = [];
 
                     // More than one page.
-                    if (datalen === 11) {
-                        nextpage.style.display = 'inline';
-                        datalen--;
-                        data.pop();
-                    } else {
-                        nextpage.style.display = 'none';
-                    }
+                    //if (datalen === 11) {
+                        //nextpage.style.display = 'inline';
+                        //datalen--;
+                        //data.pop();
+                    //} else {
+                        //nextpage.style.display = 'none';
+                    //}
                     yygo.data.gameslist = data;
                     for (i = 0; i < datalen; i++) {
                         html += '<tr><td class="gameslist-entry">' + 
@@ -1263,14 +1255,11 @@ var yygo = {}; // Namespace that contains all properties and methods.
             var navswitch =         document.getElementById('navswitch'),
                 navbar =            document.getElementById('navbar'),
                 ngame =             document.getElementById('n-game'),
-                nload =             document.getElementById('n-load'),
                 nhall =             document.getElementById('n-hall'),
                 nsendsgf =          document.getElementById('n-sendsgf'),
                 nsettings =         document.getElementById('n-settings'),
                 ngameinfos =        document.getElementById('n-gameinfos'),
                 nlogout =           document.getElementById('n-logout'),
-                prevpage =          document.getElementById('prevpage'),
-                nextpage =          document.getElementById('nextpage'),
                 refreshlist =       document.getElementById('refreshlist'),
                 submitsettings =    document.getElementById('submitsettings'),
                 submitsgf =         document.getElementById('submitsgf'),
@@ -1322,10 +1311,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             ngame.addEventListener('click', function () {
                 yygo.view.showScreen('game');
             }, false);
-            nload.addEventListener('click', function () {
-                yygo.view.showScreen('load');
-                yygo.view.showLoadList();
-            }, false);
             nhall.addEventListener('click', function () {
                 // Show screen.
                 yygo.view.showScreen('hall');
@@ -1349,20 +1334,10 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             //}}}
-            // Load page specific.{{{
-            prevpage.addEventListener('click', function () {
-                yygo.data.listpage--;
-                yygo.view.showLoadList(true);
-            }, false);
-            nextpage.addEventListener('click', function () {
-                yygo.data.listpage++;
-                yygo.view.showLoadList(true);
-            }, false);
+            // Hall specific.{{{
             refreshlist.addEventListener('click', function () {
                 yygo.view.showLoadList(true);
             }, false);
-            //}}}
-            // Hall specific.{{{
             chatform.addEventListener('submit', function () {
                 if (chatmsg.value !== '') {
                     // Send message to server.

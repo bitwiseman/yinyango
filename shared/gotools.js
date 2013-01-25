@@ -314,8 +314,8 @@
         }
         /*}}}*/
 
-        // First case intersection is empty.
-        if (isCellEmpty(x, y)) {
+        // First case intersection is empty but not a ko.
+        if (isCellEmpty(x, y) && goban[x][y] !== 'K') {
             // One stone suicide forbidden in all rules.
             if (isSurroundedBy(x, y, 'B')) {
                 goban[x][y] = 'WF';

@@ -184,7 +184,8 @@ app.get('/gameslist/:page', function (req, res) {
         options;
 
     filters = 'name';
-    options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
+    //options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
+    options = { sort: { _id: -1 } };
     Sgf.find({}, filters, options, function (err, games) {
         if (err) {
             console.error('Sgf.find: ' + err);

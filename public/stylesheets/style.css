@@ -29,10 +29,10 @@
 /*}}}*/
 /* media queries {{{*/
 @media (max-width: 600px) {
-    #room-games, #chat, #userslist {
+    #games, #chat, #userslist {
         width: 100% !important;
     }
-    #room-games {
+    #games {
         bottom: 40% !important;
     }
     #userslist {
@@ -193,14 +193,6 @@ body {/*{{{*/
     padding: 0 0.5em;
     text-decoration: none;
     cursor: pointer;
-}
-/*}}}*/
-#gameslist {/*{{{*/
-    text-align: center;
-    width: 100%;
-}
-.gameslist-entry {
-    padding: 0.5em;
 }
 /*}}}*/
 /* Game {{{*/
@@ -482,14 +474,21 @@ body {/*{{{*/
 }
 /*}}}*/
 /* Hall {{{*/
-#room-games, #chat, #userslist {
+#games, #chat, #userslist {
     position: absolute;
     top: 0;
     bottom: 1.4em;
 }
-#room-games {
+#games {
     left: 0;
     width: 50%;
+}
+#gameslist {
+    text-align: center;
+    width: 100%;
+}
+.gameslist-entry {
+    padding: 0.5em;
 }
 #chat {
     left: 50%;
