@@ -178,13 +178,34 @@
             return 'X';
         }
 
+        function isCellEmpty(x, y) {
+            if (getColor(x, y) === '' || getColor(x, y) === 'BF' ||
+                    getColor(x, y) === 'WF' || getColor(x, y) === 'K') {
+                return true;
+            }
+            return false;
+        }
+
+        // Check if a cell is surrounded by color.
+        function isSurroundedBy(x, y, color) {
+            if ((getColor(x - 1, y) === color || getColor(x - 1, y) === 'X') &&
+                    (getColor(x + 1, y) === color ||
+                     getColor(x + 1, y) === 'X') &&
+                    (getColor(x, y - 1) === color ||
+                     getColor(x, y - 1) === 'X') &&
+                    (getColor(x, y + 1) === color ||
+                     getColor(x, y + 1) === 'X')) {
+                return true;
+            }
+            return false;
+        }
+
         function listLiberties(color, x, y, liblist, group) {
             var liblen = liblist.length,
                 grouplen = group.length,
                 i;
 
-            if (getColor(x, y) === '' || getColor(x, y) === 'BF' ||
-                    getColor(x, y) === 'WF' || getColor(x, y) === 'K') {
+            if (isCellEmpty(x, y)) {
                 // Check if we already have this intersection in liberties.
                 for (i = 0; i < liblen; i++) {
                     if (liblist[i] === x + ':' + y) {
@@ -214,23 +235,13 @@
         }
 
         // First case intersection is empty.
-        if (getColor(x, y) === '' || getColor(x, y) === 'WF' ||
-                getColor(x, y) === 'BF') {
-            // Intersection surrounded by black/borders ?
-            if ((getColor(x - 1, y) === 'B' || getColor(x - 1, y) === 'X') &&
-                    (getColor(x + 1, y) === 'B' || getColor(x + 1, y) === 'X') &&
-                    (getColor(x, y - 1) === 'B' || getColor(x, y - 1) === 'X') &&
-                    (getColor(x, y + 1) === 'B' || getColor(x, y + 1) === 'X')) {
-                // Forbid white, even rules that permit suicide forbid one
-                // stone suicide.
+        if (isCellEmpty(x, y)) {
+            // One stone suicide forbidden in all rules.
+            if (isSurroundedBy(x, y, 'B')) {
                 goban[x][y] = 'WF';
             }
-            // Intersection surrounded by white/borders ?
-            if ((getColor(x - 1, y) === 'W' || getColor(x - 1, y) === 'X') &&
-                    (getColor(x + 1, y) === 'W' || getColor(x + 1, y) === 'X') &&
-                    (getColor(x, y - 1) === 'W' || getColor(x, y - 1) === 'X') &&
-                    (getColor(x, y + 1) === 'W' || getColor(x, y + 1) === 'X')) {
-                goban[x][y] = 'BF'; // Forbid black.
+            if (isSurroundedBy(x, y, 'W')) {
+                goban[x][y] = 'BF';
             }
             // Find and list group liberties. If we have only one,
             // and that rules does not permit suicide this is
