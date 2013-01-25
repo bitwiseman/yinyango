@@ -93,8 +93,12 @@ body {/*{{{*/
     background: #eecc88;
     color: #000;
 }
-.blue {
-    background: #3c5377;
+.brown3 {
+    background: #928260;
+}
+.brown4 {
+    background: #ddbb77;
+    color: #000;
 }
 .yellow, #chatmsg:focus {
     background: #ffeeaa;
@@ -111,8 +115,8 @@ body {/*{{{*/
 .tgrey, #navmenu a:not(.twhite) {
     color: #999;
 }
-.tblue, #games-menu a:not(.twhite) {
-    color: #0a2044;
+.tbrown, #games-menu a:not(.twhite) {
+    color: #312c20;
 }
 /*}}}*/
 .none {
@@ -181,6 +185,7 @@ body {/*{{{*/
 .menubar {
     width: 100%;
     padding: 0.2em;
+    border-bottom: 1px solid black;
 }
 #navswitch {
     position: absolute;
@@ -426,18 +431,18 @@ body {/*{{{*/
 /*}}}*/
 #playersinfos {/*{{{*/
     position: relative;
-    height: 3em;
+    height: 3.6em;
 }
 #variations {
     position: absolute;
-    top: 0.5em;
-    bottom: 0.5em;
+    top: 0.6em;
+    bottom: 0.6em;
     left: 50%;
-    margin-left: -1em;
-    width: 2em;
+    margin-left: -1.2em;
+    width: 2.4em;
     border-radius: 50%;
     border: 1px solid black;
-    line-height: 2em;
+    line-height: 2.4em;
 }
 #varselect {
     position: absolute;
@@ -446,6 +451,7 @@ body {/*{{{*/
     bottom: 0;
     left: 0;
     opacity: 0;
+    height: 3em;/* required for opera */
     cursor: pointer;
 }
 #playerblack {
@@ -458,11 +464,11 @@ body {/*{{{*/
     padding: 0 1em;
     width: 45%;
     border: 1px solid black;
-    line-height: 1em;
+    line-height: 1.2em;
 }
 .playerline {
     overflow: hidden;
-    height: 1em;
+    height: 1.2em;
 }
 /*}}}*/
 #comments {/*{{{*/
