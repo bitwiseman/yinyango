@@ -1073,8 +1073,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     yygo.data.gameslist = data;
                     for (i = 0; i < datalen; i++) {
                         html += '<tr><td class="gameslist-entry">' + 
-                            '<a class="linkbutton brown2" ' +
-                            'href="#">' + data[i].name + '</a></td></tr>';
+                            '<a class="linkbutton brown2" href="#">' +
+                            data[i].name + '</a></td></tr>';
                         ids.push(data[i]._id);
                     }
                     gameslist.innerHTML = html;
