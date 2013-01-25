@@ -93,6 +93,9 @@ body {/*{{{*/
     background: #eecc88;
     color: #000;
 }
+.blue {
+    background: #3c5377;
+}
 .yellow, #chatmsg:focus {
     background: #ffeeaa;
 }
@@ -105,8 +108,11 @@ body {/*{{{*/
 .twhite {
     color: #f9f0ca;
 }
-.tgrey, .menu a:not(.twhite) {
+.tgrey, #navmenu a:not(.twhite) {
     color: #999;
+}
+.tblue, #games-menu a:not(.twhite) {
+    color: #0a2044;
 }
 /*}}}*/
 .none {
