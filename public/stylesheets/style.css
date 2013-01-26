@@ -141,6 +141,9 @@ body {/*{{{*/
     left: 0;
     z-index: -1;
 }
+.circle {
+    border-radius: 50%;
+}
 .box {
     padding: 0 1em;
     border-radius: 1em;
@@ -207,7 +210,94 @@ body {/*{{{*/
 }
 /*}}}*/
 /* Game {{{*/
-#buttonsbar {/*{{{*/
+/* Goban {{{*/
+#goban {
+    position: relative;
+    margin: auto;
+}
+.cell {
+    position: relative;
+    float: left;
+    text-align: center;
+    font-family: serif;
+    overflow: hidden;
+}
+.stone {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 50%;
+}
+.stone.white {
+    border: 1px solid #000;
+}
+.playable {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    opacity: 0;
+}
+.cell:hover > .playable {
+    opacity: 0.3;
+}
+/* Grid {{{*/
+.g {
+    position: absolute;
+    z-index: -999;
+    opacity: 0.3;
+}
+.h {
+    position: absolute;
+    z-index: -999;
+    top: 50%;
+    left: 50%;
+    height: 6px;
+    width: 6px;
+    margin-top: -3px;
+    margin-left: -3px;
+    border-radius: 50%;
+}
+.gt {
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gr {
+    top: 50%;
+    right: 0;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+.gb {
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    margin-left: -1px;
+}
+.gl {
+    top: 50%;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+/*}}}*/
+/*}}}*/
+/* Panel {{{*/
+#panel {
+    position: absolute;
+    bottom: 0;
+    padding: 5px;
+}
+/* Buttons bar {{{*/
+#buttonsbar {
     position: relative;
 }
 .button {
@@ -219,9 +309,6 @@ body {/*{{{*/
 .disabled {
     opacity: 0.2;
     cursor: default;
-}
-.circle {
-    border-radius: 50%;
 }
 /* arrows buttons {{{*/
 .rotate180 {
@@ -343,92 +430,8 @@ body {/*{{{*/
 }
 /*}}}*/
 /*}}}*/
-#goban {/*{{{*/
-    position: relative;
-    margin: auto;
-}
-.cell {
-    position: relative;
-    float: left;
-    text-align: center;
-    font-family: serif;
-    overflow: hidden;
-}
-.stone {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: 50%;
-}
-.stone.white {
-    border: 1px solid #000;
-}
-.playable {
-    display: block;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    opacity: 0;
-}
-.cell:hover > .playable {
-    opacity: 0.3;
-}
-/* Grid {{{*/
-.g {
-    position: absolute;
-    z-index: -999;
-    opacity: 0.3;
-}
-.h {
-    position: absolute;
-    z-index: -999;
-    top: 50%;
-    left: 50%;
-    height: 6px;
-    width: 6px;
-    margin-top: -3px;
-    margin-left: -3px;
-    border-radius: 50%;
-}
-.gt {
-    top: 0;
-    left: 50%;
-    width: 2px;
-    height: 50%;
-    margin-left: -1px;
-}
-.gr {
-    top: 50%;
-    right: 0;
-    width: 50%;
-    height: 2px;
-    margin-top: -1px;
-}
-.gb {
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    height: 50%;
-    margin-left: -1px;
-}
-.gl {
-    top: 50%;
-    left: 0;
-    width: 50%;
-    height: 2px;
-    margin-top: -1px;
-}
-/*}}}*/
-/*}}}*/
-#panel {/*{{{*/
-    position: absolute;
-    bottom: 0;
-    padding: 5px;
-}
-/*}}}*/
-#playersinfos {/*{{{*/
+/* Players infos {{{*/
+#playersinfos {
     position: relative;
     height: 3.6em;
 }
@@ -470,6 +473,7 @@ body {/*{{{*/
     height: 1.2em;
 }
 /*}}}*/
+/* Text panel {{{*/
 #textpanel {
     position: absolute;
     right: 0;
@@ -487,7 +491,7 @@ body {/*{{{*/
     text-decoration: none;
     z-index: 1;
 }
-#comments, #gameinfos {/*{{{*/
+#comments, #gameinfos {
     position: absolute;
     top: 0;
     right: 0;
@@ -502,6 +506,7 @@ body {/*{{{*/
 .infos-column {
     float: left;
 }
+/*}}}*/
 /*}}}*/
 /*}}}*/
 /* Hall {{{*/

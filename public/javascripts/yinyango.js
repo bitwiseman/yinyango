@@ -1241,7 +1241,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showScreen('hall');
                 // Set games screen top.
                 yygo.view.setGamesScreenTop();
-                document.getElementById('chatmsg').focus();
             });
         },
         /*}}}*/
@@ -1354,10 +1353,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showScreen('game');
             }, false);
             nhall.addEventListener('click', function () {
-                // Show screen.
                 yygo.view.showScreen('hall');
-                // Focus chat message input.
-                chatmsg.focus();
             }, false);
             nsettings.addEventListener('click', function () {
                 // Hide previous answer from server.
