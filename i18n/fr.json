@@ -46,14 +46,13 @@
     "regsuccess":       "Enregistrement réussi.",
     "save":             "Enregistrer",
     "selectcategory":   "Sélectionnez une catégorie",
-    "selectfile":       "Sélectionnez un fichier SGF",
-    "sendfile":         "Envoyer le fichier",
-    "sendsgf":          "Envoyer SGF",
+    "selectsgf":        "Sélectionnez un fichier SGF",
     "sendsuccess":      "Fichier enregistré avec succès.",
     "settings":         "Paramètres",
     "settingssaved":    "Paramètres enregistrés. Ils seront pris en compte au prochain lancement.",
     "title":            "yinyango",
     "user":             "Utilisateur",
     "username":         "Nom d'utilisateur",
+    "viewsgf":          "Visualiser SGF",
     "white":            "Blanc"
 }

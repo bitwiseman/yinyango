@@ -169,10 +169,10 @@ body {/*{{{*/
 }
 /*}}}*/
 /* display: none {{{*/
-#db-games, #errorexist, #errorsendsgf, #errorinvalid, #errorlogin, #errormd5,
-#errorname, #game, #gameinfos, #sendsuccess, #settings, #settingssaved,
-#sgf-games, #loading, #n-game, #n-gameinfos, #online, #register-scr,
-#regsuccess, #sendsgf, #variations {
+#db-games, #errorexist, #errorinvalid, #errorlogin, #errorname, #game,
+#gameinfos, #sendsuccess, #settings, #settingssaved, #sgf-games, #loading,
+#n-game, #n-gameinfos, #online, #register-scr, #regsuccess, #sendsgf,
+#variations {
     display: none;
 }
 /*}}}*/

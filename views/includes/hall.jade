@@ -9,6 +9,12 @@
         p: a#refreshlist.linkbutton.black(href='#')= lingua.refresh
         table#db-gameslist
     #sgf-games.gamesscreen
+        p: form.box.brown2(onsubmit='return false;')
+            p: label= lingua.selectsgf
+            p: input.input(type='file', name='sgffile')
+            p: input#submitsgf.linkbutton.black(type='submit',
+                value= lingua.viewsgf)
+            p: div#errorinvalid.box.red= lingua.errorinvalid
 #chat.brown4
 #userslist.brown2
 form#chatform.flex(onsubmit='return false;')

@@ -1341,17 +1341,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 }
             }, false);
             // Navbar Menu.{{{
-            // Only registered users.{{{
-            if (yygo.events.username !== 'guest') {
-                nsendsgf.addEventListener('click', function () {
-                    // Hide previous answer from server.
-                    document.getElementById('answersendsgf').
-                        style.display = 'none';
-
-                    yygo.view.showScreen('sendsgf');
-                }, false);
-            }
-            //}}}
             ngame.addEventListener('click', function () {
                 yygo.view.showScreen('game');
             }, false);
@@ -1390,6 +1379,21 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showGamesScreen('sgf');
             }, false);
             // }}}
+            // Open sgf.{{{
+            submitsgf.addEventListener('click', function () {
+                var errorinvalid =  document.getElementById('errorinvalid'),
+                    file =          new FormData(this.form);
+
+                errorinvalid.style.display = 'none';
+                jsonRequest('/loadsgf/file', 'POST', file, function (data) {
+                    if (data.answer === 'invalid') {
+                        errorinvalid.style.display = 'block';
+                    } else {
+                        yygo.events.loadGame(data);
+                    }
+                });
+            }, false);
+            //}}}
             refreshlist.addEventListener('click', function () {
                 yygo.view.showLoadList(true);
             }, false);
@@ -1415,32 +1419,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 jsonRequest('/settings', 'POST', settings, function (data) {
                     if (data) {
                         settingssaved.style.display = 'block';
-                    }
-                });
-            }, false);
-            //}}}
-            // Send sgf specific.{{{
-            submitsgf.addEventListener('click', function () {
-                var answersendsgf = document.getElementById('answersendsgf'),
-                    errorinvalid =  document.getElementById('errorinvalid'),
-                    errormd5 =      document.getElementById('errormd5'),
-                    sendsuccess =   document.getElementById('sendsuccess'),
-                    file =          new FormData(this.form);
-
-                answersendsgf.style.display = 'none';
-                errorinvalid.style.display = 'none';
-                errormd5.style.display = 'none';
-                sendsuccess.style.display = 'none';
-                jsonRequest('/sendsgf', 'POST', file, function (data) {
-                    if (data.answer === 'invalid') {
-                        answersendsgf.style.display = 'inline-block';
-                        errorinvalid.style.display = 'block';
-                    } else if (data.answer === 'md5') {
-                        answersendsgf.style.display = 'inline-block';
-                        errormd5.style.display = 'block';
-                    } else if (data.answer === 'success') {
-                        answersendsgf.style.display = 'inline-block';
-                        sendsuccess.style.display = 'block';
                     }
                 });
             }, false);

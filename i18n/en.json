@@ -46,14 +46,13 @@
     "regsuccess":       "Registering successfull.",
     "save":             "Save",
     "selectcategory":   "Select a category",
-    "selectfile":       "Select a SGF file",
-    "sendfile":         "Send file",
-    "sendsgf":          "Send SGF",
+    "selectsgf":        "Select a SGF file",
     "sendsuccess":      "File successfully registered.",
     "settings":         "Settings",
     "settingssaved":    "Settings saved. They will apply at next launch.",
     "title":            "yinyango",
     "user":             "User",
     "username":         "User name",
+    "viewsgf":          "View SGF",
     "white":            "White"
 }
