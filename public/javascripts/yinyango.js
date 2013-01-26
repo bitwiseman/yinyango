@@ -445,7 +445,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
          */
         makeGameInfos: function () {
             var infos =         yygo.data.game[0][0],
-                gameinfosbox =  document.getElementById('gameinfosbox'),
                 gameblack =     document.getElementById('gameblack'),
                 gamewhite =     document.getElementById('gamewhite'),
                 gameresult =    document.getElementById('gameresult'),

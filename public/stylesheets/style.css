@@ -493,16 +493,14 @@ body {/*{{{*/
     right: 0;
     bottom: 0;
     left: 0;
-    padding: 1.5em;
-    text-align: left;
     overflow: auto;
 }
-/*}}}*/
-/* Game infos {{{*/
-.infos-column {
+#comments, .infos-column {
+    padding: 1.5em;
     text-align: left;
+}
+.infos-column {
     float: left;
-    padding: 1em;
 }
 /*}}}*/
 /*}}}*/
