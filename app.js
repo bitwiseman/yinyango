@@ -476,6 +476,7 @@ app.post('/settings', function (req, res) {
 /*}}}*/
 /*}}}*/
 /* IO Routes {{{*/
+/* join {{{*/
 app.io.route('join', function (req) {
     var chatusers = [],
         user;
@@ -498,6 +499,8 @@ app.io.route('join', function (req) {
         req.io.respond({ success: true, users: chatusers });
     }
 });
+/*}}}*/
+/* disconnect {{{*/
 app.io.route('disconnect', function (req) {
     var id =    socketIds[req.session.username].indexOf(req.io.socket.id);
 
@@ -511,12 +514,15 @@ app.io.route('disconnect', function (req) {
         }
     }
 });
+/*}}}*/
+/* chat {{{*/
 app.io.route('chat', function (req) {
     if (req.data !== '') {
         app.io.broadcast('chat', '<strong>' + req.session.username +
             ': </strong>' + req.data);
     }
 });
+/*}}}*/
 /*}}}*/
 /** init {{{
  * Server init.

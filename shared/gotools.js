@@ -820,4 +820,3 @@
     /*}}}*/
 
 }(typeof exports === 'undefined' ? this.gotools = {} : exports));
-

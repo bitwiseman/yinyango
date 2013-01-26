@@ -898,7 +898,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 ko =            yygo.data.stones[node][branch].K,
                 game =          yygo.data.game[node][branch];
 
-            function insertSymbols(symbol, list) {//{{{
+            // insertSymbols {{{
+            function insertSymbols(symbol, list) {
                 var ci = list.length,
                     cell,
                     color,
