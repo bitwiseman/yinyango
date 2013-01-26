@@ -401,6 +401,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         screen:         '',
         screenh:        0,
         gamesscreen:    '',
+        textpanel:      'comments',
         sizecell:       0,
         sizegoban:      0,
 
@@ -959,16 +960,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.setCommentsTop {{{
-         * Set comments top at bottom of top panel part.
-         */
-        setCommentsTop: function () {
-            var toppanel =  document.getElementById('toppanel'),
-                comments =  document.getElementById('comments');
-        
-            comments.style.top = toppanel.offsetHeight + 5 + 'px';
-        },
-        /*}}}*/
         /** yygo.view.setGamesScreenTop {{{
          * Set games screen top relatively to gamesmenu.
          */
@@ -1050,6 +1041,16 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.screenh = window.innerHeight - screentop;
         },
         /*}}}*/
+        /** yygo.view.setTextPanelTop {{{
+         * Set comments top at bottom of top panel part.
+         */
+        setTextPanelTop: function () {
+            var toppanel =  document.getElementById('toppanel'),
+                textpanel = document.getElementById('textpanel');
+        
+            textpanel.style.top = toppanel.offsetHeight + 5 + 'px';
+        },
+        /*}}}*/
         /** yygo.view.showGamesScreen {{{
          * Switch to another games screen.
          *
@@ -1129,6 +1130,17 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 document.getElementById('n-' + show).classList.add('twhite');
             }
             this.screen = show;
+        },
+        /*}}}*/
+        /** yygo.view.showTextPanel {{{
+         * Switch between comment and game infos.
+         *
+         * @param {String} show Element reference to show.
+         */
+        showTextPanel: function (show) {
+            document.getElementById(this.textpanel).style.display = 'none';
+            document.getElementById(show).style.display = 'block';
+            this.textpanel = show;
         },
         /*}}}*/
         /** yygo.view.toggleNavButtons {{{
@@ -1273,16 +1285,15 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
             yygo.view.toggleNavButtons();
 
-            // Activate menu buttons related to game.
+            // Activate game navmenu button.
             document.getElementById('n-game').style.display = 'inline-block';
-            document.getElementById('n-gameinfos').style.display =
-                'inline-block';
+
             // Set Screen top.
             yygo.view.setScreenTop();
 
             yygo.view.setGobanSize(true, function () {
                 yygo.view.showScreen('game');
-                yygo.view.setCommentsTop();
+                yygo.view.setTextPanelTop();
             });
         },
         /*}}}*/
@@ -1294,9 +1305,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 navbar =            document.getElementById('navbar'),
                 ngame =             document.getElementById('n-game'),
                 nhall =             document.getElementById('n-hall'),
-                nsendsgf =          document.getElementById('n-sendsgf'),
                 nsettings =         document.getElementById('n-settings'),
-                ngameinfos =        document.getElementById('n-gameinfos'),
                 nlogout =           document.getElementById('n-logout'),
                 gonlinegames =      document.getElementById('g-online-games'),
                 gdbgames =          document.getElementById('g-db-games'),
@@ -1304,6 +1313,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 refreshlist =       document.getElementById('refreshlist'),
                 submitsettings =    document.getElementById('submitsettings'),
                 submitsgf =         document.getElementById('submitsgf'),
+                textpanelswitch =   document.getElementById('textpanel-switch'),
                 butstart =          document.getElementById('butstart'),
                 butfastprev =       document.getElementById('butfastprev'),
                 butprev =           document.getElementById('butprev'),
@@ -1356,9 +1366,6 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     style.display = 'none';
                 yygo.view.showScreen('settings');
             }, false);
-            ngameinfos.addEventListener('click', function () {
-                yygo.view.showScreen('gameinfos');
-            }, false);
             nlogout.addEventListener('click', function () {
                 // Fire socket disconnection.
                 yygo.events.socket.disconnect();
@@ -1410,6 +1417,15 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.toggleUsersList();
             }, false);
             //}}}
+            // Game specific. {{{
+            textpanelswitch.addEventListener('click', function () {
+                if (yygo.view.textpanel === 'comments') {
+                    yygo.view.showTextPanel('gameinfos');
+                } else {
+                    yygo.view.showTextPanel('comments');
+                }
+            }, false);
+            // }}}
             // Settings specific.{{{
             submitsettings.addEventListener('click', function () {
                 var settingssaved = document.getElementById('settingssaved'),
@@ -1634,7 +1650,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.makeVariations();
             yygo.view.updatePlayersInfos();
             yygo.view.makeComments();
-            yygo.view.setCommentsTop();
+            yygo.view.setTextPanelTop();
 
             yygo.view.emptyGoban();
             yygo.view.placeStones();

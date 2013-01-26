@@ -170,9 +170,8 @@ body {/*{{{*/
 /*}}}*/
 /* display: none {{{*/
 #db-games, #errorexist, #errorinvalid, #errorlogin, #errorname, #game,
-#gameinfos, #sendsuccess, #settings, #settingssaved, #sgf-games, #loading,
-#n-game, #n-gameinfos, #online, #register-scr, #regsuccess, #sendsgf,
-#variations {
+#gameinfos, #settings, #settingssaved, #sgf-games, #loading, #n-game, #online,
+#register-scr, #regsuccess, #variations {
     display: none;
 }
 /*}}}*/
@@ -471,20 +470,41 @@ body {/*{{{*/
     height: 1.2em;
 }
 /*}}}*/
-#comments {/*{{{*/
+#textpanel {
     position: absolute;
+    right: 0;
     bottom: 0;
-    padding: 0.5em;
+    left: 0;
+}
+#textpanel-switch {
+    position: absolute;
+    top: 0.2em;
+    left: 0.2em;
+    height: 1.2em;
+    width: 1.2em;
+    line-height: 1.2em;
+    font: bold 1em serif;
+    text-decoration: none;
+    z-index: 1;
+}
+#comments, #gameinfos {/*{{{*/
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1.5em;
     text-align: left;
     overflow: auto;
 }
 /*}}}*/
-/*}}}*/
-.infos-column {/*{{{*/
+/* Game infos {{{*/
+.infos-column {
     text-align: left;
     float: left;
     padding: 1em;
 }
+/*}}}*/
 /*}}}*/
 /* Hall {{{*/
 #games, #chat, #userslist {
