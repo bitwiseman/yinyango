@@ -1,11 +1,11 @@
-/**
+/*
  * Stylesheet file.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
-/* viewport {{{*/
+/* Viewport. {{{*/
 @-webkit-viewport {
     width: device-width;
     user-zoom: fixed;
@@ -27,7 +27,7 @@
     user-zoom: fixed;
 }
 /*}}}*/
-/* media queries {{{*/
+/* Media queries. {{{*/
 @media (max-width: 600px) {
     #games, #chat, #userslist {
         width: 100% !important;
@@ -64,19 +64,21 @@
     }
 }
 /*}}}*/
-* {/*{{{*/
+/* All elements. {{{*/
+* {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
 /*}}}*/
-body {/*{{{*/
+/* Body. {{{*/
+body {
     margin: 0;
     font-size: 100%;
     text-align: center;
 }
 /*}}}*/
-/* General Classes {{{*/
-/* Colors {{{*/
+/* Global classes. {{{*/
+/* Colors. {{{*/
 .black {
     background: #000;
     color: #f9f0ca;
@@ -171,19 +173,19 @@ body {/*{{{*/
     cursor: pointer;
 }
 /*}}}*/
-/* display: none {{{*/
+/* Hidden elements. {{{*/
 #db-games, #errorexist, #errorinvalid, #errorlogin, #errorname, #game,
 #gameinfos, #settings, #settingssaved, #sgf-games, #loading, #n-game, #online,
 #register-scr, #regsuccess, #variations {
     display: none;
 }
 /*}}}*/
-/* display: inline-block {{{*/
+/* Inline-block elements. {{{*/
 #buttonsbar, .alert, .box, .navlink, .player {
     display: inline-block;
 }
 /*}}}*/
-/* Menubars {{{*/
+/* Menubars. {{{*/
 .menubar {
     width: 100%;
     padding: 0.2em;
@@ -209,8 +211,8 @@ body {/*{{{*/
     cursor: pointer;
 }
 /*}}}*/
-/* Game {{{*/
-/* Goban {{{*/
+/* Game. {{{*/
+/* Goban. {{{*/
 #goban {
     position: relative;
     margin: auto;
@@ -243,7 +245,7 @@ body {/*{{{*/
 .cell:hover > .playable {
     opacity: 0.3;
 }
-/* Grid {{{*/
+/* Grid. {{{*/
 .g {
     position: absolute;
     z-index: -999;
@@ -290,13 +292,13 @@ body {/*{{{*/
 }
 /*}}}*/
 /*}}}*/
-/* Panel {{{*/
+/* Panel. {{{*/
 #panel {
     position: absolute;
     bottom: 0;
     padding: 5px;
 }
-/* Buttons bar {{{*/
+/* Buttons bar. {{{*/
 #buttonsbar {
     position: relative;
 }
@@ -310,7 +312,7 @@ body {/*{{{*/
     opacity: 0.2;
     cursor: default;
 }
-/* arrows buttons {{{*/
+/* Arrows buttons. {{{*/
 .rotate180 {
     -webkit-transform: rotate(180deg);
     -o-transform: rotate(180deg);
@@ -383,7 +385,7 @@ body {/*{{{*/
     border-radius: 20%/5%;
 }
 /*}}}*/
-/* yinyang button {{{*/
+/* Yinyang button. {{{*/
 .yinyang-bg {
     position: absolute;
     top: 10%;
@@ -430,7 +432,7 @@ body {/*{{{*/
 }
 /*}}}*/
 /*}}}*/
-/* Players infos {{{*/
+/* Players infos. {{{*/
 #playersinfos {
     position: relative;
     height: 3.6em;
@@ -473,7 +475,7 @@ body {/*{{{*/
     height: 1.2em;
 }
 /*}}}*/
-/* Text panel {{{*/
+/* Text panel. {{{*/
 #textpanel {
     position: absolute;
     right: 0;
@@ -509,7 +511,7 @@ body {/*{{{*/
 /*}}}*/
 /*}}}*/
 /*}}}*/
-/* Hall {{{*/
+/* Hall. {{{*/
 #games, #chat, #userslist {
     position: absolute;
     top: 0;

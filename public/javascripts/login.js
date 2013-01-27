@@ -1,4 +1,4 @@
-/**
+/*
  * Login and register page script.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
@@ -7,7 +7,7 @@
  */
 
 (function () {
-    /** jsonRequest {{{
+    /* jsonRequest {{{
      * Simple ajax request expecting json in response.
      *
      * @param {String} url Destination url.

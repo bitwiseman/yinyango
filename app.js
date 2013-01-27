@@ -1,4 +1,4 @@
-/**
+/*
  * yinyango Node.js application.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
@@ -23,7 +23,7 @@ var express =       require('express.io'),
     gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     socketIds =     {};
 /*}}}*/
-/* Mongoose Schemas & models {{{*/
+/* Mongoose schemas & models. {{{*/
 var userSchema = new mongoose.Schema({
     name:       String,
     email:      String,
@@ -71,7 +71,7 @@ app.configure('production', function () {
 });
 db.on('error', console.error.bind(console, 'db connection error:'));
 /*}}}*/
-/* Prototypes {{{*/
+/* Prototypes. {{{*/
 Validator.prototype.error = function (msg) {
     this._errors.push(msg);
     return this;
@@ -81,7 +81,7 @@ Validator.prototype.getErrors = function () {
 };
 /*}}}*/
 /* Functions. {{{*/
-/** restricted {{{
+/* restricted {{{
  * Restrict some pages to registered users.
  */
 function restricted(req, res, next) {
@@ -92,7 +92,7 @@ function restricted(req, res, next) {
     }
 }
 /*}}}*/
-/** checkSgf {{{
+/* checkSgf {{{
  * Check if a sgf file is valid with sgfc.
  *
  * @param {String}      sgf     Path to sgf file.
@@ -117,7 +117,7 @@ function checkSgf(sgf, res, next) {
     });
 }
 /*}}}*/
-/** hash {{{
+/* hash {{{
  * Hashes a password with optional salt, otherwise generate a salt for 
  * password and return both salt and hash.
  * Taken from express auth example.
@@ -151,7 +151,7 @@ function hash(pwd, salt, fn) {
 /*}}}*/
 /*}}}*/
 /* Routes. {{{*/
-/** get / {{{
+/* get / {{{
  * Application start.
  */
 app.get('/', function (req, res) {
@@ -166,7 +166,7 @@ app.get('/', function (req, res) {
     }
 });
 /*}}}*/
-/** get /guest {{{
+/* get /guest {{{
  * Guest login.
  */
 app.get('/guest', function (req, res) {
@@ -175,7 +175,7 @@ app.get('/guest', function (req, res) {
     res.redirect('/');
 });
 /*}}}*/
-/** get /gameslist/:page {{{
+/* get /gameslist/:page {{{
  * Send games corresponding to a page.
  */
 app.get('/gameslist/:page', function (req, res) {
@@ -195,7 +195,7 @@ app.get('/gameslist/:page', function (req, res) {
     });
 });
 /*}}}*/
-/** get /load/:id {{{
+/* get /load/:id {{{
  * Load selected game or navigate in pages.
  */
 app.get('/load/:id', function (req, res) {
@@ -217,7 +217,7 @@ app.get('/load/:id', function (req, res) {
     });
 });
 /*}}}*/
-/** get /logout {{{
+/* get /logout {{{
  * User logout.
  */
 app.get('/logout', function (req, res) {
@@ -227,7 +227,7 @@ app.get('/logout', function (req, res) {
     });
 });
 /*}}}*/
-/** get /session {{{
+/* get /session {{{
  * Return user session infos and game data.
  */
 app.get('/session', function (req, res) {
@@ -251,7 +251,7 @@ app.get('/session', function (req, res) {
     }
 });
 /*}}}*/
-/** post /loadsgf/:method {{{
+/* post /loadsgf/:method {{{
  * Load an SGF file provided by user or from a given URL.
  */
 app.post('/loadsgf/:method', function (req, res) {
@@ -276,7 +276,7 @@ app.post('/loadsgf/:method', function (req, res) {
     });
 });
 /*}}}*/
-/** post /login {{{
+/* post /login {{{
  * User login.
  */
 app.post('/login', function (req, res) {
@@ -322,7 +322,7 @@ app.post('/login', function (req, res) {
     }
 });
 /*}}}*/
-/** post /register {{{
+/* post /register {{{
  * Register new user.
  */
 app.post('/register', function (req, res) {
@@ -389,7 +389,7 @@ app.post('/register', function (req, res) {
     }
 });
 /*}}}*/
-/** post /sendsgf {{{
+/* post /sendsgf {{{
  * Save sent sgf file to database.
  */
 app.post('/sendsgf', function (req, res) {
@@ -442,7 +442,7 @@ app.post('/sendsgf', function (req, res) {
     });
 });
 /*}}}*/
-/** post /settings {{{
+/* post /settings {{{
  * Apply user parameters.
  * Use _id for faster database access as it's indexed.
  */
@@ -475,7 +475,7 @@ app.post('/settings', function (req, res) {
 });
 /*}}}*/
 /*}}}*/
-/* IO Routes {{{*/
+/* IO Routes. {{{*/
 /* join {{{*/
 app.io.route('join', function (req) {
     var chatusers = [],
@@ -524,9 +524,7 @@ app.io.route('chat', function (req) {
 });
 /*}}}*/
 /*}}}*/
-/** init {{{
- * Server init.
- */
+/* Server init. {{{*/
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
     gnugo.stdout.on('data', function (data) {

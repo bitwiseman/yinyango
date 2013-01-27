@@ -1,4 +1,4 @@
-/**
+/*
  * User interface of yinyango.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
@@ -12,7 +12,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
     'use strict';
 
     // Utilities functions.
-    /** isEmpty {{{
+    /* isEmpty {{{
      * Test if an Object is empty.
      * @link http://stackoverflow.com/a/7864800
      *
@@ -23,7 +23,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         return Object.keys(obj).length === 0;
     }
     /*}}}*/
-    /** jsonRequest {{{
+    /* jsonRequest {{{
      * Simple ajax request expecting json in response.
      *
      * @param {String} url Destination url.
@@ -49,7 +49,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         xhr.send(data);
     }
     /*}}}*/
-    /** secToTime {{{
+    /* secToTime {{{
      * Convert a time in seconds to "minutes:seconds".
      *
      * @param {Number} time Time in seconds.
@@ -75,7 +75,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
     /*}}}*/
 
     // Creation of yygo.
-    /** yygo.data {{{
+    /* yygo.data {{{
      * Data part of the yygo namespace, where we store the game and the actual
      * state.
      *
@@ -101,7 +101,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         playerturn:     'B',
 
         // Methods.
-        /** yygo.data.addBranch {{{
+        /* yygo.data.addBranch {{{
          * Player move made a new branch.
          *
          * @param {String} coord Move coord.
@@ -186,7 +186,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.addMove(coord);
         },
         /*}}}*/
-        /** yygo.data.addMove {{{
+        /* yygo.data.addMove {{{
          * Add player move to game data.
          *
          * @param {String} coord Coord of move.
@@ -235,7 +235,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.events.navigateNode(1);
         },
         /*}}}*/
-        /** yygo.data.calcStones {{{
+        /* yygo.data.calcStones {{{
          * Calculate all the stones present at each goban step.
          *
          * @param {Object} data Game data.
@@ -328,7 +328,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             return stones;
         },
         /*}}}*/
-        /** yygo.data.getParentBranch {{{
+        /* yygo.data.getParentBranch {{{
          * Find the branch of which depends a given branch at a given node.
          *
          * @param   {Number} node       Node to check.
@@ -348,7 +348,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             return 0;
         },
         /*}}}*/
-        /** yygo.data.parseDataFromList {{{
+        /* yygo.data.parseDataFromList {{{
          * Parse the data of the selected game in list.
          *
          * @param {Number} index Index of the selected game in list.
@@ -371,7 +371,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             });
         },
         /*}}}*/
-        /** yygo.data.setLastNode {{{
+        /* yygo.data.setLastNode {{{
          * Define the last node of the current branch.
          */
         setLastNode: function () {
@@ -388,7 +388,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         /*}}}*/
     };
     /*}}}*/
-    /** yygo.view {{{
+    /* yygo.view {{{
      * View part of the yygo namespace, where we treat all the rendering.
      *
      * @property {String}   orientation     Orientation of the screen.
@@ -407,7 +407,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
 
         // Methods.
         // Construction/insertion of html code.
-        /** yygo.view.makeComments {{{
+        /* yygo.view.makeComments {{{
          * Create and insert comments html code.
          */
         makeComments: function () {
@@ -440,7 +440,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             comments.innerHTML = html; // Insert html.
         },
         /*}}}*/
-        /** yygo.view.makeGameInfos {{{
+        /* yygo.view.makeGameInfos {{{
          * Create and insert informations html code.
          */
         makeGameInfos: function () {
@@ -515,7 +515,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             insertInfo('GC', gamecomment);
         },
         /*}}}*/
-        /** yygo.view.makeGoban {{{
+        /* yygo.view.makeGoban {{{
          * Create and insert goban html code. This include the borders and
          * the grid.
          */
@@ -539,7 +539,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 i,
                 j;
 
-            /** isHoshi {{{
+            /* isHoshi {{{
              * Test if a coord should be diplayed as hoshi.
              *
              * @param {Number} x X coord.
@@ -626,7 +626,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.events.makeGobanBinds();
         },
         /*}}}*/
-        /** yygo.view.makeVariations {{{
+        /* yygo.view.makeVariations {{{
          * Create and insert variations html code.
          */
         makeVariations: function () {
@@ -680,7 +680,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.updatePlayersInfos {{{
+        /* yygo.view.updatePlayersInfos {{{
          * Update players time and score.
          */
         updatePlayersInfos: function () {
@@ -705,7 +705,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.setPlayersInfos {{{
+        /* yygo.view.setPlayersInfos {{{
          * Insert players names, starting scores and times.
          */
         setPlayersInfos: function () {
@@ -749,7 +749,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         /*}}}*/
 
         // Display.
-        /** yygo.view.drawInterface {{{
+        /* yygo.view.drawInterface {{{
          * Draw the goban and the panel.
          *
          * @param {Boolean}  redraw Do we need to redraw interface?
@@ -792,7 +792,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             fn();
         },
         /*}}}*/
-        /** yygo.view.emptyGoban {{{
+        /* yygo.view.emptyGoban {{{
          * Empty the goban of all stones, symbols, labels.
          */
         emptyGoban: function () {
@@ -821,7 +821,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.insertSymbolSvg {{{
+        /* yygo.view.insertSymbolSvg {{{
          * Insert a symbol in a cell using svg format.
          *
          * @param {String} symbol   Symbol to insert.
@@ -853,7 +853,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             stone.innerHTML = svg;
         },
         /*}}}*/
-        /** yygo.view.placeStones {{{
+        /* yygo.view.placeStones {{{
          * Place the stones and kos of the actual state on the goban.
          * Also remove links of those to make them unplayable moves.
          */
@@ -889,7 +889,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.placeSymbols {{{
+        /* yygo.view.placeSymbols {{{
          * Place the symbols of the actual state on the goban.
          */
         placeSymbols: function () {
@@ -898,7 +898,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 ko =            yygo.data.stones[node][branch].K,
                 game =          yygo.data.game[node][branch];
 
-            // insertSymbols {{{
+            /* insertSymbols {{{*/
             function insertSymbols(symbol, list) {
                 var ci = list.length,
                     cell,
@@ -960,7 +960,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.setGamesScreenTop {{{
+        /* yygo.view.setGamesScreenTop {{{
          * Set games screen top relatively to gamesmenu.
          */
         setGamesScreenTop: function () {
@@ -976,7 +976,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.setGobanSize {{{
+        /* yygo.view.setGobanSize {{{
          * Define the size of the goban and elements depending on it. Redraw
          * if necessary or asked.
          *
@@ -1020,7 +1020,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.drawInterface(redraw, fn);
         },
         /*}}}*/
-        /** yygo.view.setScreenTop {{{
+        /* yygo.view.setScreenTop {{{
          * Set screen top relatively to navbar.
          */
         setScreenTop: function () {
@@ -1041,7 +1041,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.screenh = window.innerHeight - screentop;
         },
         /*}}}*/
-        /** yygo.view.setTextPanelTop {{{
+        /* yygo.view.setTextPanelTop {{{
          * Set comments top at bottom of top panel part.
          */
         setTextPanelTop: function () {
@@ -1051,7 +1051,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             textpanel.style.top = toppanel.offsetHeight + 5 + 'px';
         },
         /*}}}*/
-        /** yygo.view.showGamesScreen {{{
+        /* yygo.view.showGamesScreen {{{
          * Switch to another games screen.
          *
          * @param {String} show Element reference to screen to show.
@@ -1069,7 +1069,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.gamesscreen = show;
         },
         /*}}}*/
-        /** yygo.view.showLoadList {{{
+        /* yygo.view.showLoadList {{{
          * Alternate the display of the page to load a game.
          *
          * @param {Boolean} refresh Force list refresh.
@@ -1112,7 +1112,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.showScreen {{{
+        /* yygo.view.showScreen {{{
          * Switch to another screen.
          *
          * @param {String} show Element reference to screen to show.
@@ -1132,7 +1132,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.screen = show;
         },
         /*}}}*/
-        /** yygo.view.showTextPanel {{{
+        /* yygo.view.showTextPanel {{{
          * Switch between comment and game infos.
          *
          * @param {String} show Element reference to show.
@@ -1143,7 +1143,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             this.textpanel = show;
         },
         /*}}}*/
-        /** yygo.view.toggleNavButtons {{{
+        /* yygo.view.toggleNavButtons {{{
          * Alternate active state of navigation buttons.
          */
         toggleNavButtons: function () {
@@ -1178,7 +1178,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.toggleUsersList {{{
+        /* yygo.view.toggleUsersList {{{
          * Toggle visibility of users list.
          */
         toggleUsersList: function () {
@@ -1192,7 +1192,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.view.usersList {{{
+        /* yygo.view.usersList {{{
          * Make chat users list.
          */
         usersList: function () {
@@ -1209,7 +1209,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         /*}}}*/
     };
     /*}}}*/
-    /** yygo.events {{{
+    /* yygo.events {{{
      * Events part of the yygo namespace.
      *
      * @property {String}   mode        Goban mode: replay, play, modify...
@@ -1225,7 +1225,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
         socket:         null,
 
         // Methods.
-        /** yygo.events.init {{{
+        /* yygo.events.init {{{
          * This is where we start.
          */
         init: function () {
@@ -1245,7 +1245,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             });
         },
         /*}}}*/
-        /** yygo.events.loadGame {{{
+        /* yygo.events.loadGame {{{
          * Load a game.
          *
          * @param {Object} data Game data.
@@ -1296,7 +1296,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             });
         },
         /*}}}*/
-        /** yygo.events.makeBinds {{{
+        /* yygo.events.makeBinds {{{
          * Bind events to the elements.
          */
         makeBinds: function () {
@@ -1324,7 +1324,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 chatform =          document.getElementById('chatform'),
                 showusers =         document.getElementById('showusers');
 
-            // Window resize.{{{
+            /* Window resize.{{{*/
             window.addEventListener('resize', function () {
                 yygo.view.setScreenTop();
                 if (yygo.view.screen === 'game') {
@@ -1335,7 +1335,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 }
             }, false);
             //}}}
-            // Navbar.{{{
+            /* Navbar.{{{*/
             navswitch.addEventListener('click', function () {
                 if (yygo.events.navbar) {
                     navbar.style.display = 'none';
@@ -1349,7 +1349,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                     yygo.view.setGobanSize(false, function () {});
                 }
             }, false);
-            // Navbar Menu.{{{
+            /* Navbar Menu.{{{*/
             ngame.addEventListener('click', function () {
                 yygo.view.showScreen('game');
             }, false);
@@ -1370,8 +1370,8 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
             //}}}
             //}}}
-            // Hall specific.{{{
-            // Menus. {{{
+            /* Hall specific.{{{*/
+            /* Menus. {{{*/
             gonlinegames.addEventListener('click', function () {
                 yygo.view.showGamesScreen('online');
             }, false);
@@ -1382,7 +1382,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.showGamesScreen('sgf');
             }, false);
             // }}}
-            // Open sgf.{{{
+            /* Open sgf.{{{*/
             submitsgf.addEventListener('click', function () {
                 var errorinvalid =  document.getElementById('errorinvalid'),
                     file =          new FormData(this.form);
@@ -1413,7 +1413,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 yygo.view.toggleUsersList();
             }, false);
             //}}}
-            // Game specific. {{{
+            /* Game specific. {{{*/
             textpanelswitch.addEventListener('click', function () {
                 if (yygo.view.textpanel === 'comments') {
                     yygo.view.showTextPanel('gameinfos');
@@ -1422,7 +1422,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 }
             }, false);
             // }}}
-            // Settings specific.{{{
+            /* Settings specific.{{{*/
             submitsettings.addEventListener('click', function () {
                 var settingssaved = document.getElementById('settingssaved'),
                     settings =      new FormData(this.form);
@@ -1435,7 +1435,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
                 });
             }, false);
             //}}}
-            // Buttons bar.{{{
+            /* Buttons bar.{{{*/
             butstart.addEventListener('click', function () {
                 if (yygo.data.curnode > 0) {
                     yygo.events.navigateNode(-999999);
@@ -1469,7 +1469,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             //}}}
         },
         /*}}}*/
-        /** yygo.events.makeGobanBinds {{{
+        /* yygo.events.makeGobanBinds {{{
          * Assign each goban intersection a click event.
          */
         makeGobanBinds: function () {
@@ -1503,7 +1503,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.events.makeListBinds {{{
+        /* yygo.events.makeListBinds {{{
          * Assign a click event to each row in games list to load the proper
          * game index.
          *
@@ -1533,7 +1533,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.events.makeVariationsBind {{{
+        /* yygo.events.makeVariationsBind {{{
          * Change branch according to selected variation.
          *
          * @param {Element} select Select tag element.
@@ -1558,7 +1558,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }, false);
         },
         /*}}}*/
-        /** yygo.events.navigateNode {{{
+        /* yygo.events.navigateNode {{{
          * Navigate the game depending on the defined last branch.
          *
          * @param {Number} move Move to apply to current position in game.
@@ -1653,7 +1653,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             yygo.view.placeSymbols();
         },
         /*}}}*/
-        /** yygo.events.playStone {{{
+        /* yygo.events.playStone {{{
          * User played a move.
          *
          * @param {String} coord Coordinate clicked.
@@ -1693,7 +1693,7 @@ var yygo = {}; // Namespace that contains all properties and methods.
             }
         },
         /*}}}*/
-        /** yygo.events.joinHall {{{
+        /* yygo.events.joinHall {{{
          * Connect to main hall.
          */
         joinHall: function () {

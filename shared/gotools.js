@@ -1,4 +1,4 @@
-/**
+/*
  * Tools to manipulate goban and SGF files.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
@@ -6,7 +6,7 @@
  * @link     https://github.com/hickop/yinyango
  */
 
-/**
+/*
  * Exports are public functions available for client and node.
  * To call in client:
  *      <script src="gotools.js">
@@ -20,7 +20,7 @@
     'use strict';
 
     // Private functions.
-    /** testKo {{{
+    /* testKo {{{
      * Test if a move created a ko situation and add the only liberty to goban
      * as such.
      *
@@ -51,7 +51,7 @@
         return goban;
     }
     /*}}}*/
-    /** testLiberties {{{
+    /* testLiberties {{{
      * Test liberties of a stone or a group of stones recursively.
      * Inspired by eidogo algorithm.
      *
@@ -109,7 +109,7 @@
         return 2; // Same color or goban border.
     }
     /*}}}*/
-    /** testCaptures {{{
+    /* testCaptures {{{
      * Test if played stone will capture stone(s).
      *
      * @param {String}  color Played color.
@@ -148,7 +148,7 @@
         return prisonners;
     }
     /*}}}*/
-    /** testCell {{{
+    /* testCell {{{
      * Test goban intersection for liberties and set/remove forbidden moves
      * depending on current rule.
      *
@@ -168,7 +168,7 @@
             capturing = false;
         }
 
-        /** getColor {{{
+        /* getColor {{{
          * Get color of cell.
          */
         function getColor(x, y) {
@@ -178,7 +178,7 @@
             return 'X';
         }
         /*}}}*/
-        /** isCellEmpty {{{
+        /* isCellEmpty {{{
          * Check if a cell is empty.
          */
         function isCellEmpty(x, y) {
@@ -189,7 +189,7 @@
             return false;
         }
         /*}}}*/
-        /** isSurroundedBy {{{
+        /* isSurroundedBy {{{
          * Check if a cell is surrounded by color.
          */
         function isSurroundedBy(x, y, color) {
@@ -205,7 +205,7 @@
             return false;
         }
         /*}}}*/
-        /** listLiberties {{{
+        /* listLiberties {{{
          * List liberties of a stones group.
          */
         function listLiberties(color, x, y, liblist, group) {
@@ -242,7 +242,7 @@
             return;
         }
         /*}}}*/
-        /** checkGroupLiberties {{{
+        /* checkGroupLiberties {{{
          * Check a group of stones liberties. If we found only one, test if
          * group can escape otherwise this liberty should be marked forbidden
          * move for group color.
@@ -337,7 +337,7 @@
         checkGroupLiberties(x, y);
     }
     /*}}}*/
-    /** testSuicides {{{
+    /* testSuicides {{{
      * Test if a move created a suicide situation for any color, or if it
      * removed such situation. Some rules permit suicides, so we need to
      * check which rule we are playing too.
@@ -360,7 +360,7 @@
         return goban;
     }
     /*}}}*/
-    /** gobanToStones {{{
+    /* gobanToStones {{{
      * Transform goban array to stones list.
      *
      * @param {Number}  size    Goban size.
@@ -399,7 +399,7 @@
         return stones;
     }
     /*}}}*/
-    /** stonesToGoban {{{
+    /* stonesToGoban {{{
      * Transform stones list to a goban array.
      * b: black, w: white, k: ko.
      *
@@ -442,7 +442,7 @@
         return goban;
     }
     /*}}}*/
-    /** removePrisonners {{{
+    /* removePrisonners {{{
      * Remove captured stone(s) from the state.
      *
      * @param {Array}   goban       Goban to remove stones from.
@@ -457,7 +457,7 @@
             y,
             i;
 
-        /** checkCell {{{
+        /* checkCell {{{
          * Check if a dead stone will change playable moves for both players.
          */
         function checkCell(x, y) {
@@ -504,7 +504,7 @@
         return goban;
     }
     /*}}}*/
-    /** getParentBranch {{{
+    /* getParentBranch {{{
      * Find the branch of which depends a given branch at a given node.
      *
      * @param   {Number} node       Node to check.
@@ -525,7 +525,7 @@
     /*}}}*/
 
     // Public functions.
-    /** addStones {{{
+    /* addStones {{{
      * Add stones to goban.
      *
      * @param {String}  color   Color of the stone(s) (empty to remove).
@@ -558,7 +558,7 @@
         return stones;
     };
     /*}}}*/
-    /** playMove {{{
+    /* playMove {{{
      * Play a stone, apply rules and return new stones list and number of
      * prisonners.
      *
@@ -603,7 +603,7 @@
         return newstate;
     };
     /*}}}*/
-    /** parseSgf {{{
+    /* parseSgf {{{
      * Read sgf data and register keys/values, sorting the nodes (moves)
      * and branchs (variations).
      *
@@ -736,7 +736,7 @@
         fn(sgfobj);
     };
     /*}}}*/
-    /** buildSgf {{{
+    /* buildSgf {{{
      * Build an sgf string from provided data.
      *
      * @param {Object} data Game data.
