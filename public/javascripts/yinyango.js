@@ -1561,7 +1561,7 @@ yygo.showLoadList = function (refresh) {
             yygo.gameslist = data;
             for (i = 0; i < datalen; i++) {
                 html += '<tr><td class="gameslist-entry">' +
-                        '<a class="linkbutton brown2" href="#">' +
+                        '<a class="linkbutton brown3" href="#">' +
                         data[i].name + '</a></td></tr>';
                 ids.push(data[i]._id);
             }

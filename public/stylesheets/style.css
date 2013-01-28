@@ -92,15 +92,15 @@ body {
     color: #000;
 }
 .brown2 {
-    background: #eecc88;
+    background: #ddbb77;
     color: #000;
 }
 .brown3 {
-    background: #928260;
+    background: #eecc88;
+    color: #000;
 }
 .brown4 {
-    background: #ddbb77;
-    color: #000;
+    background: #928260;
 }
 .yellow, #chatmsg:focus {
     background: #ffeeaa;

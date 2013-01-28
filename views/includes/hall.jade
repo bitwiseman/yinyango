@@ -1,5 +1,5 @@
 #games
-    #games-menu.brown3.menubar
+    #games-menu.brown4.menubar
         a#g-online-games.navlink(href='#') Online 
         a#g-db-games.navlink(href='#') Db
         a#g-sgf-games.navlink(href='#') SGF
@@ -9,15 +9,15 @@
         p: a#refreshlist.linkbutton.black(href='#')= lingua.refresh
         table#db-gameslist
     #sgf-games.gamesscreen
-        p: form.box.brown2(onsubmit='return false;')
+        p: form.box.brown3(onsubmit='return false;')
             p: label= lingua.selectsgf
             p: input.input(type='file', name='sgffile')
             p: input#submitsgf.linkbutton.black(type='submit',
                 value= lingua.viewsgf)
             p: div#errorinvalid.box.red= lingua.errorinvalid
-#chat.brown4
-#userslist.brown2
+#chat.brown2
+#userslist.brown3
 form#chatform.flex(onsubmit='return false;')
-    input#chatmsg.input.brown4(type='text', autocomplete='off')
+    input#chatmsg.input.brown2(type='text', autocomplete='off')
     input#sendmsg.black(type='submit', value='^')
     input#showusers.black(type='button', value='@')

@@ -1,5 +1,5 @@
 h2= lingua.register
-form#registerform.box.brown2(onsubmit='return false;')
+form#registerform.box.brown3(onsubmit='return false;')
     p= lingua.username
     input.input(type='text', name='username', autocomplete='on', maxlength='15',
         required)
@@ -12,5 +12,5 @@ form#registerform.box.brown2(onsubmit='return false;')
     p: input.linkbutton.black(type='submit', value= lingua.register)
     p: div#errorname.box.red= lingua.errorname
     p: div#errorexist.box.red= lingua.errorexist
-    p: div#regsuccess.box.brown2= lingua.regsuccess
+    p: div#regsuccess.box= lingua.regsuccess
 p: a#login.linkbutton.black(href='#')= lingua.back
