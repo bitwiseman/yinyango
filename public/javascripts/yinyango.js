@@ -52,7 +52,7 @@ yygo.addBranch = function (coord) {
     /* increment {{{*/
     function increment(id) {
         var i = 0;
-    
+
         while (game[i] !== undefined) {
             for (j = branchs; j >= id; j--) {
                 if (game[i][j] !== undefined) {
@@ -88,9 +88,9 @@ yygo.addBranch = function (coord) {
                 if (game[i] !== undefined && game[i][j] !== undefined &&
                         game[i - 1][j] === undefined &&
                         yygo.getParentBranch(i, j) === branch) {
-                            branchid = j + 1;
-                            break;
-                        }
+                    branchid = j + 1;
+                    break;
+                }
             }
             if (branchid !== 0) {
                 break;
@@ -190,35 +190,35 @@ yygo.calcStones = function (data) {
     /* keyAction {{{*/
     function keyAction(node, branch, key, value, stones, prevscore) {
         var play;
-    
+
         switch (key) {
-            case 'B':
-                if (value[0] !== '') { // Did not pass.
-                    play =
-                        gotools.playMove('B', value[0], size, stones, rule);
-                    stones = play.stones;
-                    yygo.game[node][branch].score.B = prevscore.B +
-                        play.prisonners;
-                }
-                break;
-            case 'W':
-                if (value[0] !== '') { // Did not pass.
-                    play =
-                        gotools.playMove('W', value[0], size, stones, rule);
-                    stones = play.stones;
-                    yygo.game[node][branch].score.W = prevscore.W +
-                        play.prisonners;
-                }
-                break;
-            case 'AB':
-                stones = gotools.addStones('B', value, size, stones, rule);
-                break;
-            case 'AW':
-                stones = gotools.addStones('W', value, size, stones, rule);
-                break;
-            case 'AE':
-                stones = gotools.addStones('', value, size, stones, rule);
-                break;
+        case 'B':
+            if (value[0] !== '') { // Did not pass.
+                play =
+                    gotools.playMove('B', value[0], size, stones, rule);
+                stones = play.stones;
+                yygo.game[node][branch].score.B = prevscore.B +
+                    play.prisonners;
+            }
+            break;
+        case 'W':
+            if (value[0] !== '') { // Did not pass.
+                play =
+                    gotools.playMove('W', value[0], size, stones, rule);
+                stones = play.stones;
+                yygo.game[node][branch].score.W = prevscore.W +
+                    play.prisonners;
+            }
+            break;
+        case 'AB':
+            stones = gotools.addStones('B', value, size, stones, rule);
+            break;
+        case 'AW':
+            stones = gotools.addStones('W', value, size, stones, rule);
+            break;
+        case 'AE':
+            stones = gotools.addStones('', value, size, stones, rule);
+            break;
         }
         return stones;
     }
@@ -238,10 +238,10 @@ yygo.calcStones = function (data) {
                     if (node > 0) {
                         prevstones = stones[node - 1][parentbranch];
                         prevscore =
-                            yygo.game[node - 1][parentbranch].score; 
+                            yygo.game[node - 1][parentbranch].score;
                     } else {
                         prevstones = stones[node][branch];
-                        prevscore = yygo.game[node][branch].score; 
+                        prevscore = yygo.game[node][branch].score;
                     }
                     yygo.game[node][branch].score = {
                         B: prevscore.B,
@@ -353,7 +353,7 @@ yygo.emptyGoban = function () {
     var size =      yygo.size,
         classturn = yygo.playerturn === 'W' ? 'white' : 'black',
         coord =     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
         links =     document.getElementsByClassName('cell-link'),
         linkslen =  links.length,
         stone,
@@ -425,7 +425,7 @@ yygo.init = function () {
 yygo.insertSymbolSvg = function (symbol, id, color) {
     var stone =  document.getElementById(id),
         svg =   '<svg xmlns="http://www.w3.org/2000/svg"' +
-            'version="1.1" viewBox="0 0 10 10">';
+                'version="1.1" viewBox="0 0 10 10">';
 
     if (symbol === 'CR') { // Circle.
         svg += '<circle cx="5" cy="5" r="2.5"' +
@@ -558,7 +558,6 @@ yygo.makeBinds = function () {
         butnext =           document.getElementById('butnext'),
         butfastnext =       document.getElementById('butfastnext'),
         butend =            document.getElementById('butend'),
-        chat =              document.getElementById('chat'),
         chatmsg =           document.getElementById('chatmsg'),
         chatform =          document.getElementById('chatform'),
         showusers =         document.getElementById('showusers');
@@ -597,9 +596,8 @@ yygo.makeBinds = function () {
     }, false);
     nsettings.addEventListener('click', function () {
         // Hide previous answer from server.
-        document.getElementById('settingssaved').
-        style.display = 'none';
-    yygo.showScreen('settings');
+        document.getElementById('settingssaved').style.display = 'none';
+        yygo.showScreen('settings');
     }, false);
     nlogout.addEventListener('click', function () {
         // Fire socket disconnection.
@@ -624,16 +622,16 @@ yygo.makeBinds = function () {
     /* Open sgf.{{{*/
     submitsgf.addEventListener('click', function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
-        file =          new FormData(this.form);
+            file =          new FormData(this.form);
 
-    errorinvalid.style.display = 'none';
-    yygo.jsonRequest('/loadsgf/file', 'POST', file, function (data) {
-        if (data.answer === 'invalid') {
-            errorinvalid.style.display = 'block';
-        } else {
-            yygo.loadGame(data);
-        }
-    });
+        errorinvalid.style.display = 'none';
+        yygo.jsonRequest('/loadsgf/file', 'POST', file, function (data) {
+            if (data.answer === 'invalid') {
+                errorinvalid.style.display = 'block';
+            } else {
+                yygo.loadGame(data);
+            }
+        });
     }, false);
     //}}}
     refreshlist.addEventListener('click', function () {
@@ -664,14 +662,14 @@ yygo.makeBinds = function () {
     /* Settings specific.{{{*/
     submitsettings.addEventListener('click', function () {
         var settingssaved = document.getElementById('settingssaved'),
-        settings =      new FormData(this.form);
+            settings =      new FormData(this.form);
 
-    settingssaved.style.display = 'none';
-    yygo.jsonRequest('/settings', 'POST', settings, function (data) {
-        if (data) {
-            settingssaved.style.display = 'block';
-        }
-    });
+        settingssaved.style.display = 'none';
+        yygo.jsonRequest('/settings', 'POST', settings, function (data) {
+            if (data) {
+                settingssaved.style.display = 'block';
+            }
+        });
     }, false);
     //}}}
     /* Buttons bar.{{{*/
@@ -782,40 +780,40 @@ yygo.makeGameInfos = function () {
         }
         if (infos.BT !== undefined) {
             gameblack.textContent += ' (' + infos.BT + ')';
-                    }
-                    } else {
-                        gameblack.textContent = '';
-                    }
-                    if (infos.PW !== undefined) {
-                        gamewhite.textContent = infos.PW;
-                        if (infos.WR !== undefined) {
-                            gamewhite.textContent += ' [' + infos.WR + ']';
-                        }
-                        if (infos.WT !== undefined) {
-                            gamewhite.textContent += ' (' + infos.WT + ')';
-                                }
-                                } else {
-                                    gamewhite.textContent = '';
-                                }
-                                if (infos.TM !== undefined) {
-                                    gametime.textContent = yygo.secToTime(infos.TM);
-                                } else {
-                                    gametime.textContent = '';
-                                }
+        }
+    } else {
+        gameblack.textContent = '';
+    }
+    if (infos.PW !== undefined) {
+        gamewhite.textContent = infos.PW;
+        if (infos.WR !== undefined) {
+            gamewhite.textContent += ' [' + infos.WR + ']';
+        }
+        if (infos.WT !== undefined) {
+            gamewhite.textContent += ' (' + infos.WT + ')';
+        }
+    } else {
+        gamewhite.textContent = '';
+    }
+    if (infos.TM !== undefined) {
+        gametime.textContent = yygo.secToTime(infos.TM);
+    } else {
+        gametime.textContent = '';
+    }
 
-                                insertInfo('RE', gameresult);
-                                insertInfo('DT', gamedate);
-                                insertInfo('PC', gameplace);
-                                insertInfo('EV', gameevent);
-                                insertInfo('GN', gamename);
-                                insertInfo('RU', gamerules);
-                                insertInfo('KM', gamekomi);
-                                insertInfo('OT', gameovertime);
-                                insertInfo('AN', gameannotator);
-                                insertInfo('US', gamescribe);
-                                insertInfo('SO', gamesource);
-                                insertInfo('CP', gamecopyright);
-                                insertInfo('GC', gamecomment);
+    insertInfo('RE', gameresult);
+    insertInfo('DT', gamedate);
+    insertInfo('PC', gameplace);
+    insertInfo('EV', gameevent);
+    insertInfo('GN', gamename);
+    insertInfo('RU', gamerules);
+    insertInfo('KM', gamekomi);
+    insertInfo('OT', gameovertime);
+    insertInfo('AN', gameannotator);
+    insertInfo('US', gamescribe);
+    insertInfo('SO', gamesource);
+    insertInfo('CP', gamecopyright);
+    insertInfo('GC', gamecomment);
 };
 /*}}}*/
 /* makeGoban {{{
@@ -826,9 +824,9 @@ yygo.makeGoban = function () {
     var size =      yygo.size + 2,
         goban =     document.getElementById('goban'),
         coord =     ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-        'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                    'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
         border =    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
-        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
+                    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
         gt =        '<div class="g gt black"></div>',
         gr =        '<div class="g gr black"></div>',
         gb =        '<div class="g gb black"></div>',
@@ -855,23 +853,23 @@ yygo.makeGoban = function () {
             r = size - 5;
 
         if (size === 11 && ((x === 3 && y === 3) ||
-                    (x === 5 && y === 3) || (x === 7 && y === 3) ||
-                    (x === 3 && y === 5) || (x === 5 && y === 5) ||
-                    (x === 7 && y === 5) || (x === 3 && y === 7) ||
-                    (x === 5 && y === 7) || (x === 7 && y === 7))) {
-                        return true;
-                    }
+                (x === 5 && y === 3) || (x === 7 && y === 3) ||
+                (x === 3 && y === 5) || (x === 5 && y === 5) ||
+                (x === 7 && y === 5) || (x === 3 && y === 7) ||
+                (x === 5 && y === 7) || (x === 7 && y === 7))) {
+            return true;
+        }
         if (size > 11) {
             if (size / 2 !== Math.round(size / 2) &&
                     ((x === 4 && y === m) || (x === m && y === 4) ||
                      (x === m && y === m) || (x === m && y === r) ||
                      (x === r && y === m))) {
-                         return true;
-                     }
+                return true;
+            }
             if ((x === 4 && y === 4) || (x === 4 && y === r) ||
                     (x === r && y === 4) || (x === r && y === r)) {
-                        return true;
-                    }
+                return true;
+            }
         }
         return false;
     }
@@ -906,21 +904,20 @@ yygo.makeGoban = function () {
                 content = gt + gr + gb + sto + id + stc + a;
             } else if (j === size - 2 && i !== 0 && i !== size - 1) {
                 content = gt + gb + gl + sto + id + stc + a;
-            } else if (i !== 0 && i !== size - 1 && j !== 0 &&
-                    j !== size - 1) {
-                        content = gt + gr + gb + gl + sto + id + stc + a;
-                        if (isHoshi(i, j)) {
-                            content += '<div class="h black"></div>';
-                        }
-                    } else if ((i === 0 || i === size - 1) && j !== size - 1 &&
-                            j !== 0) {
-                                content = border[j - 1];
-                            } else if ((j === 0 || j === size - 1) && i !== size - 1 &&
-                                    i !== 0) {
-                                        content = size - i - 1;
-                                    } else {
-                                        content = '';
-                                    }
+            } else if (i !== 0 && i !== size - 1 && j !== 0 && j !== size - 1) {
+                content = gt + gr + gb + gl + sto + id + stc + a;
+                if (isHoshi(i, j)) {
+                    content += '<div class="h black"></div>';
+                }
+            } else if ((i === 0 || i === size - 1) && j !== size - 1 &&
+                    j !== 0) {
+                content = border[j - 1];
+            } else if ((j === 0 || j === size - 1) && i !== size - 1 &&
+                    i !== 0) {
+                content = size - i - 1;
+            } else {
+                content = '';
+            }
             html += '<div class="cell">' + content + '</div>';
         }
         html += '</div>'; // Row end.
@@ -935,7 +932,7 @@ yygo.makeGoban = function () {
 yygo.makeGobanBinds = function () {
     var size =      yygo.size,
         letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-        'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+                    'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
         i,
         j;
 
@@ -946,14 +943,14 @@ yygo.makeGobanBinds = function () {
         // Add listener to parent to catch click on <a> also.
         stone.parentNode.addEventListener('click', function () {
             var stone = this.getElementsByClassName('stone')[0],
-            id =    stone.id,
-            mode =  yygo.mode;
+                id =    stone.id,
+                mode =  yygo.mode;
 
-        if (mode === 'replay' && (stone.className === 'stone' ||
-                stone.className === 'stone brown')) {
-                    yygo.playStone(id);
-                }
-        // TODO Other modes.
+            if (mode === 'replay' && (stone.className === 'stone' ||
+                    stone.className === 'stone brown')) {
+                yygo.playStone(id);
+            }
+            // TODO Other modes.
         }, true);
     }
     /*}}}*/
@@ -1011,7 +1008,6 @@ yygo.makeVariations = function () {
         variationsnum = 0,
         html =          '',
         currentvar,
-        select,
         pbranch,
         opbranch,
         i;
@@ -1061,18 +1057,18 @@ yygo.makeVariationsBind = function (select) {
 
     select.addEventListener('change', function () {
         var branch = parseInt(this.value, 10),
-        number = this.options[this.selectedIndex].innerHTML;
+            number = this.options[this.selectedIndex].innerHTML;
 
-    varvalue.textContent = number;
-    yygo.curbranch = branch;
-    yygo.lastbranch = branch;
-    yygo.setLastNode();
-    yygo.toggleNavButtons();
-    yygo.updatePlayersInfos();
-    yygo.makeComments();
-    yygo.emptyGoban();
-    yygo.placeStones();
-    yygo.placeSymbols();
+        varvalue.textContent = number;
+        yygo.curbranch = branch;
+        yygo.lastbranch = branch;
+        yygo.setLastNode();
+        yygo.toggleNavButtons();
+        yygo.updatePlayersInfos();
+        yygo.makeComments();
+        yygo.emptyGoban();
+        yygo.placeStones();
+        yygo.placeSymbols();
     }, false);
 };
 /*}}}*/
@@ -1325,21 +1321,21 @@ yygo.playStone = function (coord) {
                 game[node + 1][i] !== undefined &&
                 game[node + 1][i][turn] !== undefined &&
                 game[node + 1][i][turn][0] === coord) {
-                    // That move already exist in a child branch, change last
-                    // branch and show it.
-                    exist = true;
-                    yygo.lastbranch = i;
-                    yygo.navigateNode(1);
-                    break;
-                }
+            // That move already exist in a child branch, change last
+            // branch and show it.
+            exist = true;
+            yygo.lastbranch = i;
+            yygo.navigateNode(1);
+            break;
+        }
     }
     if (!exist) {
         if (game[node + 1] === undefined ||
                 game[node + 1][branch] === undefined) {
-                    yygo.addMove(coord);
-                } else {
-                    yygo.addBranch(coord);
-                }
+            yygo.addMove(coord);
+        } else {
+            yygo.addBranch(coord);
+        }
     }
 };
 /*}}}*/
@@ -1437,8 +1433,8 @@ yygo.setLastNode = function () {
 
     while (game[lastnode + 1] !== undefined &&
             game[lastnode + 1][curbranch] !== undefined) {
-                lastnode++;
-            }
+        lastnode++;
+    }
     yygo.lastnode = lastnode;
 };
 /*}}}*/
@@ -1552,26 +1548,26 @@ yygo.showLoadList = function (refresh) {
     if (yygo.isObjectEmpty(list) || refresh) { // Get fresh list from server.
         yygo.jsonRequest('/gameslist/' + page, 'GET', function (data) {
             var datalen = data.length,
-            ids = [];
+                ids = [];
 
-        // More than one page.
-        //if (datalen === 11) {
-        //nextpage.style.display = 'inline';
-        //datalen--;
-        //data.pop();
-        //} else {
-        //nextpage.style.display = 'none';
-        //}
-        yygo.gameslist = data;
-        for (i = 0; i < datalen; i++) {
-            html += '<tr><td class="gameslist-entry">' + 
-            '<a class="linkbutton brown2" href="#">' +
-            data[i].name + '</a></td></tr>';
-        ids.push(data[i]._id);
-        }
-        gameslist.innerHTML = html;
-        // Bind click events to list.
-        yygo.makeListBinds(ids);
+            // More than one page.
+            //if (datalen === 11) {
+            //nextpage.style.display = 'inline';
+            //datalen--;
+            //data.pop();
+            //} else {
+            //nextpage.style.display = 'none';
+            //}
+            yygo.gameslist = data;
+            for (i = 0; i < datalen; i++) {
+                html += '<tr><td class="gameslist-entry">' +
+                        '<a class="linkbutton brown2" href="#">' +
+                        data[i].name + '</a></td></tr>';
+                ids.push(data[i]._id);
+            }
+            gameslist.innerHTML = html;
+            // Bind click events to list.
+            yygo.makeListBinds(ids);
         });
     }
 };
@@ -1648,12 +1644,11 @@ yygo.toggleNavButtons = function () {
 yygo.toggleUsersList = function () {
     var userslist = document.getElementById('userslist');
 
-    if (userslist.style.display === '' ||
-            userslist.style.display === 'none') {
-                userslist.style.display = 'block';
-            } else {
-                userslist.style.display = 'none';
-            }
+    if (userslist.style.display === '' || userslist.style.display === 'none') {
+        userslist.style.display = 'block';
+    } else {
+        userslist.style.display = 'none';
+    }
 };
 /*}}}*/
 /* updatePlayersInfos {{{
