@@ -212,7 +212,7 @@
             var liblen = liblist.length,
                 grouplen = group.length,
                 i;
-        
+
             if (isCellEmpty(x, y)) {
                 // Check if we already have this intersection in liberties.
                 for (i = 0; i < liblen; i++) {
@@ -255,7 +255,7 @@
                 libx,
                 liby,
                 i;
-        
+
             if (getColor(x, y) === 'B' || getColor(x, y) === 'W') {
                 listLiberties(getColor(x, y), x, y, liblist, group);
                 // If only one liberty found.
@@ -342,7 +342,6 @@
      * removed such situation. Some rules permit suicides, so we need to
      * check which rule we are playing too.
      *
-     * @param {String} color Played color.
      * @param {Number} x X coord.
      * @param {Number} y Y coord.
      * @param {Array} goban Goban to test.
@@ -350,7 +349,7 @@
      *
      * @return {Array} New goban with suicides.
      */
-    function testSuicides(color, x, y, goban, rule) {
+    function testSuicides(x, y, goban, rule) {
 
         testCell(goban, x - 1, y, rule);
         testCell(goban, x + 1, y, rule);
@@ -466,7 +465,7 @@
                 xc,
                 yc,
                 i;
-        
+
             // Make sure we do not test a dead stone.
             for (i = 0; i < prilen; i++) {
                 coord = prisonners[i].split(':');
@@ -488,7 +487,7 @@
             y = parseInt(coord[1], 10);
             // Remove stone from goban.
             goban[x][y] = '';
-            // Check adjacent cells for ennemies groups to remove 
+            // Check adjacent cells for ennemies groups to remove
             // forbidden moves that are no more forbidden.
             checkCell(x - 1, y);
             checkCell(x + 1, y);
@@ -593,7 +592,7 @@
             // Test if that create a ko situation.
             goban = testKo(color, x, y, goban);
         }
-        goban = testSuicides(color, x, y, goban, rule);
+        goban = testSuicides(x, y, goban, rule);
 
         newstate = {
             'stones': gobanToStones(size, goban),
