@@ -169,6 +169,288 @@ yygo.addMove = function (coord) {
     yygo.navigateNode(1);
 };
 /*}}}*/
+/* ajax {{{
+ * Simple ajax request expecting json in response.
+ *
+ * @param {String}      url         Destination url.
+ * @param {String}      method      Method to send data.
+ * @param {Object}      data        FormData Object to be sent by a POST.
+ * @param {Function}    callback    Callback function.
+ */
+yygo.ajax = function (url, method, data, callback) {
+    var xhr = new XMLHttpRequest();
+
+    if (callback === undefined) {
+        callback = data;
+        data = null;
+    }
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 &&
+                (xhr.status === 200 || xhr.status === 0)) {
+            callback(JSON.parse(xhr.responseText));
+        }
+    };
+
+    xhr.open(method, url, true);
+    xhr.send(data);
+};
+/*}}}*/
+/* bindEvents {{{
+ * Bind events to the elements.
+ */
+yygo.bindEvents = function () {
+    var navswitch =         document.getElementById('navswitch'),
+        navbar =            document.getElementById('navbar'),
+        ngame =             document.getElementById('n-game'),
+        nhall =             document.getElementById('n-hall'),
+        nsettings =         document.getElementById('n-settings'),
+        nlogout =           document.getElementById('n-logout'),
+        gonlinegames =      document.getElementById('g-online-games'),
+        gdbgames =          document.getElementById('g-db-games'),
+        gsgfgames =         document.getElementById('g-sgf-games'),
+        refreshlist =       document.getElementById('refreshlist'),
+        submitsettings =    document.getElementById('submitsettings'),
+        submitsgf =         document.getElementById('submitsgf'),
+        textpanelswitch =   document.getElementById('textpanel-switch'),
+        butstart =          document.getElementById('butstart'),
+        butfastprev =       document.getElementById('butfastprev'),
+        butprev =           document.getElementById('butprev'),
+        butnext =           document.getElementById('butnext'),
+        butfastnext =       document.getElementById('butfastnext'),
+        butend =            document.getElementById('butend'),
+        chatmsg =           document.getElementById('chatmsg'),
+        chatform =          document.getElementById('chatform'),
+        showusers =         document.getElementById('showusers');
+
+    /* Window.{{{*/
+    window.addEventListener('resize', function () {
+        yygo.setScreenTop();
+        if (yygo.screen === 'game') {
+            yygo.setGobanSize(false, function () {});
+        }
+        if (yygo.screen === 'hall') {
+            yygo.setGamesScreenTop();
+        }
+    }, false);
+    //}}}
+    /* Navbar.{{{*/
+    navswitch.addEventListener('click', function () {
+        if (yygo.navbar) {
+            navbar.style.display = 'none';
+            yygo.navbar = false;
+        } else {
+            navbar.style.display = 'inline-block';
+            yygo.navbar = true;
+        }
+        yygo.setScreenTop();
+        if (yygo.screen === 'game') {
+            yygo.setGobanSize(false, function () {});
+        }
+    }, false);
+    ngame.addEventListener('click', function () {
+        yygo.showScreen('game');
+    }, false);
+    nhall.addEventListener('click', function () {
+        yygo.showScreen('hall');
+    }, false);
+    nsettings.addEventListener('click', function () {
+        // Hide previous answer from server.
+        document.getElementById('settingssaved').style.display = 'none';
+        yygo.showScreen('settings');
+    }, false);
+    nlogout.addEventListener('click', function () {
+        // Fire socket disconnection.
+        yygo.socket.disconnect();
+        // End Session.
+        window.location.href = '/logout';
+    }, false);
+    //}}}
+    /* Hall.{{{*/
+    gonlinegames.addEventListener('click', function () {
+        yygo.showGamesScreen('online');
+    }, false);
+    gdbgames.addEventListener('click', function () {
+        yygo.showGamesScreen('db');
+    }, false);
+    gsgfgames.addEventListener('click', function () {
+        yygo.showGamesScreen('sgf');
+    }, false);
+    submitsgf.addEventListener('click', function () {
+        var errorinvalid =  document.getElementById('errorinvalid'),
+            file =          new FormData(this.form);
+
+        errorinvalid.style.display = 'none';
+        yygo.ajax('/loadsgf/file', 'POST', file, function (data) {
+            if (data.answer === 'invalid') {
+                errorinvalid.style.display = 'block';
+            } else {
+                yygo.loadGame(data);
+            }
+        });
+    }, false);
+    refreshlist.addEventListener('click', function () {
+        yygo.makeDbGamesList(true);
+    }, false);
+    chatform.addEventListener('submit', function () {
+        if (chatmsg.value !== '') {
+            // Send message to server.
+            yygo.socket.emit('chat', chatmsg.value);
+            // Clear message input.
+            chatmsg.value = '';
+        }
+    }, false);
+    showusers.addEventListener('click', function () {
+        // Toggle users list visibility.
+        yygo.toggleUsersList();
+    }, false);
+    //}}}
+    /* Game. {{{*/
+    butstart.addEventListener('click', function () {
+        if (yygo.curnode > 0) {
+            yygo.navigateNode(-999999);
+        }
+    }, false);
+    butfastprev.addEventListener('click', function () {
+        if (yygo.curnode > 0) {
+            yygo.navigateNode(-10);
+        }
+    }, false);
+    butprev.addEventListener('click', function () {
+        if (yygo.curnode > 0) {
+            yygo.navigateNode(-1);
+        }
+    }, false);
+    butnext.addEventListener('click', function () {
+        if (yygo.curnode < yygo.lastnode) {
+            yygo.navigateNode(1);
+        }
+    }, false);
+    butfastnext.addEventListener('click', function () {
+        if (yygo.curnode < yygo.lastnode) {
+            yygo.navigateNode(10);
+        }
+    }, false);
+    butend.addEventListener('click', function () {
+        if (yygo.curnode < yygo.lastnode) {
+            yygo.navigateNode(999999);
+        }
+    }, false);
+    textpanelswitch.addEventListener('click', function () {
+        if (yygo.textpanel === 'comments') {
+            yygo.showTextPanel('gameinfos');
+        } else {
+            yygo.showTextPanel('comments');
+        }
+    }, false);
+    // }}}
+    /* Settings.{{{*/
+    submitsettings.addEventListener('click', function () {
+        var settingssaved = document.getElementById('settingssaved'),
+            settings =      new FormData(this.form);
+
+        settingssaved.style.display = 'none';
+        yygo.ajax('/settings', 'POST', settings, function (data) {
+            if (data) {
+                settingssaved.style.display = 'block';
+            }
+        });
+    }, false);
+    //}}}
+};
+/*}}}*/
+/* bindGamesListClick {{{
+ * Assign a click event to each row in games list to load the proper
+ * game index.
+ *
+ * @param {Array} ids Identifiers for database reference.
+ */
+yygo.bindGamesListClick = function (ids) {
+    var table =     document.getElementById('db-gameslist'),
+        rows =      table.getElementsByTagName('tr'),
+        rl =        rows.length,
+        r;
+
+    /* bindRow {{{*/
+    function bindRow(r) {
+        rows[r].addEventListener('click', function () {
+            var row = this.rowIndex;
+
+            // Show loading screen.
+            yygo.showScreen('loading');
+            // Get data of game corresponding clicked row.
+            yygo.ajax('/load/' + ids[row], 'GET', function (data) {
+                yygo.loadGame(data);
+            });
+        }, true);
+    }
+    /*}}}*/
+
+    for (r = 0; r < rl; r++) {
+        bindRow(r);
+    }
+};
+/*}}}*/
+/* bindGobanClick {{{
+ * Assign each goban intersection a click event.
+ */
+yygo.bindGobanClick = function () {
+    var size =      yygo.size,
+        letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                    'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+        i,
+        j;
+
+    /* bindStone {{{*/
+    function bindStone(coord) {
+        var stone = document.getElementById(coord);
+
+        // Add listener to parent to catch click on <a> also.
+        stone.parentNode.addEventListener('click', function () {
+            var stone = this.getElementsByClassName('stone')[0],
+                id =    stone.id,
+                mode =  yygo.mode;
+
+            if (mode === 'replay' && (stone.className === 'stone' ||
+                    stone.className === 'stone brown')) {
+                yygo.playStone(id);
+            }
+            // TODO Other modes.
+        }, true);
+    }
+    /*}}}*/
+
+    for (i = 0; i < size; i++) {
+        for (j = 0; j < size; j++) {
+            bindStone(letter[i] + letter[j]);
+        }
+    }
+};
+/*}}}*/
+/* bindVariationChange {{{
+ * Change branch according to selected variation.
+ *
+ * @param {Element} select Select tag element.
+ */
+yygo.bindVariationChange = function (select) {
+    var varvalue = document.getElementById('varvalue');
+
+    select.addEventListener('change', function () {
+        var branch = parseInt(this.value, 10),
+            number = this.options[this.selectedIndex].innerHTML;
+
+        varvalue.textContent = number;
+        yygo.curbranch = branch;
+        yygo.lastbranch = branch;
+        yygo.setLastNode();
+        yygo.toggleNavButtons();
+        yygo.updatePlayersInfos();
+        yygo.makeComments();
+        yygo.emptyGoban();
+        yygo.placeStones();
+        yygo.placeSymbols();
+    }, false);
+};
+/*}}}*/
 /* calcStones {{{
  * Calculate all the stones present at each goban step.
  *
@@ -281,7 +563,7 @@ yygo.connectHall = function () {
             yygo.connected = false;
         } else {
             yygo.userslist = data.users;
-            yygo.usersList();
+            yygo.makeUsersList();
             yygo.connected = true;
         }
     });
@@ -294,22 +576,22 @@ yygo.connectHall = function () {
     });
     yygo.socket.on('user-joined', function (user) {
         yygo.userslist.push(user);
-        yygo.usersList();
+        yygo.makeUsersList();
     });
     yygo.socket.on('user-left', function (user) {
         var id = yygo.userslist.indexOf(user);
         yygo.userslist.splice(id, 1);
-        yygo.usersList();
+        yygo.makeUsersList();
     });
 };
 /*}}}*/
-/* drawInterface {{{
+/* drawGame {{{
  * Draw the goban and the panel.
  *
  * @param {Boolean}  redraw Do we need to redraw interface?
  * @param {Function} fn     Callback.
  */
-yygo.drawInterface = function (redraw, fn) {
+yygo.drawGame = function (redraw, fn) {
     var panel =         document.getElementById('panel'),
         goban =         document.getElementById('goban'),
         cells =         document.getElementsByClassName('cell'),
@@ -400,10 +682,10 @@ yygo.getParentBranch = function (node, branch) {
  */
 yygo.init = function () {
     // Get user session if it still exist.
-    yygo.jsonRequest('/session', 'GET', function (session) {
+    yygo.ajax('/session', 'GET', function (session) {
         yygo.username = session.username;
         // Bind buttons to functions.
-        yygo.makeBinds();
+        yygo.bindEvents();
         // Set screen top.
         yygo.setScreenTop();
         // Connect to main hall.
@@ -458,32 +740,6 @@ yygo.isObjectEmpty = function (obj) {
     return Object.keys(obj).length === 0;
 };
 /*}}}*/
-/* jsonRequest {{{
- * Simple ajax request expecting json in response.
- *
- * @param {String}      url         Destination url.
- * @param {String}      method      Method to send data.
- * @param {Object}      data        FormData Object to be sent by a POST.
- * @param {Function}    callback    Callback function.
- */
-yygo.jsonRequest = function (url, method, data, callback) {
-    var xhr = new XMLHttpRequest();
-
-    if (callback === undefined) {
-        callback = data;
-        data = null;
-    }
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 &&
-                (xhr.status === 200 || xhr.status === 0)) {
-            callback(JSON.parse(xhr.responseText));
-        }
-    };
-
-    xhr.open(method, url, true);
-    xhr.send(data);
-};
-/*}}}*/
 /* loadGame {{{
  * Load a game.
  *
@@ -535,177 +791,6 @@ yygo.loadGame = function (data) {
     });
 };
 /*}}}*/
-/* makeBinds {{{
- * Bind events to the elements.
- */
-yygo.makeBinds = function () {
-    var navswitch =         document.getElementById('navswitch'),
-        navbar =            document.getElementById('navbar'),
-        ngame =             document.getElementById('n-game'),
-        nhall =             document.getElementById('n-hall'),
-        nsettings =         document.getElementById('n-settings'),
-        nlogout =           document.getElementById('n-logout'),
-        gonlinegames =      document.getElementById('g-online-games'),
-        gdbgames =          document.getElementById('g-db-games'),
-        gsgfgames =         document.getElementById('g-sgf-games'),
-        refreshlist =       document.getElementById('refreshlist'),
-        submitsettings =    document.getElementById('submitsettings'),
-        submitsgf =         document.getElementById('submitsgf'),
-        textpanelswitch =   document.getElementById('textpanel-switch'),
-        butstart =          document.getElementById('butstart'),
-        butfastprev =       document.getElementById('butfastprev'),
-        butprev =           document.getElementById('butprev'),
-        butnext =           document.getElementById('butnext'),
-        butfastnext =       document.getElementById('butfastnext'),
-        butend =            document.getElementById('butend'),
-        chatmsg =           document.getElementById('chatmsg'),
-        chatform =          document.getElementById('chatform'),
-        showusers =         document.getElementById('showusers');
-
-    /* Window resize.{{{*/
-    window.addEventListener('resize', function () {
-        yygo.setScreenTop();
-        if (yygo.screen === 'game') {
-            yygo.setGobanSize(false, function () {});
-        }
-        if (yygo.screen === 'hall') {
-            yygo.setGamesScreenTop();
-        }
-    }, false);
-    //}}}
-    /* Navbar.{{{*/
-    navswitch.addEventListener('click', function () {
-        if (yygo.navbar) {
-            navbar.style.display = 'none';
-            yygo.navbar = false;
-        } else {
-            navbar.style.display = 'inline-block';
-            yygo.navbar = true;
-        }
-        yygo.setScreenTop();
-        if (yygo.screen === 'game') {
-            yygo.setGobanSize(false, function () {});
-        }
-    }, false);
-    /* Navbar Menu.{{{*/
-    ngame.addEventListener('click', function () {
-        yygo.showScreen('game');
-    }, false);
-    nhall.addEventListener('click', function () {
-        yygo.showScreen('hall');
-    }, false);
-    nsettings.addEventListener('click', function () {
-        // Hide previous answer from server.
-        document.getElementById('settingssaved').style.display = 'none';
-        yygo.showScreen('settings');
-    }, false);
-    nlogout.addEventListener('click', function () {
-        // Fire socket disconnection.
-        yygo.socket.disconnect();
-        // End Session.
-        window.location.href = '/logout';
-    }, false);
-    //}}}
-    //}}}
-    /* Hall specific.{{{*/
-    /* Menus. {{{*/
-    gonlinegames.addEventListener('click', function () {
-        yygo.showGamesScreen('online');
-    }, false);
-    gdbgames.addEventListener('click', function () {
-        yygo.showGamesScreen('db');
-    }, false);
-    gsgfgames.addEventListener('click', function () {
-        yygo.showGamesScreen('sgf');
-    }, false);
-    // }}}
-    /* Open sgf.{{{*/
-    submitsgf.addEventListener('click', function () {
-        var errorinvalid =  document.getElementById('errorinvalid'),
-            file =          new FormData(this.form);
-
-        errorinvalid.style.display = 'none';
-        yygo.jsonRequest('/loadsgf/file', 'POST', file, function (data) {
-            if (data.answer === 'invalid') {
-                errorinvalid.style.display = 'block';
-            } else {
-                yygo.loadGame(data);
-            }
-        });
-    }, false);
-    //}}}
-    refreshlist.addEventListener('click', function () {
-        yygo.showLoadList(true);
-    }, false);
-    chatform.addEventListener('submit', function () {
-        if (chatmsg.value !== '') {
-            // Send message to server.
-            yygo.socket.emit('chat', chatmsg.value);
-            // Clear message input.
-            chatmsg.value = '';
-        }
-    }, false);
-    showusers.addEventListener('click', function () {
-        // Toggle users list visibility.
-        yygo.toggleUsersList();
-    }, false);
-    //}}}
-    /* Game specific. {{{*/
-    textpanelswitch.addEventListener('click', function () {
-        if (yygo.textpanel === 'comments') {
-            yygo.showTextPanel('gameinfos');
-        } else {
-            yygo.showTextPanel('comments');
-        }
-    }, false);
-    // }}}
-    /* Settings specific.{{{*/
-    submitsettings.addEventListener('click', function () {
-        var settingssaved = document.getElementById('settingssaved'),
-            settings =      new FormData(this.form);
-
-        settingssaved.style.display = 'none';
-        yygo.jsonRequest('/settings', 'POST', settings, function (data) {
-            if (data) {
-                settingssaved.style.display = 'block';
-            }
-        });
-    }, false);
-    //}}}
-    /* Buttons bar.{{{*/
-    butstart.addEventListener('click', function () {
-        if (yygo.curnode > 0) {
-            yygo.navigateNode(-999999);
-        }
-    }, false);
-    butfastprev.addEventListener('click', function () {
-        if (yygo.curnode > 0) {
-            yygo.navigateNode(-10);
-        }
-    }, false);
-    butprev.addEventListener('click', function () {
-        if (yygo.curnode > 0) {
-            yygo.navigateNode(-1);
-        }
-    }, false);
-    butnext.addEventListener('click', function () {
-        if (yygo.curnode < yygo.lastnode) {
-            yygo.navigateNode(1);
-        }
-    }, false);
-    butfastnext.addEventListener('click', function () {
-        if (yygo.curnode < yygo.lastnode) {
-            yygo.navigateNode(10);
-        }
-    }, false);
-    butend.addEventListener('click', function () {
-        if (yygo.curnode < yygo.lastnode) {
-            yygo.navigateNode(999999);
-        }
-    }, false);
-    //}}}
-};
-/*}}}*/
 /* makeComments {{{
  * Create and insert comments html code.
  */
@@ -737,6 +822,49 @@ yygo.makeComments = function () {
     }
 
     comments.innerHTML = html; // Insert html.
+};
+/*}}}*/
+/* makeDbGamesList {{{
+ * Insert database games list.
+ *
+ * @param {Boolean} refresh Force list refresh.
+ */
+yygo.makeDbGamesList = function (refresh) {
+    var gameslist = document.getElementById('db-gameslist'),
+        list =      yygo.gameslist,
+        page =      0,
+        html =      '',
+        i;
+
+    if (refresh === undefined) {
+        refresh = false;
+    }
+
+    if (yygo.isObjectEmpty(list) || refresh) { // Get fresh list from server.
+        yygo.ajax('/gameslist/' + page, 'GET', function (data) {
+            var datalen = data.length,
+                ids = [];
+
+            // More than one page.
+            //if (datalen === 11) {
+            //nextpage.style.display = 'inline';
+            //datalen--;
+            //data.pop();
+            //} else {
+            //nextpage.style.display = 'none';
+            //}
+            yygo.gameslist = data;
+            for (i = 0; i < datalen; i++) {
+                html += '<tr><td class="gameslist-entry">' +
+                        '<a class="linkbutton brown3" href="#">' +
+                        data[i].name + '</a></td></tr>';
+                ids.push(data[i]._id);
+            }
+            gameslist.innerHTML = html;
+            // Bind click events to list.
+            yygo.bindGamesListClick(ids);
+        });
+    }
 };
 /*}}}*/
 /* makeGameInfos {{{
@@ -796,7 +924,7 @@ yygo.makeGameInfos = function () {
         gamewhite.textContent = '';
     }
     if (infos.TM !== undefined) {
-        gametime.textContent = yygo.secToTime(infos.TM);
+        gametime.textContent = yygo.secondsToTime(infos.TM);
     } else {
         gametime.textContent = '';
     }
@@ -923,75 +1051,22 @@ yygo.makeGoban = function () {
         html += '</div>'; // Row end.
     }
     goban.innerHTML = html;
-    yygo.makeGobanBinds();
+    yygo.bindGobanClick();
 };
 /*}}}*/
-/* makeGobanBinds {{{
- * Assign each goban intersection a click event.
+/* makeUsersList {{{
+ * Make chat users list.
  */
-yygo.makeGobanBinds = function () {
-    var size =      yygo.size,
-        letter =    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-                    'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-        i,
-        j;
+yygo.makeUsersList = function () {
+    var userslist = document.getElementById('userslist'),
+        html = '',
+        s = yygo.userslist.length,
+        i;
 
-    /* bindStone {{{*/
-    function bindStone(coord) {
-        var stone = document.getElementById(coord);
-
-        // Add listener to parent to catch click on <a> also.
-        stone.parentNode.addEventListener('click', function () {
-            var stone = this.getElementsByClassName('stone')[0],
-                id =    stone.id,
-                mode =  yygo.mode;
-
-            if (mode === 'replay' && (stone.className === 'stone' ||
-                    stone.className === 'stone brown')) {
-                yygo.playStone(id);
-            }
-            // TODO Other modes.
-        }, true);
+    for (i = 0; i < s; i++) {
+        html += yygo.userslist[i] + '</br>';
     }
-    /*}}}*/
-
-    for (i = 0; i < size; i++) {
-        for (j = 0; j < size; j++) {
-            bindStone(letter[i] + letter[j]);
-        }
-    }
-};
-/*}}}*/
-/* makeListBinds {{{
- * Assign a click event to each row in games list to load the proper
- * game index.
- *
- * @param {Array} ids Identifiers for database reference.
- */
-yygo.makeListBinds = function (ids) {
-    var table =     document.getElementById('db-gameslist'),
-        rows =      table.getElementsByTagName('tr'),
-        rl =        rows.length,
-        r;
-
-    /* bindRow {{{*/
-    function bindRow(r) {
-        rows[r].addEventListener('click', function () {
-            var row = this.rowIndex;
-
-            // Show loading screen.
-            yygo.showScreen('loading');
-            // Get data of game corresponding clicked row.
-            yygo.jsonRequest('/load/' + ids[row], 'GET', function (data) {
-                yygo.loadGame(data);
-            });
-        }, true);
-    }
-    /*}}}*/
-
-    for (r = 0; r < rl; r++) {
-        bindRow(r);
-    }
+    userslist.innerHTML = html;
 };
 /*}}}*/
 /* makeVariations {{{
@@ -1043,33 +1118,8 @@ yygo.makeVariations = function () {
         varvalue.textContent = currentvar;
         varselect.innerHTML = html;
         variations.style.display = 'block';
-        yygo.makeVariationsBind(varselect);
+        yygo.bindVariationChange(varselect);
     }
-};
-/*}}}*/
-/* makeVariationsBind {{{
- * Change branch according to selected variation.
- *
- * @param {Element} select Select tag element.
- */
-yygo.makeVariationsBind = function (select) {
-    var varvalue = document.getElementById('varvalue');
-
-    select.addEventListener('change', function () {
-        var branch = parseInt(this.value, 10),
-            number = this.options[this.selectedIndex].innerHTML;
-
-        varvalue.textContent = number;
-        yygo.curbranch = branch;
-        yygo.lastbranch = branch;
-        yygo.setLastNode();
-        yygo.toggleNavButtons();
-        yygo.updatePlayersInfos();
-        yygo.makeComments();
-        yygo.emptyGoban();
-        yygo.placeStones();
-        yygo.placeSymbols();
-    }, false);
 };
 /*}}}*/
 /* navigateNode {{{
@@ -1176,7 +1226,7 @@ yygo.parseDataFromList = function (index, callback) {
     var table = document.getElementById('db-gameslist'),
         id =    table.rows[index].cells[0].textContent;
 
-    yygo.jsonRequest('games/' + id, 'GET', function (data) {
+    yygo.ajax('games/' + id, 'GET', function (data) {
         yygo.game = data;
 
         yygo.size = parseInt(yygo.game[0][0].SZ, 10);
@@ -1339,14 +1389,14 @@ yygo.playStone = function (coord) {
     }
 };
 /*}}}*/
-/* secToTime {{{
+/* secondsToTime {{{
  * Convert a time in seconds to "minutes:seconds".
  *
  * @param {Number} time Time in seconds.
  *
  * @return {String} "minutes:seconds"
  */
-yygo.secToTime = function (secs) {
+yygo.secondsToTime = function (secs) {
     var hour,
         min,
         sec;
@@ -1420,7 +1470,7 @@ yygo.setGobanSize = function (redraw, fn) {
     if (yygo.sizegoban !== oldsizegoban) {
         redraw = true;
     }
-    yygo.drawInterface(redraw, fn);
+    yygo.drawGame(redraw, fn);
 };
 /*}}}*/
 /* setLastNode {{{
@@ -1472,8 +1522,8 @@ yygo.setPlayersInfos = function () {
 
     // Initiate players time.
     if (infos.TM !== undefined) {
-        blacktime.textContent = yygo.secToTime(infos.TM);
-        whitetime.textContent = yygo.secToTime(infos.TM);
+        blacktime.textContent = yygo.secondsToTime(infos.TM);
+        whitetime.textContent = yygo.secondsToTime(infos.TM);
     } else {
         blacktime.textContent = '--';
         whitetime.textContent = '--';
@@ -1527,49 +1577,6 @@ yygo.showGamesScreen = function (show) {
     document.getElementById(show).style.display = 'block';
     document.getElementById('g-' + show).classList.add('twhite');
     yygo.gamesscreen = show;
-};
-/*}}}*/
-/* showLoadList {{{
- * Alternate the display of the page to load a game.
- *
- * @param {Boolean} refresh Force list refresh.
- */
-yygo.showLoadList = function (refresh) {
-    var gameslist = document.getElementById('db-gameslist'),
-        list =      yygo.gameslist,
-        page =      0,
-        html =      '',
-        i;
-
-    if (refresh === undefined) {
-        refresh = false;
-    }
-
-    if (yygo.isObjectEmpty(list) || refresh) { // Get fresh list from server.
-        yygo.jsonRequest('/gameslist/' + page, 'GET', function (data) {
-            var datalen = data.length,
-                ids = [];
-
-            // More than one page.
-            //if (datalen === 11) {
-            //nextpage.style.display = 'inline';
-            //datalen--;
-            //data.pop();
-            //} else {
-            //nextpage.style.display = 'none';
-            //}
-            yygo.gameslist = data;
-            for (i = 0; i < datalen; i++) {
-                html += '<tr><td class="gameslist-entry">' +
-                        '<a class="linkbutton brown3" href="#">' +
-                        data[i].name + '</a></td></tr>';
-                ids.push(data[i]._id);
-            }
-            gameslist.innerHTML = html;
-            // Bind click events to list.
-            yygo.makeListBinds(ids);
-        });
-    }
 };
 /*}}}*/
 /* showScreen {{{
@@ -1669,26 +1676,11 @@ yygo.updatePlayersInfos = function () {
 
     // Update time.
     if (game.BL !== undefined) {
-        blacktime.textContent = yygo.secToTime(game.BL);
+        blacktime.textContent = yygo.secondsToTime(game.BL);
     }
     if (game.WL !== undefined) {
-        whitetime.textContent = yygo.secToTime(game.WL);
+        whitetime.textContent = yygo.secondsToTime(game.WL);
     }
-};
-/*}}}*/
-/* usersList {{{
- * Make chat users list.
- */
-yygo.usersList = function () {
-    var userslist = document.getElementById('userslist'),
-        html = '',
-        s = yygo.userslist.length,
-        i;
-
-    for (i = 0; i < s; i++) {
-        html += yygo.userslist[i] + '</br>';
-    }
-    userslist.innerHTML = html;
 };
 /*}}}*/
 /*}}}*/
