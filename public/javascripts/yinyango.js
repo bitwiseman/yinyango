@@ -18,8 +18,8 @@ yygo.gameslist =        {};         // Loadable games.
 yygo.gamesscreen =      '';         // Actual games loading screen.
 yygo.lastbranch =       0;          // Last branch to reach.
 yygo.lastnode =         0;          // Last node of the last branch.
+yygo.menu =             true;       // Show menu at top ?
 yygo.mode =             'replay';   // Game mode: replay, play, edit.
-yygo.navbar =           true;       // Show navigation bar at top ?
 yygo.orientation =      '';         // Orientation of the screen.
 yygo.playerturn =       'B';        // Color to play next.
 yygo.screen =           '';         // Actual screen to show.
@@ -199,12 +199,12 @@ yygo.ajax = function (url, method, data, callback) {
  * Bind events to the elements.
  */
 yygo.bindEvents = function () {
-    var navswitch =         document.getElementById('navswitch'),
-        navbar =            document.getElementById('navbar'),
-        ngame =             document.getElementById('n-game'),
-        nhall =             document.getElementById('n-hall'),
-        nsettings =         document.getElementById('n-settings'),
-        nlogout =           document.getElementById('n-logout'),
+    var menuswitch =        document.getElementById('menu-switch'),
+        menu =              document.getElementById('menu'),
+        mgame =             document.getElementById('m-game'),
+        mhall =             document.getElementById('m-hall'),
+        msettings =         document.getElementById('m-settings'),
+        mlogout =           document.getElementById('m-logout'),
         gonlinegames =      document.getElementById('g-online-games'),
         gdbgames =          document.getElementById('g-db-games'),
         gsgfgames =         document.getElementById('g-sgf-games'),
@@ -233,32 +233,32 @@ yygo.bindEvents = function () {
         }
     }, false);
     //}}}
-    /* Navbar.{{{*/
-    navswitch.addEventListener('click', function () {
-        if (yygo.navbar) {
-            navbar.style.display = 'none';
-            yygo.navbar = false;
+    /* Menu.{{{*/
+    menuswitch.addEventListener('click', function () {
+        if (yygo.menu) {
+            menu.style.display = 'none';
+            yygo.menu = false;
         } else {
-            navbar.style.display = 'inline-block';
-            yygo.navbar = true;
+            menu.style.display = 'inline-block';
+            yygo.menu = true;
         }
         yygo.setScreenTop();
         if (yygo.screen === 'game') {
             yygo.setGobanSize(false, function () {});
         }
     }, false);
-    ngame.addEventListener('click', function () {
+    mgame.addEventListener('click', function () {
         yygo.showScreen('game');
     }, false);
-    nhall.addEventListener('click', function () {
+    mhall.addEventListener('click', function () {
         yygo.showScreen('hall');
     }, false);
-    nsettings.addEventListener('click', function () {
+    msettings.addEventListener('click', function () {
         // Hide previous answer from server.
         document.getElementById('settingssaved').style.display = 'none';
         yygo.showScreen('settings');
     }, false);
-    nlogout.addEventListener('click', function () {
+    mlogout.addEventListener('click', function () {
         // Fire socket disconnection.
         yygo.socket.disconnect();
         // End Session.
@@ -779,8 +779,8 @@ yygo.loadGame = function (data) {
 
     yygo.toggleNavButtons();
 
-    // Activate game navmenu button.
-    document.getElementById('n-game').style.display = 'inline-block';
+    // Activate game menu button.
+    document.getElementById('m-game').style.display = 'inline-block';
 
     // Set Screen top.
     yygo.setScreenTop();
@@ -1531,17 +1531,17 @@ yygo.setPlayersInfos = function () {
 };
 /*}}}*/
 /* setScreenTop {{{
- * Set screen top relatively to navbar.
+ * Set screen top relatively to menu.
  */
 yygo.setScreenTop = function () {
-    var navbar = document.getElementById('navbar'),
-        screens = document.getElementsByClassName('screen'),
-        nscreens = screens.length,
+    var menu =      document.getElementById('menu'),
+        screens =   document.getElementsByClassName('screen'),
+        nscreens =  screens.length,
         screentop = 0,
         i;
 
-    if (yygo.navbar) {
-        screentop = navbar.offsetHeight;
+    if (yygo.menu) {
+        screentop = menu.offsetHeight;
     }
 
     for (i = 0; i < nscreens; i++) {
@@ -1588,13 +1588,13 @@ yygo.showScreen = function (show) {
     if (yygo.screen !== '') {
         document.getElementById(yygo.screen).style.display = 'none';
         if (yygo.screen !== 'loading') {
-            document.getElementById('n-' + yygo.screen).classList.
+            document.getElementById('m-' + yygo.screen).classList.
                 remove('twhite');
         }
     }
     document.getElementById(show).style.display = 'block';
     if (show !== 'loading') {
-        document.getElementById('n-' + show).classList.add('twhite');
+        document.getElementById('m-' + show).classList.add('twhite');
     }
     yygo.screen = show;
 };

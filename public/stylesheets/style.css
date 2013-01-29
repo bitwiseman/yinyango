@@ -114,7 +114,7 @@ body {
 .twhite {
     color: #f9f0ca;
 }
-.tgrey, #navmenu a:not(.twhite) {
+.tgrey, #menu-items a:not(.twhite) {
     color: #999;
 }
 .tbrown, #games-menu a:not(.twhite) {
@@ -175,23 +175,18 @@ body {
 /*}}}*/
 /* Hidden elements. {{{*/
 #db-games, #errorexist, #errorinvalid, #errorlogin, #errorname, #game,
-#gameinfos, #settings, #settingssaved, #sgf-games, #loading, #n-game, #online,
+#gameinfos, #settings, #settingssaved, #sgf-games, #loading, #m-game, #online,
 #register-scr, #regsuccess, #variations {
     display: none;
 }
 /*}}}*/
 /* Inline-block elements. {{{*/
-#buttonsbar, .alert, .box, .navlink, .player {
+#buttonsbar, .alert, .box, .menulink, .player {
     display: inline-block;
 }
 /*}}}*/
 /* Menubars. {{{*/
-.menubar {
-    width: 100%;
-    padding: 0.2em;
-    border-bottom: 1px solid black;
-}
-#navswitch {
+#menu-switch {
     position: absolute;
     background: url("../images/favicon.png");
     background-size: 1em;
@@ -201,11 +196,16 @@ body {
     height: 1em;
     z-index: 1;
 }
-#navtitle {
+#menu-title {
     float: left;
     padding: 0 1.4em;
 }
-.navlink {
+.menubar {
+    width: 100%;
+    padding: 0.2em;
+    border-bottom: 1px solid black;
+}
+.menulink {
     padding: 0 0.5em;
     text-decoration: none;
     cursor: pointer;
