@@ -429,7 +429,7 @@ yygo.bindGobanClick = function () {
 /* bindVariationChange {{{
  * Change branch according to selected variation.
  *
- * @param {Element} select Select tag element.
+ * @param {String} select Select tag element.
  */
 yygo.bindVariationChange = function (select) {
     var varvalue = document.getElementById('varvalue');
@@ -588,10 +588,10 @@ yygo.connectHall = function () {
 /* drawGame {{{
  * Draw the goban and the panel.
  *
- * @param {Boolean}  redraw Do we need to redraw interface?
- * @param {Function} fn     Callback.
+ * @param {Boolean}  redraw     Do we need to redraw interface?
+ * @param {Function} callback   Callback.
  */
-yygo.drawGame = function (redraw, fn) {
+yygo.drawGame = function (redraw, callback) {
     var panel =         document.getElementById('panel'),
         goban =         document.getElementById('goban'),
         cells =         document.getElementsByClassName('cell'),
@@ -625,7 +625,7 @@ yygo.drawGame = function (redraw, fn) {
         panel.style.right = 0;
         panel.style.left = 0;
     }
-    fn();
+    callback();
 };
 /*}}}*/
 /* emptyGoban {{{
@@ -827,7 +827,7 @@ yygo.makeComments = function () {
 /* makeDbGamesList {{{
  * Insert database games list.
  *
- * @param {Boolean} refresh Force list refresh.
+ * @param {Boolean} refresh Force list refresh?
  */
 yygo.makeDbGamesList = function (refresh) {
     var gameslist = document.getElementById('db-gameslist'),
@@ -1220,7 +1220,8 @@ yygo.navigateNode = function (move) {
 /* parseDataFromList {{{
  * Parse the data of the selected game in list.
  *
- * @param {Number} index Index of the selected game in list.
+ * @param {Number}      index       Index of the selected game in list.
+ * @param {Function}    callback    Callback.
  */
 yygo.parseDataFromList = function (index, callback) {
     var table = document.getElementById('db-gameslist'),
@@ -1392,7 +1393,7 @@ yygo.playStone = function (coord) {
 /* secondsToTime {{{
  * Convert a time in seconds to "minutes:seconds".
  *
- * @param {Number} time Time in seconds.
+ * @param {Number} secs Time in seconds.
  *
  * @return {String} "minutes:seconds"
  */
@@ -1433,10 +1434,10 @@ yygo.setGamesScreenTop = function () {
  * Define the size of the goban and elements depending on it. Redraw
  * if necessary or asked.
  *
- * @param {Boolean}  redraw Do we need to redraw interface?
- * @param {Function} fn     Callback.
+ * @param {Boolean}  redraw     Do we need to redraw interface?
+ * @param {Function} callback   Callback.
  */
-yygo.setGobanSize = function (redraw, fn) {
+yygo.setGobanSize = function (redraw, callback) {
     var size =          yygo.size,
         winw =          window.innerWidth,
         winh =          yygo.screenh,
@@ -1470,7 +1471,7 @@ yygo.setGobanSize = function (redraw, fn) {
     if (yygo.sizegoban !== oldsizegoban) {
         redraw = true;
     }
-    yygo.drawGame(redraw, fn);
+    yygo.drawGame(redraw, callback);
 };
 /*}}}*/
 /* setLastNode {{{
