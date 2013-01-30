@@ -654,14 +654,14 @@ yygo.init = function () {
     });
 };
 /*}}}*/
-/* insertSymbolSvg {{{
- * Insert a symbol in a cell using svg format.
+/* insertSvgSymbol {{{
+ * Insert SVG symbol in a cell.
  *
  * @param {String} symbol   Symbol to insert.
  * @param {String} id       Identifier of the cell.
  * @param {String} color    Color of the stone in cell.
  */
-yygo.insertSymbolSvg = function (symbol, id, color) {
+yygo.insertSvgSymbol = function (symbol, id, color) {
     var stone =  document.getElementById(id),
         svg =   '<svg xmlns="http://www.w3.org/2000/svg"' +
                 'version="1.1" viewBox="0 0 10 10">';
@@ -1273,7 +1273,7 @@ yygo.placeSymbols = function () {
             if (symbol === 'LB') {
                 cell.textContent = label[1];
             } else {
-                yygo.insertSymbolSvg(symbol, list[i], color);
+                yygo.insertSvgSymbol(symbol, list[i], color);
             }
         }
     }
