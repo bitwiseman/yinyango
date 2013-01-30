@@ -226,7 +226,7 @@ yygo.bindEvents = function () {
     window.addEventListener('resize', function () {
         yygo.setScreenTop();
         if (yygo.screen === 'game') {
-            yygo.setGobanSize(false, function () {});
+            yygo.setGobanSize(false);
         }
         if (yygo.screen === 'hall') {
             yygo.setGamesScreenTop();
@@ -244,7 +244,7 @@ yygo.bindEvents = function () {
         }
         yygo.setScreenTop();
         if (yygo.screen === 'game') {
-            yygo.setGobanSize(false, function () {});
+            yygo.setGobanSize(false);
         }
     }, false);
     mgame.addEventListener('click', function () {
@@ -583,49 +583,6 @@ yygo.connectHall = function () {
         yygo.userslist.splice(id, 1);
         yygo.makeUsersList();
     });
-};
-/*}}}*/
-/* drawGame {{{
- * Draw the goban and the panel.
- *
- * @param {Boolean}  redraw     Do we need to redraw interface?
- * @param {Function} callback   Callback.
- */
-yygo.drawGame = function (redraw, callback) {
-    var panel =         document.getElementById('panel'),
-        goban =         document.getElementById('goban'),
-        cells =         document.getElementsByClassName('cell'),
-        cc =            cells.length,
-        fontsize =      yygo.sizecell / 1.5,
-        c;
-
-    if (redraw) { // Redraw only when needed.
-        // Resize goban.
-        goban.style.height = yygo.sizegoban + 'px';
-        goban.style.width = yygo.sizegoban + 'px';
-        // Resize the cells.
-        for (c = 0; c < cc; c++) {
-            cells[c].style.height = yygo.sizecell + 'px';
-            cells[c].style.width = yygo.sizecell + 'px';
-            cells[c].style.lineHeight = yygo.sizecell + 'px';
-            cells[c].style.fontSize = fontsize + 'px';
-        }
-    }
-    // Place panel depending on orientation.
-    if (yygo.orientation === 'horizontal') {
-        // Move goban on left side and place comments on the right.
-        goban.style.margin = 0;
-        panel.style.top = 0;
-        panel.style.right = 0;
-        panel.style.left = yygo.sizegoban + 'px';
-    } else {
-        // Keep goban centered and comments at bottom.
-        goban.style.margin = 'auto';
-        panel.style.top =  yygo.sizegoban + 'px';
-        panel.style.right = 0;
-        panel.style.left = 0;
-    }
-    callback();
 };
 /*}}}*/
 /* emptyGoban {{{
@@ -1444,6 +1401,52 @@ yygo.setGobanSize = function (redraw, callback) {
         oldsizegoban =  yygo.sizegoban,
         smaller;
 
+    /* drawGame {{{
+     * Place goban and panel elements depending on screen resolution.
+     *
+     * @param {Boolean}  redraw     Do we need to redraw interface?
+     * @param {Function} callback   Callback.
+     */
+    function drawGame(redraw, callback) {
+        var panel =         document.getElementById('panel'),
+            goban =         document.getElementById('goban'),
+            cells =         document.getElementsByClassName('cell'),
+            cc =            cells.length,
+            fontsize =      yygo.sizecell / 1.5,
+            c;
+    
+        if (redraw) { // Redraw only when needed.
+            // Resize goban.
+            goban.style.height = yygo.sizegoban + 'px';
+            goban.style.width = yygo.sizegoban + 'px';
+            // Resize the cells.
+            for (c = 0; c < cc; c++) {
+                cells[c].style.height = yygo.sizecell + 'px';
+                cells[c].style.width = yygo.sizecell + 'px';
+                cells[c].style.lineHeight = yygo.sizecell + 'px';
+                cells[c].style.fontSize = fontsize + 'px';
+            }
+        }
+        // Place panel depending on orientation.
+        if (yygo.orientation === 'horizontal') {
+            // Move goban on left side and place comments on the right.
+            goban.style.margin = 0;
+            panel.style.top = 0;
+            panel.style.right = 0;
+            panel.style.left = yygo.sizegoban + 'px';
+        } else {
+            // Keep goban centered and comments at bottom.
+            goban.style.margin = 'auto';
+            panel.style.top =  yygo.sizegoban + 'px';
+            panel.style.right = 0;
+            panel.style.left = 0;
+        }
+        if (callback !== undefined) {
+            callback();
+        }
+    }
+    /*}}}*/
+
     if (winw < winh) {
         yygo.orientation = 'vertical';
         if (winh - 200 <= winw) {
@@ -1471,7 +1474,7 @@ yygo.setGobanSize = function (redraw, callback) {
     if (yygo.sizegoban !== oldsizegoban) {
         redraw = true;
     }
-    yygo.drawGame(redraw, callback);
+    drawGame(redraw, callback);
 };
 /*}}}*/
 /* setLastNode {{{
