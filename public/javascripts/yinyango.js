@@ -276,9 +276,9 @@ yygo.bindEvents = function () {
     gsgfgames.addEventListener('click', function () {
         yygo.showGamesScreen('sgf');
     }, false);
-    loadsgf.addEventListener('click', function () {
+    loadsgf.addEventListener('submit', function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
-            file =          new FormData(this.form);
+            file =          new FormData(this);
 
         errorinvalid.style.display = 'none';
         yygo.ajax('/loadsgf/file', 'POST', file, function (data) {

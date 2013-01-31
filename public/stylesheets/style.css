@@ -459,7 +459,6 @@ body {
     left: 0;
     opacity: 0;
     height: 3em;/* required for opera */
-    cursor: pointer;
 }
 #playerblack {
     border-radius: 1em 0 0 1em;
@@ -574,7 +573,6 @@ body {
     padding: 0 0.5em;
     border: 1px solid black;
     font: bold 1em sans-serif;
-    cursor: pointer;
 }
 #showusers {
     display: none;
