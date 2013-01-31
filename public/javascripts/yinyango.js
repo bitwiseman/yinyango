@@ -205,7 +205,7 @@ yygo.bindEvents = function () {
         mhall =             document.getElementById('m-hall'),
         msettings =         document.getElementById('m-settings'),
         mlogout =           document.getElementById('m-logout'),
-        gonlinegames =      document.getElementById('g-online-games'),
+        gmatchsgames =      document.getElementById('g-matchs-games'),
         gdbgames =          document.getElementById('g-db-games'),
         gsgfgames =         document.getElementById('g-sgf-games'),
         refreshlist =       document.getElementById('refreshlist'),
@@ -266,8 +266,8 @@ yygo.bindEvents = function () {
     }, false);
     //}}}
     /* Hall.{{{*/
-    gonlinegames.addEventListener('click', function () {
-        yygo.showGamesScreen('online');
+    gmatchsgames.addEventListener('click', function () {
+        yygo.showGamesScreen('matchs');
     }, false);
     gdbgames.addEventListener('click', function () {
         yygo.showGamesScreen('db');
@@ -647,7 +647,7 @@ yygo.init = function () {
         yygo.setScreenTop();
         // Connect to main hall.
         yygo.connectHall();
-        yygo.showGamesScreen('online');
+        yygo.showGamesScreen('matchs');
         yygo.showScreen('hall');
         // Set games screen top.
         yygo.setGamesScreenTop();

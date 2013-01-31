@@ -528,7 +528,7 @@ body {
     left: 0;
     overflow: auto;
 }
-#online-gameslist, #db-gameslist {
+#matchs-gameslist, #db-gameslist {
     text-align: center;
     width: 100%;
 }
