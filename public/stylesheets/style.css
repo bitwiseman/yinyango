@@ -124,6 +124,13 @@ body {
 .none {
     display: none;
 }
+.link {
+    cursor: pointer;
+}
+.disabled {
+    opacity: 0.2;
+    cursor: default;
+}
 .flex {
     display: -webkit-flex;
     display: -moz-flex;
@@ -307,10 +314,6 @@ body {
     float: left;
     width: 30px;
     height: 30px;
-}
-.disabled {
-    opacity: 0.2;
-    cursor: default;
 }
 /* Arrows buttons. {{{*/
 .rotate180 {

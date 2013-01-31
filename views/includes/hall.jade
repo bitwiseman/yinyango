@@ -12,9 +12,20 @@
         p: form.box.brown3(onsubmit='return false;')
             p: label= lingua.selectsgf
             p: input.input(type='file', name='sgffile')
-            p: input#submitsgf.linkbutton.black(type='submit',
-                value= lingua.viewsgf)
+            p: input#load-sgf.linkbutton.black(type='submit',
+                value= lingua.loadsgf)
             p: div#errorinvalid.box.red= lingua.errorinvalid
+        p: form.box.brown3(onsubmit='return false;')
+            p: label= lingua.size
+            p: select.input(name='size')
+                option(value='9', selected) 9
+                option(value='13', selected) 13
+                option(value='19', selected) 19
+            p: label= lingua.rules
+            p: select.input(name='rules')
+                option(value='japanese', selected)= lingua.japanese
+            p: input#create-sgf.linkbutton.black(type='submit',
+                value= lingua.createsgf)
 #chat.brown2
 #userslist.brown3
 form#chatform.flex(onsubmit='return false;')

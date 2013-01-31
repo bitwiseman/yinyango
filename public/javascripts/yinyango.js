@@ -210,7 +210,8 @@ yygo.bindEvents = function () {
         gsgfgames =         document.getElementById('g-sgf-games'),
         refreshlist =       document.getElementById('refreshlist'),
         submitsettings =    document.getElementById('submitsettings'),
-        submitsgf =         document.getElementById('submitsgf'),
+        loadsgf =           document.getElementById('load-sgf'),
+        createsgf =         document.getElementById('create-sgf'),
         textpanelswitch =   document.getElementById('textpanel-switch'),
         butstart =          document.getElementById('butstart'),
         butfastprev =       document.getElementById('butfastprev'),
@@ -275,7 +276,7 @@ yygo.bindEvents = function () {
     gsgfgames.addEventListener('click', function () {
         yygo.showGamesScreen('sgf');
     }, false);
-    submitsgf.addEventListener('click', function () {
+    loadsgf.addEventListener('click', function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
             file =          new FormData(this.form);
 
