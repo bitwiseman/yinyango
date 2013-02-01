@@ -1,13 +1,18 @@
 p: form.box.brown3(onsubmit='return false;')
     p= lingua.lang
-    select.input(name='lang')
+    .selectbox.yellow
         if lang == 'en'
-            option#en(value='en', selected) English
-        else
-            option#en(value='en') English
+            .selectvalue English
         if lang == 'fr'
-            option#fr(value='fr', selected) Français
-        else
-            option#fr(value='fr') Français
+            .selectvalue Français
+        select.link.select(name='lang')
+            if lang == 'en'
+                option#en(value='en', selected) English
+            else
+                option#en(value='en') English
+            if lang == 'fr'
+                option#fr(value='fr', selected) Français
+            else
+                option#fr(value='fr') Français
     p: input#submitsettings.linkbutton.black(type='submit', value= lingua.save)
     p#settingssaved= lingua.settingssaved

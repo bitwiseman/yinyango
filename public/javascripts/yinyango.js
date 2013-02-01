@@ -221,8 +221,17 @@ yygo.bindEvents = function () {
         butend =            document.getElementById('butend'),
         chatmsg =           document.getElementById('chatmsg'),
         chatform =          document.getElementById('chatform'),
-        showusers =         document.getElementById('showusers');
+        showusers =         document.getElementById('showusers'),
+        selects =           document.getElementsByClassName('select'),
+        selectslen =        selects.length,
+        i;
 
+    for (i = 0; i < selectslen; i++) {
+        selects[i].addEventListener('change', function () {
+            this.parentNode.getElementsByClassName('selectvalue')[0].innerHTML =
+                this.options[this.selectedIndex].text;
+        }, false);
+    }
     /* Window.{{{*/
     window.addEventListener('resize', function () {
         yygo.setScreenTop();

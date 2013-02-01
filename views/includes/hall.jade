@@ -16,13 +16,17 @@
             p: div#errorinvalid.box.red= lingua.errorinvalid
         p: form#create-sgf.box.brown3(onsubmit='return false;')
             p: label= lingua.size
-            select.input(name='size')
-                option(value='9') 9
-                option(value='13') 13
-                option(value='19', selected) 19
+            .selectbox.yellow
+                .selectvalue 19
+                select.link.select(name='size')
+                    option(value='9') 9
+                    option(value='13') 13
+                    option(value='19', selected) 19
             p: label= lingua.rules
-            select.input(name='rules')
-                option(value='japanese', selected)= lingua.japanese
+            .selectbox.yellow
+                .selectvalue= lingua.japanese
+                select.link.select(name='rules')
+                    option(value='japanese', selected)= lingua.japanese
             p: input.linkbutton.black(type='submit', value= lingua.createsgf)
 #chat.brown2
 #userslist.brown3
