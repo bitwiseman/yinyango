@@ -11,7 +11,8 @@
     #sgf-games.gamesscreen
         p: form#load-sgf.box.brown3(onsubmit='return false;')
             p: label= lingua.selectsgf
-            input.input(type='file', name='sgffile')
+            #sgf-select.selectbox.link.yellow
+            input#sgf-select-file(type='file', name='sgffile')
             p: input.linkbutton.black(type='submit', value= lingua.loadsgf)
             p: div#errorinvalid.box.red= lingua.errorinvalid
         p: form#create-sgf.box.brown3(onsubmit='return false;')

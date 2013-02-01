@@ -222,6 +222,8 @@ yygo.bindEvents = function () {
         chatmsg =           document.getElementById('chatmsg'),
         chatform =          document.getElementById('chatform'),
         showusers =         document.getElementById('showusers'),
+        sgfselect =         document.getElementById('sgf-select'),
+        sgfselectfile =     document.getElementById('sgf-select-file'),
         selects =           document.getElementsByClassName('select'),
         selectslen =        selects.length,
         i;
@@ -284,6 +286,12 @@ yygo.bindEvents = function () {
     }, false);
     gsgfgames.addEventListener('click', function () {
         yygo.showGamesScreen('sgf');
+    }, false);
+    sgfselect.addEventListener('click', function () {
+        sgfselectfile.click();
+    }, false);
+    sgfselectfile.addEventListener('change', function () {
+        sgfselect.innerHTML = this.value.replace('C:\\fakepath\\', '');
     }, false);
     loadsgf.addEventListener('submit', function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
