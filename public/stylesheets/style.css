@@ -158,11 +158,11 @@ body {
     border-radius: 1em;
 }
 .input {
-    margin: 0;
-    height: 1.4em;
+    /*margin: 0;*/
+    /*height: 1.4em;*/
     width: 100%;
     min-width: 0;
-    border: 1px solid #000;
+    border: 1px solid black;
     font: bold 1em sans-serif;
 }
 .inputhelp {
