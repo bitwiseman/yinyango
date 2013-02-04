@@ -201,8 +201,8 @@ body {
 }
 /*}}}*/
 /* Hidden elements. {{{*/
-#db-games, #errorexist, #errorinvalid, #errorlogin, #errorname, #game,
-#gameinfos, #settings, #settingssaved, #sgf-games, #loading, #m-game, #online,
+#errorexist, #errorinvalid, #errorlogin, #errorname, #game,
+#gameinfos, #settings, #settingssaved, #loading, #m-game, #online,
 #register-scr, #regsuccess, #variations {
     display: none;
 }
@@ -550,7 +550,7 @@ body {
     left: 0;
     overflow: auto;
 }
-#matchs-gameslist, #db-gameslist {
+#running-gameslist, #load-gameslist {
     text-align: center;
     width: 100%;
 }

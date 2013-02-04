@@ -205,9 +205,9 @@ yygo.bindEvents = function () {
         mhall =             document.getElementById('m-hall'),
         msettings =         document.getElementById('m-settings'),
         mlogout =           document.getElementById('m-logout'),
-        gmatchsgames =      document.getElementById('g-matchs-games'),
-        gdbgames =          document.getElementById('g-db-games'),
-        gsgfgames =         document.getElementById('g-sgf-games'),
+        grunninggames =     document.getElementById('g-running-games'),
+        gcreategames =      document.getElementById('g-create-games'),
+        gloadgames =        document.getElementById('g-load-games'),
         refreshlist =       document.getElementById('refreshlist'),
         submitsettings =    document.getElementById('submitsettings'),
         loadsgf =           document.getElementById('load-sgf'),
@@ -278,14 +278,14 @@ yygo.bindEvents = function () {
     }, false);
     //}}}
     /* Hall.{{{*/
-    gmatchsgames.addEventListener('click', function () {
-        yygo.showGamesScreen('matchs');
+    grunninggames.addEventListener('click', function () {
+        yygo.showGamesScreen('running');
     }, false);
-    gdbgames.addEventListener('click', function () {
-        yygo.showGamesScreen('db');
+    gcreategames.addEventListener('click', function () {
+        yygo.showGamesScreen('create');
     }, false);
-    gsgfgames.addEventListener('click', function () {
-        yygo.showGamesScreen('sgf');
+    gloadgames.addEventListener('click', function () {
+        yygo.showGamesScreen('load');
     }, false);
     sgfselect.addEventListener('click', function () {
         sgfselectfile.click();
@@ -383,7 +383,7 @@ yygo.bindEvents = function () {
  * @param {Array} ids Identifiers for database reference.
  */
 yygo.bindGamesListClick = function (ids) {
-    var table =     document.getElementById('db-gameslist'),
+    var table =     document.getElementById('load-gameslist'),
         rows =      table.getElementsByTagName('tr'),
         rl =        rows.length,
         r;
@@ -665,7 +665,7 @@ yygo.init = function () {
         yygo.setScreenTop();
         // Connect to main hall.
         yygo.connectHall();
-        yygo.showGamesScreen('matchs');
+        yygo.showGamesScreen('running');
         yygo.showScreen('hall');
         // Set games screen top.
         yygo.setGamesScreenTop();
@@ -805,7 +805,7 @@ yygo.makeComments = function () {
  * @param {Boolean} refresh Force list refresh?
  */
 yygo.makeDbGamesList = function (refresh) {
-    var gameslist = document.getElementById('db-gameslist'),
+    var gameslist = document.getElementById('load-gameslist'),
         list =      yygo.gameslist,
         page =      0,
         html =      '',
@@ -1199,7 +1199,7 @@ yygo.navigateNode = function (move) {
  * @param {Function}    callback    Callback.
  */
 yygo.parseDataFromList = function (index, callback) {
-    var table = document.getElementById('db-gameslist'),
+    var table = document.getElementById('load-gameslist'),
         id =    table.rows[index].cells[0].textContent;
 
     yygo.ajax('games/' + id, 'GET', function (data) {
@@ -1591,12 +1591,11 @@ yygo.setTextPanelTop = function () {
 yygo.showGamesScreen = function (show) {
     show = show + '-games';
     if (yygo.gamesscreen !== '') {
-        document.getElementById(yygo.gamesscreen).style.display =
-            'none';
+        document.getElementById(yygo.gamesscreen).classList.add('none');
         document.getElementById('g-' + yygo.gamesscreen).classList.
             remove('twhite');
     }
-    document.getElementById(show).style.display = 'block';
+    document.getElementById(show).classList.remove('none');
     document.getElementById('g-' + show).classList.add('twhite');
     yygo.gamesscreen = show;
 };
