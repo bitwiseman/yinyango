@@ -16,6 +16,7 @@ yygo.curnode =          0;          // Current node (move).
 yygo.game =             {};         // All the game data.
 yygo.gameslist =        {};         // Loadable games.
 yygo.gamesscreen =      '';         // Actual games loading screen.
+yygo.gobansize =        0;          // Size of goban in pixels.
 yygo.lastbranch =       0;          // Last branch to reach.
 yygo.lastnode =         0;          // Last node of the last branch.
 yygo.menu =             true;       // Show menu at top ?
@@ -23,10 +24,8 @@ yygo.mode =             'replay';   // Game mode: replay, play, edit.
 yygo.orientation =      '';         // Orientation of the screen.
 yygo.playerturn =       'B';        // Color to play next.
 yygo.screen =           '';         // Actual screen to show.
-yygo.screenh =          0;          // Screen height.
+yygo.screenheight =     0;          // Screen height.
 yygo.size =             0;          // Size of the goban (9, 13, 19).
-yygo.sizecell =         0;          // Size of a goban cell in pixels.
-yygo.sizegoban =        0;          // Size of goban in pixels.
 yygo.socket =           null;       // IO Socket object.
 yygo.stones =           {};         // Stones list at each goban state.
 yygo.textpanel =        'comments'; // Text to show in game panel.
@@ -291,7 +290,7 @@ yygo.bindEvents = function () {
         sgfselectfile.click();
     }, false);
     sgfselectfile.addEventListener('change', function () {
-        sgfselect.innerHTML = this.value.replace('C:\\fakepath\\', '');
+        sgfselect.value = this.value.replace('C:\\fakepath\\', '');
     }, false);
     loadsgf.addEventListener('submit', function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
@@ -1373,9 +1372,9 @@ yygo.playStone = function (coord) {
  * @return {String} "minutes:seconds"
  */
 yygo.secondsToTime = function (secs) {
-    var hour,
-        min,
-        sec;
+    var hour =  0,
+        min =   0,
+        sec =   0;
 
     hour = Math.floor(secs / 3600);
     min = Math.floor((secs % 3600) / 60);
@@ -1393,14 +1392,12 @@ yygo.secondsToTime = function (secs) {
  * Set games screen top relatively to gamesmenu.
  */
 yygo.setGamesScreenTop = function () {
-    var gamesmenu =     document.getElementById('games-menu'),
-        gamesscreens =  document.getElementsByClassName('gamesscreen'),
-        nscreens =      gamesscreens.length,
-        screentop =     gamesmenu.offsetHeight,
+    var gamesscreens =      document.getElementsByClassName('gamesscreen'),
+        gamesscreenslen =   gamesscreens.length,
+        screentop =         document.getElementById('games-menu').offsetHeight,
         i;
 
-
-    for (i = 0; i < nscreens; i++) {
+    for (i = 0; i < gamesscreenslen; i++) {
         gamesscreens[i].style.top = screentop + 'px';
     }
 };
@@ -1413,11 +1410,9 @@ yygo.setGamesScreenTop = function () {
  * @param {Function} callback   Callback.
  */
 yygo.setGobanSize = function (redraw, callback) {
-    var size =          yygo.size,
-        winw =          window.innerWidth,
-        winh =          yygo.screenh,
-        oldsizegoban =  yygo.sizegoban,
-        smaller;
+    var screenwidth =   window.innerWidth,
+        cellsize =      0,
+        smaller =       0;
 
     /* drawGame {{{
      * Place goban and panel elements depending on screen resolution.
@@ -1429,20 +1424,20 @@ yygo.setGobanSize = function (redraw, callback) {
         var panel =         document.getElementById('panel'),
             goban =         document.getElementById('goban'),
             cells =         document.getElementsByClassName('cell'),
-            cc =            cells.length,
-            fontsize =      yygo.sizecell / 1.5,
-            c;
+            cellslen =      cells.length,
+            fontsize =      cellsize / 1.5,
+            i;
     
         if (redraw) { // Redraw only when needed.
             // Resize goban.
-            goban.style.height = yygo.sizegoban + 'px';
-            goban.style.width = yygo.sizegoban + 'px';
+            goban.style.height = yygo.gobansize + 'px';
+            goban.style.width = yygo.gobansize + 'px';
             // Resize the cells.
-            for (c = 0; c < cc; c++) {
-                cells[c].style.height = yygo.sizecell + 'px';
-                cells[c].style.width = yygo.sizecell + 'px';
-                cells[c].style.lineHeight = yygo.sizecell + 'px';
-                cells[c].style.fontSize = fontsize + 'px';
+            for (i = 0; i < cellslen; i++) {
+                cells[i].style.height = cellsize + 'px';
+                cells[i].style.width = cellsize + 'px';
+                cells[i].style.lineHeight = cellsize + 'px';
+                cells[i].style.fontSize = fontsize + 'px';
             }
         }
         // Place panel depending on orientation.
@@ -1451,11 +1446,11 @@ yygo.setGobanSize = function (redraw, callback) {
             goban.style.margin = 0;
             panel.style.top = 0;
             panel.style.right = 0;
-            panel.style.left = yygo.sizegoban + 'px';
+            panel.style.left = yygo.gobansize + 'px';
         } else {
             // Keep goban centered and comments at bottom.
             goban.style.margin = 'auto';
-            panel.style.top =  yygo.sizegoban + 'px';
+            panel.style.top =  yygo.gobansize + 'px';
             panel.style.right = 0;
             panel.style.left = 0;
         }
@@ -1465,33 +1460,33 @@ yygo.setGobanSize = function (redraw, callback) {
     }
     /*}}}*/
 
-    if (winw < winh) {
+    if (screenwidth < yygo.screenheight) {
         yygo.orientation = 'vertical';
-        if (winh - 200 <= winw) {
-            smaller = winh - 200;
+        if (yygo.screenheight - 200 <= screenwidth) {
+            smaller = yygo.screenheight - 200;
         } else {
-            smaller = winw;
+            smaller = screenwidth;
         }
     } else {
         yygo.orientation = 'horizontal';
-        if (winw - 220 <= winh) {
-            smaller = winw - 220;
+        if (screenwidth - 220 <= yygo.screenheight) {
+            smaller = screenwidth - 220;
         } else {
-            smaller = winh;
+            smaller = yygo.screenheight;
         }
     }
 
     // Calculate the size of the goban and avoid bad display.
-    yygo.sizecell = Math.floor(smaller / (size + 2));
-    if (yygo.sizecell / 2 !== Math.round(yygo.sizecell / 2)) {
-        yygo.sizecell--;
+    cellsize = Math.floor(smaller / (yygo.size + 2));
+    if (cellsize / 2 !== Math.round(cellsize / 2)) {
+        cellsize--;
     }
-    yygo.sizegoban = yygo.sizecell * (size + 2);
-
     // Redraw if size changed.
-    if (yygo.sizegoban !== oldsizegoban) {
+    if (yygo.gobansize !== cellsize * (yygo.size + 2)) {
         redraw = true;
     }
+    yygo.gobansize = cellsize * (yygo.size + 2);
+
     drawGame(redraw, callback);
 };
 /*}}}*/
@@ -1499,88 +1494,76 @@ yygo.setGobanSize = function (redraw, callback) {
  * Define the last node of the current branch.
  */
 yygo.setLastNode = function () {
-    var game =      yygo.game,
-        lastnode =  yygo.curnode,
-        curbranch = yygo.curbranch;
+    var node = yygo.curnode;
 
-    while (game[lastnode + 1] !== undefined &&
-            game[lastnode + 1][curbranch] !== undefined) {
-        lastnode++;
+    while (yygo.game[node + 1] !== undefined &&
+            yygo.game[node + 1][yygo.curbranch] !== undefined) {
+        node++;
     }
-    yygo.lastnode = lastnode;
+    yygo.lastnode = node;
 };
 /*}}}*/
 /* setPlayersInfos {{{
  * Insert players names, starting scores and times.
  */
 yygo.setPlayersInfos = function () {
-    var infos =         yygo.game[0][0],
-        blackname =     document.getElementById('blackname'),
-        blackscore =    document.getElementById('blackscore'),
-        blacktime =     document.getElementById('blacktime'),
-        whitename =     document.getElementById('whitename'),
-        whitescore =    document.getElementById('whitescore'),
-        whitetime =     document.getElementById('whitetime');
+    var infos = yygo.game[0][0],
+        name =  '???',
+        time =  '--';
 
     if (infos.PB !== undefined) {
-        blackname.textContent = infos.PB;
+        name = infos.PB;
         if (infos.BR !== undefined) {
-            blackname.textContent += ' [' + infos.BR + ']';
+            name += ' [' + infos.BR + ']';
         }
-    } else {
-        blackname.textContent = '???';
     }
-    blackscore.textContent = infos.score.B;
+    document.getElementById('blackname').textContent = name;
+    name = '???';
+    document.getElementById('blackscore').textContent = infos.score.B;
 
     if (infos.PW !== undefined) {
-        whitename.textContent = infos.PW;
+        name = infos.PW;
         if (infos.WR !== undefined) {
-            whitename.textContent += ' [' + infos.WR + ']';
+            name += ' [' + infos.WR + ']';
         }
-    } else {
-        whitename.textContent = '???';
     }
-    whitescore.textContent = infos.score.W;
+    document.getElementById('whitename').textContent = name;
+    document.getElementById('whitescore').textContent = infos.score.W;
 
     // Initiate players time.
     if (infos.TM !== undefined) {
-        blacktime.textContent = yygo.secondsToTime(infos.TM);
-        whitetime.textContent = yygo.secondsToTime(infos.TM);
-    } else {
-        blacktime.textContent = '--';
-        whitetime.textContent = '--';
+        time = yygo.secondsToTime(infos.TM);
     }
+    document.getElementById('blacktime').textContent = time;
+    document.getElementById('whitetime').textContent = time;
 };
 /*}}}*/
 /* setScreenTop {{{
  * Set screen top relatively to menu.
  */
 yygo.setScreenTop = function () {
-    var menu =      document.getElementById('menu'),
-        screens =   document.getElementsByClassName('screen'),
+    var screens =   document.getElementsByClassName('screen'),
         nscreens =  screens.length,
         screentop = 0,
         i;
 
     if (yygo.menu) {
-        screentop = menu.offsetHeight;
+        screentop = document.getElementById('menu').offsetHeight;
     }
 
     for (i = 0; i < nscreens; i++) {
         screens[i].style.top = screentop + 'px';
     }
     // Set screen height.
-    yygo.screenh = window.innerHeight - screentop;
+    yygo.screenheight = window.innerHeight - screentop;
 };
 /*}}}*/
 /* setTextPanelTop {{{
  * Set comments top at bottom of top panel part.
  */
 yygo.setTextPanelTop = function () {
-    var toppanel =  document.getElementById('toppanel'),
-        textpanel = document.getElementById('textpanel');
-
-    textpanel.style.top = toppanel.offsetHeight + 5 + 'px';
+    document.getElementById('textpanel').style.top =
+        document.getElementById('toppanel').offsetHeight + 5 + 'px';
 };
 /*}}}*/
 /* showGamesScreen {{{
@@ -1635,9 +1618,7 @@ yygo.showTextPanel = function (show) {
  * Alternate active state of navigation buttons.
  */
 yygo.toggleNavButtons = function () {
-    var curnode =       yygo.curnode,
-        lastnode =      yygo.lastnode,
-        butstart =     document.getElementById('butstart'),
+    var butstart =     document.getElementById('butstart'),
         butprev =      document.getElementById('butprev'),
         butfastprev =  document.getElementById('butfastprev'),
         butnext =      document.getElementById('butnext'),
@@ -1653,13 +1634,13 @@ yygo.toggleNavButtons = function () {
     butend.classList.remove('disabled');
 
     // We are at the start, make rewind buttons inactive.
-    if (curnode === 0) {
+    if (yygo.curnode === 0) {
         butstart.classList.add('disabled');
         butprev.classList.add('disabled');
         butfastprev.classList.add('disabled');
     }
     // We are at the end, make forward buttons inactive.
-    if (curnode === lastnode) {
+    if (yygo.curnode === yygo.lastnode) {
         butnext.classList.add('disabled');
         butfastnext.classList.add('disabled');
         butend.classList.add('disabled');
@@ -1683,24 +1664,20 @@ yygo.toggleUsersList = function () {
  * Update players time and score.
  */
 yygo.updatePlayersInfos = function () {
-    var node =          yygo.curnode,
-        branch =        yygo.curbranch,
-        game =          yygo.game[node][branch],
-        blackscore =    document.getElementById('blackscore'),
-        blacktime =     document.getElementById('blacktime'),
-        whitescore =    document.getElementById('whitescore'),
-        whitetime =     document.getElementById('whitetime');
+    var game = yygo.game[yygo.curnode][yygo.curbranch];
 
     // Update scores.
-    blackscore.textContent = game.score.B;
-    whitescore.textContent = game.score.W;
+    document.getElementById('blackscore').textContent = game.score.B;
+    document.getElementById('whitescore').textContent = game.score.W;
 
     // Update time.
     if (game.BL !== undefined) {
-        blacktime.textContent = yygo.secondsToTime(game.BL);
+        document.getElementById('blacktime').textContent =
+            yygo.secondsToTime(game.BL);
     }
     if (game.WL !== undefined) {
-        whitetime.textContent = yygo.secondsToTime(game.WL);
+        document.getElementById('whitetime').textContent =
+            yygo.secondsToTime(game.WL);
     }
 };
 /*}}}*/
