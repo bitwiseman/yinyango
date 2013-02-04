@@ -552,8 +552,8 @@ body {
 }
 #sgf-select-file {
     position: absolute;
-    top: -9999px;
-    left: -9999px; /* opera required */
+    top: -9999px; /* Required for opera */
+    left: -9999px;
 }
 #chat {
     left: 50%;

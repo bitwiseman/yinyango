@@ -6,12 +6,6 @@
     #running-games.gamesscreen
         table#running-gameslist
     #create-games.gamesscreen.none
-        p: form#load-sgf.box.brown3(onsubmit='return false;')
-            p: label= lingua.selectsgf
-            #sgf-select.selectbox.link.yellow
-            input#sgf-select-file(type='file', name='sgffile')
-            p: input.linkbutton.black(type='submit', value= lingua.loadsgf)
-            p: div#errorinvalid.box.red.none= lingua.errorinvalid
         p: form#create-sgf.box.brown3(onsubmit='return false;')
             p: label= lingua.size
             .selectbox.yellow
@@ -27,6 +21,12 @@
                     option(value='japanese', selected)= lingua.japanese
             p: input.linkbutton.black(type='submit', value= lingua.createsgf)
     #load-games.gamesscreen.none
+        p: form#load-sgf.box.brown3(onsubmit='return false;')
+            p: label= lingua.selectsgf
+            input#sgf-select.selectbox.link.yellow(type='button')
+            input#sgf-select-file(type='file', name='sgffile')
+            p: input.linkbutton.black(type='submit', value= lingua.loadsgf)
+            p: div#errorinvalid.box.red.none= lingua.errorinvalid
         p: a#refreshlist.linkbutton.black(href='#')= lingua.refresh
         table#load-gameslist
 #chat.brown2
