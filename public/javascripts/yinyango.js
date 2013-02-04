@@ -1220,10 +1220,7 @@ yygo.parseDataFromList = function (index, callback) {
  * Also remove links of those to make them unplayable moves.
  */
 yygo.placeStones = function () {
-    var node =          yygo.curnode,
-        branch =        yygo.curbranch,
-        stones =        yygo.stones[node][branch],
-        turn =          yygo.playerturn;
+    var stones = yygo.stones[yygo.curnode][yygo.curbranch];
 
     /* placeColor {{{*/
     function placeColor(list, color) {
@@ -1235,8 +1232,7 @@ yygo.placeStones = function () {
         for (i = 0; i < listlen; i++) {
             stone = document.getElementById(list[i]);
             stone.classList.add(color);
-            link = stone.parentNode.
-                getElementsByClassName('cell-link')[0];
+            link = stone.parentNode.getElementsByClassName('cell-link')[0];
             link.className = 'cell-link';
         }
     }
@@ -1246,7 +1242,7 @@ yygo.placeStones = function () {
     placeColor(stones.W, 'white');
     placeColor(stones.K, 'ko');
     // Add forbidden moves.
-    if (turn === 'B') {
+    if (yygo.playerturn === 'B') {
         placeColor(stones.BF, 'BF');
     } else {
         placeColor(stones.WF, 'WF');
@@ -1257,20 +1253,18 @@ yygo.placeStones = function () {
  * Place the symbols of the actual state on the goban.
  */
 yygo.placeSymbols = function () {
-    var branch =        yygo.curbranch,
-        node =          yygo.curnode,
-        ko =            yygo.stones[node][branch].K,
-        game =          yygo.game[node][branch];
+    var ko =    yygo.stones[yygo.curnode][yygo.curbranch].K,
+        game =  yygo.game[yygo.curnode][yygo.curbranch];
 
     /* insertSymbols {{{*/
     function insertSymbols(symbol, list) {
-        var ci = list.length,
+        var listlen =   list.length,
+            color =     '',
+            label =     [],
             cell,
-            color,
-            label,
             i;
 
-        for (i = 0; i < ci; i++) {
+        for (i = 0; i < listlen; i++) {
             if (symbol === 'LB') {
                 label = list[i].split(':');
                 cell = document.getElementById(label[0]);
@@ -1330,22 +1324,19 @@ yygo.placeSymbols = function () {
  * @param {String} coord Coordinate clicked.
  */
 yygo.playStone = function (coord) {
-    var turn =      yygo.playerturn,
-        game =      yygo.game,
-        node =      yygo.curnode,
-        branch =    yygo.curbranch,
-        branchs =   game[0][0].branchs,
-        exist =     false,
-        parentbranch,
+    var branchs =       yygo.game[0][0].branchs,
+        exist =         false,
+        parentbranch =  0,
         i;
 
     // Browse next node branchs to check if that move exist.
-    for (i = branch; i < branchs; i++) {
-        parentbranch = yygo.getParentBranch(node, i);
-        if (parentbranch === branch && game[node + 1] !== undefined &&
-                game[node + 1][i] !== undefined &&
-                game[node + 1][i][turn] !== undefined &&
-                game[node + 1][i][turn][0] === coord) {
+    for (i = yygo.curbranch; i < branchs; i++) {
+        parentbranch = yygo.getParentBranch(yygo.curnode, i);
+        if (parentbranch === yygo.curbranch &&
+                yygo.game[yygo.curnode + 1] !== undefined &&
+                yygo.game[yygo.curnode + 1][i] !== undefined &&
+                yygo.game[yygo.curnode + 1][i][yygo.playerturn] !== undefined &&
+                yygo.game[yygo.curnode + 1][i][yygo.playerturn][0] === coord) {
             // That move already exist in a child branch, change last
             // branch and show it.
             exist = true;
@@ -1355,8 +1346,8 @@ yygo.playStone = function (coord) {
         }
     }
     if (!exist) {
-        if (game[node + 1] === undefined ||
-                game[node + 1][branch] === undefined) {
+        if (yygo.game[yygo.curnode + 1] === undefined ||
+                yygo.game[yygo.curnode + 1][yygo.curbranch] === undefined) {
             yygo.addMove(coord);
         } else {
             yygo.addBranch(coord);
