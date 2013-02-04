@@ -7,6 +7,9 @@
         table#running-gameslist
     #create-games.gamesscreen.none
         p: form#create-sgf.box.brown3(onsubmit='return false;')
+            .ckbox.yellow
+                input#check(type='checkbox')
+                label.link(for='check')
             p: label= lingua.size
             .selectbox.yellow
                 .selectvalue 19

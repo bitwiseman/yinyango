@@ -255,7 +255,7 @@ app.get('/session', function (req, res) {
  * Load an SGF file provided by user or from a given URL.
  */
 app.post('/loadsgf/:method', function (req, res) {
-    var method =    req.params.method,
+    var method = req.params.method,
         file;
 
     if (method === 'file') {
@@ -502,7 +502,7 @@ app.io.route('join', function (req) {
 /*}}}*/
 /* disconnect {{{*/
 app.io.route('disconnect', function (req) {
-    var id =    socketIds[req.session.username].indexOf(req.io.socket.id);
+    var id = socketIds[req.session.username].indexOf(req.io.socket.id);
 
     if (id !== -1) {
         // Remove socket id from sockets list.

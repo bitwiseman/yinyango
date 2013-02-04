@@ -157,6 +157,27 @@ body {
     padding: 0 1em;
     border-radius: 1em;
 }
+.ckbox {
+    position: relative;
+    height: 1em;
+    width: 1em;
+    border: 1px solid black;
+    border-radius: 0.2em;
+}
+.ckbox input {
+    opacity: 0;
+}
+.ckbox label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+}
+.ckbox input[type=checkbox]:checked + label {
+    opacity: 1;
+}
 .input {
     /*margin: 0;*/
     /*height: 1.4em;*/
