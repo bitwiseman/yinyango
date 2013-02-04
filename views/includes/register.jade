@@ -10,7 +10,7 @@ form#registerform.box.brown3(onsubmit='return false;')
     input.input(type='email', autocomplete='on', name='email', maxlength='64',
         required)
     p: input.linkbutton.black(type='submit', value= lingua.register)
-    p: div#errorname.box.red= lingua.errorname
-    p: div#errorexist.box.red= lingua.errorexist
-    p: div#regsuccess.box= lingua.regsuccess
+    p: div#errorname.box.red.none= lingua.errorname
+    p: div#errorexist.box.red.none= lingua.errorexist
+    p: div#regsuccess.box.none= lingua.regsuccess
 p: a#login.linkbutton.black(href='#')= lingua.back

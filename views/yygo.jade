@@ -4,15 +4,15 @@ block content
     a#menu-switch(href='#')
     #menu.black.menubar
         include includes/menu
-    #loading.screen
+    #loading.screen.none
         p= lingua.loading
-    #game.screen
+    #hall.screen
+        include includes/hall
+    #game.screen.none
         #goban
         #panel
             include includes/panel
-    #hall.screen
-        include includes/hall
-    #settings.screen
+    #settings.screen.none
         include includes/settings
     script(src='gotools.js')
     script(src='javascripts/socket.io.js')

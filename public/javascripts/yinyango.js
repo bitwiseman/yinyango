@@ -267,7 +267,7 @@ yygo.bindEvents = function () {
     }, false);
     msettings.addEventListener('click', function () {
         // Hide previous answer from server.
-        document.getElementById('settingssaved').style.display = 'none';
+        document.getElementById('settingssaved').classList.add('none');
         yygo.showScreen('settings');
     }, false);
     mlogout.addEventListener('click', function () {
@@ -297,10 +297,10 @@ yygo.bindEvents = function () {
         var errorinvalid =  document.getElementById('errorinvalid'),
             file =          new FormData(this);
 
-        errorinvalid.style.display = 'none';
+        errorinvalid.classList.add('none');
         yygo.ajax('/loadsgf/file', 'POST', file, function (data) {
             if (data.answer === 'invalid') {
-                errorinvalid.style.display = 'block';
+                errorinvalid.classList.remove('none');
             } else {
                 yygo.loadGame(data);
             }
@@ -366,10 +366,10 @@ yygo.bindEvents = function () {
         var settingssaved = document.getElementById('settingssaved'),
             settings =      new FormData(this.form);
 
-        settingssaved.style.display = 'none';
+        settingssaved.classList.add('none');
         yygo.ajax('/settings', 'POST', settings, function (data) {
             if (data) {
-                settingssaved.style.display = 'block';
+                settingssaved.classList.remove('none');
             }
         });
     }, false);
@@ -755,7 +755,7 @@ yygo.loadGame = function (data) {
     yygo.toggleNavButtons();
 
     // Activate game menu button.
-    document.getElementById('m-game').style.display = 'inline-block';
+    document.getElementById('m-game').classList.remove('none');
 
     // Set Screen top.
     yygo.setScreenTop();
@@ -1088,11 +1088,11 @@ yygo.makeVariations = function () {
     }
 
     if (variationsnum <= 1) { // No variations to show.
-        variations.style.display = 'none';
+        variations.classList.add('none');
     } else {
         varvalue.textContent = currentvar;
         varselect.innerHTML = html;
-        variations.style.display = 'block';
+        variations.classList.remove('none');
         yygo.bindVariationChange(varselect);
     }
 };
@@ -1607,13 +1607,13 @@ yygo.showGamesScreen = function (show) {
  */
 yygo.showScreen = function (show) {
     if (yygo.screen !== '') {
-        document.getElementById(yygo.screen).style.display = 'none';
+        document.getElementById(yygo.screen).classList.add('none');
         if (yygo.screen !== 'loading') {
             document.getElementById('m-' + yygo.screen).classList.
                 remove('twhite');
         }
     }
-    document.getElementById(show).style.display = 'block';
+    document.getElementById(show).classList.remove('none');
     if (show !== 'loading') {
         document.getElementById('m-' + show).classList.add('twhite');
     }
@@ -1626,8 +1626,8 @@ yygo.showScreen = function (show) {
  * @param {String} show Element reference to show.
  */
 yygo.showTextPanel = function (show) {
-    document.getElementById(yygo.textpanel).style.display = 'none';
-    document.getElementById(show).style.display = 'block';
+    document.getElementById(yygo.textpanel).classList.add('none');
+    document.getElementById(show).classList.remove('none');
     yygo.textpanel = show;
 };
 /*}}}*/

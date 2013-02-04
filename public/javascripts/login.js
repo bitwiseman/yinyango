@@ -47,46 +47,46 @@ yylog.makeBinds = function () {
 
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
-        errorlogin.style.display = 'none';
+        errorlogin.classList.add('none');
         yylog.jsonRequest('/login', 'POST', formdata, function (data) {
             if (data) {
                 // Session is set, refresh the page.
                 window.location.href = '/';
             } else {
                 // Error message.
-                errorlogin.style.display = 'block';
+                errorlogin.classList.remove('none');
             }
         });
     }, false);
     registerform.addEventListener('submit', function () {
         var formdata = new FormData(this);
-        errorexist.style.display = 'none';
-        errorname.style.display = 'none';
-        regsuccess.style.display = 'none';
+        errorexist.classList.add('none');
+        errorname.classList.add('none');
+        regsuccess.classList.add('none');
         yylog.jsonRequest('/register', 'POST', formdata, function (data) {
             if (data.success) {
                 // Registration successfull.
-                regsuccess.style.display = 'block';
+                regsuccess.classList.remove('none');
             } else if (data.error === 'name') {
-                errorname.style.display = 'block';
+                errorname.classList.remove('none');
             } else if (data.error === 'exist') {
-                errorexist.style.display = 'block';
+                errorexist.classList.remove('none');
             }
         });
     }, false);
 
     login.addEventListener('click', function () {
-        errorlogin.style.display = 'none';
-        document.getElementById('register-scr').style.display = 'none';
-        document.getElementById('login-scr').style.display = 'block';
+        errorlogin.classList.add('none');
+        document.getElementById('register-scr').classList.add('none');
+        document.getElementById('login-scr').classList.remove('none');
         loginform.username.focus();
     }, false);
     register.addEventListener('click', function () {
-        errorexist.style.display = 'none';
-        errorname.style.display = 'none';
-        regsuccess.style.display = 'none';
-        document.getElementById('login-scr').style.display = 'none';
-        document.getElementById('register-scr').style.display = 'block';
+        errorexist.classList.add('none');
+        errorname.classList.add('none');
+        regsuccess.classList.add('none');
+        document.getElementById('login-scr').classList.add('none');
+        document.getElementById('register-scr').classList.remove('none');
         registerform.username.focus();
     }, false);
 };
@@ -97,7 +97,7 @@ yylog.init = function () {
 
     yylog.makeBinds();
     // Show login screen.
-    document.getElementById('login-scr').style.display = 'block';
+    document.getElementById('login-scr').classList.remove('none');
     // Focus username.
     loginform.username.focus();
 };
