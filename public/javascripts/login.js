@@ -8,7 +8,7 @@
 'use strict';
 /* yylog {{{*/
 var yylog = {};
-/* jsonRequest {{{
+/* ajax {{{
  * Simple ajax request expecting json in response.
  *
  * @param {String} url Destination url.
@@ -16,7 +16,7 @@ var yylog = {};
  * @param {Object} data FormData Object to be sent by a POST.
  * @param {Function} callback Callback function.
  */
-yylog.jsonRequest = function (url, method, data, callback) {
+yylog.ajax = function (url, method, data, callback) {
     var xhr = new XMLHttpRequest();
 
     if (callback === undefined) {
@@ -34,8 +34,8 @@ yylog.jsonRequest = function (url, method, data, callback) {
     xhr.send(data);
 };
 /*}}}*/
-/* makeBinds {{{*/
-yylog.makeBinds = function () {
+/* bindEvents {{{*/
+yylog.bindEvents = function () {
     var loginform =     document.getElementById('loginform'),
         registerform =  document.getElementById('registerform'),
         errorlogin =    document.getElementById('errorlogin'),
@@ -48,12 +48,11 @@ yylog.makeBinds = function () {
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
         errorlogin.classList.add('none');
-        yylog.jsonRequest('/login', 'POST', formdata, function (data) {
+        yylog.ajax('/login', 'POST', formdata, function (data) {
             if (data) {
                 // Session is set, refresh the page.
                 window.location.href = '/';
             } else {
-                // Error message.
                 errorlogin.classList.remove('none');
             }
         });
@@ -63,9 +62,8 @@ yylog.makeBinds = function () {
         errorexist.classList.add('none');
         errorname.classList.add('none');
         regsuccess.classList.add('none');
-        yylog.jsonRequest('/register', 'POST', formdata, function (data) {
+        yylog.ajax('/register', 'POST', formdata, function (data) {
             if (data.success) {
-                // Registration successfull.
                 regsuccess.classList.remove('none');
             } else if (data.error === 'name') {
                 errorname.classList.remove('none');
@@ -74,7 +72,6 @@ yylog.makeBinds = function () {
             }
         });
     }, false);
-
     login.addEventListener('click', function () {
         errorlogin.classList.add('none');
         document.getElementById('register-scr').classList.add('none');
@@ -93,13 +90,9 @@ yylog.makeBinds = function () {
 /*}}}*/
 /* init {{{*/
 yylog.init = function () {
-    var loginform = document.getElementById('loginform');
-
-    yylog.makeBinds();
-    // Show login screen.
+    yylog.bindEvents();
     document.getElementById('login-scr').classList.remove('none');
-    // Focus username.
-    loginform.username.focus();
+    document.getElementById('loginform').username.focus();
 };
 /*}}}*/
 /*}}}*/
