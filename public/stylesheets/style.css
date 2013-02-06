@@ -106,7 +106,8 @@ body {
     background: #ffeeaa;
 }
 .red {
-    background: #d44343;
+    background: #b42323;
+    color: #f9f0ca;
 }
 .tred {
     color: #d44343;
@@ -141,7 +142,8 @@ body {
 }
 .alert {
     width: 100%;
-    height: 3em;
+    padding: 1em !important;
+    font-weight: bold;
 }
 .screen {
     position: absolute;

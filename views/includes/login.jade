@@ -7,5 +7,5 @@ form#loginform.box.brown3(onsubmit='return false;')
     p= lingua.password
     input.input(type='password', name='password', required)
     p: input.linkbutton.black(type='submit', value= lingua.login)
-    p: div#errorlogin.box.red.none= lingua.errorlogin
+    p: div#errorlogin.box.alert.red.none= lingua.errorlogin
 p: a#register.linkbutton.black(href='#')= lingua.register
