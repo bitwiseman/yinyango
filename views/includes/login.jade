@@ -1,11 +1,13 @@
 h2= lingua.login
 p: a.linkbutton.black(href='/guest')= lingua.guestlogin
 form#loginform.box.brown3(onsubmit='return false;')
-    p= lingua.username
-    input.input(type='text', name='username', autocomplete='on',
-        maxlength='15', required)
-    p= lingua.password
-    input.input(type='password', name='password', required)
-    p: input.linkbutton.black(type='submit', value= lingua.login)
-    p: div#errorlogin.box.alert.red.none= lingua.errorlogin
+    span= lingua.username
+    .inputbox
+        input.input(type='text', name='username', autocomplete='on',
+            maxlength='15', required)
+    span= lingua.password
+    .inputbox
+        input.input(type='password', name='password', required)
+    input.linkbutton.black(type='submit', value= lingua.login)
+    #errorlogin.box.alert.red.none= lingua.errorlogin
 p: a#register.linkbutton.black(href='#')= lingua.register

@@ -1,5 +1,5 @@
 p: form.box.brown3(onsubmit='return false;')
-    p= lingua.lang
+    span= lingua.lang
     .selectbox.yellow
         if lang == 'en'
             .selectvalue English
@@ -14,5 +14,5 @@ p: form.box.brown3(onsubmit='return false;')
                 option#fr(value='fr', selected) Français
             else
                 option#fr(value='fr') Français
-    p: input#submitsettings.linkbutton.black(type='submit', value= lingua.save)
-    p#settingssaved.none= lingua.settingssaved
+    input#submitsettings.linkbutton.black(type='submit', value= lingua.save)
+    #settingssaved.box.alert.yellow.none= lingua.settingssaved

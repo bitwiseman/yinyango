@@ -1,16 +1,19 @@
 h2= lingua.register
 form#registerform.box.brown3(onsubmit='return false;')
-    p= lingua.username
-    input.input(type='text', name='username', autocomplete='on', maxlength='15',
-        required)
-    .inputhelp.yellow= lingua.helpname 
-    p= lingua.password
-    input.input(type='password', name='password', maxlength='64', required)
-    p= lingua.email
-    input.input(type='email', autocomplete='on', name='email', maxlength='64',
-        required)
-    p: input.linkbutton.black(type='submit', value= lingua.register)
-    p: div#errorname.box.alert.red.none= lingua.errorname
-    p: div#errorexist.box.alert.red.none= lingua.errorexist
-    p: div#regsuccess.box.alert.none= lingua.regsuccess
+    span= lingua.username
+    .inputbox
+        input.input(type='text', name='username', autocomplete='on',
+            maxlength='15', required)
+        .inputhelp.yellow= lingua.helpname 
+    span= lingua.password
+    .inputbox
+        input.input(type='password', name='password', maxlength='64', required)
+    span= lingua.email
+    .inputbox
+        input.input(type='email', autocomplete='on', name='email',
+            maxlength='64', required)
+    input.linkbutton.black(type='submit', value= lingua.register)
+    #errorname.box.alert.red.none= lingua.errorname
+    #errorexist.box.alert.red.none= lingua.errorexist
+    #regsuccess.box.alert.none= lingua.regsuccess
 p: a#login.linkbutton.black(href='#')= lingua.login

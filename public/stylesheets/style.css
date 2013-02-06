@@ -142,7 +142,6 @@ body {
 }
 .alert {
     width: 100%;
-    padding: 1em !important;
     font-weight: bold;
 }
 .screen {
@@ -156,15 +155,17 @@ body {
     border-radius: 50%;
 }
 .box {
-    padding: 0 1em;
+    padding: 1em;
     border-radius: 1em;
+}
+.inputbox, .selectbox {
+    margin-bottom: 1em;
 }
 .ckbox {
     position: relative;
     height: 20px;
     width: 20px;
     border: 1px solid black;
-    border-radius: 5px;
 }
 .ckbox input {
     opacity: 0;
@@ -194,13 +195,11 @@ body {
     opacity: 1;
 }
 .input {
-    /*margin: 0;*/
-    /*height: 1.4em;*/
+    margin: 0;
     padding: 0.2em 0.5em;
     width: 100%;
     min-width: 0;
     border: 1px solid black;
-    border-radius: 0.5em;
     font: bold 1em sans-serif;
 }
 .inputhelp {
@@ -214,7 +213,6 @@ body {
     height: 1.5em;
     width: 100%;
     border: 1px solid black;
-    border-radius: 0.5em;
     font: bold 1em sans-serif;
     line-height: 1.5em;
 }
