@@ -6,26 +6,10 @@
     #running-games.gamesscreen
         table#running-gameslist
     #create-games.gamesscreen.none
-        p: form#create-sgf.box.brown3(onsubmit='return false;')
-            .ckbox.yellow
-                input#check(type='checkbox')
-                label.link(for='check')
-            span= lingua.size
-            .selectbox.yellow
-                .selectvalue 19
-                select.link.select(name='size')
-                    option(value='9') 9
-                    option(value='13') 13
-                    option(value='19', selected) 19
-            label= lingua.rules
-            .selectbox.yellow
-                .selectvalue= lingua.japanese
-                select.link.select(name='rules')
-                    option(value='japanese', selected)= lingua.japanese
-            input.linkbutton.black(type='submit', value= lingua.createsgf)
+        include creategame
     #load-games.gamesscreen.none
         p: form#load-sgf.box.brown3(onsubmit='return false;')
-            span= lingua.selectsgf
+            div= lingua.selectsgf
             input#sgf-select.selectbox.link.yellow(type='button')
             input#sgf-select-file(type='file', name='sgffile')
             input.linkbutton.black(type='submit', value= lingua.loadsgf)

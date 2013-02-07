@@ -1,0 +1,25 @@
+p: form#create-game.box.brown3(onsubmit='return false;')
+    .inputbox
+        span= lingua.privategame
+        .checkbox.yellow
+            input#private(type='checkbox')
+            label.link(for='private')
+    div= lingua.typeofgame
+    .selectbox.yellow
+        .selectvalue Duel
+        select.link.select(name='gametype')
+            option(value='demo') Demo
+            option(value='duel', selected) Duel
+    div= lingua.rule
+    .selectbox.yellow
+        .selectvalue= lingua.japanese
+        select.link.select(name='rule')
+            option(value='japanese', selected)= lingua.japanese
+    div= lingua.size
+    .selectbox.yellow
+        .selectvalue 19
+        select.link.select(name='size')
+            option(value='9') 9
+            option(value='13') 13
+            option(value='19', selected) 19
+    input.linkbutton.black(type='submit', value= lingua.creategame)
