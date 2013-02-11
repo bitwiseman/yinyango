@@ -156,12 +156,13 @@ function hash(pwd, salt, fn) {
  */
 app.get('/', function (req, res) {
     var username =  req.session.username,
+        isguest =   req.session.isguest,
         lang =      req.cookies.language;
 
     // Login if user session is set.
     if (username) {
         // Check if user still exist in database.
-        if (username !== 'guest') {
+        if (!isguest) {
             User.findOne({ name: username }, function (err, user) {
                 if (err) {
                     console.error('User.findOne error: ' + err);
@@ -174,20 +175,11 @@ app.get('/', function (req, res) {
                 }
             });
         } else {
-                res.render('yygo', { username: username, lang: lang });
+            res.render('yygo', { username: username, lang: lang });
         }
     } else {
         res.render('login');
     }
-});
-/*}}}*/
-/* get /guest {{{
- * Guest login.
- */
-app.get('/guest', function (req, res) {
-    req.session.username = 'guest';
-    req.session.sgfid = '';
-    res.redirect('/');
 });
 /*}}}*/
 /* get /gameslist/:page {{{
@@ -266,6 +258,38 @@ app.get('/session', function (req, res) {
     }
 });
 /*}}}*/
+/* post /guest {{{
+ * Guest login.
+ */
+app.post('/guest', function (req, res) {
+    var username =  req.body.guestname,
+        validname = /^[a-zA-Z0-9]+$/,
+        validator = new Validator();
+
+    // Always check received data before using it.
+    validator.check(username).len(1, 15).is(validname);
+
+    // Check if that guest name is taken by regular user.
+    if (validator.getErrors().length === 0) {
+        User.findOne({ name: username }, function (err, user) {
+            if (err) {
+                console.error('User.findOne error: ' + err);
+                return;
+            }
+            if (user) {
+                res.send(false);
+            } else {
+                req.session.username = username;
+                req.session.sgfid = '';
+                req.session.isguest = true;
+                res.send(true);
+            }
+        });
+    } else {
+        res.send(false);
+    }
+});
+/*}}}*/
 /* post /loadsgf/:method {{{
  * Load an SGF file provided by user or from a given URL.
  */
@@ -322,6 +346,7 @@ app.post('/login', function (req, res) {
                         req.session.userid =    user._id;
                         req.session.username =  user.name;
                         req.session.sgfid =     user.sgfid;
+                        req.session.isguest =   false;
                         res.cookie('language', user.lang);
                         res.send(true);
                     } else {
@@ -333,7 +358,7 @@ app.post('/login', function (req, res) {
             }
         });
     } else {
-        res.render('login', { error: 'login' });
+        res.send(false);
     }
 });
 /*}}}*/

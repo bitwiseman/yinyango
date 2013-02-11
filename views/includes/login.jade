@@ -1,11 +1,17 @@
 h2= lingua.login
-p: a.linkbutton.black(href='/guest')= lingua.guestlogin
-form#loginform.box.brown3(onsubmit='return false;')
-    span= lingua.username
+p: form#guestloginform.box.brown3(onsubmit='return false;')
+    div= lingua.guestname
+    .inputbox
+        input.input(type='text', name='guestname', autocomplete='on',
+            maxlength='15', required)
+    input.linkbutton.black(type='submit', value= lingua.guestlogin)
+    #errorguestname.box.alert.red.none= lingua.errorexist
+p: form#loginform.box.brown3(onsubmit='return false;')
+    div= lingua.username
     .inputbox
         input.input(type='text', name='username', autocomplete='on',
             maxlength='15', required)
-    span= lingua.password
+    div= lingua.password
     .inputbox
         input.input(type='password', name='password', required)
     input.linkbutton.black(type='submit', value= lingua.login)

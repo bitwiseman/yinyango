@@ -36,14 +36,16 @@ yylog.ajax = function (url, method, data, callback) {
 /*}}}*/
 /* bindEvents {{{*/
 yylog.bindEvents = function () {
-    var loginform =     document.getElementById('loginform'),
-        registerform =  document.getElementById('registerform'),
-        errorlogin =    document.getElementById('errorlogin'),
-        errorexist =    document.getElementById('errorexist'),
-        errorname =     document.getElementById('errorname'),
-        regsuccess =    document.getElementById('regsuccess'),
-        login =         document.getElementById('login'),
-        register =      document.getElementById('register');
+    var loginform =         document.getElementById('loginform'),
+        guestloginform =    document.getElementById('guestloginform'),
+        registerform =      document.getElementById('registerform'),
+        errorlogin =        document.getElementById('errorlogin'),
+        errorexist =        document.getElementById('errorexist'),
+        errorname =         document.getElementById('errorname'),
+        errorguestname =    document.getElementById('errorguestname'),
+        regsuccess =        document.getElementById('regsuccess'),
+        login =             document.getElementById('login'),
+        register =          document.getElementById('register');
 
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
@@ -54,6 +56,18 @@ yylog.bindEvents = function () {
                 window.location.href = '/';
             } else {
                 errorlogin.classList.remove('none');
+            }
+        });
+    }, false);
+    guestloginform.addEventListener('submit', function () {
+        var formdata = new FormData(this);
+        errorguestname.classList.add('none');
+        yylog.ajax('/guest', 'POST', formdata, function (data) {
+            if (data) {
+                // Session is set, refresh the page.
+                window.location.href = '/';
+            } else {
+                errorguestname.classList.remove('none');
             }
         });
     }, false);
