@@ -161,17 +161,21 @@ app.get('/', function (req, res) {
     // Login if user session is set.
     if (username) {
         // Check if user still exist in database.
-        User.findOne({ name: username }, function (err, user) {
-            if (err) {
-                console.error('User.findOne error: ' + err);
-                return;
-            }
-            if (user) {
+        if (username !== 'guest') {
+            User.findOne({ name: username }, function (err, user) {
+                if (err) {
+                    console.error('User.findOne error: ' + err);
+                    return;
+                }
+                if (user) {
+                    res.render('yygo', { username: username, lang: lang });
+                } else {
+                    res.render('login');
+                }
+            });
+        } else {
                 res.render('yygo', { username: username, lang: lang });
-            } else {
-                res.render('login');
-            }
-        });
+        }
     } else {
         res.render('login');
     }
