@@ -2,6 +2,15 @@ extends layout
 
 block content
     h1= lingua.title
+    #messages.none
+        #message
+            #errorguestname.none= lingua.errorexist
+            #errorlogin.none= lingua.errorlogin
+            #errorname.none= lingua.errorname
+            #errorexist.none= lingua.errorexist
+            #regsuccess.none= lingua.regsuccess
+        #message-footer
+            input#message-ok.linkbutton.black(type='button', value= lingua.ok)
     #login-scr.none
         include includes/login
     #register-scr.none

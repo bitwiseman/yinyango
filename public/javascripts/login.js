@@ -8,6 +8,7 @@
 'use strict';
 /* yylog {{{*/
 var yylog = {};
+yylog.lastmessage = ''; // Identifier of last message.
 /* ajax {{{
  * Simple ajax request expecting json in response.
  *
@@ -39,63 +40,54 @@ yylog.bindEvents = function () {
     var loginform =         document.getElementById('loginform'),
         guestloginform =    document.getElementById('guestloginform'),
         registerform =      document.getElementById('registerform'),
-        errorlogin =        document.getElementById('errorlogin'),
-        errorexist =        document.getElementById('errorexist'),
-        errorname =         document.getElementById('errorname'),
-        errorguestname =    document.getElementById('errorguestname'),
-        regsuccess =        document.getElementById('regsuccess'),
+        messageok =         document.getElementById('message-ok'),
         login =             document.getElementById('login'),
         register =          document.getElementById('register');
 
+    messageok.addEventListener('click', function () {
+        document.getElementById(yylog.lastmessage).className = 'none';
+        document.getElementById('messages').className = 'none';
+    }, false);
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
-        errorlogin.classList.add('none');
         yylog.ajax('/login', 'POST', formdata, function (data) {
             if (data) {
                 // Session is set, refresh the page.
                 window.location.href = '/';
             } else {
-                errorlogin.classList.remove('none');
+                yylog.showMessage('error', 'errorlogin');
             }
         });
     }, false);
     guestloginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
-        errorguestname.classList.add('none');
         yylog.ajax('/guest', 'POST', formdata, function (data) {
             if (data) {
                 // Session is set, refresh the page.
                 window.location.href = '/';
             } else {
-                errorguestname.classList.remove('none');
+                yylog.showMessage('error', 'errorguestname');
             }
         });
     }, false);
     registerform.addEventListener('submit', function () {
         var formdata = new FormData(this);
-        errorexist.classList.add('none');
-        errorname.classList.add('none');
-        regsuccess.classList.add('none');
         yylog.ajax('/register', 'POST', formdata, function (data) {
             if (data.success) {
-                regsuccess.classList.remove('none');
+                yylog.showMessage('success', 'regsuccess');
             } else if (data.error === 'name') {
-                errorname.classList.remove('none');
+                yylog.showMessage('error', 'errorname');
             } else if (data.error === 'exist') {
-                errorexist.classList.remove('none');
+                yylog.showMessage('error', 'errorexist');
             }
         });
     }, false);
     login.addEventListener('click', function () {
-        errorlogin.classList.add('none');
         document.getElementById('register-scr').classList.add('none');
         document.getElementById('login-scr').classList.remove('none');
         loginform.username.focus();
     }, false);
     register.addEventListener('click', function () {
-        errorexist.classList.add('none');
-        errorname.classList.add('none');
-        regsuccess.classList.add('none');
         document.getElementById('login-scr').classList.add('none');
         document.getElementById('register-scr').classList.remove('none');
         registerform.username.focus();
@@ -107,6 +99,28 @@ yylog.init = function () {
     yylog.bindEvents();
     document.getElementById('login-scr').classList.remove('none');
     document.getElementById('loginform').username.focus();
+};
+/*}}}*/
+/* showMessage {{{
+ * Show a message on screen.
+ *
+ * @param {String} type Type of message (error, success, help).
+ * @param {String} id   Identifier of element containing the message.
+ */
+yylog.showMessage = function (type, id) {
+    var messages = document.getElementById('messages');
+
+    yylog.lastmessage = id;
+    document.getElementById(id).className = '';
+
+    if (type === 'error') {
+        messages.className = 'red';
+    } else if (type === 'success') {
+        messages.className = 'yellow';
+    } else {
+        messages.className = 'brown4';
+    }
+    document.getElementById('message-ok').focus();
 };
 /*}}}*/
 /*}}}*/

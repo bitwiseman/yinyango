@@ -226,7 +226,7 @@ body {
     opacity: 0;
 }
 .linkbutton {
-    width: 100%;
+    /*width: 100%;*/
     padding: 0.3em 0.6em;
     border: 1px solid #000;/* Avoid ugly buttons borders. */
     border-radius: 2em;/* Make sure its all rounded. */
@@ -236,8 +236,29 @@ body {
 }
 /*}}}*/
 /* Inline-block elements. {{{*/
-#buttonsbar, .alert, .checkbox, .box, .menulink, .player {
+#buttonsbar, .alert, .checkbox, .box, .linkbutton, .menulink, .player {
     display: inline-block;
+}
+/*}}}*/
+/* Messages. {{{*/
+#messages, #message, #message-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+#messages {
+    top: 0;
+    bottom: 0;
+}
+#message {
+    top: 0;
+    bottom: 3.6em;
+    padding: 1em;
+    overflow: auto;
+}
+#message-footer {
+    bottom: 0;
+    padding: 1em;
 }
 /*}}}*/
 /* Menubars. {{{*/
