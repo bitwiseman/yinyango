@@ -83,10 +83,6 @@ body {
     background: #000;
     color: #f9f0ca;
 }
-.white {
-    background: #f9f0ca;
-    color: #000;
-}
 .brown {
     background: #ccaa66;
     color: #000;
@@ -102,12 +98,19 @@ body {
 .brown4 {
     background: #928260;
 }
-.yellow, #chatmsg:focus {
-    background: #ffeeaa;
+.green {
+    background: #6d8343;
 }
 .red {
     background: #b42323;
     color: #f9f0ca;
+}
+.white {
+    background: #f9f0ca;
+    color: #000;
+}
+.yellow, #chatmsg:focus {
+    background: #ffeeaa;
 }
 .tred {
     color: #d44343;

@@ -116,7 +116,7 @@ yylog.showMessage = function (type, id) {
     if (type === 'error') {
         messages.className = 'red';
     } else if (type === 'success') {
-        messages.className = 'yellow';
+        messages.className = 'green';
     } else {
         messages.className = 'brown4';
     }
