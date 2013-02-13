@@ -159,7 +159,9 @@ function hash(pwd, salt, fn) {
 app.get('/', function (req, res) {
     var username =  req.session.username,
         isguest =   req.session.isguest,
-        lang =      req.cookies.language;
+        lang =      req.cookies.language,
+        userexist = false,
+        user;
 
     // Login if user session is set.
     if (username) {
@@ -177,7 +179,18 @@ app.get('/', function (req, res) {
                 }
             });
         } else {
-            res.render('yygo', { username: username, lang: lang });
+            // Check if that guest name is used by actual connected users.
+            for (user in socketIds) {
+                if (user === username) {
+                    userexist = true;
+                    break;
+                }
+            }
+            if (!userexist) {
+                res.render('yygo', { username: username, lang: lang });
+            } else {
+                res.render('login');
+            }
         }
     } else {
         res.render('login');
@@ -264,13 +277,22 @@ app.get('/session', function (req, res) {
  * Guest login.
  */
 app.post('/guest', function (req, res) {
-    var username =  req.body.guestname,
-        validname = /^[a-zA-Z0-9]+$/,
-        validator = new Validator();
+    var username =      req.body.guestname,
+        validname =     /^[a-zA-Z0-9]+$/,
+        validator =     new Validator(),
+        userexist =     false,
+        user;
 
     // Always check received data before using it.
     validator.check(username).len(1, 15).is(validname);
 
+    // Check if that guest name is used by actual connected users.
+    for (user in socketIds) {
+        if (user === username) {
+            userexist = true;
+            break;
+        }
+    }
     // Check if that guest name is taken by regular user.
     if (validator.getErrors().length === 0) {
         User.findOne({ name: username }, function (err, user) {
@@ -278,7 +300,7 @@ app.post('/guest', function (req, res) {
                 console.error('User.findOne error: ' + err);
                 return;
             }
-            if (user) {
+            if (user || userexist) {
                 res.send({ error: 'exist' });
             } else {
                 req.session.username = username;
