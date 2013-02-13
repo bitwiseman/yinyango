@@ -23,7 +23,7 @@ var express =       require('express.io'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     onemonth =      2592000000,
     oneyear =       31104000000,
-    socketIds =     {};
+    users =         [];
 /*}}}*/
 /* Mongoose schemas & models. {{{*/
 var userSchema = new mongoose.Schema({
@@ -170,8 +170,8 @@ app.get('/', function (req, res) {
                     console.error('User.findOne error: ' + err);
                     return;
                 }
-                if (user && socketIds[username] === undefined) {
-                    socketIds[username] = '';
+                if (user && users.indexOf(username) === -1) {
+                    users.push(username);
                     res.render('yygo', { username: username, lang: lang });
                 } else {
                     res.render('connected', { username: username });
@@ -179,8 +179,8 @@ app.get('/', function (req, res) {
             });
         } else {
             // Check if that guest name is used by actual connected users.
-            if (socketIds[username] === undefined) {
-                socketIds[username] = '';
+            if (users.indexOf(username) === -1) {
+                users.push(username);
                 res.render('yygo', { username: username, lang: lang });
             } else {
                 res.render('connected', { username: username });
@@ -285,7 +285,7 @@ app.post('/guest', function (req, res) {
                 console.error('User.findOne error: ' + err);
                 return;
             }
-            if (user || socketIds[username] !== undefined) {
+            if (user || users.indexOf(username) !== -1) {
                 res.send({ error: 'exist' });
             } else {
                 req.session.username = username;
@@ -527,24 +527,17 @@ app.post('/settings', function (req, res) {
 /* IO Routes. {{{*/
 /* join {{{*/
 app.io.route('join', function (req) {
-    var chatusers = [],
-        user;
-
-    // Save user socket id.
-    socketIds[req.session.username] = req.io.socket.id;
-    // Add user to chat users.
-    for (user in socketIds) {
-        chatusers.push(user);
-    }
     // Broadcast new user to connected users.
     req.io.broadcast('user-joined', req.session.username);
     // Send users list to new user.
-    req.io.respond({ success: true, users: chatusers });
+    req.io.respond({ success: true, users: users });
 });
 /*}}}*/
 /* disconnect {{{*/
 app.io.route('disconnect', function (req) {
-    delete socketIds[req.session.username];
+    var id = users.indexOf(req.session.username);
+
+    users.splice(id, 1);
     req.io.broadcast('user-left', req.session.username);
 });
 /*}}}*/
