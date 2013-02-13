@@ -159,9 +159,7 @@ function hash(pwd, salt, fn) {
 app.get('/', function (req, res) {
     var username =  req.session.username,
         isguest =   req.session.isguest,
-        lang =      req.cookies.language,
-        userexist = false,
-        user;
+        lang =      req.cookies.language;
 
     // Login if user session is set.
     if (username) {
@@ -172,7 +170,8 @@ app.get('/', function (req, res) {
                     console.error('User.findOne error: ' + err);
                     return;
                 }
-                if (user) {
+                if (user && socketIds[username] === undefined) {
+                    socketIds[username] = '';
                     res.render('yygo', { username: username, lang: lang });
                 } else {
                     res.render('login');
@@ -180,13 +179,8 @@ app.get('/', function (req, res) {
             });
         } else {
             // Check if that guest name is used by actual connected users.
-            for (user in socketIds) {
-                if (user === username) {
-                    userexist = true;
-                    break;
-                }
-            }
-            if (!userexist) {
+            if (socketIds[username] === undefined) {
+                socketIds[username] = '';
                 res.render('yygo', { username: username, lang: lang });
             } else {
                 res.render('login');
@@ -277,30 +271,21 @@ app.get('/session', function (req, res) {
  * Guest login.
  */
 app.post('/guest', function (req, res) {
-    var username =      req.body.guestname,
-        validname =     /^[a-zA-Z0-9]+$/,
-        validator =     new Validator(),
-        userexist =     false,
-        user;
+    var username =  req.body.guestname,
+        validname = /^[a-zA-Z0-9]+$/,
+        validator = new Validator();
 
     // Always check received data before using it.
     validator.check(username).len(1, 15).is(validname);
 
-    // Check if that guest name is used by actual connected users.
-    for (user in socketIds) {
-        if (user === username) {
-            userexist = true;
-            break;
-        }
-    }
-    // Check if that guest name is taken by regular user.
+    // Check if that guest name is taken by regular user or already connected.
     if (validator.getErrors().length === 0) {
         User.findOne({ name: username }, function (err, user) {
             if (err) {
                 console.error('User.findOne error: ' + err);
                 return;
             }
-            if (user || userexist) {
+            if (user || socketIds[username] !== undefined) {
                 res.send({ error: 'exist' });
             } else {
                 req.session.username = username;
@@ -545,38 +530,22 @@ app.io.route('join', function (req) {
     var chatusers = [],
         user;
 
-    // Check if that user is already connected to chat.
-    if (socketIds[req.session.username] !== undefined) {
-        req.io.respond({ success: false });
-    } else {
-        // Start sockets registration.
-        socketIds[req.session.username] = [];
-        // Add socket id to sockets list.
-        socketIds[req.session.username].push(req.io.socket.id);
-        // Add user to chat users.
-        for (user in socketIds) {
-            chatusers.push(user);
-        }
-        // Broadcast new user to connected users.
-        req.io.broadcast('user-joined', req.session.username);
-        // Send users list to new user.
-        req.io.respond({ success: true, users: chatusers });
+    // Save user socket id.
+    socketIds[req.session.username] = req.io.socket.id;
+    // Add user to chat users.
+    for (user in socketIds) {
+        chatusers.push(user);
     }
+    // Broadcast new user to connected users.
+    req.io.broadcast('user-joined', req.session.username);
+    // Send users list to new user.
+    req.io.respond({ success: true, users: chatusers });
 });
 /*}}}*/
 /* disconnect {{{*/
 app.io.route('disconnect', function (req) {
-    var id = socketIds[req.session.username].indexOf(req.io.socket.id);
-
-    if (id !== -1) {
-        // Remove socket id from sockets list.
-        socketIds[req.session.username].splice(id, 1);
-        // If no more sockets are connected, remove user.
-        if (socketIds[req.session.username].length === 0) {
-            delete socketIds[req.session.username];
-            req.io.broadcast('user-left', req.session.username);
-        }
-    }
+    delete socketIds[req.session.username];
+    req.io.broadcast('user-left', req.session.username);
 });
 /*}}}*/
 /* chat {{{*/
