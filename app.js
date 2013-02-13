@@ -21,6 +21,8 @@ var express =       require('express.io'),
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
+    onemonth =      2592000000,
+    oneyear =       31104000000,
     socketIds =     {};
 /*}}}*/
 /* Mongoose schemas & models. {{{*/
@@ -57,7 +59,7 @@ app.configure(function () {
     app.use(express.session({
         secret: 'Not a vegetable',
         store: new RedisStore,
-        cookie: { maxAge: 2592000000 } // One month cookie.
+        cookie: { maxAge: onemonth }
     }));
     app.use(express.static(__dirname + '/public'));
     app.use(express.static(__dirname + '/shared'));
@@ -347,7 +349,7 @@ app.post('/login', function (req, res) {
                         req.session.username =  user.name;
                         req.session.sgfid =     user.sgfid;
                         req.session.isguest =   false;
-                        res.cookie('language', user.lang);
+                        res.cookie('language', user.lang, { maxAge: oneyear });
                         res.send(true);
                     } else {
                         res.send(false);
@@ -502,14 +504,14 @@ app.post('/settings', function (req, res) {
         settings = { lang: lang };
         User.findByIdAndUpdate(userid, settings, function (err) {
             if (!err) {
-                res.cookie('language', lang);
+                res.cookie('language', lang, { maxAge: oneyear });
                 res.send(true);
             } else {
                 res.send(false);
             }
         });
     } else if (errors === 0) { // Update cookie only as it is guest user.
-        res.cookie('language', lang);
+        res.cookie('language', lang, { maxAge: oneyear });
         res.send(true);
     }
 });
