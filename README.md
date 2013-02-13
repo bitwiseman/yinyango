@@ -22,7 +22,6 @@ general.
 - Message about user shown in menu.
 - Make better games loading list.
 - Rewrite setGobanSize to have small version with togglable text panel.
-- Make global messages/errors screen.
 
 ## LICENSE
 

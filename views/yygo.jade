@@ -1,6 +1,12 @@
 extends layout
 
 block content
+    #messages.none
+        #message
+            #errorinvalid.none= lingua.errorinvalid
+            #settingssaved.none= lingua.settingssaved
+        #message-footer
+            input#message-ok.linkbutton.black(type='button', value= lingua.ok)
     a#menu-switch(href='#')
     #menu.black.menubar
         include includes/menu

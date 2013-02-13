@@ -18,6 +18,7 @@ yygo.gameslist =        {};         // Loadable games.
 yygo.gamesscreen =      '';         // Actual games loading screen.
 yygo.gobansize =        0;          // Size of goban in pixels.
 yygo.lastbranch =       0;          // Last branch to reach.
+yygo.lastmessage =      '';         // Identifier of last message.
 yygo.lastnode =         0;          // Last node of the last branch.
 yygo.menu =             true;       // Show menu at top ?
 yygo.mode =             'replay';   // Game mode: replay, play, edit.
@@ -200,6 +201,7 @@ yygo.ajax = function (url, method, data, callback) {
 yygo.bindEvents = function () {
     var menuswitch =        document.getElementById('menu-switch'),
         menu =              document.getElementById('menu'),
+        messageok =         document.getElementById('message-ok'),
         mgame =             document.getElementById('m-game'),
         mhall =             document.getElementById('m-hall'),
         msettings =         document.getElementById('m-settings'),
@@ -233,6 +235,10 @@ yygo.bindEvents = function () {
                 this.options[this.selectedIndex].text;
         }, false);
     }
+    messageok.addEventListener('click', function () {
+        document.getElementById(yygo.lastmessage).className = 'none';
+        document.getElementById('messages').className = 'none';
+    }, false);
     /* Window.{{{*/
     window.addEventListener('resize', function () {
         yygo.setScreenTop();
@@ -293,13 +299,11 @@ yygo.bindEvents = function () {
         sgfselect.value = this.value.replace('C:\\fakepath\\', '');
     }, false);
     loadsgf.addEventListener('submit', function () {
-        var errorinvalid =  document.getElementById('errorinvalid'),
-            file =          new FormData(this);
+        var file = new FormData(this);
 
-        errorinvalid.classList.add('none');
         yygo.ajax('/loadsgf/file', 'POST', file, function (data) {
             if (data.answer === 'invalid') {
-                errorinvalid.classList.remove('none');
+                yygo.showMessage('error', 'errorinvalid');
             } else {
                 yygo.loadGame(data);
             }
@@ -362,13 +366,11 @@ yygo.bindEvents = function () {
     // }}}
     /* Settings.{{{*/
     submitsettings.addEventListener('click', function () {
-        var settingssaved = document.getElementById('settingssaved'),
-            settings =      new FormData(this.form);
+        var settings = new FormData(this.form);
 
-        settingssaved.classList.add('none');
         yygo.ajax('/settings', 'POST', settings, function (data) {
             if (data) {
-                settingssaved.classList.remove('none');
+                yygo.showMessage('success', 'settingssaved');
             }
         });
     }, false);
@@ -1572,6 +1574,28 @@ yygo.showGamesScreen = function (show) {
     document.getElementById(show).classList.remove('none');
     document.getElementById('g-' + show).classList.add('twhite');
     yygo.gamesscreen = show;
+};
+/*}}}*/
+/* showMessage {{{
+ * Show a message on screen.
+ *
+ * @param {String} type Type of message (error, success, help).
+ * @param {String} id   Identifier of element containing the message.
+ */
+yygo.showMessage = function (type, id) {
+    var messages = document.getElementById('messages');
+
+    yygo.lastmessage = id;
+    document.getElementById(id).className = '';
+
+    if (type === 'error') {
+        messages.className = 'red';
+    } else if (type === 'success') {
+        messages.className = 'green';
+    } else {
+        messages.className = 'brown4';
+    }
+    document.getElementById('message-ok').focus();
 };
 /*}}}*/
 /* showScreen {{{

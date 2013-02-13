@@ -252,6 +252,7 @@ body {
 #messages {
     top: 0;
     bottom: 0;
+    z-index: 2;
 }
 #message {
     top: 0;
