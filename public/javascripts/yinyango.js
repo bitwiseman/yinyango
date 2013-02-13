@@ -302,7 +302,7 @@ yygo.bindEvents = function () {
         var file = new FormData(this);
 
         yygo.ajax('/loadsgf/file', 'POST', file, function (data) {
-            if (data.answer === 'invalid') {
+            if (data.error === 'invalid') {
                 yygo.showMessage('error', 'errorinvalid');
             } else {
                 yygo.loadGame(data);
@@ -369,8 +369,10 @@ yygo.bindEvents = function () {
         var settings = new FormData(this.form);
 
         yygo.ajax('/settings', 'POST', settings, function (data) {
-            if (data) {
+            if (data.error === '') {
                 yygo.showMessage('success', 'settingssaved');
+            } else {
+                yygo.showMessage('error', 'error');
             }
         });
     }, false);

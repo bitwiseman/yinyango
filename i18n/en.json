@@ -7,7 +7,7 @@
     "database":         "Database",
     "downsgf":          "Download with SGF format",
     "email":            "Email",
-    "error":            "Error happened.",
+    "error":            "Error occured.",
     "errorexist":       "User name already exist.",
     "errorinvalid":     "Invalid SGF file.",
     "errorlogin":       "Error in user name or password.",

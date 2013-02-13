@@ -51,10 +51,10 @@ yylog.bindEvents = function () {
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
         yylog.ajax('/login', 'POST', formdata, function (data) {
-            if (data) {
+            if (data.error === '') {
                 // Session is set, refresh the page.
                 window.location.href = '/';
-            } else {
+            } else if (data.error === 'login') {
                 yylog.showMessage('error', 'errorlogin');
             }
         });
@@ -62,23 +62,27 @@ yylog.bindEvents = function () {
     guestloginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
         yylog.ajax('/guest', 'POST', formdata, function (data) {
-            if (data) {
+            if (data.error === '') {
                 // Session is set, refresh the page.
                 window.location.href = '/';
-            } else {
-                yylog.showMessage('error', 'errorguestname');
+            } else if (data.error === 'name') {
+                yylog.showMessage('error', 'errorname');
+            } else if (data.error === 'exist') {
+                yylog.showMessage('error', 'errorexist');
             }
         });
     }, false);
     registerform.addEventListener('submit', function () {
         var formdata = new FormData(this);
         yylog.ajax('/register', 'POST', formdata, function (data) {
-            if (data.success) {
+            if (data.error === '') {
                 yylog.showMessage('success', 'regsuccess');
             } else if (data.error === 'name') {
                 yylog.showMessage('error', 'errorname');
             } else if (data.error === 'exist') {
                 yylog.showMessage('error', 'errorexist');
+            } else {
+                yylog.showMessage('error', 'error');
             }
         });
     }, false);

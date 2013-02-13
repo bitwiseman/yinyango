@@ -107,7 +107,7 @@ function checkSgf(sgf, res, next) {
         if (check === 'OK') {
             next();
         } else {
-            res.send({ answer: 'invalid' });
+            res.send({ error: 'invalid' });
         }
 
         if (error) {
@@ -279,16 +279,16 @@ app.post('/guest', function (req, res) {
                 return;
             }
             if (user) {
-                res.send(false);
+                res.send({ error: 'exist' });
             } else {
                 req.session.username = username;
                 req.session.sgfid = '';
                 req.session.isguest = true;
-                res.send(true);
+                res.send({ error: '' });
             }
         });
     } else {
-        res.send(false);
+        res.send({ error: 'name' });
     }
 });
 /*}}}*/
@@ -350,17 +350,17 @@ app.post('/login', function (req, res) {
                         req.session.sgfid =     user.sgfid;
                         req.session.isguest =   false;
                         res.cookie('language', user.lang, { maxAge: oneyear });
-                        res.send(true);
+                        res.send({ error: '' });
                     } else {
-                        res.send(false);
+                        res.send({ error: 'login' });
                     }
                 });
             } else {
-                res.send(false);
+                res.send({ error: 'login' });
             }
         });
     } else {
-        res.send(false);
+        res.send({ error: 'login' });
     }
 });
 /*}}}*/
@@ -393,7 +393,7 @@ app.post('/register', function (req, res) {
                 return;
             }
             if (user) { // User name already exist.
-                res.send({ success: false, error: 'exist' });
+                res.send({ error: 'exist' });
             } else { // Generate salt and hash and insert in database.
                 hash(password, function (err, salt, hash) {
                     if (err) {
@@ -416,7 +416,7 @@ app.post('/register', function (req, res) {
                             return;
                         }
                         // Registration successful.
-                        res.send({ success: true });
+                        res.send({ error: '' });
                     });
                 });
             }
@@ -427,7 +427,7 @@ app.post('/register', function (req, res) {
                 error = 'name';
             }
         }
-        res.send({ success: false, error: error });
+        res.send({ error: error });
     }
 });
 /*}}}*/
@@ -505,14 +505,14 @@ app.post('/settings', function (req, res) {
         User.findByIdAndUpdate(userid, settings, function (err) {
             if (!err) {
                 res.cookie('language', lang, { maxAge: oneyear });
-                res.send(true);
+                res.send({ error: '' });
             } else {
-                res.send(false);
+                res.send({ error: 'lang' });
             }
         });
     } else if (errors === 0) { // Update cookie only as it is guest user.
         res.cookie('language', lang, { maxAge: oneyear });
-        res.send(true);
+        res.send({ error: '' });
     }
 });
 /*}}}*/
