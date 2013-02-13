@@ -174,7 +174,7 @@ app.get('/', function (req, res) {
                     socketIds[username] = '';
                     res.render('yygo', { username: username, lang: lang });
                 } else {
-                    res.render('login');
+                    res.render('connected', { username: username });
                 }
             });
         } else {
@@ -183,7 +183,7 @@ app.get('/', function (req, res) {
                 socketIds[username] = '';
                 res.render('yygo', { username: username, lang: lang });
             } else {
-                res.render('login');
+                res.render('connected', { username: username });
             }
         }
     } else {

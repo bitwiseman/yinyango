@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    #messages.red
+        #message
+            p= lingua.user + ' \'' + username + '\' ' + lingua.isconnected
+        #message-footer
+            a.linkbutton.black(href='/logout')= lingua.ok

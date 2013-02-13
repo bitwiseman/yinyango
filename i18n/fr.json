@@ -34,6 +34,7 @@
     "guestname":        "Nom d'invité",
     "hall":             "Hall",
     "helpname":         "Lettres et/ou chiffres seulement.", 
+    "isconnected":      "est déjà connecté.",
     "japanese":         "Japonaise",
     "jsrequired":       "Cette application requiert l'activation de Javascript.",
     "lang":             "Langue",
