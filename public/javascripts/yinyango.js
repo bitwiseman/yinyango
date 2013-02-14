@@ -298,6 +298,18 @@ yygo.bindEvents = function () {
     sgfselectfile.addEventListener('change', function () {
         sgfselect.value = this.value.replace('C:\\fakepath\\', '');
     }, false);
+    creategame.addEventListener('submit', function () {
+        var data = { 0: { 0: {
+                PB: 'yin',
+                PW: 'yang',
+                RU: this.rule.value,
+                SZ: this.size.value
+            } } };
+
+        if (this.privategame.checked) {
+            yygo.loadGame(data);
+        }
+    }, false);
     loadsgf.addEventListener('submit', function () {
         var file = new FormData(this);
 

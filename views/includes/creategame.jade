@@ -2,8 +2,8 @@ p: form#create-game.box.brown3(onsubmit='return false;')
     .inputbox
         span= lingua.privategame
         .checkbox.yellow
-            input#private(type='checkbox')
-            label.link(for='private')
+            input#privategame(type='checkbox', name='privategame')
+            label.link(for='privategame')
     div= lingua.typeofgame
     .selectbox.yellow
         .selectvalue Duel
