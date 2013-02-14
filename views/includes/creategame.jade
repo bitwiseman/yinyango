@@ -4,12 +4,13 @@ p: form#create-game.box.brown3(onsubmit='return false;')
         .checkbox.yellow
             input#privategame(type='checkbox', name='privategame')
             label.link(for='privategame')
-    div= lingua.typeofgame
-    .selectbox.yellow
-        .selectvalue Duel
-        select.link.select(name='gametype')
-            option(value='demo') Demo
-            option(value='duel', selected) Duel
+    #publicgame
+        div= lingua.typeofgame
+        .selectbox.yellow
+            .selectvalue Duel
+            select.link.select(name='gametype')
+                option(value='demo') Demo
+                option(value='duel', selected) Duel
     div= lingua.rule
     .selectbox.yellow
         .selectvalue= lingua.japanese

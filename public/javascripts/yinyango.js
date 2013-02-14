@@ -213,6 +213,7 @@ yygo.bindEvents = function () {
         submitsettings =    document.getElementById('submitsettings'),
         loadsgf =           document.getElementById('load-sgf'),
         creategame =        document.getElementById('create-game'),
+        privategame =       document.getElementById('privategame'),
         textpanelswitch =   document.getElementById('textpanel-switch'),
         butstart =          document.getElementById('butstart'),
         butfastprev =       document.getElementById('butfastprev'),
@@ -308,6 +309,13 @@ yygo.bindEvents = function () {
 
         if (this.privategame.checked) {
             yygo.loadGame(data);
+        }
+    }, false);
+    privategame.addEventListener('change', function () {
+        if (this.checked === true) {
+            document.getElementById('publicgame').className = 'none';
+        } else {
+            document.getElementById('publicgame').className = '';
         }
     }, false);
     loadsgf.addEventListener('submit', function () {
