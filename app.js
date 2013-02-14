@@ -242,29 +242,13 @@ app.get('/logout', function (req, res) {
 });
 /*}}}*/
 /* get /session {{{
- * Return user session infos and game data.
+ * Return user session infos.
  */
 app.get('/session', function (req, res) {
     var username =  req.session.username,
-        isguest =   req.session.isguest,
-        sgfid =     req.session.sgfid;
+        isguest =   req.session.isguest;
 
-    if (sgfid !== '') {
-        Sgf.findById(sgfid, function (err, sgf) {
-            if (err) {
-                console.error('Sgf.findById: ' + err);
-                return;
-            }
-            if (sgf !== null) {
-                res.send({ username: username, isguest: isguest,
-                    data: sgf.data });
-            } else { // Game has been removed.
-                res.send({ username: username, isguest: isguest, data: '' });
-            }
-        });
-    } else {
-        res.send({ username: username, isguest: isguest,  data: '' });
-    }
+    res.send({ username: username, isguest: isguest });
 });
 /*}}}*/
 /* post /guest {{{
