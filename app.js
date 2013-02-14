@@ -23,7 +23,7 @@ var express =       require('express.io'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     onemonth =      2592000000,
     oneyear =       31104000000,
-    users =         [];
+    userslist =     {};
 /*}}}*/
 /* Mongoose schemas & models. {{{*/
 var userSchema = new mongoose.Schema({
@@ -170,25 +170,23 @@ app.get('/', function (req, res) {
                     console.error('User.findOne error: ' + err);
                     return;
                 }
-                if (user && users.indexOf(username) === -1) {
-                    users.push(username);
+                if (user) {
                     res.render('yygo', { username: username, lang: lang });
-                } else {
-                    res.render('connected', { username: username });
                 }
             });
         } else {
-            // Check if that guest name is used by actual connected users.
-            if (users.indexOf(username) === -1) {
-                users.push(username);
-                res.render('yygo', { username: username, lang: lang });
-            } else {
-                res.render('connected', { username: username });
-            }
+            res.render('yygo', { username: username, lang: lang });
         }
     } else {
         res.render('login');
     }
+});
+/*}}}*/
+/* get /error_connected {{{
+ * User already connected.
+ */
+app.get('/error_connected', function (req, res) {
+    res.render('connected', { username: req.session.username });
 });
 /*}}}*/
 /* get /gameslist/:page {{{
@@ -247,7 +245,8 @@ app.get('/logout', function (req, res) {
  * Return user session infos and game data.
  */
 app.get('/session', function (req, res) {
-    var username =  req.session.username || 'guest',
+    var username =  req.session.username,
+        isguest =   req.session.isguest,
         sgfid =     req.session.sgfid;
 
     if (sgfid !== '') {
@@ -257,13 +256,14 @@ app.get('/session', function (req, res) {
                 return;
             }
             if (sgf !== null) {
-                res.send({ username: username, data: sgf.data });
+                res.send({ username: username, isguest: isguest,
+                    data: sgf.data });
             } else { // Game has been removed.
-                res.send({ username: username, data: '' });
+                res.send({ username: username, isguest: isguest, data: '' });
             }
         });
     } else {
-        res.send({ username: username, data: '' });
+        res.send({ username: username, isguest: isguest,  data: '' });
     }
 });
 /*}}}*/
@@ -285,7 +285,7 @@ app.post('/guest', function (req, res) {
                 console.error('User.findOne error: ' + err);
                 return;
             }
-            if (user || users.indexOf(username) !== -1) {
+            if (user || userslist[username] !== undefined) {
                 res.send({ error: 'exist' });
             } else {
                 req.session.username = username;
@@ -517,9 +517,12 @@ app.post('/settings', function (req, res) {
                 res.send({ error: 'lang' });
             }
         });
-    } else if (errors === 0) { // Update cookie only as it is guest user.
+    } else if (req.session.isguest && errors === 0) {
+        // Update cookie only as it is guest user.
         res.cookie('language', lang, { maxAge: oneyear });
         res.send({ error: '' });
+    } else {
+        res.send({ error: 'error' });
     }
 });
 /*}}}*/
@@ -527,18 +530,37 @@ app.post('/settings', function (req, res) {
 /* IO Routes. {{{*/
 /* join {{{*/
 app.io.route('join', function (req) {
-    // Broadcast new user to connected users.
-    req.io.broadcast('user-joined', req.session.username);
-    // Send users list to new user.
-    req.io.respond({ success: true, users: users });
+    var users = [],
+        user;
+
+    // Check if that user is already connected.
+    if (userslist[req.session.username] !== undefined) {
+        req.io.respond({ success: false });
+    } else {
+        // Add user to users list.
+        userslist[req.session.username] = [];
+        userslist[req.session.username].push(req.io.socket.id);
+        // Generate users list.
+        for (user in userslist) {
+            users.push(user);
+        }
+        // Broadcast new user to connected users.
+        req.io.broadcast('user-joined', req.session.username);
+        // Send users list to new user.
+        req.io.respond({ success: true, users: users });
+    }
 });
 /*}}}*/
 /* disconnect {{{*/
 app.io.route('disconnect', function (req) {
-    var id = users.indexOf(req.session.username);
+    var id = userslist[req.session.username].indexOf(req.io.socket.id);
 
-    users.splice(id, 1);
-    req.io.broadcast('user-left', req.session.username);
+    // Check if disconnected socket is the first one created by user.
+    if (id !== -1) {
+        // Remove user from list.
+        delete userslist[req.session.username];
+        req.io.broadcast('user-left', req.session.username);
+    }
 });
 /*}}}*/
 /* chat {{{*/

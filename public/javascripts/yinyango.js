@@ -17,6 +17,7 @@ yygo.game =             {};         // All the game data.
 yygo.gameslist =        {};         // Loadable games.
 yygo.gamesscreen =      '';         // Actual games loading screen.
 yygo.gobansize =        0;          // Size of goban in pixels.
+yygo.isguest =          true;       // Is user a guest ?
 yygo.lastbranch =       0;          // Last branch to reach.
 yygo.lastmessage =      '';         // Identifier of last message.
 yygo.lastnode =         0;          // Last node of the last branch.
@@ -591,7 +592,7 @@ yygo.calcStones = function (data) {
  * Connect to main hall.
  */
 yygo.connectHall = function () {
-    var chat =      document.getElementById('chat');
+    var chat = document.getElementById('chat');
 
     if (yygo.socket === null) {
         yygo.socket = io.connect();
@@ -602,6 +603,7 @@ yygo.connectHall = function () {
         if (!data.success) {
             yygo.socket.disconnect();
             yygo.connected = false;
+            window.location.href = 'error_connected';
         } else {
             yygo.userslist = data.users;
             yygo.makeUsersList();
@@ -682,6 +684,7 @@ yygo.init = function () {
     // Get user session if it still exist.
     yygo.ajax('/session', 'GET', function (session) {
         yygo.username = session.username;
+        yygo.isguest = session.isguest;
         // Bind buttons to functions.
         yygo.bindEvents();
         // Set screen top.
