@@ -603,7 +603,7 @@ yygo.connectHall = function () {
         if (!data.success) {
             yygo.socket.disconnect();
             yygo.connected = false;
-            window.location.href = 'error_connected';
+            window.location.href = 'logout';
         } else {
             yygo.userslist = data.users;
             yygo.makeUsersList();

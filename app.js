@@ -182,13 +182,6 @@ app.get('/', function (req, res) {
     }
 });
 /*}}}*/
-/* get /error_connected {{{
- * User already connected.
- */
-app.get('/error_connected', function (req, res) {
-    res.render('connected', { username: req.session.username });
-});
-/*}}}*/
 /* get /gameslist/:page {{{
  * Send games corresponding to a page.
  */
@@ -245,10 +238,7 @@ app.get('/logout', function (req, res) {
  * Return user session infos.
  */
 app.get('/session', function (req, res) {
-    var username =  req.session.username,
-        isguest =   req.session.isguest;
-
-    res.send({ username: username, isguest: isguest });
+    res.send({ username: req.session.username, isguest: req.session.isguest });
 });
 /*}}}*/
 /* post /guest {{{
