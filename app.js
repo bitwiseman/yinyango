@@ -538,8 +538,7 @@ app.io.route('join', function (req) {
         req.io.respond({ success: false });
     } else {
         // Add user to users list.
-        userslist[req.session.username] = [];
-        userslist[req.session.username].push(req.io.socket.id);
+        userslist[req.session.username] = req.io.socket.id;
         // Generate users list.
         for (user in userslist) {
             users.push(user);
@@ -553,10 +552,8 @@ app.io.route('join', function (req) {
 /*}}}*/
 /* disconnect {{{*/
 app.io.route('disconnect', function (req) {
-    var id = userslist[req.session.username].indexOf(req.io.socket.id);
-
     // Check if disconnected socket is the first one created by user.
-    if (id !== -1) {
+    if (userslist[req.session.username] === req.io.socket.id) {
         // Remove user from list.
         delete userslist[req.session.username];
         req.io.broadcast('user-left', req.session.username);
