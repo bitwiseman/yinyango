@@ -234,13 +234,6 @@ app.get('/logout', function (req, res) {
     });
 });
 /*}}}*/
-/* get /session {{{
- * Return user session infos.
- */
-app.get('/session', function (req, res) {
-    res.send({ username: req.session.username, isguest: req.session.isguest });
-});
-/*}}}*/
 /* post /guest {{{
  * Guest login.
  */
@@ -519,8 +512,13 @@ app.io.route('join', function (req) {
         }
         // Broadcast new user to connected users.
         req.io.broadcast('user-joined', req.session.username);
-        // Send users list to new user.
-        req.io.respond({ success: true, users: users });
+        // Send session settings and users list to new user.
+        req.io.respond({
+            success: true,
+            username: req.session.username,
+            isguest: req.session.isguest,
+            users: users
+        });
     }
 });
 /*}}}*/

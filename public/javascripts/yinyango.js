@@ -605,6 +605,10 @@ yygo.connectHall = function () {
             yygo.connected = false;
             window.location.href = 'logout';
         } else {
+            console.log(data.username);
+            console.log(data.isguest);
+            yygo.username = data.username;
+            yygo.isguest = data.isguest;
             yygo.userslist = data.users;
             yygo.makeUsersList();
             yygo.connected = true;
@@ -681,21 +685,16 @@ yygo.getParentBranch = function (node, branch) {
  * This is where we start.
  */
 yygo.init = function () {
-    // Get user session if it still exist.
-    yygo.ajax('/session', 'GET', function (session) {
-        yygo.username = session.username;
-        yygo.isguest = session.isguest;
-        // Bind buttons to functions.
-        yygo.bindEvents();
-        // Set screen top.
-        yygo.setScreenTop();
-        // Connect to main hall.
-        yygo.connectHall();
-        yygo.showGamesScreen('running');
-        yygo.showScreen('hall');
-        // Set games screen top.
-        yygo.setGamesScreenTop();
-    });
+    // Connect to main hall.
+    yygo.connectHall();
+    // Bind events to elements.
+    yygo.bindEvents();
+    // Set and show hall screen.
+    yygo.setScreenTop();
+    yygo.showGamesScreen('running');
+    yygo.showScreen('hall');
+    // Set games screen top.
+    yygo.setGamesScreenTop();
 };
 /*}}}*/
 /* insertSvgSymbol {{{
