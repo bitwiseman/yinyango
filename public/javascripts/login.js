@@ -51,9 +51,11 @@ yylog.bindEvents = function () {
     }, false);
     mlogin.addEventListener('click', function () {
         yylog.showScreen('login');
+        loginform.username.focus();
     }, false);
     mregister.addEventListener('click', function () {
         yylog.showScreen('register');
+        registerform.username.focus();
     }, false);
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
@@ -92,16 +94,6 @@ yylog.bindEvents = function () {
                 yylog.showMessage('error', 'error');
             }
         });
-    }, false);
-    login.addEventListener('click', function () {
-        document.getElementById('register-scr').classList.add('none');
-        document.getElementById('login-scr').classList.remove('none');
-        loginform.username.focus();
-    }, false);
-    register.addEventListener('click', function () {
-        document.getElementById('login-scr').classList.add('none');
-        document.getElementById('register-scr').classList.remove('none');
-        registerform.username.focus();
     }, false);
 };
 /*}}}*/

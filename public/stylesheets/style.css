@@ -263,8 +263,7 @@ body {
 /*}}}*/
 /* Menubars. {{{*/
 #menu-logo {
-    background: url("../images/favicon.png");
-    background-repeat: no-repeat;
+    background: url("../images/favicon.png") no-repeat;
     background-size: 1.2em;
     width: 1.2em;
     height: 1.2em;
