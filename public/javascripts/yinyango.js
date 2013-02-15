@@ -25,7 +25,7 @@ yygo.menu =             true;       // Show menu at top ?
 yygo.mode =             'replay';   // Game mode: replay, play, edit.
 yygo.orientation =      '';         // Orientation of the screen.
 yygo.playerturn =       'B';        // Color to play next.
-yygo.screen =           '';         // Actual screen to show.
+yygo.screen =           'loading';  // Actual screen to show.
 yygo.screenheight =     0;          // Screen height.
 yygo.size =             0;          // Size of the goban (9, 13, 19).
 yygo.socket =           null;       // IO Socket object.
@@ -417,8 +417,6 @@ yygo.bindGamesListClick = function (ids) {
         rows[r].addEventListener('click', function () {
             var row = this.rowIndex;
 
-            // Show loading screen.
-            yygo.showScreen('loading');
             // Get data of game corresponding clicked row.
             yygo.ajax('/load/' + ids[row], 'GET', function (data) {
                 yygo.loadGame(data);
@@ -605,8 +603,6 @@ yygo.connectHall = function () {
             yygo.connected = false;
             window.location.href = 'logout';
         } else {
-            console.log(data.username);
-            console.log(data.isguest);
             yygo.username = data.username;
             yygo.isguest = data.isguest;
             yygo.userslist = data.users;
@@ -747,6 +743,9 @@ yygo.isObjectEmpty = function (obj) {
  */
 yygo.loadGame = function (data) {
     var oldsize = yygo.size;
+
+    // Show loading screen.
+    yygo.showScreen('loading');
 
     yygo.game = data;
     yygo.game[0][0].score = {B: 0, W: 0};
@@ -1628,12 +1627,9 @@ yygo.showMessage = function (type, id) {
  * @param {String} show Element reference to screen to show.
  */
 yygo.showScreen = function (show) {
-    if (yygo.screen !== '') {
-        document.getElementById(yygo.screen).classList.add('none');
-        if (yygo.screen !== 'loading') {
-            document.getElementById('m-' + yygo.screen).classList.
-                remove('twhite');
-        }
+    document.getElementById(yygo.screen).classList.add('none');
+    if (yygo.screen !== 'loading') {
+        document.getElementById('m-' + yygo.screen).classList.remove('twhite');
     }
     document.getElementById(show).classList.remove('none');
     if (show !== 'loading') {
