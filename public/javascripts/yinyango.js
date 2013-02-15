@@ -222,8 +222,8 @@ yygo.bindEvents = function () {
         butnext =           document.getElementById('butnext'),
         butfastnext =       document.getElementById('butfastnext'),
         butend =            document.getElementById('butend'),
+        chatbar =           document.getElementById('chatbar'),
         chatmsg =           document.getElementById('chatmsg'),
-        chatform =          document.getElementById('chatform'),
         showusers =         document.getElementById('showusers'),
         sgfselect =         document.getElementById('sgf-select'),
         sgfselectfile =     document.getElementById('sgf-select-file'),
@@ -333,7 +333,7 @@ yygo.bindEvents = function () {
     refreshlist.addEventListener('click', function () {
         yygo.makeDbGamesList(true);
     }, false);
-    chatform.addEventListener('submit', function () {
+    chatbar.addEventListener('submit', function () {
         if (chatmsg.value !== '') {
             // Send message to server.
             yygo.socket.emit('chat', chatmsg.value);

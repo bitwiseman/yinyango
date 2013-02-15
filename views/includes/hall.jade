@@ -17,7 +17,9 @@
         table#load-gameslist
 #chat.brown2
 #userslist.brown3
-form#chatform.flex(onsubmit='return false;')
-    input#chatmsg.input.brown2(type='text', autocomplete='off')
-    input#sendmsg.link.black(type='submit', value='^')
-    #showusers.link.black @
+form#chatbar(onsubmit='return false;')
+    table#chatbartable: tr
+        td.brown2
+            input#chatmsg.input.transparent(type='text', autocomplete='off')
+        td.buttoncell.black: input#sendmsg.link.black(type='submit', value='^')
+        td.buttoncell.black: div#showusers.link.black @
