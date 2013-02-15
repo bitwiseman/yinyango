@@ -159,6 +159,7 @@ body {
 }
 .box {
     padding: 1em;
+    margin: 0.5em;
     border-radius: 1em;
 }
 .inputbox, .selectbox {
