@@ -8,7 +8,8 @@
 'use strict';
 /* yylog {{{*/
 var yylog = {};
-yylog.lastmessage = ''; // Identifier of last message.
+yylog.lastmessage = '';         // Identifier of last message.
+yylog.screen =      'login';    // Actual screen.
 /* ajax {{{
  * Simple ajax request expecting json in response.
  *
@@ -41,12 +42,18 @@ yylog.bindEvents = function () {
         guestloginform =    document.getElementById('guestloginform'),
         registerform =      document.getElementById('registerform'),
         messageok =         document.getElementById('message-ok'),
-        login =             document.getElementById('login'),
-        register =          document.getElementById('register');
+        mlogin =            document.getElementById('m-login'),
+        mregister =         document.getElementById('m-register');
 
     messageok.addEventListener('click', function () {
         document.getElementById(yylog.lastmessage).className = 'none';
         document.getElementById('messages').className = 'none';
+    }, false);
+    mlogin.addEventListener('click', function () {
+        yylog.showScreen('login');
+    }, false);
+    mregister.addEventListener('click', function () {
+        yylog.showScreen('register');
     }, false);
     loginform.addEventListener('submit', function () {
         var formdata = new FormData(this);
@@ -101,8 +108,25 @@ yylog.bindEvents = function () {
 /* init {{{*/
 yylog.init = function () {
     yylog.bindEvents();
-    document.getElementById('login-scr').classList.remove('none');
+    yylog.setScreenTop();
+    yylog.showScreen('login');
     document.getElementById('loginform').username.focus();
+};
+/*}}}*/
+/* setScreenTop {{{
+ * Set screen top relatively to menu.
+ */
+yylog.setScreenTop = function () {
+    var screens =   document.getElementsByClassName('screen'),
+        nscreens =  screens.length,
+        screentop = 0,
+        i;
+
+    screentop = document.getElementById('menu').offsetHeight;
+
+    for (i = 0; i < nscreens; i++) {
+        screens[i].style.top = screentop + 'px';
+    }
 };
 /*}}}*/
 /* showMessage {{{
@@ -125,6 +149,19 @@ yylog.showMessage = function (type, id) {
         messages.className = 'brown4';
     }
     document.getElementById('message-ok').focus();
+};
+/*}}}*/
+/* showScreen {{{
+ * Switch to another screen.
+ *
+ * @param {String} show Element reference to screen to show.
+ */
+yylog.showScreen = function (show) {
+    document.getElementById(yylog.screen).classList.add('none');
+    document.getElementById('m-' + yylog.screen).classList.remove('twhite');
+    document.getElementById(show).classList.remove('none');
+    document.getElementById('m-' + show).classList.add('twhite');
+    yylog.screen = show;
 };
 /*}}}*/
 /*}}}*/

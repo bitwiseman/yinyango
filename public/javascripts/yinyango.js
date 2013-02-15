@@ -200,8 +200,7 @@ yygo.ajax = function (url, method, data, callback) {
  * Bind events to the elements.
  */
 yygo.bindEvents = function () {
-    var menuswitch =        document.getElementById('menu-switch'),
-        menu =              document.getElementById('menu'),
+    var menu =              document.getElementById('menu'),
         messageok =         document.getElementById('message-ok'),
         mgame =             document.getElementById('m-game'),
         mhall =             document.getElementById('m-hall'),
@@ -253,19 +252,6 @@ yygo.bindEvents = function () {
     }, false);
     //}}}
     /* Menu.{{{*/
-    menuswitch.addEventListener('click', function () {
-        if (yygo.menu) {
-            menu.style.display = 'none';
-            yygo.menu = false;
-        } else {
-            menu.style.display = 'inline-block';
-            yygo.menu = true;
-        }
-        yygo.setScreenTop();
-        if (yygo.screen === 'game') {
-            yygo.setGobanSize(false);
-        }
-    }, false);
     mgame.addEventListener('click', function () {
         yygo.showScreen('game');
     }, false);
