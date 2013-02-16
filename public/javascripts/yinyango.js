@@ -864,7 +864,7 @@ yygo.makeGameInfos = function () {
         gameplace =     document.getElementById('gameplace'),
         gameevent =     document.getElementById('gameevent'),
         gamename =      document.getElementById('gamename'),
-        gamerules =     document.getElementById('gamerules'),
+        gamerule =      document.getElementById('gamerule'),
         gamekomi =      document.getElementById('gamekomi'),
         gametime =      document.getElementById('gametime'),
         gameovertime =  document.getElementById('gameovertime'),
@@ -919,7 +919,7 @@ yygo.makeGameInfos = function () {
     insertInfo('PC', gameplace);
     insertInfo('EV', gameevent);
     insertInfo('GN', gamename);
-    insertInfo('RU', gamerules);
+    insertInfo('RU', gamerule);
     insertInfo('KM', gamekomi);
     insertInfo('OT', gameovertime);
     insertInfo('AN', gameannotator);
