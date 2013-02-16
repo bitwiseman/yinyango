@@ -1,13 +1,13 @@
 form#registerform.box.brown3(onsubmit='return false;')
-    span= lingua.username
+    div= lingua.username
     .inputbox
         input.input(type='text', name='username', autocomplete='on',
             maxlength='15', required)
         .inputhelp.yellow= lingua.helpname 
-    span= lingua.password
+    div= lingua.password
     .inputbox
         input.input(type='password', name='password', maxlength='64', required)
-    span= lingua.email
+    div= lingua.email
     .inputbox
         input.input(type='email', autocomplete='on', name='email',
             maxlength='64', required)
