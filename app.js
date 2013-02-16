@@ -171,11 +171,13 @@ app.get('/', function (req, res) {
                     return;
                 }
                 if (user) {
-                    res.render('yygo', { username: username, lang: lang });
+                    res.render('yygo', { lang: lang });
+                } else {
+                    res.render('login');
                 }
             });
         } else {
-            res.render('yygo', { username: username, lang: lang });
+            res.render('yygo', { lang: lang });
         }
     } else {
         res.render('login');
