@@ -21,5 +21,6 @@ form#chatbar(onsubmit='return false;')
     table#chatbartable: tr
         td.brown2
             input#chatmsg.input.transparent(type='text', autocomplete='off')
-        td.buttoncell.black: input#sendmsg.link.black(type='submit', value='^')
+        td.buttoncell.black
+            input#sendmsg.link.black(type='submit', value= lingua.send)
         td.buttoncell.black: div#showusers.link.black @
