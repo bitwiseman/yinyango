@@ -1424,6 +1424,7 @@ yygo.setGobanSize = function (redraw, callback) {
      */
     function drawGame(redraw, callback) {
         var panel =         document.getElementById('panel'),
+            textpanel =     document.getElementById('textpanel'),
             goban =         document.getElementById('goban'),
             cells =         document.getElementsByClassName('cell'),
             cellslen =      cells.length,
@@ -1442,19 +1443,19 @@ yygo.setGobanSize = function (redraw, callback) {
                 cells[i].style.fontSize = fontsize + 'px';
             }
         }
-        // Place panel depending on orientation.
+        // Place goban and panel elements depending on orientation.
         if (yygo.orientation === 'horizontal') {
-            // Move goban on left side and place comments on the right.
             goban.style.margin = 0;
             panel.style.top = 0;
             panel.style.right = 0;
             panel.style.left = yygo.gobansize + 'px';
+            textpanel.className = '';
         } else {
-            // Keep goban centered and comments at bottom.
             goban.style.margin = 'auto';
             panel.style.top =  yygo.gobansize + 'px';
             panel.style.right = 0;
             panel.style.left = 0;
+            textpanel.className = 'none';
         }
         if (callback !== undefined) {
             callback();
@@ -1464,11 +1465,7 @@ yygo.setGobanSize = function (redraw, callback) {
 
     if (screenwidth < yygo.screenheight) {
         yygo.orientation = 'vertical';
-        if (yygo.screenheight - 200 <= screenwidth) {
-            smaller = yygo.screenheight - 200;
-        } else {
-            smaller = screenwidth;
-        }
+        smaller = screenwidth;
     } else {
         yygo.orientation = 'horizontal';
         if (screenwidth - 220 <= yygo.screenheight) {
