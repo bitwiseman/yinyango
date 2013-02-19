@@ -382,8 +382,8 @@ body {
 .button {
     position: relative;
     float: left;
-    width: 30px;
-    height: 30px;
+    width: 1.5em;
+    height: 1.5em;
 }
 /* Arrows buttons. {{{*/
 .rotate180 {
