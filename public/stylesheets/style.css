@@ -32,14 +32,14 @@
     #games, #chat, #userslist {
         width: 100% !important;
     }
-    #chat, #chatbar, #userslist {
+    #chat, #userslist {
         display: none;
     }
     #chat, #userslist {
         left: 0 !important;
         border-width: 0 0 0 0 !important;
     }
-    #showusers {
+    #showchat, #showusers {
         display: block !important;
     }
 }
@@ -650,7 +650,7 @@ body {
     padding: 0 0.5em;
     margin: 0;
 }
-#sendmsg, #showusers {
+#sendmsg, #showchat, #showusers {
     height: 1.4em;
     margin: 0;
     padding: 0 0.5em;
@@ -660,6 +660,9 @@ body {
 #showusers {
     display: none;
     border-left: 1px solid white;
+}
+#showchat {
+    display: none;
 }
 /*}}}*/
 /*}}}*/
