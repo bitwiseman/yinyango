@@ -223,6 +223,7 @@ yygo.bindEvents = function () {
         butend =            document.getElementById('butend'),
         chatbar =           document.getElementById('chatbar'),
         chatmsg =           document.getElementById('chatmsg'),
+        showchat =          document.getElementById('showchat'),
         showusers =         document.getElementById('showusers'),
         sgfselect =         document.getElementById('sgf-select'),
         sgfselectfile =     document.getElementById('sgf-select-file'),
@@ -327,8 +328,10 @@ yygo.bindEvents = function () {
             chatmsg.value = '';
         }
     }, false);
+    showchat.addEventListener('click', function () {
+        yygo.toggleChat();
+    }, false);
     showusers.addEventListener('click', function () {
-        // Toggle users list visibility.
         yygo.toggleUsersList();
     }, false);
     //}}}
@@ -1632,6 +1635,21 @@ yygo.showTextPanel = function (show) {
     yygo.textpanel = show;
 };
 /*}}}*/
+/* toggleChat {{{
+ * Toggle visibility of chat.
+ */
+yygo.toggleChat = function () {
+    var chat = document.getElementById('chat');
+
+    if (yygo.showchat) {
+        chat.style.display = 'none';
+        yygo.showchat = false;
+    } else {
+        chat.style.display = 'block';
+        yygo.showchat = true;
+    }
+};
+/*}}}*/
 /* toggleNavButtons {{{
  * Alternate active state of navigation buttons.
  */
@@ -1669,12 +1687,19 @@ yygo.toggleNavButtons = function () {
  * Toggle visibility of users list.
  */
 yygo.toggleUsersList = function () {
-    var userslist = document.getElementById('userslist');
+    var userslist = document.getElementById('userslist'),
+        chat =      document.getElementById('chat');
 
     if (userslist.style.display === '' || userslist.style.display === 'none') {
         userslist.style.display = 'block';
+        if (yygo.showchat) {
+            chat.style.display = 'none';
+        }
     } else {
         userslist.style.display = 'none';
+        if (yygo.showchat) {
+            chat.style.display = 'block';
+        }
     }
 };
 /*}}}*/
