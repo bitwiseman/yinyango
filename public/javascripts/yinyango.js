@@ -287,7 +287,7 @@ yygo.bindEvents = function () {
     sgfselectfile.addEventListener('change', function () {
         sgfselect.value = this.value.replace('C:\\fakepath\\', '');
     }, false);
-    creategame.addEventListener('submit', function () {
+    creategame.addEventListener('submit', function (event) {
         var data = { 0: { 0: {
                 PB: 'yin',
                 PW: 'yang',
@@ -295,6 +295,7 @@ yygo.bindEvents = function () {
                 SZ: this.size.value
             } } };
 
+        event.preventDefault();
         if (this.privategame.checked) {
             yygo.loadGame(data);
         }
@@ -306,9 +307,10 @@ yygo.bindEvents = function () {
             document.getElementById('publicgame').className = '';
         }
     }, false);
-    loadsgf.addEventListener('submit', function () {
+    loadsgf.addEventListener('submit', function (event) {
         var file = new FormData(this);
 
+        event.preventDefault();
         yygo.ajax('/loadsgf/file', 'POST', file, function (data) {
             if (data.error === 'invalid') {
                 yygo.showMessage('error', 'errorinvalid');
@@ -320,7 +322,8 @@ yygo.bindEvents = function () {
     refreshlist.addEventListener('click', function () {
         yygo.makeDbGamesList(true);
     }, false);
-    chatbar.addEventListener('submit', function () {
+    chatbar.addEventListener('submit', function (event) {
+        event.preventDefault();
         if (chatmsg.value !== '') {
             // Send message to server.
             yygo.socket.emit('chat', chatmsg.value);

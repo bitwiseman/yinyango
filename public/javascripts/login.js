@@ -57,8 +57,10 @@ yylog.bindEvents = function () {
         yylog.showScreen('register');
         registerform.username.focus();
     }, false);
-    loginform.addEventListener('submit', function () {
+    loginform.addEventListener('submit', function (event) {
         var formdata = new FormData(this);
+
+        event.preventDefault();
         yylog.ajax('/login', 'POST', formdata, function (data) {
             if (data.error === '') {
                 // Session is set, refresh the page.
@@ -68,8 +70,10 @@ yylog.bindEvents = function () {
             }
         });
     }, false);
-    guestloginform.addEventListener('submit', function () {
+    guestloginform.addEventListener('submit', function (event) {
         var formdata = new FormData(this);
+
+        event.preventDefault();
         yylog.ajax('/guest', 'POST', formdata, function (data) {
             if (data.error === '') {
                 // Session is set, refresh the page.
@@ -81,8 +85,10 @@ yylog.bindEvents = function () {
             }
         });
     }, false);
-    registerform.addEventListener('submit', function () {
+    registerform.addEventListener('submit', function (event) {
         var formdata = new FormData(this);
+
+        event.preventDefault();
         yylog.ajax('/register', 'POST', formdata, function (data) {
             if (data.error === '') {
                 yylog.showMessage('success', 'regsuccess');

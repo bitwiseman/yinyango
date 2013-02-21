@@ -8,7 +8,7 @@
     #create-games.gamesscreen.none
         include creategame
     #load-games.gamesscreen.none
-        form#load-sgf.box.brown3(onsubmit='return false;')
+        form#load-sgf.box.brown3
             div= lingua.selectsgf
             input#sgf-select.selectbox.link.yellow(type='button', value='...')
             input#sgf-select-file.selectfile(type='file', name='sgffile')
@@ -17,7 +17,7 @@
         table#load-gameslist
 #chat.brown2
 #userslist.brown3
-form#chatbar(onsubmit='return false;')
+form#chatbar
     table#chatbartable: tr
         td.buttoncell.black: div#showchat.link.black= lingua.chat
         td.brown2
