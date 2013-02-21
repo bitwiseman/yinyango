@@ -121,12 +121,6 @@ body {
 .twhite {
     color: #f9f0ca;
 }
-.tgrey, #menu-items a:not(.twhite) {
-    color: #999;
-}
-.tbrown, #games-menu a:not(.twhite) {
-    color: #312c20;
-}
 /*}}}*/
 .none {
     display: none !important;
@@ -136,7 +130,10 @@ body {
 }
 .disabled {
     opacity: 0.2;
-    cursor: default;
+    cursor: default !important;
+}
+.inactive {
+    opacity: 0.5;
 }
 .alert {
     width: 100%;
@@ -229,18 +226,19 @@ body {
     top: -9999px; /* Required for opera */
     left: -9999px;
 }
-.linkbutton {
-    /*width: 100%;*/
+.bigbutton {
     padding: 0.3em 0.6em;
-    border: 1px solid #000;/* Avoid ugly buttons borders. */
-    border-radius: 2em;/* Make sure its all rounded. */
     font: bold 1em sans-serif;
-    text-decoration: none;
+}
+.bigbutton, .button  {
+    border: 1px solid black;/* Avoid ugly buttons borders. */
+    border-radius: 2em;
+    font-size: 1em;
     cursor: pointer;
 }
 /*}}}*/
 /* Inline-block elements. {{{*/
-#buttonsbar, #menu-logo, .alert, .checkbox, .box, .linkbutton, .menulink, .player {
+#buttonsbar, #menu-logo, .alert, .checkbox, .box, .menulink, .player {
     display: inline-block;
 }
 /*}}}*/
@@ -283,8 +281,10 @@ body {
     border-bottom: 1px solid black;
 }
 .menulink {
+    background: transparent;
+    border: 0;
     padding: 0 0.5em;
-    text-decoration: none;
+    font-size: 1em;
     cursor: pointer;
 }
 /*}}}*/
@@ -318,6 +318,7 @@ body {
     width: 100%;
     border-radius: 50%;
     opacity: 0;
+    cursor: pointer;
 }
 .cell:hover > .playable {
     opacity: 0.3;
@@ -379,11 +380,12 @@ body {
 #buttonsbar {
     position: relative;
 }
-.button {
+.gamebutton {
     position: relative;
     float: left;
     width: 1.5em;
     height: 1.5em;
+    cursor: pointer;
 }
 /* Arrows buttons. {{{*/
 .rotate180 {

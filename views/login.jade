@@ -9,13 +9,15 @@ block content
             #errorexist.none= lingua.errorexist
             #regsuccess.none= lingua.regsuccess
         #message-footer
-            input#message-ok.linkbutton.black(type='button', value= lingua.ok)
+            input#message-ok.bigbutton.black(type='button', value= lingua.ok)
     #menu.black.menubar
         #menu-logo
         #menu-title= lingua.yinyango
         #menu-items
-            a#m-login.menulink(href='#')= lingua.login
-            a#m-register.menulink(href='#')= lingua.register
+            input#m-login.menulink.twhite.inactive(type='button',
+                value= lingua.login)
+            input#m-register.menulink.twhite.inactive(type='button',
+                value= lingua.register)
     #login.screen.none
         include includes/login
     #register.screen.none

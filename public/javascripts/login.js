@@ -156,9 +156,9 @@ yylog.showMessage = function (type, id) {
  */
 yylog.showScreen = function (show) {
     document.getElementById(yylog.screen).classList.add('none');
-    document.getElementById('m-' + yylog.screen).classList.remove('twhite');
+    document.getElementById('m-' + yylog.screen).classList.add('inactive');
     document.getElementById(show).classList.remove('none');
-    document.getElementById('m-' + show).classList.add('twhite');
+    document.getElementById('m-' + show).classList.remove('inactive');
     yylog.screen = show;
 };
 /*}}}*/

@@ -210,7 +210,7 @@ yygo.bindEvents = function () {
         gcreategames =      document.getElementById('g-create-games'),
         gloadgames =        document.getElementById('g-load-games'),
         refreshlist =       document.getElementById('refreshlist'),
-        submitsettings =    document.getElementById('submitsettings'),
+        settingsform =      document.getElementById('settingsform'),
         loadsgf =           document.getElementById('load-sgf'),
         creategame =        document.getElementById('create-game'),
         privategame =       document.getElementById('privategame'),
@@ -378,9 +378,10 @@ yygo.bindEvents = function () {
     }, false);
     // }}}
     /* Settings.{{{*/
-    submitsettings.addEventListener('click', function () {
-        var settings = new FormData(this.form);
+    settingsform.addEventListener('submit', function (event) {
+        var settings = new FormData(this);
 
+        event.preventDefault();
         yygo.ajax('/settings', 'POST', settings, function (data) {
             if (data.error === '') {
                 yygo.showMessage('success', 'settingssaved');
@@ -952,7 +953,7 @@ yygo.makeGoban = function () {
         gl =        '<div class="g gl black"></div>',
         sto =       '<div class="stone" id="',
         stc =       '"></div>',
-        a =         '<a href="#" class="cell-link"></a>',
+        cl =        '<div class="cell-link"></div>',
         html =      '',
         content,
         id,
@@ -1001,30 +1002,30 @@ yygo.makeGoban = function () {
             id = coord[j] + coord[i];
             if (i === 1) {
                 if (j === 1) {
-                    content = gr + gb + sto + id + stc + a;
+                    content = gr + gb + sto + id + stc + cl;
                 } else if (j === size - 2) {
-                    content = gb + gl + sto + id + stc + a;
+                    content = gb + gl + sto + id + stc + cl;
                 } else if (j !== 0 && j !== size - 1) {
-                    content = gr + gb + gl + sto + id + stc + a;
+                    content = gr + gb + gl + sto + id + stc + cl;
                 } else {
                     content = size - i - 1;
                 }
             } else if (i === size - 2) {
                 if (j === 1) {
-                    content = gt + gr + sto + id + stc + a;
+                    content = gt + gr + sto + id + stc + cl;
                 } else if (j === size - 2) {
-                    content = gt + gl + sto + id + stc + a;
+                    content = gt + gl + sto + id + stc + cl;
                 } else if (j !== 0 && j !== size - 1) {
-                    content = gt + gr + gl + sto + id + stc + a;
+                    content = gt + gr + gl + sto + id + stc + cl;
                 } else {
                     content = size - i - 1;
                 }
             } else if (j === 1 && i !== 0 && i !== size - 1) {
-                content = gt + gr + gb + sto + id + stc + a;
+                content = gt + gr + gb + sto + id + stc + cl;
             } else if (j === size - 2 && i !== 0 && i !== size - 1) {
-                content = gt + gb + gl + sto + id + stc + a;
+                content = gt + gb + gl + sto + id + stc + cl;
             } else if (i !== 0 && i !== size - 1 && j !== 0 && j !== size - 1) {
-                content = gt + gr + gb + gl + sto + id + stc + a;
+                content = gt + gr + gb + gl + sto + id + stc + cl;
                 if (isHoshi(i, j)) {
                     content += '<div class="h black"></div>';
                 }
@@ -1581,10 +1582,10 @@ yygo.showGamesScreen = function (show) {
     if (yygo.gamesscreen !== '') {
         document.getElementById(yygo.gamesscreen).classList.add('none');
         document.getElementById('g-' + yygo.gamesscreen).classList.
-            remove('twhite');
+            add('inactive');
     }
     document.getElementById(show).classList.remove('none');
-    document.getElementById('g-' + show).classList.add('twhite');
+    document.getElementById('g-' + show).classList.remove('inactive');
     yygo.gamesscreen = show;
 };
 /*}}}*/
@@ -1618,11 +1619,11 @@ yygo.showMessage = function (type, id) {
 yygo.showScreen = function (show) {
     document.getElementById(yygo.screen).classList.add('none');
     if (yygo.screen !== 'loading') {
-        document.getElementById('m-' + yygo.screen).classList.remove('twhite');
+        document.getElementById('m-' + yygo.screen).classList.add('inactive');
     }
     document.getElementById(show).classList.remove('none');
     if (show !== 'loading') {
-        document.getElementById('m-' + show).classList.add('twhite');
+        document.getElementById('m-' + show).classList.remove('inactive');
     }
     yygo.screen = show;
 };

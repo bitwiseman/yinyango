@@ -1,8 +1,11 @@
 #games
     #games-menu.brown4.menubar
-        a#g-running-games.menulink(href='#')= lingua.games 
-        a#g-create-games.menulink(href='#')= lingua.create
-        a#g-load-games.menulink(href='#')= lingua.load
+        input#g-running-games.menulink.twhite.inactive(type='button',
+            value= lingua.games)
+        input#g-create-games.menulink.twhite.inactive(type='button',
+            value= lingua.create)
+        input#g-load-games.menulink.twhite.inactive(type='button',
+            value= lingua.load)
     #running-games.gamesscreen
         table#running-gameslist
     #create-games.gamesscreen.none
@@ -12,8 +15,9 @@
             div= lingua.selectsgf
             input#sgf-select.selectbox.link.yellow(type='button', value='...')
             input#sgf-select-file.selectfile(type='file', name='sgffile')
-            input.linkbutton.black(type='submit', value= lingua.loadsgf)
-        p: a#refreshlist.linkbutton.black(href='#')= lingua.refreshlist
+            input.bigbutton.black(type='submit', value= lingua.loadsgf)
+        p: input#refreshlist.bigbutton.black(type='button',
+            value= lingua.refreshlist)
         table#load-gameslist
 #chat.brown2
 #userslist.brown3
