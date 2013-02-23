@@ -47,11 +47,19 @@ var User = db.model('user', userSchema);
 var Sgf = db.model('sgf', sgfSchema);
 /*}}}*/
 /* Configuration. {{{*/
+app.configure('development', function () {
+    app.use(express.logger('dev'));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+app.configure('production', function () {
+    app.io.set('log level', 1);
+    app.use(express.errorHandler());
+});
 app.configure(function () {
+    app.io.enable('log');
     app.set('views', __dirname + '/views/');
     app.set('view engine', 'jade');
     app.use(lingua(app, { defaultLocale: 'en', path: __dirname + '/i18n' }));
-    app.use(express.logger('dev'));
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
@@ -63,13 +71,8 @@ app.configure(function () {
     }));
     app.use(express.static(__dirname + '/public'));
     app.use(express.static(__dirname + '/shared'));
+    app.use(express.logger('short'));
     app.use(app.router);
-});
-app.configure('development', function () {
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-app.configure('production', function () {
-    app.use(express.errorHandler());
 });
 db.on('error', console.error.bind(console, 'db connection error:'));
 /*}}}*/
