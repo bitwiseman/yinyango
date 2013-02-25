@@ -325,7 +325,6 @@ body {
 .playername {
     overflow: hidden;
     text-overflow: ellipsis;
-    /*word-wrap: break-word;*/
     white-space: nowrap;
 }
 .player {
@@ -424,25 +423,31 @@ body {
 #buttonsbar {
     position: relative;
 }
-#variations {
-    position: absolute;
-    top: 0.6em;
-    bottom: 0.6em;
-    left: 50%;
-    margin-left: -1.2em;
-    width: 2.4em;
-    border-radius: 50%;
-    border: 1px solid black;
-    line-height: 2.4em;
+#variationsbutton {
+    float: left;
+    height: 1.5em;
+    width: 2em;
 }
-#varselect {
+#variations {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-radius: 0.5em;
+}
+#varselect, #varvalue {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+}
+#varvalue {
+    line-height: 1.5em;
+}
+#varselect {
+    margin: 0;
     opacity: 0;
-    height: 3em;/* required for opera */
+    font-size: 1em;
 }
 .gamebutton {
     position: relative;
