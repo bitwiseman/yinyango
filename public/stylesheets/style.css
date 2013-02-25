@@ -596,6 +596,7 @@ body {
     bottom: 0;
     left: 0;
     overflow: auto;
+    word-wrap: break-word;
 }
 #comments, .infos-column {
     padding: 1.5em;
