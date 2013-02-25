@@ -289,6 +289,56 @@ body {
 }
 /*}}}*/
 /* Game. {{{*/
+/* Fake element to get playersinfos + buttonsbar heihgt before showing them. */
+#fakebar {
+    position: absolute;
+    height: 4.5em;
+}
+/* Players infos. {{{*/
+#playersinfos {
+    height: 3em;
+    width: 100%;
+    padding: 0.5em;
+}
+#playerblack, #playerwhite {
+    float: left;
+    height: 2em;
+    width: 50%;
+    border: 1px solid black;
+}
+#playerblack {
+    border-radius: 0.5em 0 0 0.5em;
+}
+#playerwhite {
+    border-radius: 0 0.5em 0.5em 0;
+}
+#blackname, #blackrank, #blackscore, #blacktime,
+#whitename, #whiterank, #whitescore, #whitetime {
+    padding: 0.5em;
+}
+#whiterank, #whitescore, #whitetime {
+    float: left;
+}
+#blackrank, #blackscore, #blacktime {
+    float: right;
+}
+.playername {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*word-wrap: break-word;*/
+    white-space: nowrap;
+}
+.player {
+    padding: 0 1em;
+    width: 45%;
+    border: 1px solid black;
+    line-height: 1.2em;
+}
+.playerline {
+    overflow: hidden;
+    height: 1.2em;
+}
+/*}}}*/
 /* Goban. {{{*/
 #goban {
     position: relative;
@@ -370,15 +420,29 @@ body {
 }
 /*}}}*/
 /*}}}*/
-/* Panel. {{{*/
-#panel {
-    position: absolute;
-    bottom: 0;
-    padding: 5px;
-}
 /* Buttons bar. {{{*/
 #buttonsbar {
     position: relative;
+}
+#variations {
+    position: absolute;
+    top: 0.6em;
+    bottom: 0.6em;
+    left: 50%;
+    margin-left: -1.2em;
+    width: 2.4em;
+    border-radius: 50%;
+    border: 1px solid black;
+    line-height: 2.4em;
+}
+#varselect {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    height: 3em;/* required for opera */
 }
 .gamebutton {
     position: relative;
@@ -507,54 +571,12 @@ body {
 }
 /*}}}*/
 /*}}}*/
-/* Players infos. {{{*/
-#playersinfos {
-    position: relative;
-    height: 3.6em;
-}
-#variations {
-    position: absolute;
-    top: 0.6em;
-    bottom: 0.6em;
-    left: 50%;
-    margin-left: -1.2em;
-    width: 2.4em;
-    border-radius: 50%;
-    border: 1px solid black;
-    line-height: 2.4em;
-}
-#varselect {
+/* Text panel. {{{*/
+#textpanel {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
-    opacity: 0;
-    height: 3em;/* required for opera */
-}
-#playerblack {
-    border-radius: 1em 0 0 1em;
-}
-#playerwhite {
-    border-radius: 0 1em 1em 0;
-}
-.player {
-    padding: 0 1em;
-    width: 45%;
-    border: 1px solid black;
-    line-height: 1.2em;
-}
-.playerline {
-    overflow: hidden;
-    height: 1.2em;
-}
-/*}}}*/
-/* Text panel. {{{*/
-#textpanel {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
 }
 #textpanel-switch {
     position: absolute;
@@ -582,7 +604,6 @@ body {
 .infos-column {
     float: left;
 }
-/*}}}*/
 /*}}}*/
 /*}}}*/
 /* Hall. {{{*/

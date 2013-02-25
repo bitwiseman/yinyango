@@ -30,7 +30,7 @@ yygo.screenheight =     0;          // Screen height.
 yygo.size =             0;          // Size of the goban (9, 13, 19).
 yygo.socket =           null;       // IO Socket object.
 yygo.stones =           {};         // Stones list at each goban state.
-yygo.textpanel =        'comments'; // Text to show in game panel.
+yygo.textpanel =        'comments'; // Content to show in text panel.
 yygo.username =         '';         // User name.
 yygo.userslist =        [];         // List of connected users.
 /*}}}*/
@@ -779,7 +779,6 @@ yygo.loadGame = function (data) {
 
     yygo.setGobanSize(true, function () {
         yygo.showScreen('game');
-        yygo.setTextPanelTop();
     });
 };
 /*}}}*/
@@ -1202,7 +1201,6 @@ yygo.navigateNode = function (move) {
     yygo.makeVariations();
     yygo.updatePlayersInfos();
     yygo.makeComments();
-    yygo.setTextPanelTop();
 
     yygo.emptyGoban();
     yygo.placeStones();
@@ -1420,29 +1418,36 @@ yygo.setGamesScreenTop = function () {
  */
 yygo.setGobanSize = function (redraw, callback) {
     var screenwidth =   window.innerWidth,
+        heightleft =    yygo.screenheight -
+                        document.getElementById('fakebar').offsetHeight,
         cellsize =      0,
         smaller =       0;
 
     /* drawGame {{{
-     * Place goban and panel elements depending on screen resolution.
+     * Place game elements depending on screen resolution.
      *
      * @param {Boolean}  redraw     Do we need to redraw interface?
      * @param {Function} callback   Callback.
      */
     function drawGame(redraw, callback) {
-        var panel =         document.getElementById('panel'),
-            textpanel =     document.getElementById('textpanel'),
+        var textpanel =     document.getElementById('textpanel'),
             goban =         document.getElementById('goban'),
+            gobanpanel =    document.getElementById('goban-panel'),
             cells =         document.getElementsByClassName('cell'),
             cellslen =      cells.length,
             fontsize =      cellsize / 1.5,
             i;
-    
-        if (redraw) { // Redraw only when needed.
+
+        if (redraw) {
             // Resize goban.
             goban.style.height = yygo.gobansize + 'px';
             goban.style.width = yygo.gobansize + 'px';
-            // Resize the cells.
+            if (yygo.orientation === 'horizontal') {
+                gobanpanel.style.width = yygo.gobansize + 'px';
+            } else {
+                gobanpanel.style.width = '100%';
+            }
+            // Resize each goban cell.
             for (i = 0; i < cellslen; i++) {
                 cells[i].style.height = cellsize + 'px';
                 cells[i].style.width = cellsize + 'px';
@@ -1450,18 +1455,14 @@ yygo.setGobanSize = function (redraw, callback) {
                 cells[i].style.fontSize = fontsize + 'px';
             }
         }
-        // Place goban and panel elements depending on orientation.
+        // Place game elements depending on orientation.
         if (yygo.orientation === 'horizontal') {
             goban.style.margin = 0;
-            panel.style.top = 0;
-            panel.style.right = 0;
-            panel.style.left = yygo.gobansize + 'px';
+            textpanel.style.left = yygo.gobansize + 'px';
             textpanel.className = '';
         } else {
             goban.style.margin = 'auto';
-            panel.style.top =  yygo.gobansize + 'px';
-            panel.style.right = 0;
-            panel.style.left = 0;
+            textpanel.style.left = 0;
             textpanel.className = 'none';
         }
         if (callback !== undefined) {
@@ -1470,15 +1471,15 @@ yygo.setGobanSize = function (redraw, callback) {
     }
     /*}}}*/
 
-    if (screenwidth < yygo.screenheight) {
+    if (screenwidth < heightleft) {
         yygo.orientation = 'vertical';
         smaller = screenwidth;
     } else {
         yygo.orientation = 'horizontal';
-        if (screenwidth - 220 <= yygo.screenheight) {
+        if (screenwidth - 220 <= heightleft) {
             smaller = screenwidth - 220;
         } else {
-            smaller = yygo.screenheight;
+            smaller = heightleft;
         }
     }
 
@@ -1515,25 +1516,29 @@ yygo.setLastNode = function () {
 yygo.setPlayersInfos = function () {
     var infos = yygo.game[0][0],
         name =  '???',
-        time =  '--';
+        time =  '--',
+        rank =  '[?]';
 
     if (infos.PB !== undefined) {
         name = infos.PB;
-        if (infos.BR !== undefined) {
-            name += ' [' + infos.BR + ']';
-        }
+    }
+    if (infos.BR !== undefined) {
+        rank = '[' + infos.BR + ']';
     }
     document.getElementById('blackname').textContent = name;
     name = '???';
+    document.getElementById('blackrank').textContent = rank;
+    rank = '[?]';
     document.getElementById('blackscore').textContent = infos.score.B;
 
     if (infos.PW !== undefined) {
         name = infos.PW;
-        if (infos.WR !== undefined) {
-            name += ' [' + infos.WR + ']';
-        }
+    }
+    if (infos.WR !== undefined) {
+        rank = ' [' + infos.WR + ']';
     }
     document.getElementById('whitename').textContent = name;
+    document.getElementById('whiterank').textContent = rank;
     document.getElementById('whitescore').textContent = infos.score.W;
 
     // Initiate players time.
@@ -1562,14 +1567,6 @@ yygo.setScreenTop = function () {
     }
     // Set screen height.
     yygo.screenheight = window.innerHeight - screentop;
-};
-/*}}}*/
-/* setTextPanelTop {{{
- * Set comments top at bottom of top panel part.
- */
-yygo.setTextPanelTop = function () {
-    document.getElementById('textpanel').style.top =
-        document.getElementById('toppanel').offsetHeight + 5 + 'px';
 };
 /*}}}*/
 /* showGamesScreen {{{

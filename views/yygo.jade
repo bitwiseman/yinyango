@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    #fakebar
     #messages.none
         #message
             #error.none= lingua.error
@@ -15,9 +16,7 @@ block content
     #hall.screen.none
         include includes/hall
     #game.screen.none
-        #goban
-        #panel
-            include includes/panel
+        include includes/game
     #settings.screen.none
         include includes/settings
     script(src='gotools.js')
