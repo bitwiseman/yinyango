@@ -289,10 +289,11 @@ yygo.bindEvents = function () {
     }, false);
     creategame.addEventListener('submit', function (event) {
         var data = { 0: { 0: {
-                PB: 'yin',
-                PW: 'yang',
-                RU: this.rule.value,
-                SZ: this.size.value
+                PB:         'yin',
+                PW:         'yang',
+                RU:         this.rule.value,
+                SZ:         this.size.value,
+                branchs:    1
             } } };
 
         event.preventDefault();
