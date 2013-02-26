@@ -314,7 +314,7 @@ body {
 }
 #blackname, #blackrank, #blackscore, #blacktime,
 #whitename, #whiterank, #whitescore, #whitetime {
-    padding: 0.5em;
+    padding: 0.35em;
 }
 #whiterank, #whitescore, #whitetime {
     float: left;
