@@ -45,6 +45,9 @@ yylog.bindEvents = function () {
         mlogin =            document.getElementById('m-login'),
         mregister =         document.getElementById('m-register');
 
+    window.addEventListener('resize', function () {
+        yylog.setScreenTop();
+    }, false);
     messageok.addEventListener('click', function () {
         document.getElementById(yylog.lastmessage).className = 'none';
         document.getElementById('messages').className = 'none';

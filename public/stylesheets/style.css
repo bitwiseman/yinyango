@@ -122,40 +122,26 @@ body {
     color: #f9f0ca;
 }
 /*}}}*/
-.none {
-    display: none !important;
-}
-.link {
-    cursor: pointer;
-}
-.disabled {
-    opacity: 0.2;
-    cursor: default !important;
-}
-.inactive {
-    opacity: 0.5;
-}
 .alert {
-    width: 100%;
     font-weight: bold;
 }
-.screen {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
+.bigbutton {
+    padding: 0.3em 0.6em;
+    font: bold 1em sans-serif;
 }
-.circle {
-    border-radius: 50%;
+.bigbutton, .button  {
+    border: 1px solid black;/* Avoid ugly buttons borders. */
+    border-radius: 2em;
+    font-size: 1em;
+    cursor: pointer;
+}
+.box, .checkbox {
+    display: inline-block;
 }
 .box {
     padding: 1em;
     margin: 0.5em;
     border-radius: 1em;
-}
-.inputbox, .selectbox {
-    margin-bottom: 1em;
 }
 .checkbox {
     position: relative;
@@ -191,6 +177,19 @@ body {
 .checkbox input[type=checkbox]:checked + label:after {
     opacity: 1;
 }
+.circle {
+    border-radius: 50%;
+}
+.disabled {
+    opacity: 0.2;
+    cursor: default !important;
+}
+.inactive {
+    opacity: 0.5;
+}
+.inputbox, .selectbox {
+    margin-bottom: 1em;
+}
 .input {
     margin: 0;
     padding: 0.2em 0.5em;
@@ -203,6 +202,12 @@ body {
     padding: 0.5em;
     border-bottom-left-radius: 1em;
     border-bottom-right-radius: 1em;
+}
+.link {
+    cursor: pointer;
+}
+.none {
+    display: none !important;
 }
 .select {
     position: absolute;
@@ -226,20 +231,12 @@ body {
     top: -9999px; /* Required for opera */
     left: -9999px;
 }
-.bigbutton {
-    padding: 0.3em 0.6em;
-    font: bold 1em sans-serif;
-}
-.bigbutton, .button  {
-    border: 1px solid black;/* Avoid ugly buttons borders. */
-    border-radius: 2em;
-    font-size: 1em;
-    cursor: pointer;
-}
-/*}}}*/
-/* Inline-block elements. {{{*/
-#buttonsbar, #menu-logo, .alert, .checkbox, .box, .menulink, .player {
-    display: inline-block;
+.screen {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
 }
 /*}}}*/
 /* Messages. {{{*/
@@ -327,16 +324,6 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.player {
-    padding: 0 1em;
-    width: 45%;
-    border: 1px solid black;
-    line-height: 1.2em;
-}
-.playerline {
-    overflow: hidden;
-    height: 1.2em;
-}
 /*}}}*/
 /* Goban. {{{*/
 #goban {
@@ -420,12 +407,17 @@ body {
 /*}}}*/
 /*}}}*/
 /* Buttons bar. {{{*/
-#buttonsbar {
+.gamebutton {
     position: relative;
+    width: 1.5em;
+    cursor: pointer;
+}
+#variationsbutton, .gamebutton {
+    display: inline-block;
+    height: 1.5em;
+    margin: 0.1em;
 }
 #variationsbutton {
-    float: left;
-    height: 1.5em;
     width: 2em;
 }
 #variations {
@@ -441,23 +433,13 @@ body {
     bottom: 0;
     left: 0;
 }
-#varvalue {
-    line-height: 1.5em;
-}
 #varselect {
     margin: 0;
     opacity: 0;
     font-size: 1em;
 }
-#variationsbutton, .gamebutton {
-    margin: 0.1em;
-}
-.gamebutton {
-    position: relative;
-    float: left;
-    width: 1.5em;
-    height: 1.5em;
-    cursor: pointer;
+#varvalue {
+    line-height: 1.5em;
 }
 /* Arrows buttons. {{{*/
 .rotate180 {
