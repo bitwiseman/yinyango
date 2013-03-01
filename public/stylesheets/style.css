@@ -122,27 +122,8 @@ body {
     color: #f9f0ca;
 }
 /*}}}*/
-.alert {
-    font-weight: bold;
-}
-.bigbutton {
-    padding: 0.3em 0.6em;
-    font: bold 1em sans-serif;
-}
-.bigbutton, .button  {
-    border: 1px solid black;/* Avoid ugly buttons borders. */
-    border-radius: 2em;
-    font-size: 1em;
-    cursor: pointer;
-}
-.box, .checkbox {
-    display: inline-block;
-}
-.box {
-    padding: 1em;
-    margin: 0.5em;
-    border-radius: 1em;
-}
+/* Inputs. {{{*/
+/* Checkbox. {{{*/
 .checkbox {
     position: relative;
     height: 1em;
@@ -177,16 +158,7 @@ body {
 .checkbox input[type=checkbox]:checked + label:after {
     opacity: 1;
 }
-.circle {
-    border-radius: 50%;
-}
-.disabled {
-    opacity: 0.2;
-    cursor: default !important;
-}
-.inactive {
-    opacity: 0.5;
-}
+/*}}}*/
 .inputbox, .selectbox {
     margin-bottom: 1em;
 }
@@ -196,18 +168,14 @@ body {
     width: 100%;
     min-width: 0;
     border: 1px solid black;
-    font: bold 1em sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: inherit;
 }
 .inputhelp {
     padding: 0.5em;
     border-bottom-left-radius: 1em;
     border-bottom-right-radius: 1em;
-}
-.link {
-    cursor: pointer;
-}
-.none {
-    display: none !important;
 }
 .select {
     position: absolute;
@@ -223,13 +191,54 @@ body {
     height: 1.5em;
     width: 100%;
     border: 1px solid black;
-    font: bold 1em sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: inherit;
     line-height: 1.5em;
 }
 .selectfile {
     position: absolute;
     top: -9999px; /* Required for opera */
     left: -9999px;
+}
+/*}}}*/
+.alert {
+    font-weight: bold;
+}
+.bigbutton {
+    padding: 0.3em 0.6em;
+    font-weight: bold;
+}
+.bigbutton, .button  {
+    border: 1px solid black;/* Avoid ugly buttons borders. */
+    border-radius: 2em;
+    font-size: 1em;
+    font-family: inherit;
+    cursor: pointer;
+}
+.box, .checkbox {
+    display: inline-block;
+}
+.box {
+    padding: 1em;
+    margin: 0.5em;
+    border-radius: 1em;
+}
+.circle {
+    border-radius: 50%;
+}
+.disabled {
+    opacity: 0.2;
+    cursor: default !important;
+}
+.inactive {
+    opacity: 0.5;
+}
+.link {
+    cursor: pointer;
+}
+.none {
+    display: none !important;
 }
 .screen {
     position: absolute;
@@ -282,6 +291,7 @@ body {
     border: 0;
     padding: 0 0.5em;
     font-size: 1em;
+    font-family: inherit;
     cursor: pointer;
 }
 /*}}}*/
@@ -669,7 +679,9 @@ body {
     margin: 0;
     padding: 0 0.5em;
     border: 1px solid black;
-    font: bold 1em sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: inherit;
 }
 #showusers {
     display: none;
