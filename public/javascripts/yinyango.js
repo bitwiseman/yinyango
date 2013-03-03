@@ -1527,6 +1527,7 @@ yygo.setPlayersInfos = function () {
         rank = '[' + infos.BR + ']';
     }
     document.getElementById('blackname').textContent = name;
+    document.getElementById('blackname').title = name;
     name = '???';
     document.getElementById('blackrank').textContent = rank;
     rank = '[?]';
@@ -1539,6 +1540,7 @@ yygo.setPlayersInfos = function () {
         rank = ' [' + infos.WR + ']';
     }
     document.getElementById('whitename').textContent = name;
+    document.getElementById('whitename').title = name;
     document.getElementById('whiterank').textContent = rank;
     document.getElementById('whitescore').textContent = infos.score.W;
 
