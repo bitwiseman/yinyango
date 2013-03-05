@@ -5,6 +5,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+/* jshint browser: true, globalstrict: true */
 'use strict';
 /* yylog {{{*/
 var yylog = {};
@@ -26,8 +27,7 @@ yylog.ajax = function (url, method, data, callback) {
         data = null;
     }
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 &&
-                (xhr.status === 200 || xhr.status === 0)) {
+        if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
             callback(JSON.parse(xhr.responseText));
         }
     };
@@ -66,7 +66,6 @@ yylog.bindEvents = function () {
         event.preventDefault();
         yylog.ajax('/login', 'POST', formdata, function (data) {
             if (data.error === '') {
-                // Session is set, refresh the page.
                 window.location.href = '/';
             } else if (data.error === 'login') {
                 yylog.showMessage('error', 'errorlogin');
@@ -79,7 +78,6 @@ yylog.bindEvents = function () {
         event.preventDefault();
         yylog.ajax('/guest', 'POST', formdata, function (data) {
             if (data.error === '') {
-                // Session is set, refresh the page.
                 window.location.href = '/';
             } else if (data.error === 'name') {
                 yylog.showMessage('error', 'errorname');

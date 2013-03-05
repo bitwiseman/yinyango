@@ -5,6 +5,8 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+/* jshint browser: true, globalstrict: true */
+/* global gotools, io */
 'use strict';
 /* yygo {{{
  * Namespace that contains all properties and methods.
@@ -200,8 +202,7 @@ yygo.ajax = function (url, method, data, callback) {
  * Bind events to the elements.
  */
 yygo.bindEvents = function () {
-    var menu =              document.getElementById('menu'),
-        messageok =         document.getElementById('message-ok'),
+    var messageok =         document.getElementById('message-ok'),
         mgame =             document.getElementById('m-game'),
         mhall =             document.getElementById('m-hall'),
         msettings =         document.getElementById('m-settings'),
@@ -231,11 +232,15 @@ yygo.bindEvents = function () {
         selectslen =        selects.length,
         i;
 
-    for (i = 0; i < selectslen; i++) {
-        selects[i].addEventListener('change', function () {
+    function fillSelect(select) {
+        selects[select].addEventListener('change', function () {
             this.parentNode.getElementsByClassName('selectvalue')[0].innerHTML =
                 this.options[this.selectedIndex].text;
         }, false);
+    }
+
+    for (i = 0; i < selectslen; i++) {
+        fillSelect(i);
     }
     messageok.addEventListener('click', function () {
         document.getElementById(yygo.lastmessage).className = 'none';

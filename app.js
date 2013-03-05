@@ -5,6 +5,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+/* jshint node: true */
 'use strict';
 /* Modules & globals. {{{*/
 var express =       require('express.io'),
@@ -66,7 +67,7 @@ app.configure(function () {
     app.use(express.cookieParser());
     app.use(express.session({
         secret: 'Not a vegetable',
-        store: new RedisStore,
+        store: new RedisStore(),
         cookie: { maxAge: onemonth }
     }));
     app.use(express.static(__dirname + '/public'));

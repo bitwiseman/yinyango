@@ -5,6 +5,7 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
+/* jshint browser: true, node: true */
 
 /*
  * Exports are public functions available for client and node.

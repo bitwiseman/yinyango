@@ -1,5 +1,5 @@
 *.swp
-
+.jshintrc
 bin/
 node_modules/
 start
