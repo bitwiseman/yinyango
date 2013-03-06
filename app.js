@@ -14,11 +14,11 @@ var express =       require('express.io'),
     mongoose =      require('mongoose'),
     db =            mongoose.createConnection('localhost', 'yinyango'),
     lingua =        require('lingua'),
-    sys =           require('sys'),
+    //sys =           require('sys'),
     fs =            require('fs'),
     crypto =        require('crypto'),
     exec =          require('child_process').exec,
-    spawn =         require('child_process').spawn,
+    //spawn =         require('child_process').spawn,
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
@@ -87,17 +87,6 @@ Validator.prototype.getErrors = function () {
 };
 /*}}}*/
 /* Functions. {{{*/
-/* restricted {{{
- * Restrict some pages to registered users.
- */
-function restricted(req, res, next) {
-    if (req.session.userid) {
-        next();
-    } else {
-        res.redirect('/');
-    }
-}
-/*}}}*/
 /* checkSgf {{{
  * Check if a sgf file is valid with sgfc.
  *
@@ -192,8 +181,8 @@ app.get('/', function (req, res) {
  * Send games corresponding to a page.
  */
 app.get('/gameslist/:page', function (req, res) {
-    var page = req.params.page,
-        filters,
+    //var page = req.params.page,
+    var filters,
         options;
 
     filters = 'name';
@@ -212,8 +201,8 @@ app.get('/gameslist/:page', function (req, res) {
  * Load selected game or navigate in pages.
  */
 app.get('/load/:id', function (req, res) {
-    var id = req.params.id,
-        userid = req.session.userid;
+    var id =        req.params.id,
+        userid =    req.session.userid;
 
     Sgf.findById(id, function (err, sgf) {
         var settings = { sgfid: id };
@@ -437,8 +426,7 @@ app.post('/sendsgf', function (req, res) {
                         console.error('fs.readFile error: ' + err);
                         return;
                     }
-                    md5 = crypto.createHash('md5').update(data)
-                            .digest('hex');
+                    md5 = crypto.createHash('md5').update(data).digest('hex');
                     gotools.parseSgf(data.toString(), function (obj) {
                         var size = parseInt(obj[0][0].SZ[0], 10);
                         sgf = new Sgf({
@@ -542,7 +530,7 @@ app.io.route('disconnect', function (req) {
 app.io.route('chat', function (req) {
     if (req.data !== '') {
         app.io.broadcast('chat', '<strong>' + req.session.username +
-            ': </strong>' + req.data);
+                         ': </strong>' + req.data);
     }
 });
 /*}}}*/
@@ -551,7 +539,7 @@ app.io.route('chat', function (req) {
 app.listen(3000, function () {
     console.log('Express server listening on port 3000');
     //gnugo.stdout.on('data', function (data) {
-        //console.log(data.toString());
+    //console.log(data.toString());
     //});
     //gnugo.stdin.write('genmove b\n');
     //gnugo.stdin.write('list_stones b\n');
