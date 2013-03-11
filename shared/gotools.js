@@ -21,6 +21,37 @@
     'use strict';
 
     // Private functions.
+   /* isCoordStatus {{{
+    * Check if a goban coord match status from a list.
+    *
+    * Existing status:
+    * '': Empty coord,
+    * 'K': Ko,
+    * 'B' and 'W': Stones,
+    * 'BF' and 'WF': Forbidden moves for each color,
+    * 'X': Out of goban (border).
+    *
+    * @param {Number} x: X coord.
+    * @param {Number} y: Y coord.
+    * @param {Array} goban: Goban to check.
+    * @param {Array} status: List of status to check.
+    *
+    * @return {Boolean} Is coord matching a status element ?
+    */
+   function isCoordStatus(x, y, goban, status) {
+       var coordstatus = (function () {
+           if (goban[x] !== undefined && goban[x][y] !== undefined) {
+               return goban[x][y];
+           }
+           return 'X';
+       }());
+   
+       if (status.indexOf(coordstatus) > -1) {
+           return true;
+       }
+       return false;
+   }
+   /*}}}*/
     /* testKo {{{
      * Test if a move created a ko situation and add the only liberty to goban
      * as such.
@@ -36,10 +67,9 @@
         var liberties = [];
 
         function isLiberty(x, y) {
-            if (goban[x] !== undefined && goban[x][y] !== undefined &&
-                    (goban[x][y] === color || goban[x][y] === '' ||
-                     goban[x][y] === 'BF' || goban[x][y] === 'WF')) {
-                liberties.push([x, y]); // Liberty or same color.
+            if (isCoordStatus(x, y, goban, [color, '', 'BF', 'WF'])) {
+                // Liberty or same color.
+                liberties.push([x, y]);
             }
         }
         isLiberty(x - 1, y);
@@ -158,13 +188,6 @@
      * @param {Number} y Y coord.
      */
     function testCell(goban, x, y, rule, capturing) {
-        var ruleForbidSuicide = function () {
-            if (rule === 'NZ') {
-                return false;
-            }
-            return true;
-        };
-
         if (!capturing) {
             capturing = false;
         }
@@ -325,9 +348,9 @@
                 goban[x][y] = 'BF';
             }
             // Find and list group liberties. If we have only one,
-            // and that rules does not permit suicide this is
+            // and that rule does not permit suicide this is
             // a forbidden move for group color.
-            if (ruleForbidSuicide) {
+            if (rule !== 'NZ') {
                 checkGroupLiberties(x - 1, y);
                 checkGroupLiberties(x + 1, y);
                 checkGroupLiberties(x, y - 1);
