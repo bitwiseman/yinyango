@@ -124,6 +124,7 @@
             ennemy = color === 'B' ? 'W' : 'B',
             liberties = [],
             group = [],
+            liblen,
             coord,
             libx,
             liby,
@@ -137,13 +138,13 @@
          * @param {String} color: Color of stone to add to group.
          */
         function addStoneAndRecheck(x, y, color) {
+            var regroup = [],
+                reliberties = [];
+
             goban[x][y] = color;
-            // Purge group and liberties before reusing them.
-            group = [];
-            liberties = [];
-            listLiberties(x, y, goban, color, liberties, group);
+            listLiberties(x, y, goban, color, reliberties, regroup);
             // This group cannot escape.
-            if (liberties.length === 0) {
+            if (reliberties.length === 0) {
                 if (testCaptures(x, y, goban, color).length === 0) {
                     goban[x][y] = color + 'F';
                 } else {
@@ -160,7 +161,8 @@
         }
 
         listLiberties(x, y, goban, color, liberties, group);
-        if (liberties.length === 1) {
+        liblen = liberties.length;
+        if (liblen === 1) {
             coord = liberties[0].split(':');
             libx = parseInt(coord[0], 10);
             liby = parseInt(coord[1], 10);
@@ -169,8 +171,8 @@
         // More than one liberty, make sure to remove forbidden moves
         // of that group color, as a capture may create more liberties
         // for a group.
-        if (liberties.length > 1 && capturing) {
-            for (i = 0; i < liberties.length; i++) {
+        if (liblen > 1 && capturing) {
+            for (i = 0; i < liblen; i++) {
                 coord = liberties[i].split(':');
                 libx = parseInt(coord[0], 10);
                 liby = parseInt(coord[1], 10);
@@ -309,11 +311,11 @@
      * Test goban intersection for liberties and set/remove forbidden moves
      * depending on current rule.
      *
-     * @param {Array} goban Goban.
      * @param {Number} x X coord.
      * @param {Number} y Y coord.
+     * @param {Array} goban Goban.
      */
-    function testCell(goban, x, y, rule, capturing) {
+    function testCell(x, y, goban, rule, capturing) {
         if (!capturing) {
             capturing = false;
         }
@@ -355,10 +357,10 @@
      */
     function testSuicides(x, y, goban, rule) {
 
-        testCell(goban, x - 1, y, rule);
-        testCell(goban, x + 1, y, rule);
-        testCell(goban, x, y - 1, rule);
-        testCell(goban, x, y + 1, rule);
+        testCell(x - 1, y, goban, rule);
+        testCell(x + 1, y, goban, rule);
+        testCell(x, y - 1, goban, rule);
+        testCell(x, y + 1, goban, rule);
 
         return goban;
     }
@@ -480,7 +482,7 @@
                 }
             }
             if (isinlist === false) {
-                testCell(goban, x, y, rule, true);
+                testCell(x, y, goban, rule, true);
             }
         }
         /*}}}*/
@@ -551,10 +553,10 @@
             y = add[i].charCodeAt(1) - 97;
             goban[x][y] = color;
             // TODO: Find a faster method, this is too CPU intensive.
-            //testCell(goban, x - 1, y, rule);
-            //testCell(goban, x + 1, y, rule);
-            //testCell(goban, x, y - 1, rule);
-            //testCell(goban, x, y + 1, rule);
+            //testCell(x - 1, y, goban, rule);
+            //testCell(x + 1, y, goban, rule);
+            //testCell(x, y - 1, goban, rule);
+            //testCell(x, y + 1, goban, rule);
         }
         stones = gobanToStones(size, goban);
 
