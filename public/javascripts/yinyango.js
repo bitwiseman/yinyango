@@ -164,9 +164,9 @@ yygo.addMove = function (coord) {
         yygo.stones[node + 1] = {};
     }
     yygo.stones[node + 1][branch] = play.stones;
-    // Add prisonners to player score.
+    // Add capturess to player score.
     yygo.game[node + 1][branch].score[turn] =
-        prevscore[turn] + play.prisonners;
+        prevscore[turn] + play.captures;
     // Move to next node.
     yygo.lastnode = yygo.curnode + 1;
     yygo.navigateNode(1);
@@ -515,20 +515,16 @@ yygo.calcStones = function (data) {
         switch (key) {
         case 'B':
             if (value[0] !== '') { // Did not pass.
-                play =
-                    gotools.playMove('B', value[0], size, stones, rule);
+                play = gotools.playMove('B', value[0], size, stones, rule);
                 stones = play.stones;
-                yygo.game[node][branch].score.B = prevscore.B +
-                    play.prisonners;
+                yygo.game[node][branch].score.B = prevscore.B + play.captures;
             }
             break;
         case 'W':
             if (value[0] !== '') { // Did not pass.
-                play =
-                    gotools.playMove('W', value[0], size, stones, rule);
+                play = gotools.playMove('W', value[0], size, stones, rule);
                 stones = play.stones;
-                yygo.game[node][branch].score.W = prevscore.W +
-                    play.prisonners;
+                yygo.game[node][branch].score.W = prevscore.W + play.captures;
             }
             break;
         case 'AB':
@@ -554,12 +550,10 @@ yygo.calcStones = function (data) {
                         WF: [], K: []};
                     yygo.game[node][branch].score = {B: 0, W: 0};
                     // Load previous stones.
-                    parentbranch =
-                        yygo.getParentBranch(node - 1, branch);
+                    parentbranch = yygo.getParentBranch(node - 1, branch);
                     if (node > 0) {
                         prevstones = stones[node - 1][parentbranch];
-                        prevscore =
-                            yygo.game[node - 1][parentbranch].score;
+                        prevscore = yygo.game[node - 1][parentbranch].score;
                     } else {
                         prevstones = stones[node][branch];
                         prevscore = yygo.game[node][branch].score;
