@@ -74,6 +74,13 @@
     /*}}}*/
     /* listLiberties {{{
      * List liberties of a stones group.
+     *
+     * @param {Number} x: X coord.
+     * @param {Number} y: Y coord.
+     * @param {Array} goban: Goban to check.
+     * @param {String} color: Played color.
+     * @param {Array} liberties: List of group liberties.
+     * @param {Array} group: List of group stones.
      */
     function listLiberties(x, y, goban, color, liberties, group) {
         var liblen = liberties.length,
@@ -188,14 +195,14 @@
      * Test if a move created a ko situation and add the only liberty to goban
      * as such.
      *
-     * @param {String} color Played color.
-     * @param {Number} x X coord.
-     * @param {Number} y Y coord.
-     * @param {Array} goban Goban to test.
+     * @param {Number} x: X coord.
+     * @param {Number} y: Y coord.
+     * @param {Array} goban: Goban to test.
+     * @param {String} color: Played color.
      *
      * @return {Array} New goban with eventual ko added.
      */
-    function testKo(color, x, y, goban) {
+    function testKo(x, y, goban, color) {
         var liberties = [];
 
         function isLiberty(x, y) {
@@ -218,17 +225,17 @@
      * Test liberties of a stone or a group of stones recursively.
      * Inspired by eidogo algorithm.
      *
-     * @param {Number}  x           X coordinate to test.
-     * @param {Number}  y           Y coordinate to test.
-     * @param {Array}   goban       Goban state to test.
-     * @param {String}  color       Color of the played stone.
-     * @param {Array}   prisonners  Potential prisonners.
+     * @param {Number} x: X coordinate to test.
+     * @param {Number} y: Y coordinate to test.
+     * @param {Array} goban: Goban state to test.
+     * @param {String} color: Color of the played stone.
+     * @param {Array} prisonners: Potential prisonners.
      *
      * @return {Array} [
-     *  {Number}    0: No liberties or already in prisonners list,
-     *              1: Has liberties,
-     *              2: Same color or goban border.
-     *  {Array}     Potential prisonners]
+     * {Number} 0: No liberties or already in prisonners list,
+     *          1: Has liberties,
+     *          2: Same color or goban border.
+     * {Array} Potential prisonners. ]
      */
     function testLiberties(x, y, goban, color, prisonners) {
         var ennemy = (color === 'B') ? 'W' : 'B',
@@ -272,10 +279,10 @@
     /* testCaptures {{{
      * Test if played stone will capture stone(s).
      *
-     * @param {Number}  x     X coordinate of played stone.
-     * @param {Number}  y     Y coordinate of played stone.
-     * @param {Array}   goban Goban to test.
-     * @param {String}  color Played color.
+     * @param {Number} x: X coordinate of played stone.
+     * @param {Number} y: Y coordinate of played stone.
+     * @param {Array} goban: Goban to test.
+     * @param {String} color: Played color.
      *
      * @return {Array} Prisonners coordinates.
      */
@@ -311,9 +318,11 @@
      * Test goban intersection for liberties and set/remove forbidden moves
      * depending on current rule.
      *
-     * @param {Number} x X coord.
-     * @param {Number} y Y coord.
-     * @param {Array} goban Goban.
+     * @param {Number} x: X coord.
+     * @param {Number} y: Y coord.
+     * @param {Array} goban: Goban.
+     * @param {String} rule: Played ruleset.
+     * @param {Boolean} capturing: Are we capturing stones ?
      */
     function testCell(x, y, goban, rule, capturing) {
         if (!capturing) {
@@ -343,37 +352,18 @@
         checkGroupLiberties(x, y, goban, capturing);
     }
     /*}}}*/
-    /* testSuicides {{{
-     * Test if a move created a suicide situation for any color, or if it
-     * removed such situation. Some rules permit suicides, so we need to
-     * check which rule we are playing too.
-     *
-     * @param {Number} x X coord.
-     * @param {Number} y Y coord.
-     * @param {Array} goban Goban to test.
-     * @param {String} rule Played rule.
-     *
-     * @return {Array} New goban with suicides.
-     */
-    function testSuicides(x, y, goban, rule) {
-
-        testCell(x - 1, y, goban, rule);
-        testCell(x + 1, y, goban, rule);
-        testCell(x, y - 1, goban, rule);
-        testCell(x, y + 1, goban, rule);
-
-        return goban;
-    }
-    /*}}}*/
     /* gobanToStones {{{
      * Transform goban array to stones list.
      *
-     * @param {Number}  size    Goban size.
-     * @param {Array}   goban   Goban to convert.
+     * @param {Number} size: Goban size.
+     * @param {Array} goban: Goban to convert.
      *
-     * @return {Object} { 'B':{String} (black stones on goban),
-     *                    'W':{String} (white stones on goban),
-     *                    'K':{String} (kos on goban) }
+     * @return {Object} {
+     * 'B':{Array} black stones,
+     * 'W':{Array} white stones,
+     * 'BF':{Array} black forbidden moves,
+     * 'WF':{Array} white forbidden moves,
+     * 'K':{Array} kos. }
      */
     function gobanToStones(size, goban) {
         var stones =    { B: [], W: [], BF: [], WF: [], K: [] },
@@ -406,10 +396,9 @@
     /*}}}*/
     /* stonesToGoban {{{
      * Transform stones list to a goban array.
-     * b: black, w: white, k: ko.
      *
-     * @param {Number}  size    Goban size.
-     * @param {Object}  stones  Stones list.
+     * @param {Number} size: Goban size.
+     * @param {Object} stones: Stones list.
      *
      * @return {Array} Array representing the goban.
      */
@@ -450,12 +439,13 @@
     /* removePrisonners {{{
      * Remove captured stone(s) from the state.
      *
-     * @param {Array}   goban       Goban to remove stones from.
-     * @param {Array}   prisonners  Prisonners list to remove from goban.
+     * @param {Array} goban: Goban to remove stones from.
+     * @param {String} rule: Played ruleset.
+     * @param {Array} prisonners: Prisonners list to remove from goban.
      *
      * @return {Array} Goban after removing prisonners.
      */
-    function removePrisonners(goban, prisonners, rule) {
+    function removePrisonners(goban, rule, prisonners) {
         var prilen =    prisonners.length,
             coord =     [],
             x,
@@ -481,7 +471,7 @@
                     isinlist = true;
                 }
             }
-            if (isinlist === false) {
+            if (!isinlist) {
                 testCell(x, y, goban, rule, true);
             }
         }
@@ -512,10 +502,11 @@
     /* getParentBranch {{{
      * Find the branch of which depends a given branch at a given node.
      *
-     * @param   {Number} node       Node to check.
-     * @param   {Number} branch     Child branch.
+     * @param {Object} data: Game data.
+     * @param {Number} node: Node to check.
+     * @param {Number} branch: Child branch.
      *
-     * @return  {Number}            The parent branch.
+     * @return {Number} The parent branch.
      */
     function getParentBranch(data, node, branch) {
         var i;
@@ -533,11 +524,11 @@
     /* addStones {{{
      * Add stones to goban.
      *
-     * @param {String}  color   Color of the stone(s) (empty to remove).
-     * @param {Array}   add     Stone list to add/remove.
-     * @param {Number}  size    Goban size.
-     * @param {Object}  stones  Stones to modify.
-     * @param {String}  rule    Played rule.
+     * @param {String} color: Color of the stone(s) (empty to remove).
+     * @param {Array} add: Stone list to add/remove.
+     * @param {Number} size: Goban size.
+     * @param {Object} stones: Stones to modify.
+     * @param {String} rule: Played rule.
      *
      * @return {Object} New stones after adding/removing stones.
      */
@@ -567,15 +558,15 @@
      * Play a stone, apply rules and return new stones list and number of
      * prisonners.
      *
-     * @param {String}  color   Color of played stone.
-     * @param {String}  coord   Coordinate of played stone in letters.
-     * @param {Number}  size    Goban size.
-     * @param {Object}  stones  Stones list.
-     * @param {String}  rule    Played rule.
+     * @param {String} color: Color of played stone.
+     * @param {String} coord: Coordinate of played stone in letters.
+     * @param {Number} size: Goban size.
+     * @param {Object} stones: Stones list.
+     * @param {String} rule: Played rule.
      *
-     * @return {Object} { 'stones':{Object} (new stones list after playing the
-     *                                       stone and applying rules),
-     *                    'prisonners':{Number} (number of prisonners made) }
+     * @return {Object} {
+     * 'stones':{Object} new stones list after applying rules,
+     * 'prisonners':{Number} number of prisonners made. }
      */
     exports.playMove = function (color, coord, size, stones, rule) {
         var x =             coord.charCodeAt(0) - 97, // Coord to Number.
@@ -592,13 +583,17 @@
 
         // Remove prisonners.
         if (prisonners.length > 0) {
-            goban = removePrisonners(goban, prisonners, rule);
+            goban = removePrisonners(goban, rule, prisonners);
         }
         if (prisonners.length === 1) {
             // Test if that create a ko situation.
-            goban = testKo(color, x, y, goban);
+            goban = testKo(x, y, goban, color);
         }
-        goban = testSuicides(x, y, goban, rule);
+        // Apply suicide rule to goban.
+        testCell(x - 1, y, goban, rule);
+        testCell(x + 1, y, goban, rule);
+        testCell(x, y - 1, goban, rule);
+        testCell(x, y + 1, goban, rule);
 
         newstate = {
             'stones': gobanToStones(size, goban),
@@ -612,12 +607,12 @@
      * Read sgf data and register keys/values, sorting the nodes (moves)
      * and branchs (variations).
      *
-     * @param {String}      sgf Sgf data.
-     * @param {Function}    fn  Callback.
+     * @param {String} sgf: Sgf data.
+     * @param {Function} callback: Callback.
      *
      * @return {Object} JSON form of sgf.
      */
-    exports.parseSgf = function (sgf, fn) {
+    exports.parseSgf = function (sgf, callback) {
         var sgfobj =        {},
             sgflen =        sgf.length,
             isescaped =     false,
@@ -738,18 +733,18 @@
         // Save total number of branchs in the tree root for later use.
         sgfobj[0][0].branchs = branch + 1;
 
-        fn(sgfobj);
+        callback(sgfobj);
     };
     /*}}}*/
     /* buildSgf {{{
      * Build an sgf string from provided data.
      *
-     * @param {Object} data Game data.
-     * @param {Function} fn Callback.
+     * @param {Object} data: Game data.
+     * @param {Function} callback: Callback.
      *
      * @return {String} Sgf string.
      */
-    exports.buildSgf = function (data, fn) {
+    exports.buildSgf = function (data, callback) {
         var branchs =   data[0][0].branchs,
             branch =    0,
             node =      0,
@@ -820,7 +815,7 @@
             }
             sgf += ')';
         }
-        fn(sgf);
+        callback(sgf);
     };
     /*}}}*/
 
