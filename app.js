@@ -152,7 +152,8 @@ function hash(pwd, salt, fn) {
 app.get('/', function (req, res) {
     var username =  req.session.username,
         isguest =   req.session.isguest,
-        lang =      req.cookies.language;
+        lang =      req.cookies.language,
+        dev = app.settings.env === 'development' ? true : false;
 
     // Login if user session is set.
     if (username) {
@@ -164,16 +165,16 @@ app.get('/', function (req, res) {
                     return;
                 }
                 if (user) {
-                    res.render('yygo', { lang: lang });
+                    res.render('yygo', { dev: dev, lang: lang });
                 } else {
-                    res.render('login');
+                    res.render('login', { dev: dev });
                 }
             });
         } else {
-            res.render('yygo', { lang: lang });
+            res.render('yygo', { dev: dev, lang: lang });
         }
     } else {
-        res.render('login');
+        res.render('login', { dev: dev });
     }
 });
 /*}}}*/

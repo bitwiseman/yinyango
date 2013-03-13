@@ -22,4 +22,7 @@ block content
         include includes/login
     #register.screen.none
         include includes/register
-    script(src='javascripts/login.js')
+    if dev
+        script(src='javascripts/login.js')
+    else
+        script(src='javascripts/login-min.js')

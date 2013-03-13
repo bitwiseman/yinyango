@@ -6,7 +6,7 @@
  * @link     https://github.com/hickop/yinyango
  */
 /* jshint browser: true, globalstrict: true */
-/* global gotools, io */
+/* global gotools, io, yygo */
 'use strict';
 /* yygo {{{
  * Namespace that contains all properties and methods.

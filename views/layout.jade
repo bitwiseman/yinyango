@@ -4,7 +4,14 @@ html
         title= lingua.title
         meta(charset='UTF-8')
         meta(name='viewport', content='width=device-width, user-scalable=no')
-        link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
+        if dev
+            link(rel='stylesheet', type='text/css',
+                href='/stylesheets/style.css')
+            link(rel='stylesheet', type='text/css',
+                href='/stylesheets/debug.css')
+        else
+            link(rel='stylesheet', type='text/css',
+                href='/stylesheets/style-min.css')
         link(rel='shortcut icon', type='image/png', href='/images/favicon.png') 
     body.brown
         noscript

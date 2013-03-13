@@ -19,6 +19,9 @@ block content
         include includes/game
     #settings.screen.none
         include includes/settings
-    script(src='gotools.js')
-    script(src='javascripts/socket.io.js')
-    script(src='javascripts/yinyango.js')
+    if dev
+        script(src='gotools.js')
+        script(src='javascripts/socket.io.js')
+        script(src='javascripts/yygo.js')
+    else
+        script(src='javascripts/yygo-min.js')
