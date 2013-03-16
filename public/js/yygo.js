@@ -5,8 +5,6 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
-/* jshint browser: true, globalstrict: true */
-/* global gotools, io, yygo */
 'use strict';
 /* yygo {{{
  * Namespace that contains all properties and methods.

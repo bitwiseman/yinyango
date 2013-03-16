@@ -2,7 +2,7 @@
 .jshintrc
 bin/
 node_modules/
-public/javascripts/login-min.js
-public/javascripts/yygo-min.js
-public/stylesheets/style-min.css
+public/js/login.min.js
+public/js/yinyango*.js
+public/css/style.min.css
 start

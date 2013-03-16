@@ -491,6 +491,7 @@
             y = add[i].charCodeAt(1) - 97;
             goban[x][y] = color;
             // TODO: Find a faster method, this is too CPU intensive.
+            console.log(rule);
             //applySuicideRule(x - 1, y, goban, rule);
             //applySuicideRule(x + 1, y, goban, rule);
             //applySuicideRule(x, y - 1, goban, rule);
