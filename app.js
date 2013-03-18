@@ -1,4 +1,4 @@
-/*
+/**
  * yinyango Node.js application.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>

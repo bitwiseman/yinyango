@@ -1,4 +1,4 @@
-/*
+/**
  * User interface of yinyango.
  *
  * @author   Mathieu Quinette <hickop@gmail.com>
@@ -6,7 +6,7 @@
  * @link     https://github.com/hickop/yinyango
  */
 'use strict';
-/* yygo {{{
+/** yygo {{{
  * Namespace that contains all properties and methods.
  */
 var yygo = {};
@@ -34,10 +34,10 @@ yygo.textpanel =        'comments'; // Content to show in text panel.
 yygo.username =         '';         // User name.
 yygo.userslist =        [];         // List of connected users.
 /*}}}*/
-/* addBranch {{{
+/** addBranch {{{
  * Player move made a new branch.
  *
- * @param {String} coord Move coord.
+ * @param {String} coord: Move coord.
  */
 yygo.addBranch = function (coord) {
     var node =      yygo.curnode,
@@ -121,10 +121,10 @@ yygo.addBranch = function (coord) {
     yygo.addMove(coord);
 };
 /*}}}*/
-/* addMove {{{
+/** addMove {{{
  * Add player move to game data.
  *
- * @param {String} coord Coord of move.
+ * @param {String} coord: Coord of move.
  */
 yygo.addMove = function (coord) {
     var node =          yygo.curnode,
@@ -170,13 +170,13 @@ yygo.addMove = function (coord) {
     yygo.navigateNode(1);
 };
 /*}}}*/
-/* ajax {{{
+/** ajax {{{
  * Simple ajax request expecting json in response.
  *
- * @param {String}      url         Destination url.
- * @param {String}      method      Method to send data.
- * @param {Object}      data        FormData Object to be sent by a POST.
- * @param {Function}    callback    Callback function.
+ * @param {String} url: Destination url.
+ * @param {String} method: Method to send data.
+ * @param {Object} data: FormData Object to be sent by a POST.
+ * @param {Function} callback: Callback function.
  */
 yygo.ajax = function (url, method, data, callback) {
     var xhr = new XMLHttpRequest();
@@ -196,7 +196,7 @@ yygo.ajax = function (url, method, data, callback) {
     xhr.send(data);
 };
 /*}}}*/
-/* bindEvents {{{
+/** bindEvents {{{
  * Bind events to the elements.
  */
 yygo.bindEvents = function () {
@@ -254,7 +254,7 @@ yygo.bindEvents = function () {
             yygo.setGamesScreenTop();
         }
     }, false);
-    //}}}
+    /*}}}*/
     /* Menu.{{{*/
     mgame.addEventListener('click', function () {
         yygo.showScreen('game');
@@ -273,7 +273,7 @@ yygo.bindEvents = function () {
         // End Session.
         window.location.href = '/logout';
     }, false);
-    //}}}
+    /*}}}*/
     /* Hall.{{{*/
     grunninggames.addEventListener('click', function () {
         yygo.showGamesScreen('running');
@@ -341,7 +341,7 @@ yygo.bindEvents = function () {
     showusers.addEventListener('click', function () {
         yygo.toggleUsersList();
     }, false);
-    //}}}
+    /*}}}*/
     /* Game. {{{*/
     butstart.addEventListener('click', function () {
         if (yygo.curnode > 0) {
@@ -380,7 +380,7 @@ yygo.bindEvents = function () {
             yygo.showTextPanel('comments');
         }
     }, false);
-    // }}}
+    /*}}}*/
     /* Settings.{{{*/
     settingsform.addEventListener('submit', function (event) {
         var settings = new FormData(this);
@@ -394,14 +394,14 @@ yygo.bindEvents = function () {
             }
         });
     }, false);
-    //}}}
+    /*}}}*/
 };
 /*}}}*/
-/* bindGamesListClick {{{
+/** bindGamesListClick {{{
  * Assign a click event to each row in games list to load the proper
  * game index.
  *
- * @param {Array} ids Identifiers for database reference.
+ * @param {Array} ids: Identifiers for database reference.
  */
 yygo.bindGamesListClick = function (ids) {
     var table =     document.getElementById('load-gameslist'),
@@ -427,7 +427,7 @@ yygo.bindGamesListClick = function (ids) {
     }
 };
 /*}}}*/
-/* bindGobanClick {{{
+/** bindGobanClick {{{
  * Assign each goban intersection a click event.
  */
 yygo.bindGobanClick = function () {
@@ -463,10 +463,10 @@ yygo.bindGobanClick = function () {
     }
 };
 /*}}}*/
-/* bindVariationChange {{{
+/** bindVariationChange {{{
  * Change branch according to selected variation.
  *
- * @param {String} select Select tag element.
+ * @param {String} select: Select tag element.
  */
 yygo.bindVariationChange = function (select) {
     var varvalue = document.getElementById('varvalue');
@@ -488,10 +488,10 @@ yygo.bindVariationChange = function (select) {
     }, false);
 };
 /*}}}*/
-/* calcStones {{{
+/** calcStones {{{
  * Calculate all the stones present at each goban step.
  *
- * @param {Object} data Game data.
+ * @param {Object} data: Game data.
  *
  * @return {Object} Stones.
  */
@@ -577,7 +577,7 @@ yygo.calcStones = function (data) {
     return stones;
 };
 /*}}}*/
-/* connectHall {{{
+/** connectHall {{{
  * Connect to main hall.
  */
 yygo.connectHall = function () {
@@ -619,7 +619,7 @@ yygo.connectHall = function () {
     });
 };
 /*}}}*/
-/* emptyGoban {{{
+/** emptyGoban {{{
  * Empty the goban of all stones, symbols, labels.
  */
 yygo.emptyGoban = function () {
@@ -648,13 +648,13 @@ yygo.emptyGoban = function () {
     }
 };
 /*}}}*/
-/* getParentBranch {{{
+/** getParentBranch {{{
  * Find the branch of which depends a given branch at a given node.
  *
- * @param   {Number} node       Node to check.
- * @param   {Number} branch     Child branch.
+ * @param {Number} node: Node to check.
+ * @param {Number} branch: Child branch.
  *
- * @return  {Number}            The parent branch.
+ * @return {Number} The parent branch.
  */
 yygo.getParentBranch = function (node, branch) {
     var game = yygo.game,
@@ -668,7 +668,7 @@ yygo.getParentBranch = function (node, branch) {
     return 0;
 };
 /*}}}*/
-/* init {{{
+/** init {{{
  * This is where we start.
  */
 yygo.init = function () {
@@ -684,12 +684,12 @@ yygo.init = function () {
     yygo.setGamesScreenTop();
 };
 /*}}}*/
-/* insertSvgSymbol {{{
+/** insertSvgSymbol {{{
  * Insert SVG symbol in a cell.
  *
- * @param {String} symbol   Symbol to insert.
- * @param {String} id       Identifier of the cell.
- * @param {String} color    Color of the stone in cell.
+ * @param {String} symbol: Symbol to insert.
+ * @param {String} id: Identifier of the cell.
+ * @param {String} color: Color of the stone in cell.
  */
 yygo.insertSvgSymbol = function (symbol, id, color) {
     var stone =  document.getElementById(id),
@@ -716,21 +716,22 @@ yygo.insertSvgSymbol = function (symbol, id, color) {
     stone.innerHTML = svg;
 };
 /*}}}*/
-/* isObjectEmpty {{{
+/** isObjectEmpty {{{
  * Test if an Object is empty.
  * @link http://stackoverflow.com/a/7864800
  *
- * @param {Object} obj Object to check.
- * @return {Boolean} TRUE if Object is empty.
+ * @param {Object} obj: Object to check.
+ *
+ * @return {Boolean} is Object empty?
  */
 yygo.isObjectEmpty = function (obj) {
     return Object.keys(obj).length === 0;
 };
 /*}}}*/
-/* loadGame {{{
+/** loadGame {{{
  * Load a game.
  *
- * @param {Object} data Game data.
+ * @param {Object} data: Game data.
  */
 yygo.loadGame = function (data) {
     var oldsize = yygo.size;
@@ -780,7 +781,7 @@ yygo.loadGame = function (data) {
     });
 };
 /*}}}*/
-/* makeComments {{{
+/** makeComments {{{
  * Create and insert comments html code.
  */
 yygo.makeComments = function () {
@@ -813,10 +814,10 @@ yygo.makeComments = function () {
     comments.innerHTML = html; // Insert html.
 };
 /*}}}*/
-/* makeDbGamesList {{{
+/** makeDbGamesList {{{
  * Insert database games list.
  *
- * @param {Boolean} refresh Force list refresh?
+ * @param {Boolean} refresh: Force list refresh?
  */
 yygo.makeDbGamesList = function (refresh) {
     var gameslist = document.getElementById('load-gameslist'),
@@ -856,7 +857,7 @@ yygo.makeDbGamesList = function (refresh) {
     }
 };
 /*}}}*/
-/* makeGameInfos {{{
+/** makeGameInfos {{{
  * Create and insert informations html code.
  */
 yygo.makeGameInfos = function () {
@@ -933,7 +934,7 @@ yygo.makeGameInfos = function () {
     insertInfo('GC', gamecomment);
 };
 /*}}}*/
-/* makeGoban {{{
+/** makeGoban {{{
  * Create and insert goban html code. This include the borders and
  * the grid.
  */
@@ -957,11 +958,11 @@ yygo.makeGoban = function () {
         i,
         j;
 
-    /* isHoshi {{{
+    /** isHoshi {{{
      * Test if a coord should be diplayed as hoshi.
      *
-     * @param {Number} x X coord.
-     * @param {Number} y Y coord.
+     * @param {Number} x: X coord.
+     * @param {Number} y: Y coord.
      *
      * @return {Boolean}
      */
@@ -1043,7 +1044,7 @@ yygo.makeGoban = function () {
     yygo.bindGobanClick();
 };
 /*}}}*/
-/* makeUsersList {{{
+/** makeUsersList {{{
  * Make chat users list.
  */
 yygo.makeUsersList = function () {
@@ -1058,7 +1059,7 @@ yygo.makeUsersList = function () {
     userslist.innerHTML = html;
 };
 /*}}}*/
-/* makeVariations {{{
+/** makeVariations {{{
  * Create and insert variations html code.
  */
 yygo.makeVariations = function () {
@@ -1111,10 +1112,10 @@ yygo.makeVariations = function () {
     }
 };
 /*}}}*/
-/* navigateNode {{{
+/** navigateNode {{{
  * Navigate the game depending on the defined last branch.
  *
- * @param {Number} move Move to apply to current position in game.
+ * @param {Number} move: Move to apply to current position in game.
  */
 yygo.navigateNode = function (move) {
     var game =          yygo.game,
@@ -1205,11 +1206,11 @@ yygo.navigateNode = function (move) {
     yygo.placeSymbols();
 };
 /*}}}*/
-/* parseDataFromList {{{
+/** parseDataFromList {{{
  * Parse the data of the selected game in list.
  *
- * @param {Number}      index       Index of the selected game in list.
- * @param {Function}    callback    Callback.
+ * @param {Number} index: Index of the selected game in list.
+ * @param {Function} callback: Callback.
  */
 yygo.parseDataFromList = function (index, callback) {
     var table = document.getElementById('load-gameslist'),
@@ -1229,7 +1230,7 @@ yygo.parseDataFromList = function (index, callback) {
     });
 };
 /*}}}*/
-/* placeStones {{{
+/** placeStones {{{
  * Place the stones and kos of the actual state on the goban.
  * Also remove links of those to make them unplayable moves.
  */
@@ -1263,7 +1264,7 @@ yygo.placeStones = function () {
     }
 };
 /*}}}*/
-/* placeSymbols {{{
+/** placeSymbols {{{
  * Place the symbols of the actual state on the goban.
  */
 yygo.placeSymbols = function () {
@@ -1332,10 +1333,10 @@ yygo.placeSymbols = function () {
     }
 };
 /*}}}*/
-/* playStone {{{
+/** playStone {{{
  * User played a move.
  *
- * @param {String} coord Coordinate clicked.
+ * @param {String} coord: Coordinate clicked.
  */
 yygo.playStone = function (coord) {
     var branchs =       yygo.game[0][0].branchs,
@@ -1369,10 +1370,10 @@ yygo.playStone = function (coord) {
     }
 };
 /*}}}*/
-/* secondsToTime {{{
+/** secondsToTime {{{
  * Convert a time in seconds to "minutes:seconds".
  *
- * @param {Number} secs Time in seconds.
+ * @param {Number} secs: Time in seconds.
  *
  * @return {String} "minutes:seconds"
  */
@@ -1393,7 +1394,7 @@ yygo.secondsToTime = function (secs) {
     return min + ':' + sec;
 };
 /*}}}*/
-/* setGamesScreenTop {{{
+/** setGamesScreenTop {{{
  * Set games screen top relatively to gamesmenu.
  */
 yygo.setGamesScreenTop = function () {
@@ -1407,12 +1408,12 @@ yygo.setGamesScreenTop = function () {
     }
 };
 /*}}}*/
-/* setGobanSize {{{
+/** setGobanSize {{{
  * Define the size of the goban and elements depending on it. Redraw
  * if necessary or asked.
  *
- * @param {Boolean}  redraw     Do we need to redraw interface?
- * @param {Function} callback   Callback.
+ * @param {Boolean} redraw: Do we need to redraw interface?
+ * @param {Function} callback: Callback.
  */
 yygo.setGobanSize = function (redraw, callback) {
     var screenwidth =   window.innerWidth,
@@ -1421,11 +1422,11 @@ yygo.setGobanSize = function (redraw, callback) {
         cellsize =      0,
         smaller =       0;
 
-    /* drawGame {{{
+    /** drawGame {{{
      * Place game elements depending on screen resolution.
      *
-     * @param {Boolean}  redraw     Do we need to redraw interface?
-     * @param {Function} callback   Callback.
+     * @param {Boolean} redraw: Do we need to redraw interface?
+     * @param {Function} callback: Callback.
      */
     function drawGame(redraw, callback) {
         var textpanel =     document.getElementById('textpanel'),
@@ -1495,7 +1496,7 @@ yygo.setGobanSize = function (redraw, callback) {
     drawGame(redraw, callback);
 };
 /*}}}*/
-/* setLastNode {{{
+/** setLastNode {{{
  * Define the last node of the current branch.
  */
 yygo.setLastNode = function () {
@@ -1508,7 +1509,7 @@ yygo.setLastNode = function () {
     yygo.lastnode = node;
 };
 /*}}}*/
-/* setPlayersInfos {{{
+/** setPlayersInfos {{{
  * Insert players names, starting scores and times.
  */
 yygo.setPlayersInfos = function () {
@@ -1549,7 +1550,7 @@ yygo.setPlayersInfos = function () {
     document.getElementById('whitetime').textContent = time;
 };
 /*}}}*/
-/* setScreenTop {{{
+/** setScreenTop {{{
  * Set screen top relatively to menu.
  */
 yygo.setScreenTop = function () {
@@ -1569,10 +1570,10 @@ yygo.setScreenTop = function () {
     yygo.screenheight = window.innerHeight - screentop;
 };
 /*}}}*/
-/* showGamesScreen {{{
+/** showGamesScreen {{{
  * Switch to another games screen.
  *
- * @param {String} show Element reference to screen to show.
+ * @param {String} show: Element reference to screen to show.
  */
 yygo.showGamesScreen = function (show) {
     show = show + '-games';
@@ -1586,11 +1587,11 @@ yygo.showGamesScreen = function (show) {
     yygo.gamesscreen = show;
 };
 /*}}}*/
-/* showMessage {{{
+/** showMessage {{{
  * Show a message on screen.
  *
- * @param {String} type Type of message (error, success, help).
- * @param {String} id   Identifier of element containing the message.
+ * @param {String} type: Type of message (error, success, help).
+ * @param {String} id: Identifier of element containing the message.
  */
 yygo.showMessage = function (type, id) {
     var messages = document.getElementById('messages');
@@ -1608,10 +1609,10 @@ yygo.showMessage = function (type, id) {
     document.getElementById('message-ok').focus();
 };
 /*}}}*/
-/* showScreen {{{
+/** showScreen {{{
  * Switch to another screen.
  *
- * @param {String} show Element reference to screen to show.
+ * @param {String} show: Element reference to screen to show.
  */
 yygo.showScreen = function (show) {
     document.getElementById(yygo.screen).classList.add('none');
@@ -1625,10 +1626,10 @@ yygo.showScreen = function (show) {
     yygo.screen = show;
 };
 /*}}}*/
-/* showTextPanel {{{
+/** showTextPanel {{{
  * Switch between comment and game infos.
  *
- * @param {String} show Element reference to show.
+ * @param {String} show: Element reference to show.
  */
 yygo.showTextPanel = function (show) {
     document.getElementById(yygo.textpanel).classList.add('none');
@@ -1636,7 +1637,7 @@ yygo.showTextPanel = function (show) {
     yygo.textpanel = show;
 };
 /*}}}*/
-/* toggleChat {{{
+/** toggleChat {{{
  * Toggle visibility of chat.
  */
 yygo.toggleChat = function () {
@@ -1651,7 +1652,7 @@ yygo.toggleChat = function () {
     }
 };
 /*}}}*/
-/* toggleNavButtons {{{
+/** toggleNavButtons {{{
  * Alternate active state of navigation buttons.
  */
 yygo.toggleNavButtons = function () {
@@ -1684,7 +1685,7 @@ yygo.toggleNavButtons = function () {
     }
 };
 /*}}}*/
-/* toggleUsersList {{{
+/** toggleUsersList {{{
  * Toggle visibility of users list.
  */
 yygo.toggleUsersList = function () {
@@ -1704,7 +1705,7 @@ yygo.toggleUsersList = function () {
     }
 };
 /*}}}*/
-/* updatePlayersInfos {{{
+/** updatePlayersInfos {{{
  * Update players time and score.
  */
 yygo.updatePlayersInfos = function () {
