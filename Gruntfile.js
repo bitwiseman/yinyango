@@ -7,9 +7,10 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    'shared/gotools.js',
                     'public/js/socket.io.js',
-                    'public/js/yygo*.js'
+                    'dev/js/closure.start.js',
+                    'public/js/yygo*.js',
+                    'dev/js/closure.end.js',
                 ],
                 dest: 'public/js/<%= pkg.name %>.js'
             }
@@ -33,7 +34,6 @@ module.exports = function (grunt) {
         },
         jshint: {
             files: [
-                'shared/gotools.js',
                 'public/js/login.js',
                 'public/js/yygo*.js'
             ],
