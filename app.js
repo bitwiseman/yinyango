@@ -17,10 +17,11 @@ var express =       require('express.io'),
     pass =          require('pwd'),
     //sys =           require('sys'),
     fs =            require('fs'),
-    exec =          require('child_process').exec,
+    //exec =          require('child_process').exec,
     //spawn =         require('child_process').spawn,
     Validator =     require('validator').Validator,
     gotools =       require('./shared/gotools'),
+    sgf =           require('./lib/sgf'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     onemonth =      2592000000,
     oneyear =       31104000000,
@@ -85,33 +86,6 @@ Validator.prototype.error = function (msg) {
 Validator.prototype.getErrors = function () {
     return this._errors;
 };
-/*}}}*/
-/* Functions. {{{*/
-/* checkSgf {{{
- * Check if a sgf file is valid with sgfc.
- *
- * @param {String}      sgf     Path to sgf file.
- * @param {Function}    next    Callback if file is valid.
- */
-function checkSgf(sgf, res, next) {
-    exec('bin/sgfc -et ' + sgf + ' ' + sgf, function (error, stdout, stderr) {
-        var check = stdout.replace(/\s+$/, '').slice(-2);
-
-        if (check === 'OK') {
-            next();
-        } else {
-            res.send({ error: 'invalid' });
-        }
-
-        if (error) {
-            console.log('checkSgf exec error: ' + error);
-        }
-        if (stderr) {
-            console.log('sgfc error: ' + stderr);
-        }
-    });
-}
-/*}}}*/
 /*}}}*/
 /* Routes. {{{*/
 /* get / {{{
@@ -242,16 +216,24 @@ app.post('/loadsgf/:method', function (req, res) {
     } else {
         // Get SGF at given URL.
     }
-    checkSgf(file, res, function () {
-        fs.readFile(file, function (err, data) {
-            if (err) {
-                console.error('fs.readFile error: ' + err);
-                return;
-            }
-            gotools.parseSgf(data.toString(), function (data) {
-                res.send(data);
+    sgf.isValid(file, function (err, valid) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        if (valid) {
+            fs.readFile(file, function (err, data) {
+                if (err) {
+                    console.error('fs.readFile error: ' + err);
+                    return;
+                }
+                gotools.parseSgf(data.toString(), function (data) {
+                    res.send(data);
+                });
             });
-        });
+        } else {
+            res.send({ error: 'invalid' });
+        }
     });
 });
 /*}}}*/
