@@ -11,6 +11,7 @@
     "jade": "*",
     "lingua": "*",
     "mongoose": "*",
+    "pwd": "*",
     "validator": "*"
   },
   "devDependencies": {

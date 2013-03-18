@@ -14,9 +14,9 @@ var express =       require('express.io'),
     mongoose =      require('mongoose'),
     db =            mongoose.createConnection('localhost', 'yinyango'),
     lingua =        require('lingua'),
+    pass =          require('pwd'),
     //sys =           require('sys'),
     fs =            require('fs'),
-    crypto =        require('crypto'),
     exec =          require('child_process').exec,
     //spawn =         require('child_process').spawn,
     Validator =     require('validator').Validator,
@@ -110,38 +110,6 @@ function checkSgf(sgf, res, next) {
             console.log('sgfc error: ' + stderr);
         }
     });
-}
-/*}}}*/
-/* hash {{{
- * Hashes a password with optional salt, otherwise generate a salt for 
- * password and return both salt and hash.
- * Taken from express auth example.
- *
- * @param {String}      pwd     Password to hash.
- * @param {String}      salt    Optional salt.
- * @param {Function}    fn      Callback function. 
- */
-function hash(pwd, salt, fn) {
-    var len =           128,
-        iterations =    12000;
-
-    if (fn !== undefined) {
-        crypto.pbkdf2(pwd, salt, iterations, len, fn);
-    } else {
-        fn = salt;
-        crypto.randomBytes(len, function (err, salt) {
-            if (err) {
-                return fn(err);
-            }
-            salt = salt.toString('base64');
-            crypto.pbkdf2(pwd, salt, iterations, len, function (err, hash) {
-                if (err) {
-                    return fn(err);
-                }
-                fn(null, salt, hash);
-            });
-        });
-    }
 }
 /*}}}*/
 /*}}}*/
@@ -308,7 +276,8 @@ app.post('/login', function (req, res) {
             }
             if (user) {
                 // Compare hashs.
-                hash(password, user.salt, function (err, hash) {
+                pass.hash(password, user.salt, function (err, hash) {
+                    console.log(hash);
                     if (err) {
                         console.error('hash error: ' + err);
                         return;
@@ -362,10 +331,11 @@ app.post('/register', function (req, res) {
                 console.error('User.findOne error: ' + err);
                 return;
             }
-            if (user) { // User name already exist.
+            if (user) {
                 res.send({ error: 'exist' });
-            } else { // Generate salt and hash and insert in database.
-                hash(password, function (err, salt, hash) {
+            } else {
+                // Generate salt and hash and insert in database.
+                pass.hash(password, function (err, salt, hash) {
                     if (err) {
                         console.error('hash error: ' + err);
                         return;
