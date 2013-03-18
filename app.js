@@ -20,7 +20,6 @@ var express =       require('express.io'),
     //exec =          require('child_process').exec,
     //spawn =         require('child_process').spawn,
     Validator =     require('validator').Validator,
-    gotools =       require('./shared/gotools'),
     sgf =           require('./lib/sgf'),
     //gnugo =         spawn('gnugo', ['--mode', 'gtp']),
     onemonth =      2592000000,
@@ -216,7 +215,7 @@ app.post('/loadsgf/:method', function (req, res) {
     } else {
         // Get SGF at given URL.
     }
-    sgf.isValid(file, function (err, valid) {
+    sgf.validate(file, function (err, valid) {
         if (err) {
             console.error(err);
             return;
@@ -227,7 +226,7 @@ app.post('/loadsgf/:method', function (req, res) {
                     console.error('fs.readFile error: ' + err);
                     return;
                 }
-                gotools.parseSgf(data.toString(), function (data) {
+                sgf.parse(data.toString(), function (data) {
                     res.send(data);
                 });
             });
@@ -380,7 +379,7 @@ app.post('/sendsgf', function (req, res) {
                         return;
                     }
                     md5 = crypto.createHash('md5').update(data).digest('hex');
-                    gotools.parseSgf(data.toString(), function (obj) {
+                    sgf.parse(data.toString(), function (obj) {
                         var size = parseInt(obj[0][0].SZ[0], 10);
                         sgf = new Sgf({
                             name:       name,
