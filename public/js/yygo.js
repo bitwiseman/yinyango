@@ -156,7 +156,7 @@ yygo.addMove = function (coord) {
         W: prevscore.W
     };
 
-    play = gotools.playMove(turn, coord, size, stones, rule);
+    play = yygo.rules.playMove(turn, coord, size, stones, rule);
     // Add stones state.
     if (yygo.stones[node + 1] === undefined) {
         yygo.stones[node + 1] = {};
@@ -513,26 +513,26 @@ yygo.calcStones = function (data) {
         switch (key) {
         case 'B':
             if (value[0] !== '') { // Did not pass.
-                play = gotools.playMove('B', value[0], size, stones, rule);
+                play = yygo.rules.playMove('B', value[0], size, stones, rule);
                 stones = play.stones;
                 yygo.game[node][branch].score.B = prevscore.B + play.captures;
             }
             break;
         case 'W':
             if (value[0] !== '') { // Did not pass.
-                play = gotools.playMove('W', value[0], size, stones, rule);
+                play = yygo.rules.playMove('W', value[0], size, stones, rule);
                 stones = play.stones;
                 yygo.game[node][branch].score.W = prevscore.W + play.captures;
             }
             break;
         case 'AB':
-            stones = gotools.addStones('B', value, size, stones, rule);
+            stones = yygo.rules.addStones('B', value, size, stones, rule);
             break;
         case 'AW':
-            stones = gotools.addStones('W', value, size, stones, rule);
+            stones = yygo.rules.addStones('W', value, size, stones, rule);
             break;
         case 'AE':
-            stones = gotools.addStones('', value, size, stones, rule);
+            stones = yygo.rules.addStones('', value, size, stones, rule);
             break;
         }
         return stones;
