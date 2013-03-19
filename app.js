@@ -352,58 +352,6 @@ app.post('/register', function (req, res) {
     }
 });
 /*}}}*/
-/* post /sendsgf {{{
- * Save sent sgf file to database.
- */
-app.post('/sendsgf', function (req, res) {
-    var file =      req.files.sgffile.path,
-        category =  req.body.categoryselect,
-        name =      req.body.name || req.files.sgffile.name,
-        date =      new Date(),
-        userid =    req.session.userid,
-        username =  req.session.username,
-        md5,
-        sgf;
-
-    // Make sure data comes from registered user.
-    User.findById(userid, function (err, user) {
-        if (err) {
-            console.error('User.findById error: ' + err);
-            return;
-        }
-        if (user) {
-            checkSgf(file, res, function () {
-                fs.readFile(file, function (err, data) {
-                    if (err) {
-                        console.error('fs.readFile error: ' + err);
-                        return;
-                    }
-                    md5 = crypto.createHash('md5').update(data).digest('hex');
-                    sgf.parse(data.toString(), function (obj) {
-                        var size = parseInt(obj[0][0].SZ[0], 10);
-                        sgf = new Sgf({
-                            name:       name,
-                            submitter:  username,
-                            date:       date,
-                            category:   category,
-                            md5:        md5,
-                            size:       size,
-                            data:       obj
-                        });
-                        sgf.save(function (err) {
-                            if (err && err.code === 11000) { // duplicate.
-                                res.send({ answer: 'md5' });
-                            } else {
-                                res.send({ answer: 'success' });
-                            }
-                        });
-                    });
-                });
-            });
-        }
-    });
-});
-/*}}}*/
 /* post /settings {{{
  * Apply user parameters.
  * Use _id for faster database access as it's indexed.
