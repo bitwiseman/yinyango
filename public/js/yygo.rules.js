@@ -494,17 +494,15 @@ yygo.rules.stonesToGoban = function (size, stones) {
      * @param {String} color: Color of the stones.
      */
     function placeStones(stones, color) {
-        var stoneslen = stones.length,
-            i,
+        var i = stones.length,
             x,
             y;
 
-        if (stoneslen !== 0) {
-            for (i = 0; i < stoneslen; i++) {
-                x = stones[i].charCodeAt(0) - 97;
-                y = stones[i].charCodeAt(1) - 97;
-                goban[x][y] = color;
-            }
+        while (i > 0) {
+            x = stones[i - 1].charCodeAt(0) - 97;
+            y = stones[i - 1].charCodeAt(1) - 97;
+            goban[x][y] = color;
+            i--;
         }
     }
     /*}}}*/
