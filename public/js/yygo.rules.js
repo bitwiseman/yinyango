@@ -93,10 +93,13 @@ yygo.rules.applySuicideRule = function (x, y, goban, rule, capturing) {
      * @return {Boolen} Is coord surrounded by color ?
      */
     function isSurroundedBy(x, y, color) {
-        if (yygo.rules.isCoordStatus(x - 1, y, goban, [color, 'X']) !== null
-        && yygo.rules.isCoordStatus(x + 1, y, goban, [color, 'X']) !== null 
-        && yygo.rules.isCoordStatus(x, y - 1, goban, [color, 'X']) !== null
-        && yygo.rules.isCoordStatus(x, y + 1, goban, [color, 'X']) !== null) {
+        var status = [color, 'X'],
+            a = yygo.rules.isCoordStatus(x - 1, y, goban, status) !== null,
+            b = yygo.rules.isCoordStatus(x + 1, y, goban, status) !== null,
+            c = yygo.rules.isCoordStatus(x, y - 1, goban, status) !== null,
+            d = yygo.rules.isCoordStatus(x, y + 1, goban, status) !== null;
+
+        if (a && b && c && d) {
             return true;
         }
         return false;
