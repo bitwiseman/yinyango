@@ -395,7 +395,9 @@ yygo.rules.playMove = function (color, coord, size, stones, rule) {
     goban[x][y] = color;
 
     yygo.rules.listCaptures(x, y, goban, color, captures);
-    yygo.rules.removeCaptures(goban, rule, captures);
+    if (captures.length > 0) {
+        yygo.rules.removeCaptures(goban, rule, captures);
+    }
     if (captures.length === 1) {
         yygo.rules.applyKoRule(x, y, goban, color);
     }
@@ -420,10 +422,11 @@ yygo.rules.playMove = function (color, coord, size, stones, rule) {
  * @param {Array} captures: Captured stones list to remove from goban.
  */
 yygo.rules.removeCaptures = function (goban, rule, captures) {
-    var i =    captures.length,
+    var caplen =    captures.length,
         coord =     [],
         x,
-        y;
+        y,
+        i;
 
     /** checkSuicides {{{
      * Check if a captured stone will create/remove suicides moves.
@@ -453,8 +456,8 @@ yygo.rules.removeCaptures = function (goban, rule, captures) {
     }
     /*}}}*/
 
-    while (i > 0) {
-        coord = captures[i - 1].split(':');
+    for (i = 0; i < caplen; i++) {
+        coord = captures[i].split(':');
         x = parseInt(coord[0], 10);
         y = parseInt(coord[1], 10);
         // Remove stone from goban.
@@ -468,7 +471,6 @@ yygo.rules.removeCaptures = function (goban, rule, captures) {
         checkSuicides(x + 1, y - 1);
         checkSuicides(x - 1, y + 1);
         checkSuicides(x + 1, y + 1);
-        i--;
     }
 };
 /*}}}*/
