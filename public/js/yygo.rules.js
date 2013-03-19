@@ -487,15 +487,13 @@ yygo.rules.stonesToGoban = function (size, stones) {
         i,
         j;
 
-    // Generate empty goban.
-    for (i = 0; i < size; i++) {
-        goban[i] = [];
-        for (j = 0; j < size; j++) {
-            goban[i][j] = '';
-        }
-    }
-    // Put stones on goban.
-    function putStones(stones, color) {
+    /** placeStones {{{
+     * Place stones on goban.
+     *
+     * @param {Array} stones: List of stones to place on goban.
+     * @param {String} color: Color of the stones.
+     */
+    function placeStones(stones, color) {
         var stoneslen = stones.length,
             i,
             x,
@@ -509,10 +507,20 @@ yygo.rules.stonesToGoban = function (size, stones) {
             }
         }
     }
-    putStones(stones.B, 'B');
-    putStones(stones.W, 'W');
-    putStones(stones.BF, 'BF');
-    putStones(stones.WF, 'WF');
+    /*}}}*/
+
+    // Generate empty goban.
+    for (i = 0; i < size; i++) {
+        goban[i] = [];
+        for (j = 0; j < size; j++) {
+            goban[i][j] = '';
+        }
+    }
+    
+    placeStones(stones.B, 'B');
+    placeStones(stones.W, 'W');
+    placeStones(stones.BF, 'BF');
+    placeStones(stones.WF, 'WF');
     return goban;
 };
 /*}}}*/
