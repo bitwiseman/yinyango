@@ -11,8 +11,7 @@
 var express =       require('express.io'),
     app =           express().http().io(),
     RedisStore =    require('connect-redis')(express),
-    mongoose =      require('mongoose'),
-    db =            mongoose.createConnection('localhost', 'yinyango'),
+    db =            require('./lib/db'),
     lingua =        require('lingua'),
     pass =          require('pwd'),
     //sys =           require('sys'),
@@ -25,27 +24,6 @@ var express =       require('express.io'),
     onemonth =      2592000000,
     oneyear =       31104000000,
     userslist =     {};
-/*}}}*/
-/* Mongoose schemas & models. {{{*/
-var userSchema = new mongoose.Schema({
-    name:       String,
-    email:      String,
-    salt:       String,
-    hash:       String,
-    sgfid:      String,
-    lang:       String
-});
-var sgfSchema = new mongoose.Schema({
-    name:       String,
-    submitter:  String,
-    date:       Date,
-    category:   String,
-    md5:        { type: String, unique: true },
-    size:       Number,
-    data:       Object
-});
-var User = db.model('user', userSchema);
-var Sgf = db.model('sgf', sgfSchema);
 /*}}}*/
 /* Configuration. {{{*/
 app.configure('development', function () {
@@ -75,7 +53,7 @@ app.configure(function () {
     app.use(express.logger('short'));
     app.use(app.router);
 });
-db.on('error', console.error.bind(console, 'db connection error:'));
+//db.on('error', console.error.bind(console, 'db connection error:'));
 /*}}}*/
 /* Prototypes. {{{*/
 Validator.prototype.error = function (msg) {
@@ -100,7 +78,7 @@ app.get('/', function (req, res) {
     if (username) {
         // Check if user still exist in database.
         if (!isguest) {
-            User.findOne({ name: username }, function (err, user) {
+            db.User.findOne({ name: username }, function (err, user) {
                 if (err) {
                     console.error('User.findOne error: ' + err);
                     return;
@@ -130,7 +108,7 @@ app.get('/gameslist/:page', function (req, res) {
     filters = 'name';
     //options = { sort: { _id: -1 }, skip: page * 10, limit: 11 };
     options = { sort: { _id: -1 } };
-    Sgf.find({}, filters, options, function (err, games) {
+    db.Sgf.find({}, filters, options, function (err, games) {
         if (err) {
             console.error('Sgf.find: ' + err);
             return;
@@ -146,7 +124,7 @@ app.get('/load/:id', function (req, res) {
     var id =        req.params.id,
         userid =    req.session.userid;
 
-    Sgf.findById(id, function (err, sgf) {
+    db.Sgf.findById(id, function (err, sgf) {
         var settings = { sgfid: id };
 
         if (err) {
@@ -154,7 +132,7 @@ app.get('/load/:id', function (req, res) {
             return;
         }
         if (userid) {
-            User.findByIdAndUpdate(userid, settings, function () {});
+            db.User.findByIdAndUpdate(userid, settings, function () {});
         }
         req.session.sgfid = id;
         res.send(sgf.data);
@@ -184,7 +162,7 @@ app.post('/guest', function (req, res) {
 
     // Check if that guest name is taken by regular user or already connected.
     if (validator.getErrors().length === 0) {
-        User.findOne({ name: username }, function (err, user) {
+        db.User.findOne({ name: username }, function (err, user) {
             if (err) {
                 console.error('User.findOne error: ' + err);
                 return;
@@ -250,7 +228,7 @@ app.post('/login', function (req, res) {
     validator.check(password).len(1, 64);
 
     if (validator.getErrors().length === 0) {
-        User.findOne({ name: username }, function (err, user) {
+        db.User.findOne({ name: username }, function (err, user) {
             if (err) {
                 console.error('User.findOne error: ' + err);
                 return;
@@ -307,7 +285,7 @@ app.post('/register', function (req, res) {
     errorslen = errors.length;
 
     if (errorslen === 0) {
-        User.findOne({ name: username }, function (err, user) {
+        db.User.findOne({ name: username }, function (err, user) {
             if (err) {
                 console.error('User.findOne error: ' + err);
                 return;
@@ -322,7 +300,7 @@ app.post('/register', function (req, res) {
                         return;
                     }
 
-                    var user = new User({
+                    var user = new db.User({
                         name: username,
                         email: email,
                         salt: salt,
@@ -370,7 +348,7 @@ app.post('/settings', function (req, res) {
     // Update user settings in database.
     if (userid && errors === 0) {
         settings = { lang: lang };
-        User.findByIdAndUpdate(userid, settings, function (err) {
+        db.User.findByIdAndUpdate(userid, settings, function (err) {
             if (!err) {
                 res.cookie('language', lang, { maxAge: oneyear });
                 res.send({ error: '' });
