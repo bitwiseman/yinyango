@@ -21,21 +21,21 @@ yygo.rules = {};
  * @return {Object} New stones after adding/removing stones.
  */
 yygo.rules.addStones = function (color, add, size, stones, rule) {
-    var addlen =    add.length,
-        goban =     yygo.rules.stonesToGoban(size, stones),
-        i,
+    var i =     add.length,
+        goban = yygo.rules.stonesToGoban(size, stones),
         x,
         y;
 
-    for (i = 0; i < addlen; i++) {
-        x = add[i].charCodeAt(0) - 97;
-        y = add[i].charCodeAt(1) - 97;
+    while (i > 0) {
+        x = add[i - 1].charCodeAt(0) - 97;
+        y = add[i - 1].charCodeAt(1) - 97;
         goban[x][y] = color;
         // TODO: Find a faster method, this is too CPU intensive.
         yygo.rules.applySuicideRule(x - 1, y, goban, rule);
         yygo.rules.applySuicideRule(x + 1, y, goban, rule);
         yygo.rules.applySuicideRule(x, y - 1, goban, rule);
         yygo.rules.applySuicideRule(x, y + 1, goban, rule);
+        i--;
     }
     stones = yygo.rules.gobanToStones(size, goban);
 
