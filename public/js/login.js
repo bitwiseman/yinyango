@@ -11,13 +11,13 @@
 var yylog = {};
 yylog.lastmessage = '';         // Identifier of last message.
 yylog.screen =      'login';    // Actual screen.
-/* ajax {{{
+/** ajax {{{
  * Simple ajax request expecting json in response.
  *
- * @param {String} url Destination url.
- * @param {String} method Method to send data.
- * @param {Object} data FormData Object to be sent by a POST.
- * @param {Function} callback Callback function.
+ * @param {String} url: Destination url.
+ * @param {String} method: Method to send data.
+ * @param {Object} data: FormData Object to be sent by a POST.
+ * @param {Function} callback: Callback function.
  */
 yylog.ajax = function (url, method, data, callback) {
     var xhr = new XMLHttpRequest();
@@ -112,7 +112,7 @@ yylog.init = function () {
     document.getElementById('loginform').username.focus();
 };
 /*}}}*/
-/* setScreenTop {{{
+/** setScreenTop {{{
  * Set screen top relatively to menu.
  */
 yylog.setScreenTop = function () {
@@ -128,11 +128,11 @@ yylog.setScreenTop = function () {
     }
 };
 /*}}}*/
-/* showMessage {{{
+/** showMessage {{{
  * Show a message on screen.
  *
- * @param {String} type Type of message (error, success, help).
- * @param {String} id   Identifier of element containing the message.
+ * @param {String} type: Type of message (error, success, help).
+ * @param {String} id: Identifier of element containing the message.
  */
 yylog.showMessage = function (type, id) {
     var messages = document.getElementById('messages');
@@ -150,10 +150,10 @@ yylog.showMessage = function (type, id) {
     document.getElementById('message-ok').focus();
 };
 /*}}}*/
-/* showScreen {{{
+/** showScreen {{{
  * Switch to another screen.
  *
- * @param {String} show Element reference to screen to show.
+ * @param {String} show: Element reference to screen to show.
  */
 yylog.showScreen = function (show) {
     document.getElementById(yylog.screen).classList.add('none');

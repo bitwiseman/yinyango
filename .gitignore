@@ -1,5 +1,4 @@
 *.swp
-.jshintrc
 bin/
 node_modules/
 public/js/login.min.js

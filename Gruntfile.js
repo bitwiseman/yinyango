@@ -7,10 +7,10 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    'public/js/socket.io.js',
-                    'dev/js/closure.start.js',
-                    'public/js/yygo*.js',
-                    'dev/js/closure.end.js',
+                        'public/js/socket.io.js',
+                        'dev/js/closure.start.js',
+                        'public/js/yygo*.js',
+                        'dev/js/closure.end.js',
                 ],
                 dest: 'public/js/<%= pkg.name %>.js'
             }
@@ -27,28 +27,42 @@ module.exports = function (grunt) {
                 files: {
                     'public/js/login.min.js': 'public/js/login.js',
                     'public/js/<%= pkg.name %>.min.js': [
-                        '<%= concat.dist.dest %>'
+                            '<%= concat.dist.dest %>'
                     ]
                 }
             }
         },
         jshint: {
-            files: [
-                'public/js/login.js',
-                'public/js/yygo*.js'
-            ],
             options: {
-                "browser": true,
-                "globalstrict": true,
                 "indent": 4,
                 "laxbreak": true,
                 "maxlen": 80,
                 "undef": true,
                 "unused": true,
-                globals: {
-                    "gotools": true,
-                    "io": true,
-                    "yygo": true
+            },
+            browser: {
+                files: {
+                    src: ['public/js/login.js', 'public/js/yygo*.js']
+                },
+                options: {
+                    "browser": true,
+                    "globalstrict": true,
+                    globals: {
+                        "gotools": true,
+                        "io": true,
+                        "yygo": true
+                    }
+                }
+            },
+            node: {
+                files: {
+                    src: ['app.js', 'lib/**/*.js']
+                },
+                options: {
+                    "node": true,
+                    globals: {
+                        "userslist": true
+                    }
                 }
             }
         }
