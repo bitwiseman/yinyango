@@ -47,6 +47,9 @@
     #games {
         width: 70% !important;
     }
+    #chat {
+        display: block !important;
+    }
     #chat, #userslist {
         left: 70% !important;
         width: 30% !important;
