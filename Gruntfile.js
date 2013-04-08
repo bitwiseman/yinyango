@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        clean: ['public/css', 'public/js'],
         concat: {
             options: {
                 separator: ';'
@@ -17,10 +18,12 @@ module.exports = function (grunt) {
         },
         copy: {
             dev: {
+                expand: true,
+                cwd: 'dev/js',
                 src: [
-                        'dev/js/socket.io.js',
-                        'dev/js/login.js',
-                        'dev/js/yygo*.js'
+                        'socket.io.js',
+                        'login.js',
+                        'yygo*.js'
                 ],
                 dest: 'public/js/'
             }
@@ -63,7 +66,7 @@ module.exports = function (grunt) {
             },
             browser: {
                 files: {
-                    src: ['public/js/login.js', 'public/js/yygo*.js']
+                    src: ['dev/js/login.js', 'dev/js/yygo*.js']
                 },
                 options: {
                     "browser": true,
@@ -89,12 +92,19 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['jshint', 'copy', 'sass:dev']);
-    grunt.registerTask('prod', ['jshint', 'concat', 'uglify', 'sass:prod']);
+    grunt.registerTask('default', ['clean', 'jshint', 'copy', 'sass:dev']);
+    grunt.registerTask('prod', [
+                       'clean',
+                       'jshint',
+                       'concat',
+                       'uglify',
+                       'sass:prod'
+    ]);
 };
