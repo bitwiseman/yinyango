@@ -1,0 +1,41 @@
+#!/bin/bash
+startmongo=true
+startmongocmd='sudo systemctl start mongodb'
+stopmongocmd='sudo systemctl stop mongodb'
+startredis=true
+startrediscmd='sudo systemctl start redis'
+stoprediscmd='sudo systemctl stop redis'
+
+if [[ $1 == "prod" ]]; then
+    env="production"
+    grunt prod
+else
+    env="development"
+    grunt
+fi
+
+if [[ $? == 0 ]]; then
+    if $startmongo; then
+        echo -e "Starting Mongodb... \t\c"
+        $startmongocmd
+        echo "DONE"
+    fi
+    if $startredis; then
+        echo -e "Starting redis... \t\c"
+        $startrediscmd 
+        echo "DONE"
+    fi
+    
+    echo "Starting node in $env..."
+    NODE_ENV=$env node app
+    wait
+
+    if $startmongo; then
+        $stopmongocmd
+    fi
+    if $startredis; then
+        $stoprediscmd
+    fi
+fi
+
+exit
