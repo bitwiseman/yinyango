@@ -3,6 +3,5 @@
 bin/
 node_modules/
 public/css/
-public/js/login.min.js
-public/js/yinyango*.js
+public/js/
 start

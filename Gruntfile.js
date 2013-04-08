@@ -7,12 +7,22 @@ module.exports = function (grunt) {
             },
             prod: {
                 src: [
-                        'public/js/socket.io.js',
+                        'dev/js/socket.io.js',
                         'dev/js/closure.start.js',
-                        'public/js/yygo*.js',
+                        'dev/js/yygo*.js',
                         'dev/js/closure.end.js',
                 ],
                 dest: 'public/js/<%= pkg.name %>.js'
+            }
+        },
+        copy: {
+            dev: {
+                src: [
+                        'dev/js/socket.io.js',
+                        'dev/js/login.js',
+                        'dev/js/yygo*.js'
+                ],
+                dest: 'public/js/'
             }
         },
         sass: {
@@ -36,8 +46,8 @@ module.exports = function (grunt) {
         uglify: {
             prod: {
                 files: {
-                    'public/js/login.min.js': 'public/js/login.js',
-                    'public/js/<%= pkg.name %>.min.js': [
+                    'public/js/login.js': 'dev/js/login.js',
+                    'public/js/<%= pkg.name %>.js': [
                             '<%= concat.prod.dest %>'
                     ]
                 }
@@ -80,10 +90,11 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['jshint', 'sass:dev']);
+    grunt.registerTask('default', ['jshint', 'copy', 'sass:dev']);
     grunt.registerTask('prod', ['jshint', 'concat', 'uglify', 'sass:prod']);
 };
