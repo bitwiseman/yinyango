@@ -18,8 +18,10 @@ module.exports = function (grunt) {
         sass: {
             dev: {
                 files: {
-                    'public/css/style.css': 'dev/css/main.sass',
-                    'public/css/debug.css': 'dev/css/debug.sass'
+                    'public/css/style.css': [
+                        'dev/css/main.sass',
+                        'dev/css/debug.sass'
+                    ]
                 }
             },
             prod: {
