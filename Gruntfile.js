@@ -5,7 +5,7 @@ module.exports = function (grunt) {
             options: {
                 separator: ';'
             },
-            dist: {
+            prod: {
                 src: [
                         'public/js/socket.io.js',
                         'dev/js/closure.start.js',
@@ -15,19 +15,28 @@ module.exports = function (grunt) {
                 dest: 'public/js/<%= pkg.name %>.js'
             }
         },
-        cssmin: {
-            compress: {
+        sass: {
+            dev: {
                 files: {
-                    'public/css/style.min.css': ['public/css/style.css']
+                    'public/css/style.css': 'dev/css/main.sass',
+                    'public/css/debug.css': 'dev/css/debug.sass'
+                }
+            },
+            prod: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    'public/css/style.css': 'dev/css/main.sass',
                 }
             }
         },
         uglify: {
-            dist: {
+            prod: {
                 files: {
                     'public/js/login.min.js': 'public/js/login.js',
                     'public/js/<%= pkg.name %>.min.js': [
-                            '<%= concat.dist.dest %>'
+                            '<%= concat.prod.dest %>'
                     ]
                 }
             }
@@ -69,10 +78,10 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
-    grunt.registerTask('default', ['jshint']);
-    grunt.registerTask('prod', ['jshint', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['jshint', 'sass:dev']);
+    grunt.registerTask('prod', ['jshint', 'concat', 'uglify', 'sass:prod']);
 };

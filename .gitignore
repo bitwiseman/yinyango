@@ -1,7 +1,8 @@
 *.swp
+.sass-cache/
 bin/
 node_modules/
+public/css/
 public/js/login.min.js
 public/js/yinyango*.js
-public/css/style.min.css
 start
