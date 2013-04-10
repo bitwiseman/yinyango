@@ -364,52 +364,6 @@
     border-radius: 20%/5%;
 }
 /*}}}*/
-/* Yinyang button. {{{*/
-.yinyang-bg {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-}
-.yinyang-left {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 40%;
-    height: 80%;
-    border-top-left-radius: 100% 50%;
-    border-bottom-left-radius: 100% 50%;
-}
-.yinyang-top {
-    position: absolute;
-    top: 10%;
-    left: 30%;
-    width: 40%;
-    height: 40%;
-}
-.yinyang-bottom {
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    width: 40%;
-    height: 40%;
-}
-.yinyang-top-dot {
-    position: absolute;
-    top: 26%;
-    left: 45%;
-    width: 10%;
-    height: 10%;
-}
-.yinyang-bottom-dot {
-    position: absolute;
-    top: 64%;
-    left: 45%;
-    width: 10%;
-    height: 10%;
-}
-/*}}}*/
 /*}}}*/
 /* Text panel. {{{*/
 #textpanel {
