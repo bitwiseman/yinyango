@@ -3,23 +3,23 @@ form#create-game.box.brown3
         span= lingua.privategame
         .checkbox.yellow
             input#privategame(type='checkbox', name='privategame')
-            label.link(for='privategame')
+            label(for='privategame')
     #publicgame
         div= lingua.typeofgame
         .selectbox.yellow
             .selectvalue Duel
-            select.link.select(name='gametype')
+            select.select(name='gametype')
                 option(value='demo') Demo
                 option(value='duel', selected) Duel
     div= lingua.rule
     .selectbox.yellow
         .selectvalue= lingua.japanese
-        select.link.select(name='rule')
+        select.select(name='rule')
             option(value='japanese', selected)= lingua.japanese
     div= lingua.size
     .selectbox.yellow
         .selectvalue 19
-        select.link.select(name='size')
+        select.select(name='size')
             option(value='9') 9
             option(value='13') 13
             option(value='19', selected) 19

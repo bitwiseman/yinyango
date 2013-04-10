@@ -9,36 +9,36 @@
 /* Inputs. {{{*/
 /* Checkbox. {{{*/
 .checkbox {
+    display: inline-block;
     position: relative;
     height: 1em;
     width: 1em;
     border: 1px solid $black;
     margin-left: 1em;
-}
-.checkbox input {
-    opacity: 0;
-}
-.checkbox label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-.checkbox label:after {
-    position: absolute;
-    content: '';
-    top: 0;
-    left: 0.25em;
-    height: 0.6em;
-    width: 0.3em;
-    opacity: 0;
-    border-right: 0.2em solid $black;
-    border-bottom: 0.2em solid $black;
-    @include transform(rotate(40deg));
-}
-.checkbox input[type=checkbox]:checked + label:after {
-    opacity: 1;
+    input {
+        opacity: 0;
+    }
+    label {
+        @include absolute;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        &:after {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0.25em;
+            height: 0.6em;
+            width: 0.3em;
+            opacity: 0;
+            border-right: 0.2em solid $black;
+            border-bottom: 0.2em solid $black;
+            @include transform(rotate(40deg));
+        }
+    }
+    input[type=checkbox]:checked + label:after {
+        opacity: 1;
+    }
 }
 /*}}}*/
 .inputbox, .selectbox {
@@ -60,12 +60,11 @@
     border-bottom-right-radius: 1em;
 }
 .select {
-    position: absolute;
-    top: 0;
-    left: 0;
+    @include absolute;
     width: 100%;
     height: 100%;
     opacity: 0;
+    cursor: pointer;
 }
 .selectbox {
     position: relative;
@@ -77,6 +76,7 @@
     font-size: 1em;
     font-family: inherit;
     line-height: 1.5em;
+    cursor: pointer;
 }
 .selectfile {
     position: absolute;
@@ -87,27 +87,23 @@
 .alert {
     font-weight: bold;
 }
-.bigbutton {
-    padding: 0.3em 0.6em;
-    font-weight: bold;
-}
-.bigbutton, .button  {
+.button {
     border: 1px solid $black;/* Avoid ugly buttons borders. */
     border-radius: 2em;
     font-size: 1em;
     font-family: inherit;
     cursor: pointer;
 }
-.box, .checkbox {
-    display: inline-block;
+.bigbutton {
+    @extend .button;
+    padding: 0.3em 0.6em;
+    font-weight: bold;
 }
 .box {
+    display: inline-block;
     padding: 1em;
     margin: 0.5em;
     border-radius: 1em;
-}
-.circle {
-    border-radius: 50%;
 }
 .disabled {
     opacity: 0.2;
@@ -116,17 +112,11 @@
 .inactive {
     opacity: 0.5;
 }
-.link {
-    cursor: pointer;
-}
 .none {
     display: none !important;
 }
 .screen {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include absolute;
     z-index: -1;
 }
 /*}}}*/
@@ -230,15 +220,11 @@
     overflow: hidden;
 }
 .stone {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include absolute;
     border-radius: 50%;
-}
-.stone.white {
-    border: 1px solid $black;
+    &.white {
+        border: 1px solid $black;
+    }
 }
 .playable {
     display: block;
@@ -325,6 +311,7 @@
     margin: 0;
     opacity: 0;
     font-size: 1em;
+    cursor: pointer;
 }
 #varvalue {
     line-height: 1.5em;
@@ -344,6 +331,9 @@
 }
 .medium-arrow {
     @include transform(translate(-5%) scaleX(0.9));
+}
+.arrow-top, .arrow-bottom, .arrow-back {
+    border-radius: 50%;
 }
 .arrow-top {
     @include absolute(13%, 0, 57%, 4%);
@@ -511,6 +501,7 @@
     font-weight: bold;
     font-size: 1em;
     font-family: inherit;
+    cursor: pointer;
 }
 #showusers {
     display: none;

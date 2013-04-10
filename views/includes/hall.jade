@@ -13,7 +13,7 @@
     #load-games.gamesscreen.none
         form#load-sgf.box.brown3
             div= lingua.selectsgf
-            input#sgf-select.selectbox.link.yellow(type='button', value='...')
+            input#sgf-select.selectbox.yellow(type='button', value='...')
             input#sgf-select-file.selectfile(type='file', name='sgffile')
             input.bigbutton.black(type='submit', value= lingua.loadsgf)
         p: input#refreshlist.bigbutton.black(type='button',
@@ -23,9 +23,9 @@
 #userslist.brown3
 form#chatbar
     table#chatbartable: tr
-        td.buttoncell.black: div#showchat.link.black= lingua.chat
+        td.buttoncell.black: div#showchat.black= lingua.chat
         td.brown2
             input#chatmsg.input.transparent(type='text', autocomplete='off')
         td.buttoncell.black
-            input#sendmsg.link.black(type='submit', value= lingua.send)
-        td.buttoncell.black: div#showusers.link.black @
+            input#sendmsg.black(type='submit', value= lingua.send)
+        td.buttoncell.black: div#showusers.black @
