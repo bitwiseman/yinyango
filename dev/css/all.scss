@@ -5,81 +5,6 @@
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
  * @link     https://github.com/hickop/yinyango
  */
-/* Viewport. {{{*/
-@-webkit-viewport {
-    width: device-width;
-    user-zoom: fixed;
-}
-@-moz-viewport {
-    width: device-width;
-    user-zoom: fixed;
-}
-@-ms-viewport {
-    width: device-width;
-    user-zoom: fixed;
-}
-@-o-viewport {
-    width: device-width;
-    user-zoom: fixed;
-}
-@viewport {
-    width: device-width;
-    user-zoom: fixed;
-}
-/*}}}*/
-/* Media queries. {{{*/
-@media (max-width: 800px) {
-    #games, #chat, #userslist {
-        width: 100% !important;
-    }
-    #chat, #userslist {
-        display: none;
-    }
-    #chat, #userslist {
-        left: 0 !important;
-        border-width: 0 0 0 0 !important;
-    }
-    #showchat, #showusers {
-        display: block !important;
-    }
-}
-@media (max-width: 1024px) and (min-width: 800px) {
-    #games {
-        width: 70% !important;
-    }
-    #chat {
-        display: block !important;
-    }
-    #chat, #userslist {
-        left: 70% !important;
-        width: 30% !important;
-    }
-    #userslist {
-        display: none;
-    }
-    #showusers {
-        display: block !important;
-    }
-}
-@media (min-width: 1024px) {
-    #chat, #userslist {
-        display: block !important;
-    }
-}
-/*}}}*/
-/* All elements. {{{*/
-* {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
-/*}}}*/
-/* Body. {{{*/
-body {
-    margin: 0;
-    font-size: 100%;
-    text-align: center;
-}
-/*}}}*/
 /* Global classes. {{{*/
 /* Inputs. {{{*/
 /* Checkbox. {{{*/
@@ -87,7 +12,7 @@ body {
     position: relative;
     height: 1em;
     width: 1em;
-    border: 1px solid black;
+    border: 1px solid $black;
     margin-left: 1em;
 }
 .checkbox input {
@@ -108,11 +33,9 @@ body {
     height: 0.6em;
     width: 0.3em;
     opacity: 0;
-    border-right: 0.2em solid black;
-    border-bottom: 0.2em solid black;
-    -webkit-transform: rotate(40deg);
-    -o-transform: rotate(40deg);
-    transform: rotate(40deg);
+    border-right: 0.2em solid $black;
+    border-bottom: 0.2em solid $black;
+    @include transform(rotate(40deg));
 }
 .checkbox input[type=checkbox]:checked + label:after {
     opacity: 1;
@@ -126,7 +49,7 @@ body {
     padding: 0.2em 0.5em;
     width: 100%;
     min-width: 0;
-    border: 1px solid black;
+    border: 1px solid $black;
     font-weight: bold;
     font-size: 1em;
     font-family: inherit;
@@ -149,7 +72,7 @@ body {
     padding: 0 0.5em;
     height: 1.5em;
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid $black;
     font-weight: bold;
     font-size: 1em;
     font-family: inherit;
@@ -169,7 +92,7 @@ body {
     font-weight: bold;
 }
 .bigbutton, .button  {
-    border: 1px solid black;/* Avoid ugly buttons borders. */
+    border: 1px solid $black;/* Avoid ugly buttons borders. */
     border-radius: 2em;
     font-size: 1em;
     font-family: inherit;
@@ -243,7 +166,7 @@ body {
 .menubar {
     width: 100%;
     padding: 0.2em;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid $black;
 }
 .menulink {
     background: transparent;
@@ -270,7 +193,7 @@ body {
     float: left;
     height: 2em;
     width: 50%;
-    border: 1px solid black;
+    border: 1px solid $black;
 }
 #playerblack {
     border-radius: 0.5em 0 0 0.5em;
@@ -315,7 +238,7 @@ body {
     border-radius: 50%;
 }
 .stone.white {
-    border: 1px solid #000;
+    border: 1px solid $black;
 }
 .playable {
     display: block;
@@ -396,11 +319,7 @@ body {
     border-radius: 0.5em;
 }
 #varselect, #varvalue {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include absolute;
 }
 #varselect {
     margin: 0;
@@ -412,74 +331,36 @@ body {
 }
 /* Arrows buttons. {{{*/
 .rotate180 {
-    -webkit-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    transform: rotate(180deg);
+    @include transform(rotate(180deg));
+}
+.small-arrow, .small-arrow2, .medium-arrow {
+    @include absolute;
 }
 .small-arrow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-transform: translate(-18%) scaleX(0.6);
-    -o-transform: translate(-18%) scaleX(0.6);
-    transform: translate(-18%) scaleX(0.6);
+    @include transform(translate(-18%) scaleX(0.6));
 }
 .small-arrow2 {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-transform: translate(18%) scaleX(0.6);
-    -o-transform: translate(18%) scaleX(0.6);
-    transform: translate(18%) scaleX(0.6);
+    @include transform(translate(18%) scaleX(0.6));
 }
 .medium-arrow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-transform: translate(-5%) scaleX(0.9);
-    -o-transform: translate(-5%) scaleX(0.9);
-    transform: translate(-5%) scaleX(0.9);
+    @include transform(translate(-5%) scaleX(0.9));
 }
 .arrow-top {
-    position: absolute;
-    top: 13%;
-    left: 4%;
-    width: 100%;
-    height: 30%;
-    -webkit-transform: rotate(30deg);
-    -o-transform: rotate(30deg);
-    transform: rotate(30deg);
+    @include absolute(13%, 0, 57%, 4%);
+    @include transform(rotate(30deg));
 }
 .arrow-bottom {
-    position: absolute;
-    top: 57%;
-    left: 4%;
-    width: 100%;
-    height: 30%;
-    -webkit-transform: rotate(-30deg);
-    -o-transform: rotate(-30deg);
-    transform: rotate(-30deg);
+    @include absolute(57%, 0, 13%, 4%);
+    @include transform(rotate(-30deg));
 }
 .arrow-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 30%;
-    height: 100%;
+    @include absolute(2%, 70%, 2%, 0);
 }
 .arrow-fill {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 40%;
-    height: 50%;
+    @include absolute(25%, 35%, 25%, 25%);
 }
 .arrow-rect {
-    position: absolute;
-    top: 0;
-    left: 80%;
-    width: 20%;
-    height: 100%;
+    @include absolute(0, 0, 0, 80%);
     border-radius: 20%/5%;
 }
 /*}}}*/
@@ -575,23 +456,58 @@ body {
 #games {
     left: 0;
     width: 50%;
+    @media (max-width: 800px) {
+        width: 100%;
+    }
+    @media (max-width: 1024px) and (min-width: 800px) {
+        width: 70%;
+    }
 }
 #chat {
     left: 50%;
+    border-width: 0 0 0 1px;
     width: 30%;
+    @media (max-width: 800px) {
+        display: none;
+        left: 0;
+        border-width: 0 0 0 0;
+        width: 100%;
+    }
+    @media (max-width: 1024px) and (min-width: 800px) {
+        left: 70%;
+        width: 30%;
+    }
+    @media (min-width: 800px) {
+        display: block !important;
+    }
 }
 #userslist {
     right: 0;
+    border-width: 0 0 0 1px;
     width: 20%;
+    @media (max-width: 800px) {
+        left: 0;
+        border-width: 0 0 0 0;
+        width: 100%;
+    }
+    @media (max-width: 1024px) {
+        display: none;
+    }
+    @media (max-width: 1024px) and (min-width: 800px) {
+        left: 70%;
+        width: 30%;
+    }
+    @media (min-width: 1024px) {
+        display: block !important;
+    }
 }
 #chat, #userslist {
     text-align: left;
     padding: 0.5em;
     overflow: auto;
     word-wrap: break-word;
-    border-width: 0 0 0 1px;
     border-style: solid;
-    border-color: black;
+    border-color: $black;
 }
 .gamesscreen {
     position: absolute;
@@ -615,8 +531,8 @@ body {
     right: 0;
     width: 100%;
     height: 1.6em;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+    border-top: 1px solid $black;
+    border-bottom: 1px solid $black;
 }
 #chatbartable {
     margin: 0;
@@ -637,17 +553,23 @@ body {
     height: 1.4em;
     margin: 0;
     padding: 0 0.5em;
-    border: 1px solid black;
+    border: 1px solid $black;
     font-weight: bold;
     font-size: 1em;
     font-family: inherit;
 }
 #showusers {
     display: none;
-    border-left: 1px solid white;
+    border-left: 1px solid $white;
+    @media (max-width: 1024px) {
+        display: block;
+    }
 }
 #showchat {
     display: none;
+    @media (max-width: 800px) {
+        display: block;
+    }
 }
 /*}}}*/
 /*}}}*/

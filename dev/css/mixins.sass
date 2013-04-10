@@ -1,0 +1,16 @@
+/**
+ * Sass mixins.
+ *
+ * @author   Mathieu Quinette <hickop@gmail.com>
+ * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * @link     https://github.com/hickop/yinyango
+ */
+=absolute($top: 0, $right: 0, $bottom: 0, $left: 0)
+    position: absolute
+    top: $top
+    right: $right
+    bottom: $bottom
+    left: $left
+=transform($transforms)
+    -webkit-transform: $transforms 
+    transform: $transforms
